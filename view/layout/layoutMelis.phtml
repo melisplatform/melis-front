@@ -1,0 +1,40 @@
+
+
+
+
+<?php echo $this->content; ?>
+<!-- Rendered with Melis CMS V2 - <?= date("Y-m-d H:i:s"); ?> -->
+
+<!--  ======================= tinymce temp CSS ============================= -->
+<style>
+    .melis-editable{
+    	border: 1px dotted #333;
+    }
+    .melis-editable:hover{
+    	border-color: red;
+    }
+</style>
+
+<script>
+function loadScript(url, callback)
+{
+    var head = document.getElementsByTagName('head')[0];
+    var script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.src = url;    
+    script.onreadystatechange = callback;
+    script.onload = callback;
+    head.appendChild(script); 
+}
+window.onload = function() {
+    if (window.jQuery) {  
+    } else {
+    	loadScript("/MelisCore/assets/components/library/jquery/jquery.min.js?v=v1.2.3");    	
+    }
+}
+</script>
+
+<script src='/MelisCore/js/library/tinymce/tinymce.min.js'></script>
+<script src='/MelisCore/js/tinyMCE/tinymce_cleaner.js'></script>
+<script src="/melis/MelisCms/Page/checkIdentity?idPage=<?= $this->idPage; ?>" type="text/javascript">
+</script>

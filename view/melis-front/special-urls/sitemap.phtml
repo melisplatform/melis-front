@@ -1,0 +1,24 @@
+<?php 
+    echo '<?xml version="1.0" encoding="UTF-8"?>';
+?>
+
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+	<?php 
+	   foreach ($this->menu as $menuItem)
+	   {
+	       $lastEditDate = $menuItem['lastEditDate'];
+	       if (!empty($lastEditDate))
+	       {
+	           $lastEditDate = explode(' ', $lastEditDate);
+	           $lastEditDate = $lastEditDate[0];
+	       }
+?>
+   <url>
+      <loc><?= $menuItem['uri']; ?></loc>
+      <lastmod><?= $lastEditDate; ?></lastmod>
+      <changefreq>daily</changefreq>
+   </url>
+<?php       
+	   }
+?>
+</urlset>

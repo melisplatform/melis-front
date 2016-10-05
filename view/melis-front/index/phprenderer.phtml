@@ -1,0 +1,27 @@
+<?php // $this->MelisPHPRenderResult; ?>
+<?php 
+
+//$melisPage = new MelisPage($this->serviceManager);
+//$datasPage = $melisPage->getDatasPage($idPage);
+
+// Looking for the template
+$templatePath = "../module/MelisSites/".$this->datasPage->getMelisTemplate()->tpl_zf2_website_folder."/template/".$this->datasPage->getMelisTemplate()->tpl_php_path;
+$templatePath = HTTP_ROOT . $templatePath;
+
+if (!file_exists($templatePath))
+{
+	return array(0, 'Template error: Unable to read data HTML file: ' . $templatePath);
+}
+else
+{
+	// Generating and getting the content
+//	ob_start ();
+	require ($templatePath);
+//	$htmlContent = ob_get_contents ();
+/*	eval ( ' ?> ' . $htmlContent . " <?" ); */
+//	ob_end_clean ();
+//	echo 	$htmlContent;
+//	return array(1, $htmlContent);
+}
+
+?>
