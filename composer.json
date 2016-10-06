@@ -1,8 +1,22 @@
 {
   "name": "melisplatform/melis-front",
+  "description": "Melis Platform front module",
   "type": "melisplatform-module",
   "license": "OSL-3.0",
   "homepage": "https://github.com/melisplatform/melis-front",
+  "support": {
+    "source": "https://github.com/melisplatform/melis-front",
+    "issues": "https://github.com/melisplatform/melis-front/issues"
+  },
+  "keywords": [
+    "cms",
+    "melis",
+    "zf2",
+    "module"
+  ],
+  "extra": {
+    "module-name": "MelisFront"
+  },
   "require": {
     "php": "^5.5 || ^7.0"
   },
