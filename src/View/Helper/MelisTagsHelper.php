@@ -1,10 +1,22 @@
 <?php
 
+/**
+ * Melis Technology (http://www.melistechnology.com)
+ *
+ * @copyright Copyright (c) 2016 Melis Technology (http://www.melistechnology.com)
+ *
+ */
+
 namespace MelisFront\View\Helper;
 
 use Zend\View\Helper\AbstractHelper;
 use Zend\Session\Container;
 
+/**
+ * This helper gets the content for a page and show it for front mode, or adds the 
+ * tinyMCE edition system for back office
+ *
+ */
 class MelisTagsHelper extends AbstractHelper
 {
 	public $serviceManager;
@@ -22,6 +34,12 @@ class MelisTagsHelper extends AbstractHelper
 		$this->datasPagesSaved = array();
 	}
 	
+	/**
+	 * Gets the datas from a page and "cache" it in an array to avoid
+	 * multiple querries when getting content
+	 * 
+	 * @param int $idPage
+	 */
 	private function getDatasPage($idPage)
 	{
 		$melisPage = $this->serviceManager->get('MelisEnginePage');
@@ -38,6 +56,13 @@ class MelisTagsHelper extends AbstractHelper
 		}
 	}
 	
+	/**
+	 * Gets a tag in an XML by its id
+	 * 
+	 * @param string $xmlPage
+	 * @param int $tagId
+	 * @return string The content of the tag
+	 */
 	public function getPageTagValue($xmlPage, $tagId)
 	{
 		$xml = simplexml_load_string($xmlPage);
@@ -55,6 +80,15 @@ class MelisTagsHelper extends AbstractHelper
 		return '';
 	}
 	
+	/**
+	 * Gets the text corresponding to the tag and page
+	 * 
+	 * @param int $idPage Page id to look in
+	 * @param string $tagId Tag id to search in the XML of page
+	 * @param string $type Type of conf to load for TinyMCE
+	 * @param string $defaultValue If nothing in DB, default text to show for rendering
+	 * @return string Text of the tag
+	 */
 	public function __invoke($idPage, $tagId, $type, $defaultValue = '')
 	{
 		if ($this->renderMode == 'melis' || empty($this->datasPages[$idPage]))
@@ -74,6 +108,7 @@ class MelisTagsHelper extends AbstractHelper
 		$value = '';
 		if ($this->renderMode == 'front' || !empty($idversion))
 		{
+		    // Front mode, nothing to do but to send back the text
 			$xmlPage = $this->datasPages[$idPage]->page_content;
 			$value = $this->getPageTagValue($xmlPage, $tagId);
 		}
@@ -97,16 +132,23 @@ class MelisTagsHelper extends AbstractHelper
 			}
 		}
 		
+		// If BO and value is empty, let's put default one so that the template looks like something
 		if ($value == '' && $this->renderMode == 'melis')
 			$value = $defaultValue;
 		
 		$finalValue = $value;
+
 		
 		if ($this->renderMode == 'front' )
 			$finalValue = $value;
 		else
 		{
-			if (!$this->preview)
+		    // BO, we add the classes and div nessecary to render TInyMCE
+		    $routeMatch = $this->serviceManager->get('Application')->getMvcEvent()->getRouteMatch();
+		    $params = $routeMatch->getParams();
+		    $idpageLoaded = $params['idpage'];
+		     
+			if (!$this->preview && $idpageLoaded == $idPage)
 			{
 				$data_tag_type = " data-tag-type='$type'";
 				$data_tag_id = " data-tag-id='$tagId'";

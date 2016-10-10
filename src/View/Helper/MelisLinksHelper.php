@@ -1,9 +1,20 @@
 <?php
 
+/**
+ * Melis Technology (http://www.melistechnology.com)
+ *
+ * @copyright Copyright (c) 2016 Melis Technology (http://www.melistechnology.com)
+ *
+ */
+
 namespace MelisFront\View\Helper;
 
 use Zend\View\Helper\AbstractHelper;
 
+/**
+ * This helper will generate links for a melis page
+ *
+ */
 class MelisLinksHelper extends AbstractHelper
 {
 	public $serviceManager;
@@ -15,6 +26,11 @@ class MelisLinksHelper extends AbstractHelper
 		$this->dataBreadcrumbs = array();
 	}
 	
+	/**
+	 * 
+	 * @param int $idPage Id of the page for the link
+	 * @param boolean $absolute Add the domain if true
+	 */
 	public function __invoke($idPage, $absolute)
 	{
 		if (empty($this->dataBreadcrumbs[$idPage]))

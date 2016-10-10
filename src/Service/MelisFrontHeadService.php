@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * Melis Technology (http://www.melistechnology.com)
+ *
+ * @copyright Copyright (c) 2016 Melis Technology (http://www.melistechnology.com)
+ *
+ */
+
 namespace MelisFront\Service;
 
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
@@ -7,6 +14,11 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 use MelisEngine\Model\MelisPage;
 use Zend\Filter\HtmlEntities;
 
+/**
+ * This class updates the Meta datas description and title
+ * by replacing the one existing (or not) by the one define in Melis SEO Page system
+ *
+ */
 class MelisFrontHeadService implements MelisFrontHeadServiceInterface, ServiceLocatorAwareInterface
 {
 	protected $serviceLocator;
@@ -22,6 +34,13 @@ class MelisFrontHeadService implements MelisFrontHeadServiceInterface, ServiceLo
 		return $this->serviceLocator;
 	}	
 	
+	/**
+	 * Updates the title and description
+	 * 
+	 * @param int $idPage Id of page asked
+	 * @param strig $contentGenerated Content to be changed
+	 * 
+	 */
 	public function updateTitleAndDescription($idPage, $contentGenerated)
 	{
 		$newContent = $contentGenerated;

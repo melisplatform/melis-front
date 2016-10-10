@@ -1,7 +1,4 @@
 
-
-
-
 <?php echo $this->content; ?>
 <!-- Rendered with Melis CMS V2 - <?= date("Y-m-d H:i:s"); ?> -->
 
@@ -16,6 +13,13 @@
 </style>
 
 <script>
+<?php 
+    /**
+     * This JS function will check if JQuery is already added in the template
+     * currently being edited as adding a new one would destroy instances already created.
+     * If no JQuery, then we add it.
+     */
+?>
 function loadScript(url, callback)
 {
     var head = document.getElementsByTagName('head')[0];

@@ -1,15 +1,21 @@
 <?php
 
+/**
+ * Melis Technology (http://www.melistechnology.com)
+ *
+ * @copyright Copyright (c) 2016 Melis Technology (http://www.melistechnology.com)
+ *
+ */
+
 namespace MelisFront\Navigation;
 
 use Zend\Navigation\Service\DefaultNavigationFactory;
 use Interop\Container\ContainerInterface;
+use Zend\ServiceManager\ServiceManager;
 
 /**
- * 
- * For customization, see here:
- * http://framework.zend.com/manual/current/en/tutorials/tutorial.navigation.html
- * 
+ * Generate zend navigation based on Melis Page System
+ *
  */
 class MelisFrontNavigation extends DefaultNavigationFactory
 {
@@ -17,7 +23,13 @@ class MelisFrontNavigation extends DefaultNavigationFactory
 	private $idpage;
 	private $renderMode;
 	
-	
+	/**
+	 * Constructor
+	 * 
+	 * @param ServiceManager $serviceLocator
+	 * @param int $idpage
+	 * @param string $renderMode
+	 */
 	public function __construct($serviceLocator, $idpage, $renderMode)
 	{
 		$this->serviceLocator = $serviceLocator;
@@ -25,6 +37,12 @@ class MelisFrontNavigation extends DefaultNavigationFactory
 		$this->renderMode = $renderMode;
 	}
 	
+	/**
+	 * Get subpages recursively
+	 * 
+	 * @param int $idPage
+	 * @return array Pages
+	 */
 	public function getChildrenRecursive($idPage)
 	{
 		$results = array();
@@ -65,6 +83,14 @@ class MelisFrontNavigation extends DefaultNavigationFactory
 		return $results;
 	}
 	
+	/**
+	 * Get Pages
+	 * 
+	 * @param ContainerInterface $container
+	 * 
+	 * {@inheritDoc}
+	 * @see \Zend\Navigation\Service\AbstractNavigationFactory::getPages()
+	 */
 	protected function getPages(ContainerInterface $container)
 	{
 		

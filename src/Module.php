@@ -3,7 +3,7 @@
 /**
  * Melis Technology (http://www.melistechnology.com)
  *
- * @copyright Copyright (c) 2015 Melis Technology (http://www.melistechnology.com)
+ * @copyright Copyright (c) 2016 Melis Technology (http://www.melistechnology.com)
  *
  */
 
@@ -18,11 +18,9 @@ use MelisFront\View\Helper\MelisTagsHelper;
 use MelisFront\View\Helper\MelisLinksHelper;
 
 use MelisFront\Listener\MelisFrontLayoutListener;
-use MelisFront\Listener\MelisFrontMetaPageSeoListener;
-use MelisFront\Listener\MelisFrontReformatToRoutePageSeoUrlListener;
-use MelisFront\Listener\MelisFrontPageRouterUpdateRegularUrlListener;
-
-use MelisFront\Listener\MelisFrontPageRouterUpdateCommerceUrlListener;
+use MelisFront\Listener\MelisFrontSEOMetaPageListener;
+use MelisFront\Listener\MelisFrontSEOReformatToRoutePageUrlListener;
+use MelisFront\Listener\MelisFrontSEODispatchRouterRegularUrlListener;
 
 class Module
 {
@@ -37,13 +35,13 @@ class Module
         $eventManager->attach(new MelisFrontLayoutListener()); 
         
         // Adding SEO meta datas to page
-        $eventManager->attach(new MelisFrontMetaPageSeoListener());
+        $eventManager->attach(new MelisFrontSEOMetaPageListener());
 
         // Catching PAGE SEO URLs to update Router
-        $eventManager->attach(new MelisFrontReformatToRoutePageSeoUrlListener());
+        $eventManager->attach(new MelisFrontSEOReformatToRoutePageUrlListener());
         
         // Checking if Url is correct and redirect if not
-        $eventManager->attach(new MelisFrontPageRouterUpdateRegularUrlListener());
+        $eventManager->attach(new MelisFrontSEODispatchRouterRegularUrlListener());
     }
     
     
@@ -119,6 +117,17 @@ class Module
     					}
     			)
     	);
+    }
+    
+    public function getAutoloaderConfig()
+    {
+        return array(
+            'Zend\Loader\StandardAutoloader' => array(
+                'namespaces' => array(
+                    __NAMESPACE__ => __DIR__ . '/src/' . __NAMESPACE__,
+                ),
+            ),
+        );
     }
  
 }
