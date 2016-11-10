@@ -105,8 +105,17 @@ class Module
     						$router = $sm->getServiceLocator()->get('router');
     						$request = $sm->getServiceLocator()->get('request');
     						$routeMatch = $router->match($request);
-    						$renderMode = $routeMatch->getParam('renderMode');
-    						$preview = $routeMatch->getParam('preview');
+    						
+    						if (!empty($routeMatch))
+    						{
+    						    $renderMode = $routeMatch->getParam('renderMode');
+    						    $preview = $routeMatch->getParam('preview');
+    						}
+    						else
+    						{
+    						    $renderMode = 'front';
+    						    $preview = false;
+    						}
     						$helper = new MelisTagsHelper($sl, $renderMode, $preview);
     						return $helper;
     					},

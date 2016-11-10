@@ -103,7 +103,9 @@ class MelisTagsHelper extends AbstractHelper
 		$request = $this->serviceManager->get('request');
 		$routeMatch = $router->match($request);
 		
-		$idversion = $routeMatch->getParam('idversion');
+		$idversion = null;
+		if (!empty($routeMatch))
+		  $idversion = $routeMatch->getParam('idversion');
 		
 		$value = '';
 		if ($this->renderMode == 'front' || !empty($idversion))

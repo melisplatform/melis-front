@@ -79,7 +79,7 @@ class MelisFrontSEODispatchRouterRegularUrlListener
                    // Check if page exist and page published
                    if (empty($pageTree) || ($pageTree->page_status == 0 && $renderMode == 'front'))
                    {
-                       if (!empty($pageTree->page_status) && $pageTree->page_status == 0 && 
+                       if (isset($pageTree->page_status) && $pageTree->page_status == 0 && 
                            $renderMode == 'front')
                        {
                            // The page is inactive, let's try SEO redirection
@@ -140,7 +140,6 @@ class MelisFrontSEODispatchRouterRegularUrlListener
                                }
                        }
                    }
-                   
                    
                    /**
                     * SENDING EVENT BEFORE MAKING REDIRECTIONS

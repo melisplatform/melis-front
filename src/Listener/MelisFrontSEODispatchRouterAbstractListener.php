@@ -196,7 +196,7 @@ abstract class MelisFrontSEODispatchRouterAbstractListener
     	if (!empty($siteFolder) && !empty($locale))
     	   $translator->addTranslationFile(
     	       'phparray',  
-    	       $_SERVER['DOCUMENT_ROOT'] . '/../modules/MelisSites/' . 
+    	       $_SERVER['DOCUMENT_ROOT'] . '/../module/MelisSites/' . 
     	           $siteFolder . '/language/' . $locale . '.php'
     	   );
     }
