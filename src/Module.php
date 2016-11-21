@@ -14,9 +14,6 @@ use Zend\Mvc\MvcEvent;
 use Zend\ModuleManager\ModuleManager;
 use Zend\Stdlib\ArrayUtils;
 
-use MelisFront\View\Helper\MelisTagsHelper;
-use MelisFront\View\Helper\MelisLinksHelper;
-
 use MelisFront\Listener\MelisFrontLayoutListener;
 use MelisFront\Listener\MelisFrontSEOMetaPageListener;
 use MelisFront\Listener\MelisFrontSEOReformatToRoutePageUrlListener;
@@ -30,23 +27,35 @@ class Module
         $moduleRouteListener = new ModuleRouteListener();
         $moduleRouteListener->attach($eventManager);
         
-        
-        // Adding different layout if displayed in front or front for melis back office
-        $eventManager->attach(new MelisFrontLayoutListener()); 
-        
-        // Adding SEO meta datas to page
-        $eventManager->attach(new MelisFrontSEOMetaPageListener());
-
-        // Catching PAGE SEO URLs to update Router
-        $eventManager->attach(new MelisFrontSEOReformatToRoutePageUrlListener());
-        
-        // Checking if Url is correct and redirect if not
-        $eventManager->attach(new MelisFrontSEODispatchRouterRegularUrlListener());
-    }
-    
-    
-    public function init(ModuleManager $manager)
-    {
+        $sm = $e->getApplication()->getServiceManager();
+        $routeMatch = $sm->get('router')->match($sm->get('request'));
+        if (!empty($routeMatch))
+        {
+            $routeName = $routeMatch->getMatchedRouteName();
+            $module = explode('/', $routeName);
+             
+            if (!empty($module[0]))
+            {
+                if ($module[0] == 'melis-backoffice')
+                {
+                    
+                }
+                else
+                {
+                    // Adding different layout if displayed in front or front for melis back office
+                    $eventManager->attach(new MelisFrontLayoutListener()); 
+                    
+                    // Adding SEO meta datas to page
+                    $eventManager->attach(new MelisFrontSEOMetaPageListener());
+            
+                    // Catching PAGE SEO URLs to update Router
+                    $eventManager->attach(new MelisFrontSEOReformatToRoutePageUrlListener());
+                    
+                    // Checking if Url is correct and redirect if not
+                    $eventManager->attach(new MelisFrontSEODispatchRouterRegularUrlListener());
+                }
+            }
+        }
     }
 
     public function getConfig()
@@ -61,71 +70,6 @@ class Module
     	} 
     	
     	return $config;
-    }
-    
-    public function getServiceConfig()
-    {
-    	return array(
-    			'factories' => array(
-    					'MelisFront\Service\MelisFrontHeadService' =>  function($sm) {
-    						$melisMelisFrontHeadService = new \MelisFront\Service\MelisFrontHeadService();
-    						$melisMelisFrontHeadService->setServiceLocator($sm);
-    						return $melisMelisFrontHeadService;
-    					},
-    					'MelisFrontNavigation' =>  function($sm) {
-    						$router = $sm->get('router');
-    						$request = $sm->get('request');
-    						$routeMatch = $router->match($request);
-    						if ($routeMatch)
-    						{
-    							$params = $routeMatch->getParams();
-    							$idpage = $params['idpage'];
-    							$renderMode = $params['renderMode'];
-    							
-    							$navigation = new \MelisFront\Navigation\MelisFrontNavigation($sm, $idpage, $renderMode);
-    							$navigationService =  $navigation->createService($sm);
-    						}
-    						else
-    						{
-    							$navigation = new \MelisFront\Navigation\MelisFrontNavigation($sm, 0, 'front');
-    							$navigationService =  $navigation->createService($sm);
-    						}
-    						return $navigationService;
-    					},
-    			)
-    	);
-    }
-
-    public function getViewHelperConfig()
-    {
-    	return array(
-    			'factories' => array(
-    					'MelisTag' => function($sm) {
-    						$sl = $sm->getServiceLocator();
-    						$router = $sm->getServiceLocator()->get('router');
-    						$request = $sm->getServiceLocator()->get('request');
-    						$routeMatch = $router->match($request);
-    						
-    						if (!empty($routeMatch))
-    						{
-    						    $renderMode = $routeMatch->getParam('renderMode');
-    						    $preview = $routeMatch->getParam('preview');
-    						}
-    						else
-    						{
-    						    $renderMode = 'front';
-    						    $preview = false;
-    						}
-    						$helper = new MelisTagsHelper($sl, $renderMode, $preview);
-    						return $helper;
-    					},
-    					'MelisLink' => function($sm) {
-    						$sl = $sm->getServiceLocator();
-    						$helper = new MelisLinksHelper($sl);
-    						return $helper;
-    					}
-    			)
-    	);
     }
     
     public function getAutoloaderConfig()

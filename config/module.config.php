@@ -119,9 +119,12 @@ return array(
     'service_manager' => array(
 		'aliases' => array(
             'translator' => 'MvcTranslator',
-			'MelisFrontHead' => 'MelisFront\Service\MelisFrontHeadService',
 		),
 		'invokables' => array(
+		),
+        'factories' => array(
+			'MelisFrontHead' => 'MelisFront\Service\Factory\MelisFrontHeadServiceFactory',
+			'MelisFrontNavigation' => 'MelisFront\Navigation\Factory\MelisFrontNavigationFactory',
 		),
 	),
     'controllers' => array(
@@ -130,6 +133,12 @@ return array(
             'MelisFront\Controller\SpecialUrls' => 'MelisFront\Controller\SpecialUrlsController',
             'MelisFront\Controller\MelisFrontSearch' => 'MelisFront\Controller\MelisFrontSearchController',
         ),
+    ),
+    'view_helpers' => array(
+        'factories' => array(
+            'MelisTag' => 'MelisFront\View\Helper\Factory\MelisTagsHelperFactory',
+            'MelisLink' => 'MelisFront\View\Helper\Factory\MelisLinksHelperFactory',
+        ),    
     ),
     'view_manager' => array(
         'display_not_found_reason' => true,
