@@ -18,6 +18,8 @@ use MelisFront\Listener\MelisFrontLayoutListener;
 use MelisFront\Listener\MelisFrontSEOMetaPageListener;
 use MelisFront\Listener\MelisFrontSEOReformatToRoutePageUrlListener;
 use MelisFront\Listener\MelisFrontSEODispatchRouterRegularUrlListener;
+use MelisFront\Listener\MelisFront404To301Listener;
+use MelisFront\Listener\MelisFront404CatcherListener;
 
 class Module
 {
@@ -26,36 +28,28 @@ class Module
     	$eventManager        = $e->getApplication()->getEventManager();
         $moduleRouteListener = new ModuleRouteListener();
         $moduleRouteListener->attach($eventManager);
-        
+
         $sm = $e->getApplication()->getServiceManager();
         $routeMatch = $sm->get('router')->match($sm->get('request'));
-        if (!empty($routeMatch))
-        {
-            $routeName = $routeMatch->getMatchedRouteName();
-            $module = explode('/', $routeName);
-             
-            if (!empty($module[0]))
-            {
-                if ($module[0] == 'melis-backoffice')
-                {
-                    
-                }
-                else
-                {
-                    // Adding different layout if displayed in front or front for melis back office
-                    $eventManager->attach(new MelisFrontLayoutListener()); 
-                    
-                    // Adding SEO meta datas to page
-                    $eventManager->attach(new MelisFrontSEOMetaPageListener());
-            
-                    // Catching PAGE SEO URLs to update Router
-                    $eventManager->attach(new MelisFrontSEOReformatToRoutePageUrlListener());
-                    
-                    // Checking if Url is correct and redirect if not
-                    $eventManager->attach(new MelisFrontSEODispatchRouterRegularUrlListener());
-                }
-            }
-        }
+        
+        // Catching PAGE SEO URLs to update Router
+        $eventManager->attach(new MelisFrontSEOReformatToRoutePageUrlListener());
+        
+        
+        // Adding different layout if displayed in front or front for melis back office
+        $eventManager->attach(new MelisFrontLayoutListener()); 
+        
+        // Adding SEO meta datas to page
+        $eventManager->attach(new MelisFrontSEOMetaPageListener());
+        
+        // Checking if Url is correct and redirect if not
+        $eventManager->attach(new MelisFrontSEODispatchRouterRegularUrlListener());
+        
+        // Checking if Url is 404 and try to check if url has new Url
+        $eventManager->attach($sm->get('MelisFront\Listener\MelisFront404To301Listener'));
+        
+        // This will try to look another url if 404 occured
+        $eventManager->attach(new MelisFront404CatcherListener());
     }
 
     public function getConfig()

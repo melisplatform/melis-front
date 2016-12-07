@@ -36,7 +36,12 @@ abstract class MelisFrontSEODispatchRouterAbstractListener
     public function redirectPageMelisURL(MvcEvent $e, $idpage)
     {
         $sm = $e->getApplication()->getServiceManager();
-    
+
+        $melisPage = $sm->get('MelisEnginePage');
+        $page = $melisPage->getDatasPage($idpage);
+        if (empty($page->getMelisPageTree()))
+            return null;
+        
         $melisTree = $sm->get('MelisEngineTree');
         $link = $melisTree->getPageLink($idpage, true);
     

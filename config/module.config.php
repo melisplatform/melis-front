@@ -121,10 +121,13 @@ return array(
             'translator' => 'MvcTranslator',
 		),
 		'invokables' => array(
+		    
 		),
         'factories' => array(
 			'MelisFrontHead' => 'MelisFront\Service\Factory\MelisFrontHeadServiceFactory',
 			'MelisFrontNavigation' => 'MelisFront\Navigation\Factory\MelisFrontNavigationFactory',
+            
+            'MelisFront\Listener\MelisFront404To301Listener' => 'MelisFront\Listener\Factory\MelisFront404To301ListenerFactory'
 		),
 	),
     'controllers' => array(

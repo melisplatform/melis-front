@@ -63,7 +63,7 @@ class MelisFrontSEOReformatToRoutePageUrlListener implements ListenerAggregateIn
     		        // avoid collision with BO modules rules)
     		        return;
     		    }
-    		     
+    		    
     		    // Removing the optional parameters from url before checking
     		    $params = '';
     		    $parameters = explode('/', $uri);
@@ -97,7 +97,7 @@ class MelisFrontSEOReformatToRoutePageUrlListener implements ListenerAggregateIn
     		                    'urlparams' => $params,
     		                )
     		            ));
-    		
+    		            
     		            // add the route to the router
     		            $router->addRoute('melis-front-page-seo', $route);
     		        }

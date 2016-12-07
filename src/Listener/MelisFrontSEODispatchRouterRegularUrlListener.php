@@ -121,23 +121,26 @@ class MelisFrontSEODispatchRouterRegularUrlListener
                    // Setting all router datas
                    if ($routingResult['301'] == null && $routingResult['404'] == null)
                    {
-                       $routingResult['pageLangId'] = $datasPage->getMelisPageTree()->plang_lang_id;
-                       $routingResult['pageLangLocale'] = $datasPage->getMelisPageTree()->lang_cms_locale;
-                       
-                       if (!empty($datasTemplate))
+                       if (!empty($datasPage->getMelisPageTree()))
                        {
-                           if ($datasTemplate->tpl_type == 'ZF2')
+                           $routingResult['pageLangId'] = $datasPage->getMelisPageTree()->plang_lang_id;
+                           $routingResult['pageLangLocale'] = $datasPage->getMelisPageTree()->lang_cms_locale;
+                            
+                           if (!empty($datasTemplate))
                            {
-                               $routingResult['module'] = $datasTemplate->tpl_zf2_website_folder;
-                               $routingResult['controller'] = $datasTemplate->tpl_zf2_website_folder . '\Controller\\' . $datasTemplate->tpl_zf2_controller;
-                               $routingResult['action'] = $datasTemplate->tpl_zf2_action;
-                           }
-                           else
-                               if ($datasTemplate->tpl_type == 'PHP')
+                               if ($datasTemplate->tpl_type == 'ZF2')
                                {
-                                   $routingResult['action'] = 'phprenderer';
-                                   $routingResult['renderType'] = 'melis_php';
+                                   $routingResult['module'] = $datasTemplate->tpl_zf2_website_folder;
+                                   $routingResult['controller'] = $datasTemplate->tpl_zf2_website_folder . '\Controller\\' . $datasTemplate->tpl_zf2_controller;
+                                   $routingResult['action'] = $datasTemplate->tpl_zf2_action;
                                }
+                               else
+                                   if ($datasTemplate->tpl_type == 'PHP')
+                                   {
+                                       $routingResult['action'] = 'phprenderer';
+                                       $routingResult['renderType'] = 'melis_php';
+                                   }
+                           }
                        }
                    }
                    
@@ -147,7 +150,6 @@ class MelisFrontSEODispatchRouterRegularUrlListener
                     */
                    $routingResult = $eventManager->prepareArgs($routingResult);
                    $eventManager->trigger('melisfront_site_dispatch_ready', $this, $routingResult);
-                  
                    
                    // Changing the router with what we have in the routing array generated
                    if ($routingResult['301'] != null || $routingResult['404'] != null)
