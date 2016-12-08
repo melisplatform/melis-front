@@ -12,13 +12,15 @@
     }
 </style>
 
-<script>
 <?php 
+    /**
+<script>
     /**
      * This JS function will check if JQuery is already added in the template
      * currently being edited as adding a new one would destroy instances already created.
      * If no JQuery, then we add it.
      */
+/*
 ?>
 function loadScript(url, callback)
 {
@@ -42,3 +44,12 @@ function tinyInit()
 loadScript("/MelisCore/assets/components/library/jquery/jquery.min.js?v=v1.2.3", tinyInit);
 
 </script>
+<?php
+ */
+?>
+
+<script type="text/javascript" src="/MelisCore/assets/components/library/jquery/jquery.min.js?v=v1.2.3"></script>
+<script type="text/javascript" src="/MelisCore/js/library/tinymce/tinymce.min.js"></script>
+<script type="text/javascript" src="/MelisCore/js/tinyMCE/tinymce_cleaner.js"></script>
+<script type="text/javascript" src="/MelisCore/js/tinyMCE/melis_tinymce.js"></script>
+<script type="text/javascript" src="/melis/MelisCms/Page/checkIdentity?idPage=<?= $this->idPage; ?>"></script>
