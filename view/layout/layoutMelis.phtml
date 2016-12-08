@@ -30,16 +30,15 @@ function loadScript(url, callback)
     script.onload = callback;
     head.appendChild(script); 
 }
-window.onload = function() {
-    if (window.jQuery) {  
-    } else {
-    	loadScript("/MelisCore/assets/components/library/jquery/jquery.min.js?v=v1.2.3");    	
-    }
-}
-</script>
 
-<script src='/MelisCore/js/library/tinymce/tinymce.min.js'></script>
-<script src='/MelisCore/js/tinyMCE/tinymce_cleaner.js'></script>
-<script src='/MelisCore/js/tinyMCE/melis_tinymce.js'></script>
-<script src="/melis/MelisCms/Page/checkIdentity?idPage=<?= $this->idPage; ?>" type="text/javascript">
+function tinyInit()
+{
+	loadScript("/MelisCore/js/library/tinymce/tinymce.min.js");
+	loadScript("/MelisCore/js/tinyMCE/tinymce_cleaner.js");
+	loadScript("/MelisCore/js/tinyMCE/melis_tinymce.js");
+	loadScript("/melis/MelisCms/Page/checkIdentity?idPage=<?= $this->idPage; ?>");
+}
+
+loadScript("/MelisCore/assets/components/library/jquery/jquery.min.js?v=v1.2.3", tinyInit);
+
 </script>
