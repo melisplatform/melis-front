@@ -137,6 +137,14 @@ return array(
             'MelisFront\Controller\MelisFrontSearch' => 'MelisFront\Controller\MelisFrontSearchController',
         ),
     ),
+    'controller_plugins' => array(
+        'invokables' => array(
+            'MelisFrontMenuPlugin' => 'MelisFront\Controller\Plugin\MelisFrontMenuPlugin',
+            'MelisFrontBreadcrumbPlugin' => 'MelisFront\Controller\Plugin\MelisFrontBreadcrumbPlugin',
+            'MelisFrontShowListFromFolderPlugin' => 'MelisFront\Controller\Plugin\MelisFrontShowListFromFolderPlugin',
+            'MelisFrontSearchResultsPlugin' => 'MelisFront\Controller\Plugin\MelisFrontSearchResultsPlugin',
+        )
+    ),
     'view_helpers' => array(
         'factories' => array(
             'MelisTag' => 'MelisFront\View\Helper\Factory\MelisTagsHelperFactory',
@@ -150,7 +158,12 @@ return array(
         'template_map' => array(
            'layout/layoutFront'           => __DIR__ . '/../view/layout/layoutFront.phtml',
            'layout/layoutMelis'           => __DIR__ . '/../view/layout/layoutMelis.phtml',
-            'melis-front/index/index' => __DIR__ . '/../view/melis-front/index/index.phtml',
+           'melis-front/index/index' => __DIR__ . '/../view/melis-front/index/index.phtml',
+            
+           'MelisFront/menu' => __DIR__ . '/../view/melis-front/plugins/menu.phtml',
+           'MelisFront/breadcrumb' => __DIR__ . '/../view/melis-front/plugins/breadcrumb.phtml',
+           'MelisFront/show-list-from-folder' => __DIR__ . '/../view/melis-front/plugins/show-list-from-folder.phtml',
+           'MelisFront/search-results' => __DIR__ . '/../view/melis-front/plugins/search-results.phtml',
         ),
         'template_path_stack' => array(
             __DIR__ . '/../view',

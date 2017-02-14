@@ -1,0 +1,27 @@
+<?php
+	// Make a list from an array
+	function makeList($array) 
+	{
+	    
+		// Base case: an empty array produces no list
+		if (empty($array))
+		{
+		    return '';
+		}
+		
+		// Recursive Step: make a list with child lists
+		$output = '<ul>'.PHP_EOL;
+		
+		foreach ($array as $key => $subArray) 
+		{
+		    $subMenu = (!empty($subArray->children)) ? makeList($subArray->children) : PHP_EOL;
+			$output .= '<li>' . $subArray->page_name . $subMenu . '</li>'.PHP_EOL;
+		}
+		
+		$output .= '</ul>'.PHP_EOL;
+		
+		return $output;
+	}
+	
+	echo makeList($this->menu);
+?>

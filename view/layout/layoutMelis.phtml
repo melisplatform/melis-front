@@ -1,55 +1,42 @@
-
 <?php echo $this->content; ?>
 <!-- Rendered with Melis CMS V2 - <?= date("Y-m-d H:i:s"); ?> -->
 
 <!--  ======================= tinymce temp CSS ============================= -->
 <style>
     .melis-editable{
-    	border: 1px dotted #333;
+        border: 1px dotted #333;
     }
     .melis-editable:hover{
-    	border-color: red;
+        border-color: red;
     }
 </style>
 
-<?php 
-    /**
-<script>
+<script type="text/javascript">
+    <?php
     /**
      * This JS function will check if JQuery is already added in the template
      * currently being edited as adding a new one would destroy instances already created.
      * If no JQuery, then we add it.
      */
-/*
-?>
-function loadScript(url, callback)
-{
-    var head = document.getElementsByTagName('head')[0];
-    var script = document.createElement('script');
-    script.type = 'text/javascript';
-    script.src = url;    
-    script.onreadystatechange = callback;
-    script.onload = callback;
-    head.appendChild(script); 
-}
-
-function tinyInit()
-{
-	loadScript("/MelisCore/js/library/tinymce/tinymce.min.js");
-	loadScript("/MelisCore/js/tinyMCE/tinymce_cleaner.js");
-	loadScript("/MelisCore/js/tinyMCE/melis_tinymce.js");
-	loadScript("/melis/MelisCms/Page/checkIdentity?idPage=<?= $this->idPage; ?>");
-}
-
-loadScript("/MelisCore/assets/components/library/jquery/jquery.min.js?v=v1.2.3", tinyInit);
-
+    ?>
+    function loadScript(url, callback)
+    {
+        var body = document.getElementsByTagName('body')[0];
+        var script = document.createElement('script');
+        script.type = 'text/javascript';
+        script.src = url;
+        script.onreadystatechange = callback;
+        script.onload = callback;
+        body.appendChild(script);
+    }
+    window.onload = function() {
+        if ('undefined' == typeof window.jQuery) {
+            loadScript("/MelisCore/assets/components/library/jquery/jquery.min.js?v=v1.2.3");
+        }
+    }
 </script>
-<?php
- */
-?>
-
-<script type="text/javascript" src="/MelisCore/assets/components/library/jquery/jquery.min.js?v=v1.2.3"></script>
 <script type="text/javascript" src="/MelisCore/js/library/tinymce/tinymce.min.js"></script>
 <script type="text/javascript" src="/MelisCore/js/tinyMCE/tinymce_cleaner.js"></script>
 <script type="text/javascript" src="/MelisCore/js/tinyMCE/melis_tinymce.js"></script>
+<script type="text/javascript" src="/MelisCms/js/tools/findpage.tool.js"></script>
 <script type="text/javascript" src="/melis/MelisCms/Page/checkIdentity?idPage=<?= $this->idPage; ?>"></script>

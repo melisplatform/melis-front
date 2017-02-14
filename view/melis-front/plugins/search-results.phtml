@@ -1,0 +1,9 @@
+<?php if ($this->searchresults->count()):?>
+	<?php foreach ($this->searchresults As $key => $val):?>
+        <h4><a href="<?php echo $val->url ?>"><?php echo $val->pageName ?></a></h4>
+        <p><?php echo date('M d, Y', strtotime($val->lastPageEdit))?></p>
+        <p><?php (is_array($val['description'])) ? implode(' ', $val['description']) : $val['description'] ?></p>
+    <?php endforeach;?>
+<?php else:?>    
+	<h4>No Result</h4>
+<?php endif;?>

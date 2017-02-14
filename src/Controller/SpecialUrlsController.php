@@ -35,11 +35,22 @@ class SpecialUrlsController extends AbstractActionController
                 $site = $datasSite->current();
                 $siteMainPage = $site->site_main_page_id;
                 
+                $menu = array();
                 $navigation = new \MelisFront\Navigation\MelisFrontNavigation($this->getServiceLocator(),
                     $siteMainPage, 'front');
-                $menu = $navigation->getChildrenRecursive($siteMainPage);
+
+                $melisPage = $this->getServiceLocator()->get('MelisEnginePage');
+		        $datasPageRes = $melisPage->getDatasPage($siteMainPage);
+		        if (!empty($datasPageRes))
+		        {
+		            $datasPageRes = $datasPageRes->getMelisPageTree()->getArrayCopy();
+		            $menu[] = $navigation->formatPageInArray($datasPageRes);
+		        }
+		        
+                $menuTmp = $navigation->getChildrenRecursive($siteMainPage);
+                $menuTmp = $this->getAllPagesInOneArray(array(), $menuTmp);
                 
-                $menu = $this->getAllPagesInOneArray(array(), $menu);
+                $menu = array_merge($menu, $menuTmp);
             }
         }
         

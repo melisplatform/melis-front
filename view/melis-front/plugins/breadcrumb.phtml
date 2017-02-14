@@ -1,0 +1,10 @@
+<ol class="breadcrumb">
+    <?php foreach ($this->breadcrumb As $key => $val):?>
+    	<?php $pageName = (!empty($val->pseo_meta_title)) ? $val->pseo_meta_title : $val->page_name; ?>
+    	<?php if ($val->isActive):?>
+    		<li class="active"><?php echo $pageName?></li>
+    	<?php else:?>
+    		<li><a title="<?php echo $pageName  ?>" href="<?php echo $this->melisLink($val->page_id, true)?>"><?php echo $pageName ?></a></li>
+    	<?php endif;?>
+    <?php endforeach;?>
+</ol>

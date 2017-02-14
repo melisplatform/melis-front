@@ -24,6 +24,13 @@ class MelisFront404CatcherListener implements ListenerAggregateInterface
         $callBackHandler = $events->attach(
         	MvcEvent::EVENT_FINISH, 
         	function(MvcEvent $e){
+        	    
+        	    // AssetManager, we don't want listener to be executed if it's not a php code
+        	    $uri = $_SERVER['REQUEST_URI'];
+        	    preg_match('/.*\.((?!php).)+(?:\?.*|)$/i', $uri, $matches, PREG_OFFSET_CAPTURE);
+        	    if (count($matches) > 1)
+        	        return;
+        	    
         		$sm = $e->getApplication()->getServiceManager();
         		$router = $e->getRouter();
         		

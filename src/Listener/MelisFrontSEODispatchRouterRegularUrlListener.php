@@ -11,6 +11,7 @@ namespace MelisFront\Listener;
 
 use Zend\EventManager\EventManagerInterface;
 use Zend\Mvc\MvcEvent;
+use Zend\Session\Container;
 
 /**
  * This listener check if the Melis Page URL is correct.
@@ -125,6 +126,10 @@ class MelisFrontSEODispatchRouterRegularUrlListener
                        {
                            $routingResult['pageLangId'] = $datasPage->getMelisPageTree()->plang_lang_id;
                            $routingResult['pageLangLocale'] = $datasPage->getMelisPageTree()->lang_cms_locale;
+                           
+                           $container = new Container('melisplugins');
+                           $container['melis-plugins-lang-id'] = $datasPage->getMelisPageTree()->plang_lang_id;
+                           $container['melis-plugins-lang-locale'] = $datasPage->getMelisPageTree()->lang_cms_locale;
                             
                            if (!empty($datasTemplate))
                            {

@@ -73,7 +73,6 @@ class MelisSiteActionController extends AbstractActionController
     	            $mainPageId = $sitePageId->site_main_page_id;
     	        }
     	    }
-    	    // TO HERE
         	
     		$this->layout()->setVariables(array(
     				'idPage' => $this->idPage,
@@ -81,8 +80,8 @@ class MelisSiteActionController extends AbstractActionController
     				'renderMode' => $this->renderMode,
     				'pageLangId' => $this->pageLangId,
     				'pageLangLocale' => $this->pageLangLocale,
-    		        'pageBreadCrumb' => $pageBreadCrumb, // NEW ADDED
-    		        'mainPageId' => $mainPageId // NEW ADDED
+    		        'pageBreadCrumb' => $pageBreadCrumb,
+    		        'mainPageId' => $mainPageId
     		));
     
     		$this->oMelisPage = $datasPage;
