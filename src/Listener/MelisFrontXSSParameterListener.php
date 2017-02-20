@@ -34,9 +34,20 @@ class MelisFrontXSSParameterListener implements ListenerAggregateInterface
         	    $request = $e->getRequest();
                 $GetParameters = $request->getQuery();
             
-                foreach ($GetParameters as $key => $value)
+        	    foreach ($GetParameters as $key => $value)
                 {
-                    $request->getQuery()->set($key, htmlspecialchars(htmlentities($value), ENT_QUOTES, 'UTF-8'));
+                    if (!is_array($value))
+                        $request->getQuery()->set($key, htmlspecialchars(htmlentities($value), ENT_QUOTES, 'UTF-8'));
+                    else
+                    {
+                       
+                        array_walk_recursive($value, function (&$val) {
+                            $val = htmlentities($val);
+                            $val = htmlspecialchars($val, ENT_QUOTES, 'UTF-8');
+                        });
+                          
+                        $request->getQuery()->set($key, $value);
+                    }
                 }
         	},
         100);

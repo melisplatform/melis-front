@@ -49,6 +49,29 @@ class MelisFrontNavigation extends DefaultNavigationFactory
 		return $this->serviceLocator;
 	}
 	
+	public function getSiteMenu($siteId)
+	{
+	    $melisPage = $this->serviceLocator->get('MelisEnginePage');
+	    $pageTree = $melisPage->getDatasPage($siteId);
+	    
+	    $pages = array();
+	    
+	    if (!is_null($pageTree))
+	    {
+	        $page = $this->formatPageInArray((Array)$pageTree->getMelisPageTree());
+	         
+	        $children = $this->getChildrenRecursive($siteId);
+	        if (!empty($children))
+	        {
+	            $page['pages'] = $children;
+	        }
+	         
+	        $pages[] = $page;
+	    }
+	    
+	    return $pages;
+	}
+	
 	/**
 	 * Get subpages recursively
 	 * 
@@ -70,7 +93,6 @@ class MelisFrontNavigation extends DefaultNavigationFactory
 			foreach ($pages as $page)
 			{
 				$tmp = $this->formatPageInArray($page);
-				
 				$children = $this->getChildrenRecursive($page['tree_page_id']);
 				if (!empty($children))
 					$tmp['pages'] = $children;
@@ -85,13 +107,22 @@ class MelisFrontNavigation extends DefaultNavigationFactory
 	public function formatPageInArray($page)
 	{
 		$melisTree = $this->serviceLocator->get('MelisEngineTree');
-	    $uri = $melisTree->getPageLink($page['tree_page_id'], 1);
-	    
+		
+		if (empty($page['purl_page_url']))
+		    $uri = $melisTree->getPageLink($page['tree_page_id'], 0);
+		else
+		    $uri = $page['purl_page_url'];
+		
 	    if (empty($page['page_edit_date']))
 	        $page['page_edit_date'] = date('Y-m-d H:i:s');
 	    
+	    if (!empty($page['pseo_meta_title']))
+	        $pageName = $page['pseo_meta_title'];
+	    else
+	        $pageName = $page['page_name'];
+	        
 	    $tmp = array(
-	        'label' => $page['page_name'],
+	        'label' => $pageName,
 	        'menu' => $page['page_menu'],
 	        'uri' => $uri,
 	        'idPage' => $page['tree_page_id'],
@@ -106,121 +137,15 @@ class MelisFrontNavigation extends DefaultNavigationFactory
 	    return $tmp;
 	}
 	
-	/**
-	 * Getting the Site menu or the Site pageTree
-	 * 
-	 * @return Array of MelisPageSaved/MelisPagePublished Object|null
-	 */
-	public function getSiteMenuByPageId()
+	public function getSiteMainPageByPageId($idPage)
 	{
-	    $menu = array();
-	    // Template Id of the Page
-	    $tplId = null;
+	    $melisTree = $this->serviceLocator->get('MelisEngineTree');
+	    $datasSite = $melisTree->getSiteByPageId($idPage);
 	    
-	    // Table services
-	    $pagePublishTbl = $this->serviceLocator->get('MelisEngineTablePagePublished');
-	    $pageSaveTbl = $this->serviceLocator->get('MelisEngineTablePageSaved');
-	    $tplTbl = $this->serviceLocator->get('MelisEngineTableTemplate');
-	    $siteTbl = $this->serviceLocator->get('MelisEngineTableSite');
-	    // Checking renderMode melis/front
-	    if ($this->renderMode == 'front')
-	    {
-	        // In the Front only Publeshed pages are accessable
-            $pagePublished = $pagePublishTbl->getEntryById($this->idpage)->current();
-            if (!empty($pagePublished))
-            {
-                $tplId = $pagePublished->page_tpl_id;
-            }
-	    }
-	    elseif ($this->renderMode == 'melis') 
-	    {
-	        /**
-	         * if renderMode is melis this will try get the Page data from Saved Pages first,
-	         * else the Page data will get from Published Page table
-	         */
-	        $pageSaved = $pageSaveTbl->getEntryById($this->idpage)->current();
-	        if(!empty($pageSaved))
-	        {
-	            $tplId = $pageSaved->page_tpl_id;
-	        }
-	        else
-	        {
-	            $pagePublished = $pagePublishTbl->getEntryById($this->idpage)->current();
-	            if (!empty($pagePublished))
-	            {
-	                $tplId = $pagePublished->page_tpl_id;
-	            }
-	        }
-	    }
+	    if (!empty($datasSite))
+	       return $datasSite->site_main_page_id;
 	    
-	    // Checking if the TemplateId has value
-	    if (!is_null($tplId))
-	    {
-	        $tpl = $tplTbl->getEntryById($tplId)->current();
-	        $siteId = $tpl->tpl_site_id;
-	        
-	        /**
-	         * Retrieving the main page of the site
-	         */
-	        $site = $siteTbl->getEntryById($siteId)->current();
-	        if (!empty($site))
-	        {
-	            $mainPageId = $site->site_main_page_id;
-	            /**
-	             * Preparing the Page Tree using the mainPageId 
-	             * in order to get the list of pages under the site
-	             */
-	            $menu = $this->getSubPagesRecursive($mainPageId);
-	        }
-	    }
-	    
-	    return $menu;
-	}
-	
-	/**
-	 * This method will generate listing of pages depending on the parameter specified
-	 * 
-	 * @param int $currentPageId, if specified the current page would be added to the list as a root
-	 * @param int $subFatherPageId, if specified this will return page(s) that match to the fatherId
-	 * 
-	 * @return Array of MelisPageSaved/MelisPagePublished Object
-	 */
-	public function getSubPagesRecursive($currentPageId = null, $subFatherPageId = null)
-	{
-	    
-	    // Table Services
-	    $pageTreeTbl = $this->serviceLocator->get('MelisEngineTablePageTree');
-	    $pageSrv = $this->getServiceLocator()->get('MelisEnginePage');
-	    
-        if (is_null($subFatherPageId))
-        {
-            if (!is_null($currentPageId))
-            {
-                /**
-                 * If the currentPage has value this would be First execution of this function, 
-                 * this will get from page tree the root of the Site
-                 */
-                $pageTree = $pageTreeTbl->getEntryById($currentPageId);
-            }
-        }
-        else 
-        {
-            /**
-             * After first execution $subFatherPageId param can have a value to get the children of the fatherId
-             * this step can be executed if only the $subFatherPageId have a value after recursive
-             */
-            $pageTree = $pageTreeTbl->getPageTreeOrderedByFatherId($subFatherPageId);
-        }
-        
-        $pages = array();
-        foreach ($pageTree As $key => $val)
-        {
-            $pageDetails = $pageSrv->getDatasPage($val->tree_page_id);
-            $pages[$key] = $pageDetails->getMelisPageTree();
-            $pages[$key]->children =  $this->getSubPagesRecursive(null, $pageDetails->getId());
-        }
-        
-        return $pages;
+	    return null;
 	}
 	
 	/**
@@ -233,7 +158,6 @@ class MelisFrontNavigation extends DefaultNavigationFactory
 	 */
 	protected function getPages(ContainerInterface $container)
 	{
-		
 		if (null === $this->pages) 
 		{
 			$siteMainId = 0;

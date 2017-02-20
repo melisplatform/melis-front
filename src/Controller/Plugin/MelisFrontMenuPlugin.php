@@ -62,8 +62,9 @@ class MelisFrontMenuPlugin extends MelisTemplatingPlugin
         
         // Getting the Site Menu from MelisFrontNavigator
         $site = new MelisFrontNavigation($this->getServiceLocator(), $pageId, $this->renderMode);
-        $siteMenu = $site->getSiteMenuByPageId();
+        $mainPageId = $site->getSiteMainPageByPageId($pageId);
         
+        $siteMenu = $site->getSiteMenu($mainPageId);
         /**
          * Sending service end event
          * This process param can be modified by catching the event from listeners
@@ -72,11 +73,12 @@ class MelisFrontMenuPlugin extends MelisTemplatingPlugin
          * Ex.
          *      array['menu'] = modifiedArray(datas....);
          */
-        $data = $this->sendEvent('melisfornt_site_menu_plugin', array('menu' => $siteMenu));
+            
+        $siteMenu = $this->sendEvent('melisfront_site_menu_plugin', array('menu' => $siteMenu));
         
         // Create an array with the variables that will be available in the view
         $viewVariables = array(
-            'menu' => $data['menu']
+            'menu' => $siteMenu['menu']
         );
         
         // return the variable array and let the view be created
