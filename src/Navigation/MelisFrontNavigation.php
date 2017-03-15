@@ -107,6 +107,9 @@ class MelisFrontNavigation extends DefaultNavigationFactory
 	public function formatPageInArray($page)
 	{
 		$melisTree = $this->serviceLocator->get('MelisEngineTree');
+
+		if (empty($page) || empty($page['tree_page_id']))
+		    return null;
 		
 		if (empty($page['purl_page_url']))
 		    $uri = $melisTree->getPageLink($page['tree_page_id'], 0);
