@@ -72,16 +72,38 @@ class MelisFrontBreadcrumbPlugin extends MelisTemplatingPlugin
                 {
                     // Checking if the pageId is the current viewed
                     $flag = ($val->page_id == $pageId) ? 1 : 0;
-                    $val->isActive = $flag;
-            
-                    array_push($breadcrumb, $val);
+                    
+                    $label = (!empty($val->pseo_meta_title)) ? $val->pseo_meta_title : $val->page_name;
+                    $tmp = array(
+                        'label' => $label,
+                        'menu' => $val->page_menu,
+                        'uri' => $treeSrv->getPageLink($val->page_id, false),
+                        'idPage' => $val->page_id,
+                        'lastEditDate' => $val->page_edit_date,
+                        'pageStat' => $val->page_status,
+                        'pageType' => $val->page_type,
+                        'isActive' => $flag,
+                    );
+                    
+                    array_push($breadcrumb, $tmp);
                 }
             }
         }
         
+        /**
+         * Sending service end event
+         * This process param can be modified by catching the event from listeners
+         * To modified the data, need to use the same param name
+         * in the sample code we use index "breadcrumb". and return same index of variable
+         * Ex.
+         *      array['breadcrumb'] = modifiedArray(datas....);
+         */
+        
+        $breadcrumb = $this->sendEvent('melisfront_site_breadcrumb_plugin', array('breadcrumb' => $breadcrumb));
+        
         // Create an array with the variables that will be available in the view
         $viewVariables = array(
-            'breadcrumb' => $breadcrumb
+            'breadcrumb' => $breadcrumb['breadcrumb']
         );
         
         // return the variable array and let the view be created
