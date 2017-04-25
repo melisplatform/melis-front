@@ -40,6 +40,7 @@
                 loadScript("/MelisCore/js/tinyMCE/melis_tinymce.js");
                 loadScript("/MelisCms/js/tools/findpage.tool.js");
                 loadScript("/melis/MelisCms/Page/checkIdentity?idPage=<?= $this->idPage; ?>");
+
                 clearTimeout(jQueryChecker);
             }
 
@@ -50,7 +51,13 @@
         if ('undefined' == typeof window.jQuery) {
             loadScript("/MelisCore/assets/components/library/jquery/jquery.min.js?v=v1.2.3");
         }
+        // loadLayoutScripts();
 
-        loadLayoutScripts();
     }
 </script>
+
+<script type="text/javascript" src="/MelisCore/js/library/tinymce/tinymce.min.js"></script>
+<script type="text/javascript" src="/MelisCore/js/tinyMCE/tinymce_cleaner.js"></script>
+<script type="text/javascript" src="/MelisCore/js/tinyMCE/melis_tinymce.js"></script>
+<script type="text/javascript" src="/MelisCms/js/tools/findpage.tool.js"></script>
+<script type="text/javascript" src="/melis/MelisCms/Page/checkIdentity?idPage=<?= $this->idPage; ?>"></script>

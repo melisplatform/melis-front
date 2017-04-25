@@ -3,6 +3,10 @@
 return array(
     'plugins' => array(
         'melisfront' => array(
+            'conf' => array(
+                // user rights exclusions
+                'rightsDisplay' => 'none',
+            ),
             'plugins' => array(
                 'MelisFrontBreadcrumbPlugin' => array(
                     'front' => array(
