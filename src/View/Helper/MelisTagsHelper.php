@@ -47,12 +47,12 @@ class MelisTagsHelper extends AbstractHelper
 		if (empty($this->datasPages[$idPage]))
 		{
 			$datasPage = $melisPage->getDatasPage($idPage, 'published');
-			$this->datasPages[$idPage] = $datasPage->getMelisPageTree();
+			$this->datasPages[$idPage] = (!empty($datasPage)) ? $datasPage->getMelisPageTree() : '';
 		}
 		if (empty($this->datasPagesSaved[$idPage]) && $this->renderMode == 'melis')
 		{
 			$datasPageSaved = $melisPage->getDatasPage($idPage, 'saved');
-			$this->datasPagesSaved[$idPage] = $datasPageSaved->getMelisPageTree();
+			$this->datasPagesSaved[$idPage] = (!empty($datasPageSaved)) ? $datasPageSaved->getMelisPageTree() : '';
 		}
 	}
 	
