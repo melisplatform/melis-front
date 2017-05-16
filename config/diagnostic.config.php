@@ -4,6 +4,10 @@ return array(
 
     'plugins' => array(
         'diagnostic' => array(
+            'conf' => array(
+                // user rights exclusions
+                'rightsDisplay' => 'none',
+            ),
             'MelisFront' => array(
                 // location of your test folder inside the module
                 'testFolder' => 'test',
@@ -18,7 +22,7 @@ return array(
                 // instead, just put the methods that will be needing or requiring the payloads for your test.
                 'methods' => array(
                     // the key name should correspond to what your test method name in the unit test controller
-                    'basicTest' => array(
+                    'testBasicMelisFrontTestSuccess' => array(
                         'payloads' => array()
                     ),
                 ),

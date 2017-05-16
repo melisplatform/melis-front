@@ -38,12 +38,6 @@ class MelisFrontControllerTest extends AbstractHttpControllerTestCase
         $this->assertEquals("equalvalue", "equalvalue");
     }
 
-    public function testBasicMelisFrontTestError()
-    {
-        $this->assertEquals("supposed-to", "display-an-error");
-    }
-
-
 
 }
 
