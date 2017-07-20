@@ -147,8 +147,7 @@ class MelisTagsHelper extends AbstractHelper
 		{
 		    // BO, we add the classes and div nessecary to render TInyMCE
 		    $routeMatch = $this->serviceManager->get('Application')->getMvcEvent()->getRouteMatch();
-		    $params = $routeMatch->getParams();
-		    $idpageLoaded = $params['idpage'];
+		    $idpageLoaded = $routeMatch->getParam('idpage');
 		     
 			if (!$this->preview && $idpageLoaded == $idPage)
 			{
