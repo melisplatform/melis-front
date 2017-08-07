@@ -1,0 +1,78 @@
+<?php 
+
+    $name = $this->pluginName;
+    if (!empty($this->pluginBackConfig))
+    {
+        $conf = $this->pluginBackConfig;
+        if (!empty($conf['name']))
+            $name = $this->translate($conf['name']);
+    }
+    
+    $pluginId = '';
+    if (!empty($this->pluginFrontConfig) && !empty($this->pluginFrontConfig['id']))
+        $pluginId = $this->pluginFrontConfig['id'];
+
+    if ($this->fromDragDropZone)
+    {
+        $module = $this->translate('tr_PluginSection_' . $this->configPluginKey);
+        if ($module == 'tr_PluginSection_' . $this->configPluginKey)
+            $module = $this->configPluginKey;
+        
+            
+        $uniqueContainerId =  $this->pageId . '_' . $this->configPluginKey . '_' . $this->pluginName . '_' . $pluginId;
+    
+?>
+<div class="melis-ui-outlined" id="<?= $uniqueContainerId; ?>">
+	<div class="plugin-hardcoded-conf" style="display:none;">
+		<?php 
+		      echo serialize($this->hardcodedConfig);
+		?>
+	</div>
+	<div class="melis-plugin-indicator">
+		<i class="fa fa-plug"></i>
+	</div>
+	<div class="melis-plugin-tools-box" data-module="<?= $this->configPluginKey; ?>"
+		data-plugin="<?= $this->pluginName; ?>" data-plugin-id="<?= $pluginId; ?>" data-site-module="<?= $this->siteModule; ?>" data-melis-tag="<?= $this->pluginXmlDbKey; ?>" data-melis-fromDragDropZone="<?= $this->fromDragDropZone; ?>">
+		<div class="melis-plugin-title-box">
+			<span class="melis-module-title"><?= $module; ?></span>
+			<span class="melis-plugin-title"><?= $name; ?></span>
+		</div>
+	    <div class="m-plugin-sub-tools clearfix">
+	    	<?php 
+	    	  if ($this->fromDragDropZone)
+	    	  {
+	    	?>
+	        <div class="m-move-handle">
+	            <i class="fa fa-arrows"></i>
+	        </div>
+	        <div class="m-trash-handle">
+	            <i class="fa fa-trash"></i>
+	        </div>
+	        <?php 
+	    	  }
+	        ?>
+	    </div>
+	</div>
+<?php 
+    }
+    
+    $data_tag_type = " data-tag-type='$this->type'";
+    $data_tag_id = " data-tag-id='$this->tagId'";
+    $data_id_page = " data-id-page='$this->pageId'";
+    $tag_id = " id='$this->tagId'";
+    
+?>
+    <div class='<?= $this->type; ?>-editable melis-editable' <?= $data_tag_type; ?> <?= $data_tag_id; ?> <?= $data_id_page; ?> <?= $tag_id; ?> data-plugin-hardcode="true" data-module="<?= $this->configPluginKey; ?>"
+		data-plugin="<?= $this->pluginName; ?>" data-plugin-id="<?= $pluginId; ?>"  data-melis-tag="<?= $this->pluginXmlDbKey; ?>">
+    <?php 
+        echo $this->viewFront;
+    ?>
+    </div>
+<?php 
+    if ($this->fromDragDropZone)
+    {
+?>
+</div>
+<?php 
+    }
+?>

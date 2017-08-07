@@ -18,7 +18,7 @@ use Zend\Mvc\MvcEvent;
  * on Melis Pages
  * 
  */
-class MelisFrontSEOMetaPageListener implements ListenerAggregateInterface
+class MelisFrontPluginsToLayoutListener implements ListenerAggregateInterface
 {
     public function attach(EventManagerInterface $events)
     {
@@ -38,11 +38,11 @@ class MelisFrontSEOMetaPageListener implements ListenerAggregateInterface
         		// No routematch, we're not in Melis, no need this listener
             	if (!$routeMatch)
             		return;
-            	 
+            		
             	$renderMode = $routeMatch->getParam('renderMode');
 
             	// Only for Melis Front or Back routes
-            	if ($renderMode == 'melis' || $renderMode == 'front')
+            	if ($renderMode == 'front')
             	{
             		$sm = $e->getApplication()->getServiceManager();
             	
@@ -57,17 +57,18 @@ class MelisFrontSEOMetaPageListener implements ListenerAggregateInterface
             		
             		$idpage = $params['idpage'];
             	
+            		    
             		/**
             		 * Replace Head and SEO datas automatically
             		 */
             		$melisFrontHead = $sm->get('MelisFrontHead');
-            		$newContent = $melisFrontHead->updateTitleAndDescription($idpage, $content);
-            	
+            		$newContent = $melisFrontHead->updatePluginsRessources($content);
+            		
             		// Set the updated content
             		$response->setContent($newContent);
             	}
         	},
-        110);
+        115);
         
         $this->listeners[] = $callBackHandler;
     }

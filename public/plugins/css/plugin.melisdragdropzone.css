@@ -1,0 +1,99 @@
+/*
+ * CSS for Melis DragDropZone
+ */
+
+.melis-dragdropzone {
+    position: relative;
+    margin-bottom: 10px;
+    padding: 15px;
+    min-height: 250px;
+    height: auto;
+    background: rgba(147, 46, 42, 0.1);
+    transition: opacity 0.4s;
+    -webkit-transition: opacity 0.4s;
+    -moz-transition: opacity 0.4s;
+    border: 1px dashed #de7d79;
+    border-radius: 4px;
+    bottom: -25px;
+}
+.melis-dragdropzone .melis-ui-outlined {
+    margin-bottom: 30px;
+}
+.wrapper div.melis-dragdropzone:last-of-type {
+    margin-bottom: 35px;
+}
+
+.melis-dragdropzone.no-content:after {
+    content: "\f1e6";
+    font-family: FontAwesome;
+    font-style: normal;
+    font-weight: normal;
+    text-decoration: inherit;
+    position: absolute;
+    font-size: 50px;
+    color: #a2413d;
+    top: 50%;
+    left: 0;
+    right: 0;
+    display: block;
+    text-align: center;
+    transition: font 0.4s;
+    transition: font 0.4s;
+    transition: font 0.4s;
+    transform: translateY(-50%);
+    -webkit-transform: translateY(-50%);
+    -moz-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+}
+
+.melis-dragdropzone.no-content:before {
+    content: "Drag plugin here!";
+    position: absolute;
+    top: 50%;
+    transform: translateY(145%);
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-family: "Montserrat", sans-serif;
+    color: #a2413d;
+}
+
+.melis-dragdropzone.ui-droppable-active {
+    opacity: 1;
+    background: #932e2a;
+}
+
+.melis-dragdropzone.ui-droppable-active:after {
+    font-size: 80px;
+}
+
+.melis-dragdropzone.ui-state-highlight:after {
+    content: "\f00c";
+    font-family: FontAwesome;
+    font-style: normal;
+    font-weight: normal;
+    text-decoration: inherit;
+    position: absolute;
+    font-size: 80px;
+    color: #fff;
+    top: 50%;
+    left: 0;
+    right: 0;
+    z-index: 1;
+    display: block;
+    text-align: center;
+}
+
+.melis-dragdropzone.ui-state-highlight {
+	background: rgba(255, 255, 255, 0.4);
+    color: #fff;
+    border: none;
+    opacity: 1;
+}
+.melis-dragdropzone.ui-state-highlight:before {
+	border: 0;
+}

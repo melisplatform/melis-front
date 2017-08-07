@@ -14,8 +14,8 @@
 		
 		foreach ($array as $key => $subArray) 
 		{
-		    $subMenu = (!empty($subArray->children)) ? makeList($subArray->children) : PHP_EOL;
-			$output .= '<li>' . $subArray->page_name . $subMenu . '</li>'.PHP_EOL;
+		    $subMenu = (!empty($subArray['pages'])) ? makeList($subArray['pages']) : PHP_EOL;
+			$output .= '<li>' . $subArray['label'] . $subMenu . '</li>'.PHP_EOL;
 		}
 		
 		$output .= '</ul>'.PHP_EOL;
@@ -23,5 +23,12 @@
 		return $output;
 	}
 	
-	echo makeList($this->menu);
+	if ($this->menu)
+	{
+	    echo makeList($this->menu);
+	}
+	else
+	{
+	    echo '<div class="alert alert-warning" role="alert">No result</div>';
+	}
 ?>

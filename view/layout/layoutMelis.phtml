@@ -1,18 +1,11 @@
 <?php echo $this->content; ?>
 <!-- Rendered with Melis CMS V2 - <?= date("Y-m-d H:i:s"); ?> -->
 
-<!--  ======================= tinymce temp CSS ============================= -->
-<style>
-    .melis-editable{
-        border: 1px dotted #333;
-    }
-    .melis-editable:hover{
-        border-color: red;
-    }
-</style>
-
 <script type="text/javascript">
+
     var jQueryChecker = null;
+    var melisActivePageId = window.parent.$("#"+parent.activeTabId).find("iframe").data("iframe-id");
+    
     <?php
     /**
      * This JS function will check if JQuery is already added in the template
@@ -39,7 +32,7 @@
                 loadScript("/MelisCore/js/tinyMCE/tinymce_cleaner.js");
                 loadScript("/MelisCore/js/tinyMCE/melis_tinymce.js");
                 loadScript("/MelisCms/js/tools/findpage.tool.js");
-                loadScript("/melis/MelisCms/Page/checkIdentity?idPage=<?= $this->idPage; ?>");
+                loadScript("/MelisCms/js/plugins/plugins.edition.js");
 
                 clearTimeout(jQueryChecker);
             }
@@ -52,12 +45,29 @@
             loadScript("/MelisCore/assets/components/library/jquery/jquery.min.js?v=v1.2.3");
         }
         // loadLayoutScripts();
+        
+        // disable all links in preview page       
+        $('a').click(function(event) { event.preventDefault(); });
 
+        // disable all form submitting in preview page
+        $('form').submit(false);
     }
 </script>
 
 <script type="text/javascript" src="/MelisCore/js/library/tinymce/tinymce.min.js"></script>
 <script type="text/javascript" src="/MelisCore/js/tinyMCE/tinymce_cleaner.js"></script>
 <script type="text/javascript" src="/MelisCore/js/tinyMCE/melis_tinymce.js"></script>
+<script type="text/javascript" src="/MelisFront/js/melisfront_tinycme.js"></script>
 <script type="text/javascript" src="/MelisCms/js/tools/findpage.tool.js"></script>
-<script type="text/javascript" src="/melis/MelisCms/Page/checkIdentity?idPage=<?= $this->idPage; ?>"></script>
+<script type="text/javascript" src="/MelisCms/js/plugins/plugins.edition.js"></script>
+<script type="text/javascript" src="/melis/MelisCore/Language/getTranslations"></script>
+<?php
+    foreach ($this->assets['css']as $css)
+        echo '<link href="' . $css . '" media="screen" rel="stylesheet" type="text/css">' . "\n";
+
+    foreach ($this->assets['js']as $js)
+        echo '<script type="text/javascript" src="' . $js . '"></script>' . "\n";
+
+    echo $this->pluginsMenu;
+
+?>

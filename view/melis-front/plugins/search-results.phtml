@@ -1,9 +1,39 @@
-<?php if ($this->searchresults->count()):?>
-	<?php foreach ($this->searchresults As $key => $val):?>
-        <h4><a href="<?php echo $val->url ?>"><?php echo $val->pageName ?></a></h4>
-        <p><?php echo date('M d, Y', strtotime($val->lastPageEdit))?></p>
-        <p><?php (is_array($val['description'])) ? implode(' ', $val['description']) : $val['description'] ?></p>
-    <?php endforeach;?>
-<?php else:?>    
-	<h4>No Result</h4>
-<?php endif;?>
+<?php if ($this->siteDirExist){?>
+    <?php if (!$this->indexerOk){?>
+    	<?php if ($this->moduleDirWritable){?>
+        		<p>The search engine cannot proceed to a search as the website has not been indexed.</p>
+                <p>Please use the following URL to index your website:</p>
+                <a href="<?php echo $this->indexerURL ?>"><?php echo $this->indexerURL?></a>
+    	<?php }else{?>
+			<h3><strong>Oppsss...</strong></h3>
+			<p>/module/MelisSites/<?php echo $this->moduleName?>/luceneIndex directory is not writable, please make the directory writable and try again</p>
+    	<?php }?>
+    <?php }else{?>
+        <?php if ($this->searchresults->count()){?>
+        	<?php foreach ($this->searchresults As $key => $val){?>
+            	<h4><a href="<?php echo $val->url ?>"><?php echo $val->pageName ?></a></h4>
+                <p><?php echo date('M d, Y', strtotime($val->lastPageEdit))?></p>
+                <p><?php (is_array($val['description'])) ? implode(' ', $val['description']) : $val['description'] ?></p>
+            <?php }?>
+            	
+        	<!-- Pagination -->
+            <?php 
+                // Generating Pagination Control using partial view
+                echo $this->paginationControl(
+                        $this->searchresults, 
+                        'Sliding', 
+                        'MelisFront/list-paginator', 
+                        array(
+                            'searchKey' => $this->searchKey,
+                            'nbPageBeforeAfter' => $this->nbPageBeforeAfter
+                        )
+                    ); 
+            ?>
+        <?php }else{?>    
+        	<div class="alert alert-warning" role="alert">No result</div>
+        <?php }?>
+    <?php }?>
+<?php }else{?>
+	<h3><strong>Oppsss...</strong></h3>
+	<p>/module/MelisSites/<?php echo $this->moduleName?> directory doesn't exist</p>
+<?php }?>

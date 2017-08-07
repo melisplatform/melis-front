@@ -11,6 +11,8 @@ namespace MelisFront\Controller\Plugin;
 
 use MelisEngine\Controller\Plugin\MelisTemplatingPlugin;
 use MelisFront\Navigation\MelisFrontNavigation;
+use Zend\View\Model\ViewModel;
+use Zend\Session\Container;
 /**
  * This plugin implements the business logic of the
  * "Breadcrumb" plugin.
@@ -20,7 +22,6 @@ use MelisFront\Navigation\MelisFrontNavigation;
  * 
  * front() and back() are the only functions to create / update.
  * front() generates the website view
- * back() generates the plugin view in template edition mode (TODO)
  * 
  * Configuration can be found in $pluginConfig / $pluginFrontConfig / $pluginBackConfig
  * Configuration is automatically merged with the parameters provided when calling the plugin.
@@ -47,8 +48,13 @@ use MelisFront\Navigation\MelisFrontNavigation;
  */
 class MelisFrontBreadcrumbPlugin extends MelisTemplatingPlugin
 {
-    // the key of the configuration in the app.plugins.php
-    public $configPluginKey = 'melisfront';
+    
+    public function __construct($updatesPluginConfig = array())
+    {
+        $this->configPluginKey = 'melisfront';
+        $this->pluginXmlDbKey = 'melisBreadcrumb';
+        parent::__construct($updatesPluginConfig);
+    }
     
     /**
      * This function gets the datas and create an array of variables
@@ -56,13 +62,16 @@ class MelisFrontBreadcrumbPlugin extends MelisTemplatingPlugin
      */
     public function front()
     {
-        $breadcrumb = array();
         // Get the parameters and config from $this->pluginFrontConfig (default > hardcoded > get > post)
+        $data = $this->getFormData();
+        
         // Retrieving the pageId from config
-        $pageId = (!empty($this->pluginFrontConfig['pageId'])) ? $this->pluginFrontConfig['pageId'] : null;
+        $pageId = (!empty($data['pageIdRootBreadcrumb'])) ? $data['pageIdRootBreadcrumb'] : null;
         
         $treeSrv = $this->getServiceLocator()->get('MelisEngineTree');
         $pageBreadcrumb = $treeSrv->getPageBreadcrumb($pageId, 0, true);
+        
+        $breadcrumb = array();
         
         if (is_array($pageBreadcrumb))
         {
@@ -90,32 +99,151 @@ class MelisFrontBreadcrumbPlugin extends MelisTemplatingPlugin
             }
         }
         
-        /**
-         * Sending service end event
-         * This process param can be modified by catching the event from listeners
-         * To modified the data, need to use the same param name
-         * in the sample code we use index "breadcrumb". and return same index of variable
-         * Ex.
-         *      array['breadcrumb'] = modifiedArray(datas....);
-         */
-        
-        $breadcrumb = $this->sendEvent('melisfront_site_breadcrumb_plugin', array('breadcrumb' => $breadcrumb));
-        
         // Create an array with the variables that will be available in the view
         $viewVariables = array(
-            'breadcrumb' => $breadcrumb['breadcrumb']
+            'pluginId' => $data['id'],
+            'breadcrumb' => $breadcrumb,
         );
         
         // return the variable array and let the view be created
         return $viewVariables;
     }
-    
+
+
     /**
-     * This function return the back office rendering for the template edition system
-     * TODO
+     * This function generates the form displayed when editing the parameters of the plugin
+     * @return array
      */
-    public function back()
+    public function createOptionsForms()
     {
-        return array();
+        // construct form
+        $factory = new \Zend\Form\Factory();
+        $formElements = $this->getServiceLocator()->get('FormElementManager');
+        $factory->setFormElementManager($formElements);
+        $formConfig = $this->pluginBackConfig['modal_form'];
+
+        $response = [];
+        $render   = [];
+        if (!empty($formConfig)) {
+            foreach ($formConfig as $formKey => $config) {
+                $form = $factory->createForm($config);
+                $request = $this->getServiceLocator()->get('request');
+                $parameters = $request->getQuery()->toArray();
+
+                if (!isset($parameters['validate'])) {
+
+                    $form->setData($this->getFormData());
+                    $viewModelTab = new ViewModel();
+                    $viewModelTab->setTemplate($config['tab_form_layout']);
+                    $viewModelTab->modalForm = $form;
+                    $viewModelTab->formData   = $this->getFormData();
+                    $viewRender = $this->getServiceLocator()->get('ViewRenderer');
+                    $html = $viewRender->render($viewModelTab);
+                    array_push($render, [
+                            'name' => $config['tab_title'],
+                            'icon' => $config['tab_icon'],
+                            'html' => $html
+                        ]
+                    );
+                }
+                else {
+
+                    // validate the forms and send back an array with errors by tabs
+                    $post = get_object_vars($request->getPost());
+                    $success = false;
+                    $form->setData($post);
+
+                    $errors = array();
+                    if ($form->isValid()) {
+                        $data = $form->getData();
+                        $success = true;
+                        array_push($response, [
+                            'name' => $this->pluginBackConfig['modal_form'][$formKey]['tab_title'],
+                            'success' => $success,
+                        ]);
+                    } else {
+                        $errors = $form->getMessages();
+
+                        foreach ($errors as $keyError => $valueError) {
+                            foreach ($config['elements'] as $keyForm => $valueForm) {
+                                if ($valueForm['spec']['name'] == $keyError &&
+                                    !empty($valueForm['spec']['options']['label'])
+                                )
+                                    $errors[$keyError]['label'] = $valueForm['spec']['options']['label'];
+                            }
+                        }
+
+                        array_push($response, [
+                            'name' => $this->pluginBackConfig['modal_form'][$formKey]['tab_title'],
+                            'success' => $success,
+                            'errors' => $errors,
+                            'message' => '',
+                        ]);
+                    }
+
+                }
+            }
+        }
+
+        if (!isset($parameters['validate'])) {
+            return $render;
+        }
+        else {
+            return $response;
+        }
+
     }
+
+    /**
+     * Returns the data to populate the form inside the modals when invoked
+     * @return array|bool|null
+     */
+    public function getFormData()
+    {
+        return parent::getFormData();
+    }
+    /**
+     * This method will decode the XML in DB to make it in the form of the plugin config file
+     * so it can overide it. Only front key is needed to update.
+     * The part of the XML corresponding to this plugin can be found in $this->pluginXmlDbValue
+     */
+    public function loadDbXmlToPluginConfig()
+    {
+        $configValues = array();
+
+        $xml = simplexml_load_string($this->pluginXmlDbValue);
+        if ($xml)
+        {
+            if (!empty($xml->template_path))
+                $configValues['template_path'] = (string)$xml->template_path;
+            if (!empty($xml->pageIdRootBreadcrumb))
+                $configValues['pageIdRootBreadcrumb'] = (string)$xml->pageIdRootBreadcrumb;
+        }
+
+        return $configValues;
+    }
+
+    /**
+     * This method saves the XML version of this plugin in DB, for this pageId
+     * Automatically called from savePageSession listenner in PageEdition
+     */
+    public function savePluginConfigToXml($parameters)
+    {
+        $xmlValueFormatted = '';
+
+        // template_path is mendatory for all plugins
+        if (!empty($parameters['template_path']))
+            $xmlValueFormatted .= "\t\t" . '<template_path><![CDATA[' . $parameters['template_path'] . ']]></template_path>';
+        if (!empty($parameters['pageIdRootBreadcrumb']))
+            $xmlValueFormatted .= "\t\t" . '<pageIdRootBreadcrumb><![CDATA[' . $parameters['pageIdRootBreadcrumb'] . ']]></pageIdRootBreadcrumb>';
+          
+        // Something has been saved, let's generate an XML for DB
+        $xmlValueFormatted = "\t" . '<' . $this->pluginXmlDbKey . ' id="' . $parameters['melisPluginId'] . '">' .
+            $xmlValueFormatted .
+            "\t" . '</' . $this->pluginXmlDbKey . '>' . "\n";
+
+        return $xmlValueFormatted;
+    }
+
+
 }

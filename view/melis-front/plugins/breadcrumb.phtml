@@ -1,9 +1,15 @@
+<?php if ($this->breadcrumb) {?>
 <ol class="breadcrumb">
-    <?php foreach ($this->breadcrumb As $key => $val):?>
-    	<?php if ($val['isActive']):?>
+    <?php foreach ($this->breadcrumb As $key => $val){?>
+    	<?php if ($val['isActive']){?>
     		<li class="active"><?php echo $val['label']?></li>
-    	<?php else:?>
+    	<?php }else{?>
     		<li><a title="<?php echo $val['label']  ?>" href="<?php echo $val['uri']?>"><?php echo $val['label'] ?></a></li>
-    	<?php endif;?>
-    <?php endforeach;?>
+    	<?php }?>
+    <?php }?>
 </ol>
+<?php }else{?>
+	<div class="alert alert-warning" role="alert">
+		No result
+	</div>
+<?php }?>

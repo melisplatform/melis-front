@@ -122,4 +122,31 @@ class MelisFrontHeadService implements MelisFrontHeadServiceInterface, ServiceLo
 		
 		return $newContent;
 	}
+	
+	public function updatePluginsRessources($content)
+	{
+	    $newContent = $content;
+	    
+	    // Auto adding plugins CSS and JS files to layout
+	    if ($this->serviceLocator->get('templating_plugins')->hasItem('plugins_front'))
+	    {
+	        $files = $this->serviceLocator->get('templating_plugins')->getItem('plugins_front');
+	         
+	        $cssHtmlToAdd = "\n";
+	        foreach ($files['css'] as $css)
+	            $cssHtmlToAdd .= '<link href="' . $css . '" media="screen" rel="stylesheet" type="text/css">' . "\n";
+
+	        $headRegex = '/(<\/head[^>]*>)/im';
+	        $newContent = preg_replace($headRegex, "$cssHtmlToAdd$1", $newContent);
+	         
+	        $jsHtmlToAdd = "\n";
+	        foreach ($files['js'] as $js)
+	            $jsHtmlToAdd .= '<script type="text/javascript" src="' . $js . '"></script>' . "\n";
+
+	        $bodyRegex = '/(<\/body[^>]*>)/im';
+	        $newContent = preg_replace($bodyRegex, "$jsHtmlToAdd$1", $newContent);
+	    }
+	    
+	    return $newContent;
+	}
 }

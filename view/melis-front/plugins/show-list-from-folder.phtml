@@ -1,6 +1,6 @@
 <?php
 	// Make a list from an array
-	function makeList($array) 
+	function makeListFold($array) 
 	{
 	    
 		// Base case: an empty array produces no list
@@ -14,7 +14,7 @@
 		
 		foreach ($array as $key => $subArray) 
 		{
-		    $subMenu = (!empty($subArray->children)) ? makeList($subArray->children) : PHP_EOL;
+		    $subMenu = (!empty($subArray->children)) ? makeListFold($subArray->children) : PHP_EOL;
 			$output .= '<li>' . $subArray->page_name . $subMenu . '</li>'.PHP_EOL;
 		}
 		
@@ -23,5 +23,12 @@
 		return $output;
 	}
 	
-	echo makeList($this->listofpages);
+	if ($this->listofpages)
+	{
+	    echo makeListFold($this->listofpages);
+	}
+	else
+	{
+	    echo '<div class="alert alert-warning" role="alert">No result</div>';
+	}
 ?>

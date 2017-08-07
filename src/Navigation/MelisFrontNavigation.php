@@ -49,24 +49,27 @@ class MelisFrontNavigation extends DefaultNavigationFactory
 		return $this->serviceLocator;
 	}
 	
-	public function getSiteMenu($siteId)
+	public function getPageAndSubPages($pageId)
 	{
 	    $melisPage = $this->serviceLocator->get('MelisEnginePage');
-	    $pageTree = $melisPage->getDatasPage($siteId);
+	    $pageTree = $melisPage->getDatasPage($pageId);
 	    
 	    $pages = array();
 	    
 	    if (!is_null($pageTree))
 	    {
 	        $page = $this->formatPageInArray((Array)$pageTree->getMelisPageTree());
-	         
-	        $children = $this->getChildrenRecursive($siteId);
+	        
+	        $children = $this->getChildrenRecursive($pageId);
 	        if (!empty($children))
 	        {
 	            $page['pages'] = $children;
 	        }
 	         
-	        $pages[] = $page;
+	        if ($page)
+	        {
+	            $pages[] = $page;
+	        }
 	    }
 	    
 	    return $pages;
@@ -88,9 +91,9 @@ class MelisFrontNavigation extends DefaultNavigationFactory
 		
 		if ($pages)
 		{
-			$pages = $pages->toArray();
+		    $rpages = $pages->toArray();
 			
-			foreach ($pages as $page)
+			foreach ($rpages as $page)
 			{
 				$tmp = $this->formatPageInArray($page);
 				$children = $this->getChildrenRecursive($page['tree_page_id']);

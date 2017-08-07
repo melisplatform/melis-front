@@ -6,7 +6,7 @@
 
 // Looking for the template
 $templatePath = "../module/MelisSites/".$this->datasPage->getMelisTemplate()->tpl_zf2_website_folder."/template/".$this->datasPage->getMelisTemplate()->tpl_php_path;
-$templatePath = HTTP_ROOT . $templatePath;
+$templatePath = $_SERVER['DOCUMENT_ROOT'] . $templatePath;
 
 if (!file_exists($templatePath))
 {
