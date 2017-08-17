@@ -24,6 +24,7 @@ use MelisFront\Listener\MelisFront404To301Listener;
 use MelisFront\Listener\MelisFront404CatcherListener;
 use MelisFront\Listener\MelisFrontXSSParameterListener;
 use Zend\Session\Container;
+use MelisFront\Listener\MelisFrontPageCacheListener;
 
 class Module
 {
@@ -53,7 +54,8 @@ class Module
         }
 
         // do not load listeners if working on back-office
-        if(!$isBackOffice) {
+        if(!$isBackOffice) 
+        {
             // Catching PAGE SEO URLs to update Router
             $eventManager->attach(new MelisFrontSEOReformatToRoutePageUrlListener());
 
@@ -80,6 +82,8 @@ class Module
 
             // This will automatically prevent XSS attacks
             $eventManager->attach(new MelisFrontXSSParameterListener());
+            
+            $eventManager->attach(new MelisFrontPageCacheListener());
         }
 
 
