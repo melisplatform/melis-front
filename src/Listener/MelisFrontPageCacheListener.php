@@ -28,10 +28,11 @@ class MelisFrontPageCacheListener implements ListenerAggregateInterface
                 // Get route match to know if we are displaying in back or front
                 $routeMatch = $e->getRouteMatch();
                 
-                $params = $routeMatch->getParams();
                 
+                if($routeMatch) {
                 if (!empty($params['idpage']) && $params['renderMode'] == 'front')
                 {
+                    $params = $routeMatch->getParams();
                     $response = $e->getResponse();
                     
                     $page = $response->getContent();
@@ -52,6 +53,8 @@ class MelisFrontPageCacheListener implements ListenerAggregateInterface
                         $melisEngineCacheSystem->setCacheByKey($cacheKey, $cacheConfig, $page);
                     }
                 }
+                }
+
             }
         );
         $this->listeners[] = $callBackHandler;
