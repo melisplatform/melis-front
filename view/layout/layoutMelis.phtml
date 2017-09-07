@@ -1,4 +1,4 @@
-<?php echo $this->content; ?>
+<?php  echo $this->content; ?>
 <!-- Rendered with Melis CMS V2 - <?= date("Y-m-d H:i:s"); ?> -->
 
 <link href="https://fonts.googleapis.com/css?family=Lato:400,700,900" rel="stylesheet">
@@ -11,8 +11,9 @@
     }
 ?>
 
+<script type="text/javascript" src="/MelisCore/js/library/tinymce/tinymce.min.js"></script>
+<script type="text/javascript" src="/melis/MelisCore/Language/getTranslations"></script>
 <script type="text/javascript">
-
     var jQueryChecker = null;
     var melisActivePageId = window.parent.$("#"+parent.activeTabId).find("iframe").data("iframe-id");
     
@@ -23,6 +24,38 @@
      * If no JQuery, then we add it.
      */
     ?>
+    // default js
+    var scriptMap =[
+        "/MelisCore/js/tinyMCE/tinymce_cleaner.js",
+        "/MelisCore/js/tinyMCE/melis_tinymce.js",
+        "/MelisCms/js/tools/findpage.tool.js",
+        "/MelisCms/js/plugins/plugins.edition.js",
+    ];
+
+
+    <?php
+        // plugins js
+        foreach ($this->assets['js']as $js)
+        {
+            echo 'scriptMap.push("'.$js.'");' . "\n";
+        }
+    ?>
+    var order = 0;
+    // properly load script in order
+    function loadScriptInOrder(){
+        if(order == scriptMap.length) { return; }
+        var JSLink = scriptMap[order];
+        var JSElement = document.createElement('script');
+        JSElement.src = JSLink;
+        JSElement.onload = callback;
+        document.getElementsByTagName('body')[0].appendChild(JSElement);
+
+        function callback(){
+            order++;
+            loadScriptInOrder();
+        }
+    }
+
     function loadScript(url, callback) {
         var body = document.getElementsByTagName('body')[0];
         var script = document.createElement('script');
@@ -32,33 +65,11 @@
         script.onload = callback;
         body.appendChild(script);
     }
-    
-    function loadLayoutScripts() {
-        var jQueryChecker = setTimeout(function(){
-            if(window.jQuery !== undefined) {
-                loadScript("/MelisCore/js/library/tinymce/tinymce.min.js");
-                loadScript("/MelisCore/js/tinyMCE/tinymce_cleaner.js");
-                loadScript("/MelisCore/js/tinyMCE/melis_tinymce.js");
-                loadScript("/MelisFront/js/melisfront_tinycme.js");
-                loadScript("/MelisCms/js/tools/findpage.tool.js");
-                loadScript("/MelisCms/js/plugins/plugins.edition.js");
-
-				<?php 
-    				foreach ($this->assets['js']as $js)
-    				{
-    				    echo 'loadScript("'.$js.'");' . "\n";
-    				}
-				?>
-                
-                clearTimeout(jQueryChecker);
-            }
-        }, 300);
-    } 
-
 
     (function() {
-        
+        // check jQuery
         if ('undefined' == typeof window.jQuery) {
+            // add jQuery
             loadScript("/MelisCore/assets/components/library/jquery/jquery.min.js?v=v1.2.3");
         }     
 
@@ -67,20 +78,19 @@
         for(i=0, len=anchors.length; i<len; i++) {
             anchors[i].addEventListener('click', function(e){e.preventDefault();});
         }
-        // jQuery checker
+
+        // jQuery checker if properly loaded
         var checkjQueryExists = setInterval(function() {
         	if(window.jQuery !== undefined) {
-        	 	$('form').submit(false); 
-             	loadLayoutScripts();
-             	clearInterval(checkjQueryExists);
+                $( document ).ready(function() {
+                    $('form').submit(false);
+                    loadScriptInOrder();
+                });
+                clearInterval(checkjQueryExists);
             }
         }, 500);
     })();
 </script>
-
-
-
-<script type="text/javascript" src="/melis/MelisCore/Language/getTranslations"></script>
 
 <?php
     echo $this->pluginsMenu;
