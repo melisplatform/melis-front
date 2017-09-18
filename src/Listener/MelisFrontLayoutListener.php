@@ -161,9 +161,12 @@ class MelisFrontLayoutListener implements ListenerAggregateInterface
                         // Set the updated content
                         $em = $e->getApplication()->getEventManager();
                         $tmp = $em->trigger('melis_front_layout', $this, array('content' => $newContent));
-                        if($tmp->offsetGet(0)) {
-                            $newContent = $tmp->offsetGet(0);
+                        if($tmp && isset($tmp[0])) {
+                            if($tmp->offsetGet(0)) {
+                                $newContent = $tmp->offsetGet(0);
+                            }
                         }
+
                         $response->setContent($newContent);
                     }
                 }
