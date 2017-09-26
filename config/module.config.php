@@ -69,6 +69,17 @@ return array(
 							'spec' => ''
 						),
 					),
+                    'front-plugin-widths' => array(
+                        'type'    => 'Literal',
+                        'options' => array(
+                            'route'    => 'css/plugin-width.css',
+                            'defaults' => array(
+                                '__NAMESPACE__' => 'MelisFront\Controller',
+                                'controller' => 'Style',
+                                'action'     => 'pluginWidths',
+                            ),
+                        ),
+                    ),
                     'front-module-ctrl-action' => array(
                         'type'    => 'Segment',
                         'options' => array(
@@ -110,6 +121,7 @@ return array(
                             ),
                         ),
 				    ),
+
 				),
             ),
             'melis-plugin-renderer' => array(
@@ -149,6 +161,7 @@ return array(
             'MelisFront\Controller\SpecialUrls' => 'MelisFront\Controller\SpecialUrlsController',
             'MelisFront\Controller\MelisFrontSearch' => 'MelisFront\Controller\MelisFrontSearchController',
             'MelisFront\Controller\MelisPluginRenderer' => 'MelisFront\Controller\MelisPluginRendererController',
+            'MelisFront\Controller\Style' => 'MelisFront\Controller\StyleController',
         ),
     ),
     'controller_plugins' => array(
