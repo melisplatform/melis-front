@@ -1,0 +1,111 @@
+[1mdiff --git a/src/Controller/MelisPluginRendererController.php b/src/Controller/MelisPluginRendererController.php[m
+[1mindex 38db716..df7bbd3 100644[m
+[1m--- a/src/Controller/MelisPluginRendererController.php[m
+[1m+++ b/src/Controller/MelisPluginRendererController.php[m
+[36m@@ -17,7 +17,9 @@[m [mclass MelisPluginRendererController extends AbstractActionController[m
+ {[m
+ [m
+     public function getPluginAction()[m
+[31m-    {   [m
+[32m+[m[32m    {[m
+[32m+[m[32m        set_time_limit(0);[m
+[32m+[m
+         $module = $this->getRequest()->getQuery('module', $this->params()->fromRoute('module'));[m
+         $pluginName = $this->getRequest()->getQuery('pluginName', $this->params()->fromRoute('pluginName'));[m
+         $pageId = $this->getRequest()->getQuery('pageId', $this->params()->fromRoute('pageId', 1));[m
+[36m@@ -34,11 +36,11 @@[m [mclass MelisPluginRendererController extends AbstractActionController[m
+             $pluginHardcodedConfig = html_entity_decode($pluginHardcodedConfig, ENT_QUOTES);[m
+             $pluginHardcodedConfig = unserialize($pluginHardcodedConfig);[m
+         }[m
+[31m-        [m
+[32m+[m
+         $translator = $this->getServiceLocator()->get('translator');[m
+[31m-    [m
+[32m+[m
+         $results = array();[m
+[31m-        [m
+[32m+[m
+         $config = $this->getServiceLocator()->get('config');[m
+         if (empty($module) || empty($pluginName) || empty($pageId))[m
+         {[m
+[36m@@ -55,25 +57,25 @@[m [mclass MelisPluginRendererController extends AbstractActionController[m
+             else[m
+             {[m
+                 $pluginConf = $config['plugins'][$module]['plugins'][$pluginName];[m
+[31m-                [m
+[32m+[m
+                 try[m
+                 {[m
+                     $melisPlugin = $this->getServiceLocator()->get('ControllerPluginManager')->get($pluginName);[m
+[31m-                    [m
+[31m-                    // dragdrop, delete only if plugin is not hardcoded[m
+[32m+[m
+[32m+[m[32m//                    // dragdrop, delete only if plugin is not hardcoded[m
+                     if (empty($pluginId))[m
+                         $melisPlugin->setPluginHardcoded(false);[m
+                     else[m
+                         $melisPlugin->setPluginHardcoded(true);[m
+[31m-                    [m
+[32m+[m
+                     if ($fromDragDropZone)[m
+                         $melisPlugin->setPluginFromDragDrop(true);[m
+[31m-                    [m
+[32m+[m
+                     $melisPlugin->setEncapsulatedPlugin($encapsulatedPlugin);[m
+ [m
+                     $pluginParameters = $pluginHardcodedConfig;[m
+                     $pluginParameters['pageId'] = $pageId;[m
+[31m-                    [m
+[32m+[m
+                     // if it's a reload and there's an id[m
+                     if (!empty($pluginId))[m
+                     {[m
+[36m@@ -84,22 +86,25 @@[m [mclass MelisPluginRendererController extends AbstractActionController[m
+                         $generatePluginId = true;[m
+ [m
+                     $melisPluginView = $melisPlugin->render($pluginParameters, $generatePluginId);[m
+[31m-                        [m
+[32m+[m
+                     $viewRender = $this->getServiceLocator()->get('ViewRenderer');[m
+[31m-                    $html = $viewRender->render($melisPluginView);[m
+[31m-                    [m
+[32m+[m[32m                    /**[m
+[32m+[m[32m                     * @todo Need to check, gives an error 500 when modifying the settings on php 7.1.8[m
+[32m+[m[32m                     */[m
+[32m+[m[32m                    $html = @$viewRender->render($melisPluginView);[m
+[32m+[m
+                     $pluginConfFOBO = array();[m
+                     $BoFiles = (!empty($pluginConf['melis']['files']))? $pluginConf['melis']['files'] : array();[m
+                     $BoInit = (!empty($pluginConf['melis']['js_initialization']))? $pluginConf['melis']['js_initialization'] : array();[m
+[31m-                    [m
+[32m+[m
+                     $frontConfig = $melisPlugin->getPluginFrontConfig();[m
+                     $FoFiles = (!empty($frontConfig['files']))? $frontConfig['files'] : array();[m
+[31m-                    [m
+[32m+[m
+                     $pluginConfFOBO = array([m
+                         'front' => array('ressources' => $FoFiles),[m
+                         'melis' => array('ressources' => $BoFiles, 'js_initialization' => $BoInit),[m
+                     );[m
+[31m-                    [m
+[32m+[m
+                     $results = array([m
+                         'success' => true,[m
+                         'datas' => array([m
+[36m@@ -108,14 +113,14 @@[m [mclass MelisPluginRendererController extends AbstractActionController[m
+                         )[m
+                     );[m
+                 }[m
+[31m-                catch (Exception $e)[m
+[32m+[m[32m                catch (\Exception $e)[m
+                 {[m
+                     $results['success'] = false;[m
+                     $results['errors'] = $translator->translate('tr_melisfront_generate_error_Plugin cant be created');[m
+                 }[m
+             }[m
+         }[m
+[31m-        [m
+[32m+[m
+         return new JsonModel($results);[m
+     }[m
+ }[m

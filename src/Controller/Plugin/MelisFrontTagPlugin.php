@@ -68,7 +68,10 @@ class MelisFrontTagPlugin extends MelisTemplatingPlugin
         // Create an array with the variables that will be available in the view
         $viewVariables = array(
             'pluginId' => $this->pluginFrontConfig['id'],
-            'value' => $this->pluginFrontConfig['value']
+            'value'        => $this->pluginFrontConfig['value'],
+            'widthDesktop' => $this->pluginFrontConfig['widthDesktop'],
+            'widthTablet' => $this->pluginFrontConfig['widthTablet'],
+            'widthMobile' => $this->pluginFrontConfig['widthMobile']
         );
         
         // return the variable array and let the view be created
@@ -94,6 +97,9 @@ class MelisFrontTagPlugin extends MelisTemplatingPlugin
         
         $viewModel->tagId = $this->pluginFrontConfig['id'];
         $viewModel->type = $this->pluginFrontConfig['type'];
+        $viewModel->widthDesktop = $this->pluginFrontConfig['widthDesktop'];
+        $viewModel->widthTablet = $this->pluginFrontConfig['widthTablet'];
+        $viewModel->widthMobile = $this->pluginFrontConfig['widthMobile'];
         $viewModel->configPluginKey = $this->configPluginKey;
         $viewModel->fromDragDropZone = $this->fromDragDropZone;
         
@@ -125,7 +131,16 @@ class MelisFrontTagPlugin extends MelisTemplatingPlugin
         {
             if (!empty($xml->attributes()->type))
                 $configValues['type'] = (string)$xml->attributes()->type;
-                
+
+            if (!empty($xml->attributes()->width_desktop))
+                $configValues['widthDesktop'] = (string)$xml->attributes()->width_desktop;
+
+            if (!empty($xml->attributes()->width_tablet))
+                $configValues['widthTablet'] = (string)$xml->attributes()->width_tablet;
+
+            if (!empty($xml->attributes()->width_mobile))
+                $configValues['widthMobile'] = (string)$xml->attributes()->width_mobile;
+
             $configValues['value'] = (string)$xml;
         }
         
@@ -134,16 +149,56 @@ class MelisFrontTagPlugin extends MelisTemplatingPlugin
     
     public function savePluginConfigToXml($parameters)
     {
+
         $xmlValueFormatted = '';
         if (!empty($parameters['tagValue']))
             $tagValue = $parameters['tagValue'];
         else
             $tagValue = '';
-        
-        $xmlValueFormatted = "\t" . '<melisTag id="' . $parameters['tagId'] . 
-                            '" type="' . $parameters['tagType'] . '"><![CDATA[' . 
-                            $tagValue . ']]></melisTag>' . "\n";
+
+        $widthDesktop = isset($parameters['melisPluginDesktopWidth']) ? $parameters['melisPluginDesktopWidth'] : $this->widthDesktop;
+        $widthTablet  = isset($parameters['melisPluginTabletWidth'])  ? $parameters['melisPluginTabletWidth']  : $this->widthTablet;
+        $widthMobile  = isset($parameters['melisPluginMobileWidth'])  ? $parameters['melisPluginMobileWidth']  : $this->widthMobile;
+
+        $type = null;
+        if(isset($parameters['tagType'])) {
+            $type = $parameters['tagType'];
+        }
+        else {
+            if(isset($parameters['melisPluginName'])) {
+                $pluginName = $parameters['melisPluginName'];
+                $regex = '/MelisFrontTag([a-zA-Z]*)Plugin/';
+                if(preg_match($regex, $pluginName, $matches)) {
+                    $type = isset($matches[1]) ? strtolower($matches[1]) : 'html';
+                }
+            }
+        }
+
+        $id = null;
+        if(isset($parameters['tagId'])) {
+            $id = $parameters['tagId'];
+        }
+        else {
+            if(isset($parameters['melisPluginId'])) {
+                $id = $parameters['melisPluginId'];
+            }
+        }
+
+        $xmlValueFormatted = "\t" . '<melisTag id="' . $id .
+            '" type="' . $type . '" width_desktop="'.$widthDesktop.'" '.
+            'width_tablet="'.$widthTablet.'" width_mobile="'.$widthMobile.'"><![CDATA[' .
+            $tagValue . ']]></melisTag>' . "\n";
 
         return $xmlValueFormatted;
+    }
+
+    public function getResponsiveContent()
+    {
+        $newContent = '<div class="'.'plugin-width-lg-'.round($this->widthDesktop) .
+            ' ' . 'plugin-width-lg-'.round($this->widthDesktop) .
+            ' ' . 'plugin-width-lg-'.round($this->widthDesktop).'">'.
+            $this->pluginFrontConfig['value'].'</div>';
+
+        return $newContent;
     }
 }
