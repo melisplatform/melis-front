@@ -194,16 +194,33 @@ abstract class MelisFrontSEODispatchRouterAbstractListener
      * @param string $locale
      */
     public function createTranslations($e, $siteFolder, $locale)
-    {
+    { 
     	$sm = $e->getApplication()->getServiceManager();
     	$translator = $sm->get('translator');
-
-    	if (!empty($siteFolder) && !empty($locale))
-    	   $translator->addTranslationFile(
-    	       'phparray',  
-    	       $_SERVER['DOCUMENT_ROOT'] . '/../module/MelisSites/' . 
-    	           $siteFolder . '/language/' . $locale . '.php'
-    	   );
+    	
+    	$langFileTarget = $_SERVER['DOCUMENT_ROOT'] . '/../module/MelisSites/' .$siteFolder . '/language/' . $locale . '.php';
+    	
+    	if (!file_exists($langFileTarget))
+    	{
+    	    $langFileTarget = $_SERVER['DOCUMENT_ROOT'] . '/../module/MelisSites/' .$siteFolder . '/language/en_EN.php';
+    	    
+    	    if (!file_exists($langFileTarget))
+    	    {
+    	        $langFileTarget = null;
+    	    }
+    	}
+    	else 
+    	{
+    	    $langFileTarget = null;
+    	}
+    	
+    	if (!is_null($langFileTarget) && !empty($siteFolder) && !empty($locale))
+    	{
+    	    $translator->addTranslationFile(
+    	        'phparray',
+    	        $langFileTarget
+	        );
+    	}
     }
     
     /**
