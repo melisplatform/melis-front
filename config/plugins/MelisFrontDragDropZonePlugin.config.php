@@ -20,6 +20,7 @@ return array(
                         // To delete an entry, use the keyword "disable" instead of the file path for the same key
                         'files' => array(
                             'css' => array(
+                                'css_resize_plugins_class' => 'css/plugin-width.css',
                             ),
                             'js' => array(
                             ),
@@ -28,7 +29,8 @@ return array(
                     'melis' => array(
                         'files' => array(
                             'css' => array(
-                                'css_melisdragdropzone' => '/MelisFront/plugins/css/plugin.melisdragdropzone.css'
+                                'css_melisdragdropzone' => '/MelisFront/plugins/css/plugin.melisdragdropzone.css',
+                                'css_resize_plugins_class' => 'css/plugin-width.css',
                             ),
                             'js' => array(
                                 'js_melisdragdropzone' => '/MelisFront/plugins/js/plugin.melisdragdropzone.js'
