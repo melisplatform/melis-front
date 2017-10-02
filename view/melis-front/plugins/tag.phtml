@@ -1,3 +1,9 @@
-<?php 
-
+<?php
+if($this->fromDragDropZone) {
+    echo '<div class="' . "$this->widthDesktop $this->widthTablet $this->widthMobile" .'">';
     echo $this->value;
+    echo '</div>';
+}
+else {
+    echo $this->value;
+}

@@ -16,9 +16,6 @@ return array(
                         'type' => 'html',
                         'default' => 'Add HTML content here',
                         'value' => '',
-                        'widthDesktop' => 100,
-                        'widthTablet'  => 100,
-                        'widthMobile'  => 100,
 
                         // List the files to be automatically included for the correct display of the plugin
                         // To overide a key, just add it again in your site module
@@ -56,9 +53,6 @@ return array(
                         'type' => 'textarea',
                         'default' => 'Add text content here',
                         'value' => '',
-                        'widthDesktop' => 100,
-                        'widthTablet'  => 100,
-                        'widthMobile'  => 100,
                         // List the files to be automatically included for the correct display of the plugin
                         // To overide a key, just add it again in your site module
                         // To delete an entry, use the keyword "disable" instead of the file path for the same key
@@ -95,9 +89,6 @@ return array(
                         'type' => 'media',
                         'default' => 'Add Media content here',
                         'value' => '',
-                        'widthDesktop' => 100,
-                        'widthTablet'  => 100,
-                        'widthMobile'  => 100,
                         // List the files to be automatically included for the correct display of the plugin
                         // To overide a key, just add it again in your site module
                         // To delete an entry, use the keyword "disable" instead of the file path for the same key
