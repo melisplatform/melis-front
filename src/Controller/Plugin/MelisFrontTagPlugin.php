@@ -61,10 +61,7 @@ class MelisFrontTagPlugin extends MelisTemplatingPlugin
         if ($this->renderMode == 'melis' && empty($this->pluginFrontConfig['value']))
             $this->pluginFrontConfig['value'] = $this->pluginFrontConfig['default'];
 
-        // Create an array with the variables that will be available in the view
-        $this->pluginFrontConfig['widthDesktop'] = isset($this->widthDesktop[0]) ? round($this->widthDesktop[0]) : 100;
-        $this->pluginFrontConfig['widthTablet']  = isset($this->widthTablet[0])  ? round($this->widthTablet[0])  : 100;
-        $this->pluginFrontConfig['widthMobile']  = isset($this->widthMobile[0])  ? round($this->widthMobile[0])  : 100;
+        $this->getWidths();
 
         $this->widthDesktop = $this->pluginFrontConfig['widthDesktop'];
         $this->widthTablet = $this->pluginFrontConfig['widthTablet'];
@@ -86,8 +83,13 @@ class MelisFrontTagPlugin extends MelisTemplatingPlugin
     // Redefining the back function as the display of tags is specific with TinyMce
     public function back()
     {
+
         $viewModel = new ViewModel();
         $viewModel->setTemplate('MelisFront/tag/meliscontainer');
+
+        $this->widthDesktop = $this->pluginFrontConfig['widthDesktop'];
+        $this->widthTablet = $this->pluginFrontConfig['widthTablet'];
+        $this->widthMobile = $this->pluginFrontConfig['widthMobile'];
 
         $viewModel->configPluginKey = $this->configPluginKey;
         $viewModel->pluginName = $this->pluginName;
@@ -104,6 +106,10 @@ class MelisFrontTagPlugin extends MelisTemplatingPlugin
         $viewModel->type = $this->pluginFrontConfig['type'];
         $viewModel->configPluginKey = $this->configPluginKey;
         $viewModel->fromDragDropZone = $this->fromDragDropZone;
+
+        $viewModel->widthDesktop = $this->pluginFrontConfig['widthDesktop'];
+        $viewModel->widthTablet  = $this->pluginFrontConfig['widthTablet'];
+        $viewModel->widthMobile  = $this->pluginFrontConfig['widthMobile'];
 
 
         $siteModule = getenv('MELIS_MODULE');
@@ -162,5 +168,13 @@ class MelisFrontTagPlugin extends MelisTemplatingPlugin
             '" type="' . $parameters['tagType'] . '"><![CDATA[' .
             $tagValue . ']]></melisTag>' . "\n";
         return $xmlValueFormatted;
+    }
+
+    private function getWidths()
+    {
+        // Create an array with the variables that will be available in the view
+        $this->pluginFrontConfig['widthDesktop'] = isset($this->widthDesktop[0]) ? round($this->widthDesktop[0]) : 100;
+        $this->pluginFrontConfig['widthTablet']  = isset($this->widthTablet[0])  ? round($this->widthTablet[0])  : 100;
+        $this->pluginFrontConfig['widthMobile']  = isset($this->widthMobile[0])  ? round($this->widthMobile[0])  : 100;
     }
 }
