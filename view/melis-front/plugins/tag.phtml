@@ -1,9 +1,6 @@
 <?php
-if($this->fromDragDropZone) {
-    echo '<div class="' . "$this->widthDesktop $this->widthTablet $this->widthMobile" .'">';
+
+    echo '<div data-melis-plugin-tag-container="'.$this->pluginId.'" class="' . "$this->widthDesktop $this->widthTablet $this->widthMobile" .'">';
     echo $this->value;
     echo '</div>';
-}
-else {
-    echo $this->value;
-}
+
