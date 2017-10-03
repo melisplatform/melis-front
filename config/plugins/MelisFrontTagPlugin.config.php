@@ -19,6 +19,7 @@ return array(
                         'widthDesktop' => 100,
                         'widthTablet'  => 100,
                         'widthMobile'  => 100,
+                        'pluginContainerId' => null,
                         // List the files to be automatically included for the correct display of the plugin
                         // To overide a key, just add it again in your site module
                         // To delete an entry, use the keyword "disable" instead of the file path for the same key
@@ -58,6 +59,7 @@ return array(
                         'widthDesktop' => 100,
                         'widthTablet'  => 100,
                         'widthMobile'  => 100,
+                        'pluginContainerId' => null,
                         // List the files to be automatically included for the correct display of the plugin
                         // To overide a key, just add it again in your site module
                         // To delete an entry, use the keyword "disable" instead of the file path for the same key
@@ -97,6 +99,7 @@ return array(
                         'widthDesktop' => 100,
                         'widthTablet'  => 100,
                         'widthMobile'  => 100,
+                        'pluginContainerId' => null,
                         // List the files to be automatically included for the correct display of the plugin
                         // To overide a key, just add it again in your site module
                         // To delete an entry, use the keyword "disable" instead of the file path for the same key

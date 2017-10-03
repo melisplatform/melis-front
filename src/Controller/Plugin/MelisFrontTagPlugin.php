@@ -66,6 +66,7 @@ class MelisFrontTagPlugin extends MelisTemplatingPlugin
         $this->widthDesktop = $this->pluginFrontConfig['widthDesktop'];
         $this->widthTablet = $this->pluginFrontConfig['widthTablet'];
         $this->widthMobile = $this->pluginFrontConfig['widthMobile'];
+        $this->pluginContainerId = $this->pluginFrontConfig['pluginContainerId'];
 
         $viewVariables = array(
             'pluginId' => $this->pluginFrontConfig['id'],
@@ -73,6 +74,7 @@ class MelisFrontTagPlugin extends MelisTemplatingPlugin
             'widthDesktop' => 'plugin-width-lg-'.$this->widthDesktop,
             'widthTablet'  => 'plugin-width-md-'.$this->widthTablet,
             'widthMobile'  => 'plugin-width-xs-'.$this->widthMobile,
+            'pluginContainerId' => $this->pluginContainerId
         );
 
 
@@ -87,9 +89,10 @@ class MelisFrontTagPlugin extends MelisTemplatingPlugin
         $viewModel = new ViewModel();
         $viewModel->setTemplate('MelisFront/tag/meliscontainer');
 
-        $this->widthDesktop = $this->pluginFrontConfig['widthDesktop'];
-        $this->widthTablet = $this->pluginFrontConfig['widthTablet'];
-        $this->widthMobile = $this->pluginFrontConfig['widthMobile'];
+//        $this->widthDesktop = $this->pluginFrontConfig['widthDesktop'];
+//        $this->widthTablet = $this->pluginFrontConfig['widthTablet'];
+//        $this->widthMobile = $this->pluginFrontConfig['widthMobile'];
+//        $this->pluginContainerId = $this->pluginFrontConfig['pluginContainerId'];
 
         $viewModel->configPluginKey = $this->configPluginKey;
         $viewModel->pluginName = $this->pluginName;
@@ -107,9 +110,10 @@ class MelisFrontTagPlugin extends MelisTemplatingPlugin
         $viewModel->configPluginKey = $this->configPluginKey;
         $viewModel->fromDragDropZone = $this->fromDragDropZone;
 
-        $viewModel->widthDesktop = $this->pluginFrontConfig['widthDesktop'];
-        $viewModel->widthTablet  = $this->pluginFrontConfig['widthTablet'];
-        $viewModel->widthMobile  = $this->pluginFrontConfig['widthMobile'];
+        $viewModel->widthDesktop      = $this->pluginFrontConfig['widthDesktop'];
+        $viewModel->widthTablet       = $this->pluginFrontConfig['widthTablet'];
+        $viewModel->widthMobile       = $this->pluginFrontConfig['widthMobile'];
+        $viewModel->pluginContainerId = $this->pluginFrontConfig['pluginContainerId'];
 
 
         $siteModule = getenv('MELIS_MODULE');
@@ -150,6 +154,9 @@ class MelisFrontTagPlugin extends MelisTemplatingPlugin
             if(!empty($xml->attributes()->width_mobile))
                 $this->widthMobile = (array) $xml->attributes()->width_mobile[0];
 
+            if(!empty($xml->attributes()->plugin_container_id))
+                $this->pluginContainerId = (array) $xml->attributes()->plugin_container_id[0];
+
             $configValues['value'] = (string)$xml;
         }
 
@@ -176,5 +183,6 @@ class MelisFrontTagPlugin extends MelisTemplatingPlugin
         $this->pluginFrontConfig['widthDesktop'] = isset($this->widthDesktop[0]) ? round($this->widthDesktop[0]) : 100;
         $this->pluginFrontConfig['widthTablet']  = isset($this->widthTablet[0])  ? round($this->widthTablet[0])  : 100;
         $this->pluginFrontConfig['widthMobile']  = isset($this->widthMobile[0])  ? round($this->widthMobile[0])  : 100;
+        $this->pluginFrontConfig['pluginContainerId']  = isset($this->pluginContainerId[0])  ? round($this->pluginContainerId[0]) : null;
     }
 }
