@@ -183,6 +183,6 @@ class MelisFrontTagPlugin extends MelisTemplatingPlugin
         $this->pluginFrontConfig['widthDesktop'] = isset($this->widthDesktop[0]) ? round($this->widthDesktop[0]) : 100;
         $this->pluginFrontConfig['widthTablet']  = isset($this->widthTablet[0])  ? round($this->widthTablet[0])  : 100;
         $this->pluginFrontConfig['widthMobile']  = isset($this->widthMobile[0])  ? round($this->widthMobile[0])  : 100;
-        $this->pluginFrontConfig['pluginContainerId']  = isset($this->pluginContainerId[0])  ? round($this->pluginContainerId[0]) : null;
+        $this->pluginFrontConfig['pluginContainerId']  = isset($this->pluginContainerId[0])  ? $this->pluginContainerId[0] : null;
     }
 }

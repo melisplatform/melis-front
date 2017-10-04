@@ -66,8 +66,13 @@ class MelisFrontDragDropZonePlugin extends MelisTemplatingPlugin
         
         // Looping on plugins found inside the dragdrop zone to render them through their plugins
         // and get the HTML resulting in everything
+
+        $plugins     = array();
+        $containerId = null;
         foreach ($this->pluginFrontConfig['plugins'] as $plugin)
         {
+
+            $tmpHtml = null;
             $datas = array(
                 'action' => 'getPlugin',
                 'module' => $plugin['pluginModule'],
@@ -82,16 +87,26 @@ class MelisFrontDragDropZonePlugin extends MelisTemplatingPlugin
                 $forwardPlugin = $this->getController()->forward();
                 
                 $jsonResults = $forwardPlugin->dispatch('MelisFront\\Controller\\MelisPluginRenderer', $datas);
-                
+
+
                 if (!empty($jsonResults))
                 {
                     $variables = $jsonResults->getVariables();
-                    if (!empty($variables['success']))
-                        $html .= $variables['datas']['html'];
-                    else 
+                    $containerId = $variables['datas']['dom']['pluginContainerId'] ?: count($plugins);
+
+                    if (!empty($variables['success'])) {
+                        //$html .= $variables['datas']['html'];
+                        $tmpHtml = $variables['datas']['html'];
+                    }
+
+                    else  {
                         // problem with the plugins, we show the error only BO side
-                        if ($this->renderMode == 'melis')
-                            $html .= $variables['errors'] . ' : ' . $plugin['pluginModule'] . ' / ' . $plugin['pluginName'];
+                        if ($this->renderMode == 'melis') {
+                            //$html .= $variables['errors'] . ' : ' . $plugin['pluginModule'] . ' / ' . $plugin['pluginName'];
+                            $tmpHtml = $variables['errors'] . ' : ' . $plugin['pluginModule'] . ' / ' . $plugin['pluginName'];
+                        }
+                    }
+
                 }
             }
             catch (\Exception $e)
@@ -99,12 +114,40 @@ class MelisFrontDragDropZonePlugin extends MelisTemplatingPlugin
                 return array('pluginId' => $this->pluginFrontConfig['id']);
     		    
             }
+
+            $plugins[$containerId][] = $tmpHtml;
+
         }
-        
+
+
+        // group the plugins that has the same container ID
+        $newHtml = '';
+        foreach($plugins as $containerId => $contents) {
+
+
+            // check if the containerId is a valid container ID
+            if(!preg_match('/^[0-9]*$/', $containerId)) {
+                $newHtml .= '<div id="' . $containerId . '" class="melis-float-plugins ui-sortable">' . PHP_EOL;
+                $hasCloseTag = true;
+            }
+            else {
+                $hasCloseTag = false;
+            }
+
+            foreach($contents as $idx => $content) {
+                $newHtml .= "\t" . $content;
+            }
+            
+            if($hasCloseTag) {
+                $newHtml .= '</div>';
+            }
+
+        }
+
         // Create an array with the variables that will be available in the view
         $viewVariables = array(
             'pluginId' => $this->pluginFrontConfig['id'],
-            'pluginsHtml' => $html,
+            'pluginsHtml' => $newHtml,
         );
         
         // return the variable array and let the view be created
@@ -170,5 +213,10 @@ class MelisFrontDragDropZonePlugin extends MelisTemplatingPlugin
             "\t" . '</' . $this->pluginXmlDbKey . '>' . "\n";
 
         return $xmlValueFormatted;
-    } 
+    }
+
+    private function addToContainer($containerId, $content)
+    {
+
+    }
 }

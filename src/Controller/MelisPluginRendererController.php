@@ -93,16 +93,25 @@ class MelisPluginRendererController extends AbstractActionController
                     $BoInit = (!empty($pluginConf['melis']['js_initialization']))? $pluginConf['melis']['js_initialization'] : array();
                     
                     $frontConfig = $melisPlugin->getPluginFrontConfig();
+
                     $FoFiles = (!empty($frontConfig['files']))? $frontConfig['files'] : array();
                     
                     $pluginConfFOBO = array(
                         'front' => array('ressources' => $FoFiles),
                         'melis' => array('ressources' => $BoFiles, 'js_initialization' => $BoInit),
                     );
+
+                    $dom = array(
+                        'widthDesktop' => $frontConfig['widthDesktop'],
+                        'widthTablet' => $frontConfig['widthTablet'],
+                        'widthMobile' => $frontConfig['widthMobile'],
+                        'pluginContainerId' => $frontConfig['pluginContainerId'],
+                    );
                     
                     $results = array(
                         'success' => true,
                         'datas' => array(
+                            'dom'  => $dom,
                             'html' => $html,
                             'init' => $pluginConfFOBO
                         )
