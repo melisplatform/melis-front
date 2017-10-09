@@ -4,10 +4,10 @@
 .melis-dragdropzone {
     position: relative;
     margin-bottom: 10px;
-    padding: 15px;
+    padding: 50px 15px;
     min-height: 250px;
     height: auto;
-    background: rgba(147, 46, 42, 0.1);
+    background: transparent;
     transition: opacity 0.4s;
     -webkit-transition: opacity 0.4s;
     -moz-transition: opacity 0.4s;
@@ -15,6 +15,19 @@
     border-radius: 4px;
     bottom: -25px;
 }
+.melis-dragdropzone.highlight {
+    background: #932e2a;
+}
+
+.melis-dragdropzone.highlight .ui-state-highlight {
+    background: transparent;
+    border: 1px dashed #fff;
+}
+.melis-dragdropzone.highlight .melis-float-plugins {
+    border: 1px dashed #fff;
+    box-shadow: 0 0 0 0 rgb(255, 255, 255);
+}
+
 .melis-dragdropzone .melis-ui-outlined {
     margin-bottom: 30px;
 }
@@ -22,7 +35,7 @@
     margin-bottom: 35px;
 }
 
-.melis-dragdropzone.no-content:after {
+.melis-dragdropzone.highlight:after {
     content: "\f1e6";
     font-family: FontAwesome;
     font-style: normal;
@@ -30,8 +43,7 @@
     text-decoration: inherit;
     position: absolute;
     font-size: 50px;
-    color: #a2413d;
-    top: 50%;
+    top: 49%;
     left: 0;
     right: 0;
     display: block;
@@ -43,12 +55,20 @@
     -webkit-transform: translateY(-50%);
     -moz-transform: translateY(-50%);
     -ms-transform: translateY(-50%);
+    color: #fff;
+    text-shadow: 2px 2px #932e2a;
+    height: 100px;
+    width: 200px;
+    margin: 0 auto;
+    line-height: 100px;
+    background: #932e2a;
+    z-index: 1;
 }
 
-.melis-dragdropzone.no-content:before {
+.melis-dragdropzone.highlight:before {
     content: "Drag plugin here!";
     position: absolute;
-    top: 50%;
+    top: 49%;
     transform: translateY(145%);
     left: 0;
     right: 0;
@@ -58,7 +78,14 @@
     letter-spacing: 1px;
     text-transform: uppercase;
     font-family: "Montserrat", sans-serif;
-    color: #a2413d;
+    width: 200px;
+    height: 25px;
+    padding: 0px 0 30px;
+    margin: 0 auto;
+    color: #fff;
+    text-shadow: 2px 2px #932e2a;
+    background: #932e2a;
+    z-index: 99;
 }
 
 .melis-dragdropzone.ui-droppable-active {

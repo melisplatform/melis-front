@@ -37,8 +37,11 @@ $("body").on("blur", "div.media-editable", function(){
 		tagId : currentdata.tagId,
 		tagValue : content,
     };
-
+    melisPluginEdition.calcFrameHeight();
     melisPluginEdition.savePluginUpdate(data);
+});
+$("body").on("keyup", "div.html-editable", function(){
+    melisPluginEdition.calcFrameHeight();
 });
 
 melistagMEDIA_init();
