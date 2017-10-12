@@ -38,9 +38,16 @@ class Module
         $routeMatch = $sm->get('router')->match($sm->get('request'));
 
         $isBackOffice = false;
+        
+        $container = new Container('melisplugins');
+        $container['melis-plugins-lang-id'] = 1;
+        $container['melis-plugins-lang-locale'] = 'en_EN';
 
         if (!empty($routeMatch))
         {
+            
+            $this->createTranslations($e, $routeMatch); 
+            
             $routeName = $routeMatch->getMatchedRouteName();
             $module = explode('/', $routeName);
 
@@ -51,6 +58,8 @@ class Module
                     $isBackOffice = true;
                 }
             }
+            
+            
         }
 
         // do not load listeners if working on back-office
@@ -85,23 +94,23 @@ class Module
             
             $eventManager->attach(new MelisFrontPageCacheListener());
         }
-
-
-        $this->createTranslations($e); 
-
-        
-        $container = new Container('melisplugins');
-        $container['melis-plugins-lang-id'] = 1;
-        $container['melis-plugins-lang-locale'] = 'en_EN';
     }
     
-    public function createTranslations($e, $locale = 'en_EN')
+    public function createTranslations($e, $routeMatch)
     {
-        $sm = $e->getApplication()->getServiceManager();
-        $translator = $sm->get('translator');
-    
-        $container = new Container('meliscore');
-        $locale = $container['melis-lang-locale'];
+        
+        $param = $routeMatch->getParams();
+        // Checking if the Request is from Melis-BackOffice or Front
+        if ($param['renderMode'] = 'melis')
+        {
+            $container = new Container('meliscore');
+            $locale = $container['melis-lang-locale'];
+        }
+        else
+        {
+            $container = new Container('melisplugins');
+            $locale = $container['melis-plugins-lang-locale'];
+        }
         
         if (!empty($locale))
         {
@@ -111,6 +120,8 @@ class Module
             
             $transPath = (file_exists($interfaceTransPath))? $interfaceTransPath : $default;
             
+            $sm = $e->getApplication()->getServiceManager();
+            $translator = $sm->get('translator');
             $translator->addTranslationFile('phparray', $transPath);
         }
     }
