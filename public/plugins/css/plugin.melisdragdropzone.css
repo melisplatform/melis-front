@@ -15,6 +15,10 @@
     border-radius: 4px;
     bottom: -25px;
 }
+.melis-dragdropzone.no-content {
+    background: rgba(147, 46, 42, 0.3);
+}
+
 .melis-dragdropzone.highlight {
     background: #932e2a;
 }
@@ -35,7 +39,9 @@
     margin-bottom: 35px;
 }
 
-.melis-dragdropzone.highlight:after {
+.melis-dragdropzone.highlight:after,
+.melis-dragdropzone.no-content:after,
+.melis-dragdropzone.no-content.highlight:after{
     content: "\f1e6";
     font-family: FontAwesome;
     font-style: normal;
@@ -65,7 +71,9 @@
     z-index: 1;
 }
 
-.melis-dragdropzone.highlight:before {
+.melis-dragdropzone.highlight:before,
+.melis-dragdropzone.no-content:before,
+.melis-dragdropzone.no-content.highlight:before {
     content: "Drag plugin here!";
     position: absolute;
     top: 49%;
@@ -86,6 +94,16 @@
     text-shadow: 2px 2px #932e2a;
     background: #932e2a;
     z-index: 99;
+}
+.melis-dragdropzone.no-content:before {
+    color: #932e2a;
+    text-shadow: 2px 2px #bd9694;
+    background: transparent;
+}
+.melis-dragdropzone.no-content:after {
+    color: #932e2a;
+    text-shadow: 2px 2px #bd9694;
+    background: transparent;
 }
 
 .melis-dragdropzone.ui-droppable-active {
