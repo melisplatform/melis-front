@@ -98,18 +98,24 @@ class Module
     
     public function createTranslations($e, $routeMatch)
     {
+        $container = new Container('melisplugins');
+        $locale = $container['melis-plugins-lang-locale'];
         
         $param = $routeMatch->getParams();
+        
         // Checking if the Request is from Melis-BackOffice or Front
-        if ($param['renderMode'] = 'melis')
+        if (!empty($param['renderMode']))
+        {
+            if ($param['renderMode'] == 'melis')
+            {
+                $container = new Container('meliscore');
+                $locale = $container['melis-lang-locale'];
+            }
+        }
+        elseif ($param['action'] == 'renderPluginModal')
         {
             $container = new Container('meliscore');
             $locale = $container['melis-lang-locale'];
-        }
-        else
-        {
-            $container = new Container('melisplugins');
-            $locale = $container['melis-plugins-lang-locale'];
         }
         
         if (!empty($locale))
