@@ -112,10 +112,17 @@ class Module
                 $locale = $container['melis-lang-locale'];
             }
         }
-        elseif ($param['action'] == 'renderPluginModal')
+        else
         {
-            $container = new Container('meliscore');
-            $locale = $container['melis-lang-locale'];
+            if (!empty($param['action']))
+            {
+                // MelisCore locale will be use translations in plugin modals requests
+                if (in_array($param['action'], array('renderPluginModal', 'validatePluginModal')))
+                {
+                    $container = new Container('meliscore');
+                    $locale = $container['melis-lang-locale'];
+                }
+            }
         }
         
         if (!empty($locale))
