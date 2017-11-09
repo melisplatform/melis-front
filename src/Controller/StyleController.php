@@ -65,4 +65,15 @@ class StyleController extends AbstractActionController
 
         return $classes;
     }
+    private function getObjects($prefix = null)
+    {
+        $classes = null;
+        $prefix  = null;
+        for($x = 1; $x <= 100; $x++) {
+            $classes .= ".plugin-width{$prefix}-{$x} {";
+
+        }
+
+        return $classes;
+    }
 }

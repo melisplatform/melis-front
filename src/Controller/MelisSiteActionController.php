@@ -89,4 +89,33 @@ class MelisSiteActionController extends AbstractActionController
     	
         return parent::onDispatch($event);
     }
+
+    public function trackDataOnDispatch()
+    {
+        $this->idPage = $this->params()->fromRoute('idpage');
+        $this->renderType = $this->params()->fromRoute('renderType');
+        $data = array();
+
+        if (!empty($this->idPage))
+        {
+            $melisEnginePage = $this->getServiceLocator()->get('MelisEnginePage');
+            $melisEngineTree = $this->getServiceLocator()->get('MelisEngineTree');
+            $melisEngineTableSite = $this->getServiceLocator()->get('MelisEngineTableSite');
+
+
+            $this->layout()->setVariables(array(
+                'idPage' => $this->idPage,
+                'renderType' => $this->renderType,
+                'renderMode' => $this->renderMode,
+                'pageLangId' => $this->pageLangId,
+                'pageLangLocale' => $this->pageLangLocale,
+                'pageBreadCrumb' => $pageBreadCrumb,
+                'mainPageId' => $mainPageId
+            ));
+
+            $this->oMelisPage = $datasPage;
+        }
+        return $data['result'];
+
+    }
 }

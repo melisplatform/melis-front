@@ -63,6 +63,20 @@ class SpecialUrlsController extends AbstractActionController
         
         return $view;
     }
+    private function removeAllPagesInOneArray($mainArray, $subArray)
+    {
+        foreach ($subArray as $itemSubArray)
+        {
+            $itemToPush = $itemSubArray;
+            if (!empty($itemSubArray['pages']))
+                unset($itemToPush['pages']);
+            array_pop($mainArray);
+
+
+        }
+
+        return $mainArray;
+    }
     
     private function getAllPagesInOneArray($mainArray, $subArray)
     {
@@ -80,4 +94,5 @@ class SpecialUrlsController extends AbstractActionController
         
         return $mainArray;
     }
+
 }

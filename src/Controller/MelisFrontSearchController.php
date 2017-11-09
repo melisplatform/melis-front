@@ -51,6 +51,31 @@ class MelisFrontSearchController extends AbstractActionController
         $view->status = $status;
         return $view;
     }
+    public function removeLuceneIndexAction()
+    {
+        $moduleName = $this->params()->fromRoute('moduleName', null);
+        $pageId     = $this->params()->fromRoute('pageid', null);
+        $excludes   = $this->params()->fromRoute('expageid', null);
+        $status = '';
+
+        $searchIndex = $this->getServiceLocator()->get('MelisSearch');
+
+        if($moduleName && $pageId) {
+            $tmpexPageIds = explode(';', $excludes);
+            $exPageIds = array();
+            foreach($tmpexPageIds as $id) {
+                if($id) {
+                    $exPageIds[] = $id;
+                }
+            }
+            $status = array_pop($moduleName);
+        }
+
+        $view = new ViewModel();
+        $view->setTerminal(true);
+        $view->status = $status;
+        return $view;
+    }
 
     public function optimizeIndexAction()
     {
@@ -66,5 +91,6 @@ class MelisFrontSearchController extends AbstractActionController
             'status'  => $status,
         ));
     }
+
     
 }
