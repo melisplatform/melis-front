@@ -50,4 +50,16 @@ class IndexController extends AbstractActionController
     	
     	return $view;
     }
+    public function getIndexDataAction()
+    {
+        $success = 0 ;
+        $data    = array();
+
+        if($this->request()->isPost()){
+            $melisFront = $this->getServiceLocator()->get("MelisFrontService");
+            $data       = $melisFront->indexData();
+        }
+
+        return $data;
+    }
 }

@@ -12,6 +12,7 @@ namespace MelisFront\Controller;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\JsonModel;
 use Assetic\Exception\Exception;
+use Zend\View\Model\ViewModel;
 
 class MelisPluginRendererController extends AbstractActionController
 {
@@ -127,4 +128,12 @@ class MelisPluginRendererController extends AbstractActionController
         
         return new JsonModel($results);
     }
+
+    public function editPluginAction()
+    {
+        $view  = new ViewModel();
+
+        return $view;
+    }
+
 }
