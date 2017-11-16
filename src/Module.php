@@ -26,6 +26,11 @@ use MelisFront\Listener\MelisFrontXSSParameterListener;
 use Zend\Session\Container;
 use MelisFront\Listener\MelisFrontPageCacheListener;
 
+/**
+ * Class Module
+ * @package MelisFront
+ * @require melis-engine
+ */
 class Module
 {
     public function onBootstrap(MvcEvent $e)

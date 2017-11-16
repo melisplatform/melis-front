@@ -142,7 +142,10 @@ class MelisFrontTagPlugin extends MelisTemplatingPlugin
         $xml = simplexml_load_string($this->pluginXmlDbValue);
         if ($xml)
         {
-            if (!empty($xml->attributes()->type))
+            $type = isset($this->pluginFrontConfig['type']) ? $this->pluginFrontConfig['type'] : 'html';
+
+            if (!empty($xml->attributes()->type) &&
+                ($type == (string)$xml->attributes()->type))
                 $configValues['type'] = (string)$xml->attributes()->type;
 
             if(!empty($xml->attributes()->width_desktop))

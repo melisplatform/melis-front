@@ -44,7 +44,7 @@ class MelisFront404To301Listener extends MelisFrontSEODispatchRouterAbstractList
         		
         	    $sm = $this->serviceLocator;
         	    $params = $e->getParams();
-        	    
+
                 if (!empty($params['404']))
         	    {
         	        // Retrieving the router Details, This will return URL details in Object
