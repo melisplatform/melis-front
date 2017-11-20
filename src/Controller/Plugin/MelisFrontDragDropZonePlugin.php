@@ -68,7 +68,6 @@ class MelisFrontDragDropZonePlugin extends MelisTemplatingPlugin
         // and get the HTML resulting in everything
 
         $plugins     = array();
-        $containerId = null;
         foreach ($this->pluginFrontConfig['plugins'] as $plugin)
         {
 
@@ -92,7 +91,6 @@ class MelisFrontDragDropZonePlugin extends MelisTemplatingPlugin
                 if (!empty($jsonResults))
                 {
                     $variables = $jsonResults->getVariables();
-                    $containerId = $variables['datas']['dom']['pluginContainerId'] ?: count($plugins);
 
                     if (!empty($variables['success'])) {
                         $html .= $variables['datas']['html'];
@@ -112,7 +110,7 @@ class MelisFrontDragDropZonePlugin extends MelisTemplatingPlugin
                 return array('pluginId' => $this->pluginFrontConfig['id']);
     		    
             }
-            
+
         }
 
 
