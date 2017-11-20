@@ -71,9 +71,9 @@ class MelisFrontTagPlugin extends MelisTemplatingPlugin
         $viewVariables = array(
             'pluginId' => $this->pluginFrontConfig['id'],
             'value' => $this->pluginFrontConfig['value'],
-            'widthDesktop' => 'plugin-width-lg-'.$this->widthDesktop,
-            'widthTablet'  => 'plugin-width-md-'.$this->widthTablet,
-            'widthMobile'  => 'plugin-width-xs-'.$this->widthMobile,
+            'widthDesktop' => $this->convertToCssClass('desktop', $this->widthDesktop),
+            'widthTablet'  => $this->convertToCssClass('tablet',$this->widthTablet),
+            'widthMobile'  => $this->convertToCssClass('mobile',$this->widthMobile),
             'pluginContainerId' => $this->pluginContainerId
         );
 
@@ -88,11 +88,6 @@ class MelisFrontTagPlugin extends MelisTemplatingPlugin
 
         $viewModel = new ViewModel();
         $viewModel->setTemplate('MelisFront/tag/meliscontainer');
-
-//        $this->widthDesktop = $this->pluginFrontConfig['widthDesktop'];
-//        $this->widthTablet = $this->pluginFrontConfig['widthTablet'];
-//        $this->widthMobile = $this->pluginFrontConfig['widthMobile'];
-//        $this->pluginContainerId = $this->pluginFrontConfig['pluginContainerId'];
 
         $viewModel->configPluginKey = $this->configPluginKey;
         $viewModel->pluginName = $this->pluginName;
@@ -183,9 +178,10 @@ class MelisFrontTagPlugin extends MelisTemplatingPlugin
     private function getWidths()
     {
         // Create an array with the variables that will be available in the view
-        $this->pluginFrontConfig['widthDesktop'] = isset($this->widthDesktop[0]) ? round($this->widthDesktop[0]) : 100;
-        $this->pluginFrontConfig['widthTablet']  = isset($this->widthTablet[0])  ? round($this->widthTablet[0])  : 100;
-        $this->pluginFrontConfig['widthMobile']  = isset($this->widthMobile[0])  ? round($this->widthMobile[0])  : 100;
+        $this->pluginFrontConfig['widthDesktop'] = isset($this->widthDesktop[0]) ? $this->widthDesktop[0] : 100;
+        $this->pluginFrontConfig['widthTablet']  = isset($this->widthTablet[0])  ? $this->widthTablet[0]  : 100;
+        $this->pluginFrontConfig['widthMobile']  = isset($this->widthMobile[0])  ? $this->widthMobile[0]  : 100;
         $this->pluginFrontConfig['pluginContainerId']  = isset($this->pluginContainerId[0])  ? $this->pluginContainerId[0] : null;
     }
+
 }

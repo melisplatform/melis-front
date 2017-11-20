@@ -80,6 +80,17 @@ return array(
                             ),
                         ),
                     ),
+                    'front-page-plugin-widths' => array(
+                        'type'    => 'Literal',
+                        'options' => array(
+                            'route'    => 'css/page-plugin-width.css',
+                            'defaults' => array(
+                                '__NAMESPACE__' => 'MelisFront\Controller',
+                                'controller' => 'Style',
+                                'action'     => 'getPagePluginWidthCss',
+                            ),
+                        ),
+                    ),
                     'front-module-ctrl-action' => array(
                         'type'    => 'Segment',
                         'options' => array(

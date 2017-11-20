@@ -62,4 +62,27 @@ class IndexController extends AbstractActionController
 
         return $data;
     }
+
+    public function getBackOfficeCssAction()
+    {
+        $content  =  null;
+        $response = $this->getResponse();
+
+        $response->getHeaders()
+            ->addHeaderLine('Cache-Control', 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0')
+            ->addHeaderLine('Pragma'       , 'no-cache')
+            ->addHeaderLine('Content-Type' , 'text/css;charset=UTF-8');
+
+        $response->setContent($content);
+
+
+
+        $view = new ViewModel();
+        $view->setTerminal(true);
+
+        $view->content = $response->getContent();
+
+        return $view;
+    }
+
 }

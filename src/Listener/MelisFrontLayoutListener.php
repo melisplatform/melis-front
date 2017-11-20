@@ -40,8 +40,9 @@ class MelisFrontLayoutListener implements ListenerAggregateInterface
                 if (!$routeMatch)
                     return;
 
-                $renderMode = $routeMatch->getParam('renderMode');
+                $renderMode  = $routeMatch->getParam('renderMode');
                 $previewMode = $routeMatch->getParam('preview');
+                $idpage      = $routeMatch->getParam('idpage');
 
                 // Only for Melis Front or Back routes
                 if ($renderMode == 'melis' || $renderMode == 'front')
@@ -166,6 +167,11 @@ class MelisFrontLayoutListener implements ListenerAggregateInterface
                                 $newContent = $tmp->offsetGet(0);
                             }
                         }
+
+                        // add plugin style css if page is viewed in front
+                        if($renderMode == 'front')
+                            $newContent = str_replace('</head>',
+                                '<link href="/css/page-plugin-width.css?idpage='.$idpage.'" media="screen" rel="stylesheet" type="text/css"></head>', $newContent);
 
                         $response->setContent($newContent);
                     }
