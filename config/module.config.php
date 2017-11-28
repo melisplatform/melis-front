@@ -220,6 +220,7 @@ return array(
             'MelisFront/search/melis/form'               => __DIR__ . '/../view/melis-front/plugins/search-melis-template-form.phtml',
             'MelisFront/list-paginator'                  => __DIR__ . '/../view/melis-front/plugins/list-paginator.phtml',
             'MelisFront/block-section'                   => __DIR__ . '/../view/melis-front/plugins/block-section.phtml',
+            'MelisFront/block-section-container'         => __DIR__ . '/../view/melis-front/plugins/block-section-container.phtml',
         ),
         'template_path_stack' => array(
             __DIR__ . '/../view',

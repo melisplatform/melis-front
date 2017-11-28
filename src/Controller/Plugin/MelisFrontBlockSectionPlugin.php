@@ -72,6 +72,47 @@ class MelisFrontBlockSectionPlugin extends MelisTemplatingPlugin
         return $viewVariables;
     }
 
+    public function back()
+    {
+        $viewModel = new ViewModel();
+        $viewModel->setTemplate('MelisFront/block-section-container');
+        $viewModel->configPluginKey    = $this->configPluginKey;
+        $viewModel->pluginName         = $this->pluginName;
+        $viewModel->pluginBackConfig   = $this->pluginBackConfig;
+        $viewModel->pluginFrontConfig  = $this->pluginFrontConfig;
+        $viewModel->pluginHardcoded    = $this->pluginHardcoded;
+        $viewModel->hardcodedConfig    = $this->updatesPluginConfig;
+        $viewModel->fromDragDropZone   = $this->fromDragDropZone;
+        $viewModel->encapsulatedPlugin = $this->encapsulatedPlugin;
+
+        $viewModel->widthDesktop      = $this->widthDesktop;
+        $viewModel->widthTablet       = $this->widthTablet;
+        $viewModel->widthMobile       = $this->widthMobile;
+        $viewModel->pluginContainerId = $this->pluginContainerId;
+
+        $pageId = (!empty($this->pluginFrontConfig['pageId'])) ? $this->pluginFrontConfig['pageId'] : 0;
+        $viewModel->pageId = $pageId;
+        $viewModel->pluginXmlDbKey = $this->pluginXmlDbKey;
+
+        $siteModule = getenv('MELIS_MODULE');
+        $melisPage = $this->getServiceLocator()->get('MelisEnginePage');
+        $datasPage = $melisPage->getDatasPage($pageId, 'saved');
+        if($datasPage)
+        {
+            $datasTemplate = $datasPage->getMelisTemplate();
+
+            if(!empty($datasTemplate))
+            {
+                $siteModule = $datasTemplate->tpl_zf2_website_folder;
+            }
+        }
+
+
+        $viewModel->siteModule = $siteModule;
+
+        return $viewModel;
+    }
+
 
     /**
      * This method saves the XML version of this plugin in DB, for this pageId
