@@ -4,7 +4,8 @@
 .melis-dragdropzone {
     position: relative;
     margin-bottom: 10px;
-    padding: 50px 15px;
+    /*padding: 50px 15px;*/
+    padding: 10px 5px;
     min-height: 250px;
     height: auto;
     background: transparent;
@@ -15,6 +16,13 @@
     border-radius: 4px;
     bottom: -25px;
 }
+
+.melis-dragdropzone:after {
+    content: " ";
+    display: block;
+    clear: both;
+}
+
 .melis-dragdropzone.no-content {
     background: rgba(147, 46, 42, 0.3);
 }
@@ -24,7 +32,10 @@
 }
 
 .melis-dragdropzone.highlight .ui-state-highlight {
+    float: left;
+    width: auto;
     background: transparent;
+    margin: 0 5px 30px;
     border: 1px dashed #fff;
 }
 .melis-dragdropzone.highlight .melis-float-plugins {
@@ -33,13 +44,14 @@
 }
 
 .melis-dragdropzone .melis-ui-outlined {
-    margin-bottom: 30px;
+    float: left;
+    margin: 0 5px 30px;
 }
 .wrapper div.melis-dragdropzone:last-of-type {
     margin-bottom: 35px;
 }
 
-.melis-dragdropzone.highlight:after,
+/*.melis-dragdropzone.highlight:after,*/
 .melis-dragdropzone.no-content:after,
 .melis-dragdropzone.no-content.highlight:after{
     content: "\f1e6";
@@ -71,7 +83,7 @@
     z-index: 1;
 }
 
-.melis-dragdropzone.highlight:before,
+/*.melis-dragdropzone.highlight:before,*/
 .melis-dragdropzone.no-content:before,
 .melis-dragdropzone.no-content.highlight:before {
     content: "Drag plugin here!";
@@ -133,11 +145,15 @@
 }
 
 .melis-dragdropzone.ui-state-highlight {
-	background: rgba(255, 255, 255, 0.4);
+    background: rgba(255, 255, 255, 0.4);
     color: #fff;
     border: none;
     opacity: 1;
 }
 .melis-dragdropzone.ui-state-highlight:before {
-	border: 0;
+    border: 0;
+}
+.block-section {
+    width: 100%;
+    min-height: 5px;
 }

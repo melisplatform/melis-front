@@ -26,16 +26,11 @@ use MelisFront\Listener\MelisFrontXSSParameterListener;
 use Zend\Session\Container;
 use MelisFront\Listener\MelisFrontPageCacheListener;
 
-/**
- * Class Module
- * @package MelisFront
- * @require melis-engine
- */
 class Module
 {
     public function onBootstrap(MvcEvent $e)
     {
-    	$eventManager        = $e->getApplication()->getEventManager();
+        $eventManager        = $e->getApplication()->getEventManager();
         $moduleRouteListener = new ModuleRouteListener();
         $moduleRouteListener->attach($eventManager);
 
@@ -43,16 +38,16 @@ class Module
         $routeMatch = $sm->get('router')->match($sm->get('request'));
 
         $isBackOffice = false;
-        
+
         $container = new Container('melisplugins');
         $container['melis-plugins-lang-id'] = 1;
         $container['melis-plugins-lang-locale'] = 'en_EN';
 
         if (!empty($routeMatch))
         {
-            
-            $this->createTranslations($e, $routeMatch); 
-            
+
+            $this->createTranslations($e, $routeMatch);
+
             $routeName = $routeMatch->getMatchedRouteName();
             $module = explode('/', $routeName);
 
@@ -63,12 +58,12 @@ class Module
                     $isBackOffice = true;
                 }
             }
-            
-            
+
+
         }
 
         // do not load listeners if working on back-office
-        if(!$isBackOffice) 
+        if(!$isBackOffice)
         {
             // Catching PAGE SEO URLs to update Router
             $eventManager->attach(new MelisFrontSEOReformatToRoutePageUrlListener());
@@ -96,18 +91,18 @@ class Module
 
             // This will automatically prevent XSS attacks
             $eventManager->attach(new MelisFrontXSSParameterListener());
-            
+
             $eventManager->attach(new MelisFrontPageCacheListener());
         }
     }
-    
+
     public function createTranslations($e, $routeMatch)
     {
         $container = new Container('melisplugins');
         $locale = $container['melis-plugins-lang-locale'];
-        
+
         $param = $routeMatch->getParams();
-        
+
         // Checking if the Request is from Melis-BackOffice or Front
         if (!empty($param['renderMode']))
         {
@@ -129,48 +124,49 @@ class Module
                 }
             }
         }
-        
+
         if (!empty($locale))
         {
             // Inteface translations
             $interfaceTransPath = 'module/MelisModuleConfig/languages/MelisFront/' . $locale . '.interface.php';
             $default = __DIR__ . '/../language/' . $locale . '.interface.php';
-            
+
             $transPath = (file_exists($interfaceTransPath))? $interfaceTransPath : $default;
-            
+
             $sm = $e->getApplication()->getServiceManager();
             $translator = $sm->get('translator');
             $translator->addTranslationFile('phparray', $transPath);
         }
     }
-    
+
     public function getConfig()
     {
-    	$config = array();
-    	$configFiles = array(
-			include __DIR__ . '/../config/module.config.php',
-    	    
-    	    // Tests
-			include __DIR__ . '/../config/diagnostic.config.php',
-			include __DIR__ . '/../config/app.interface.php',
+        $config = array();
+        $configFiles = array(
+            include __DIR__ . '/../config/module.config.php',
 
-    	    // Templating Plugins
-			include __DIR__ . '/../config/plugins/MelisFrontDragDropZonePlugin.config.php',
-			include __DIR__ . '/../config/plugins/MelisFrontTagPlugin.config.php',
-			include __DIR__ . '/../config/plugins/MelisFrontBreadcrumbPlugin.config.php',
-			include __DIR__ . '/../config/plugins/MelisFrontMenuPlugin.config.php',
-			include __DIR__ . '/../config/plugins/MelisFrontShowListFromFolderPlugin.config.php',
-			include __DIR__ . '/../config/plugins/MelisFrontSearchResultsPlugin.config.php',
+            // Tests
+            include __DIR__ . '/../config/diagnostic.config.php',
+            include __DIR__ . '/../config/app.interface.php',
 
-    	);
-    	
-    	foreach ($configFiles as $file) {
-    		$config = ArrayUtils::merge($config, $file);
-    	} 
-    	
-    	return $config;
+            // Templating Plugins
+            include __DIR__ . '/../config/plugins/MelisFrontDragDropZonePlugin.config.php',
+            include __DIR__ . '/../config/plugins/MelisFrontTagPlugin.config.php',
+            include __DIR__ . '/../config/plugins/MelisFrontBreadcrumbPlugin.config.php',
+            include __DIR__ . '/../config/plugins/MelisFrontMenuPlugin.config.php',
+            include __DIR__ . '/../config/plugins/MelisFrontShowListFromFolderPlugin.config.php',
+            include __DIR__ . '/../config/plugins/MelisFrontSearchResultsPlugin.config.php',
+            include __DIR__ . '/../config/plugins/MelisFrontBlockSectionPlugin.config.php',
+
+        );
+
+        foreach ($configFiles as $file) {
+            $config = ArrayUtils::merge($config, $file);
+        }
+
+        return $config;
     }
-    
+
     public function getAutoloaderConfig()
     {
         return array(
@@ -181,5 +177,5 @@ class Module
             ),
         );
     }
- 
+
 }
