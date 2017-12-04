@@ -19,7 +19,6 @@ Run the composer command:
 composer require melisplatform/melis-front
 ```
 
-
 ## Tools & Elements provided
 
 * Services to update SEO and ressources from templating plugins  
@@ -29,6 +28,9 @@ composer require melisplatform/melis-front
 
 
 ## Running the code
+
+**[See Full documentation on implementing a website here](https://www.melistechnology.com/MelisTechnology/resources/documentation/front-office/create-a-website/Declareavhostforyourwebsite)**
+
 
 ### MelisFront Templating Plugins  
 
