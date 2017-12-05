@@ -4,9 +4,7 @@ $width = null;
 if($this->fromDragDropZone) {
     $width = "$this->widthDesktop $this->widthTablet $this->widthMobile";
 }
+echo '<div data-melis-plugin-tag-id="'.$this->pluginId.'" class="' .$width.'">';
+echo $this->value;
+echo '</div>';
 ?>
-<div class="<?= $width ?>">
-    <div data-melis-plugin-tag-id="<?= $this->pluginId ?>">
-        <?= $this->value ?>
-    </div>
-</div>

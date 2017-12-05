@@ -164,13 +164,16 @@ class MelisFrontTagPlugin extends MelisTemplatingPlugin
     public function savePluginConfigToXml($parameters)
     {
         $xmlValueFormatted = '';
-        if (!empty($parameters['tagValue']))
-            $tagValue = $parameters['tagValue'];
+        $tagValue          = isset($parameters['tagValue']) ? $parameters['tagValue'] : null;
+        $tagId             = isset($parameters['tagId'])    ? $parameters['tagId']    : null;
+        $tagType           = isset($parameters['tagType'])  ? $parameters['tagType']    : null;
+        if (!empty($tagValue))
+            $tagValue = $tagValue;
         else
             $tagValue = '';
 
-        $xmlValueFormatted = "\t" . '<melisTag id="' . $parameters['tagId'] .
-            '" type="' . $parameters['tagType'] . '"><![CDATA[' .
+        $xmlValueFormatted = "\t" . '<melisTag id="' . $tagId .
+            '" type="' . $tagType . '"><![CDATA[' .
             $tagValue . ']]></melisTag>' . "\n";
         return $xmlValueFormatted;
     }
