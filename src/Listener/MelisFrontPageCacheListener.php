@@ -27,32 +27,34 @@ class MelisFrontPageCacheListener implements ListenerAggregateInterface
                 
                 // Get route match to know if we are displaying in back or front
                 $routeMatch = $e->getRouteMatch();
-                
-                
+
                 if($routeMatch) {
-                if (!empty($params['idpage']) && $params['renderMode'] == 'front')
-                {
+
                     $params = $routeMatch->getParams();
-                    $response = $e->getResponse();
-                    
-                    $page = $response->getContent();
-                    
-                    $sm = $e->getApplication()->getServiceManager();
-                    
-                    $request = $sm->get('Request');
-                    
-                    // Retrieve page cache
-                    $cacheKey = 'cms_page_getter_'.$params['idpage'];
-                    $cacheConfig = 'meliscms_page';
-                    $melisEngineCacheSystem = $sm->get('MelisEngineCacheSystem');
-                    $results = $melisEngineCacheSystem->getCacheByKey($cacheKey, $cacheConfig);
-                    // Checking if the page is existing on page file cache
-                    if (empty($results))
+
+                    if (!empty($params['idpage']) && $params['renderMode'] == 'front')
                     {
-                        // Saving the page file cache
-                        $melisEngineCacheSystem->setCacheByKey($cacheKey, $cacheConfig, $page);
+                        $params = $routeMatch->getParams();
+                        $response = $e->getResponse();
+
+                        $page = $response->getContent();
+
+                        $sm = $e->getApplication()->getServiceManager();
+
+                        $request = $sm->get('Request');
+
+                        // Retrieve page cache
+                        $cacheKey = 'cms_page_getter_'.$params['idpage'];
+                        $cacheConfig = 'meliscms_page';
+                        $melisEngineCacheSystem = $sm->get('MelisEngineCacheSystem');
+                        $results = $melisEngineCacheSystem->getCacheByKey($cacheKey, $cacheConfig);
+                        // Checking if the page is existing on page file cache
+                        if (empty($results))
+                        {
+                            // Saving the page file cache
+                            $melisEngineCacheSystem->setCacheByKey($cacheKey, $cacheConfig, $page);
+                        }
                     }
-                }
                 }
 
             }
