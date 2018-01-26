@@ -161,15 +161,6 @@ return array(
                                         'spec' => array(
                                             'name' => 'current',
                                             'type' => 'hidden',
-                                            'options' => array(
-                                                'label' => 'tr_meliscmsnews_plugin_pagination_current',
-                                            ),
-                                            'attributes' => array(
-                                                'id' => 'current',
-                                                'class' => 'form-control',
-                                                'placeholder' => 'tr_meliscmsnews_plugin_pagination_current',
-                                                'required' => 'required',
-                                            ),
                                         ),
                                     ),
                                     array(
@@ -177,13 +168,13 @@ return array(
                                             'name' => 'nbPerPage',
                                             'type' => 'MelisText',
                                             'options' => array(
-                                                'label' => 'tr_meliscmsnews_plugin_pagination_nbPerPage',
-                                                'tooltip' => 'tr_meliscmsnews_plugin_pagination_nbPerPage tooltip',
+                                                'label' => 'tr_front_plugin_search_pagination_nbPerPage',
+                                                'tooltip' => 'tr_front_plugin_search_pagination_nbPerPage tooltip',
                                             ),
                                             'attributes' => array(
                                                 'id' => 'nbPerPage',
                                                 'class' => 'form-control',
-                                                'placeholder' => 'tr_meliscmsnews_plugin_pagination_nbPerPage',
+                                                'placeholder' => 'tr_front_plugin_search_pagination_nbPerPage',
                                                 'required' => 'required',
                                             ),
                                         ),
@@ -193,13 +184,13 @@ return array(
                                             'name' => 'nbPageBeforeAfter',
                                             'type' => 'MelisText',
                                             'options' => array(
-                                                'label' => 'tr_meliscmsnews_plugin_pagination_nbPageBeforeAfter',
-                                                'tooltip' => 'tr_meliscmsnews_plugin_pagination_nbPageBeforeAfter tooltip',
+                                                'label' => 'tr_front_plugin_search_pagination_nbPageBeforeAfter',
+                                                'tooltip' => 'tr_front_plugin_search_pagination_nbPageBeforeAfter tooltip',
                                             ),
                                             'attributes' => array(
                                                 'id' => 'nbPageBeforeAfter',
                                                 'class' => 'form-control',
-                                                'placeholder' => 'tr_meliscmsnews_plugin_pagination_nbPageBeforeAfter',
+                                                'placeholder' => 'tr_front_plugin_search_pagination_nbPageBeforeAfter',
                                                 'required' => 'required',
                                             ),
                                         ),
@@ -264,5 +255,5 @@ return array(
                 ),
             ),
         ),
-     ),
+    ),
 );
