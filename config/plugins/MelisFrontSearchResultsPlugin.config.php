@@ -206,7 +206,15 @@ return array(
                                                 'options' => array(
                                                     'messages' => array(
                                                         \Zend\Validator\Digits::NOT_DIGITS => 'tr_front_common_input_not_digit',
-                                                        \Zend\Validator\Digits::STRING_EMPTY => 'tr_front_common_input_empty',
+                                                        \Zend\Validator\Digits::STRING_EMPTY => '',
+                                                    ),
+                                                ),
+                                            ),
+                                            array(
+                                                'name' => 'NotEmpty',
+                                                'options' => array(
+                                                    'messages' => array(
+                                                        \Zend\Validator\NotEmpty::IS_EMPTY => 'tr_front_common_input_empty',
                                                     ),
                                                 ),
                                             ),
@@ -223,7 +231,15 @@ return array(
                                                 'options' => array(
                                                     'messages' => array(
                                                         \Zend\Validator\Digits::NOT_DIGITS => 'tr_front_common_input_not_digit',
-                                                        \Zend\Validator\Digits::STRING_EMPTY => 'tr_front_common_input_empty',
+                                                        \Zend\Validator\Digits::STRING_EMPTY => '',
+                                                    ),
+                                                ),
+                                            ),
+                                            array(
+                                                'name' => 'NotEmpty',
+                                                'options' => array(
+                                                    'messages' => array(
+                                                        \Zend\Validator\NotEmpty::IS_EMPTY => 'tr_front_common_input_empty',
                                                     ),
                                                 ),
                                             ),
@@ -240,7 +256,15 @@ return array(
                                                 'options' => array(
                                                     'messages' => array(
                                                         \Zend\Validator\Digits::NOT_DIGITS => 'tr_front_common_input_not_digit',
-                                                        \Zend\Validator\Digits::STRING_EMPTY => 'tr_front_common_input_empty',
+                                                        \Zend\Validator\Digits::STRING_EMPTY => '',
+                                                    ),
+                                                ),
+                                            ),
+                                            array(
+                                                'name' => 'NotEmpty',
+                                                'options' => array(
+                                                    'messages' => array(
+                                                        \Zend\Validator\NotEmpty::IS_EMPTY => 'tr_front_common_input_empty',
                                                     ),
                                                 ),
                                             ),
