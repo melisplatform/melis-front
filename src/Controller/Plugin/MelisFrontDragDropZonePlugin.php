@@ -92,7 +92,8 @@ class MelisFrontDragDropZonePlugin extends MelisTemplatingPlugin
                 if (!empty($jsonResults))
                 {
                     $variables = $jsonResults->getVariables();
-                    $containerId = $variables['datas']['dom']['pluginContainerId'] ?: count($plugins);
+                    $containerId = isset($variables['datas']['dom']['pluginContainerId']) ?
+                        $variables['datas']['dom']['pluginContainerId'] : count($plugins);
 
                     if (!empty($variables['success'])) {
                         //$html .= $variables['datas']['html'];
