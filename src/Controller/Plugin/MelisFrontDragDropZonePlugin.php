@@ -171,9 +171,9 @@ class MelisFrontDragDropZonePlugin extends MelisTemplatingPlugin
                 $configValues[$cpt] = array();
                 if (!empty($plugin->attributes()->module))
                     $configValues[$cpt]['pluginModule'] = (string)$plugin->attributes()->module;
-                if (!empty($plugin->attributes()->module))
+                if (!empty($plugin->attributes()->name))
                     $configValues[$cpt]['pluginName'] = (string)$plugin->attributes()->name;
-                if (!empty($plugin->attributes()->module))
+                if (!empty($plugin->attributes()->id))
                     $configValues[$cpt]['pluginId'] = (string)$plugin->attributes()->id;
 
                 $cpt++;
