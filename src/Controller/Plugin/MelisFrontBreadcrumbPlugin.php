@@ -69,36 +69,54 @@ class MelisFrontBreadcrumbPlugin extends MelisTemplatingPlugin
         $pageId = (!empty($data['pageIdRootBreadcrumb'])) ? $data['pageIdRootBreadcrumb'] : null;
         
         $treeSrv = $this->getServiceLocator()->get('MelisEngineTree');
-        $pageBreadcrumb = $treeSrv->getPageBreadcrumb($pageId, 0, true);
-        
+        $pageSrv = $this->getServiceLocator()->get('MelisEnginePage');
+      //  $pageBreadcrumb = $treeSrv->getPageBreadcrumb($pageId, 0, true);
+        $pageData = $pageSrv->getDatasPage($pageId);
+        $pageData = (array)$pageData->getMelisPageTree();
+
+        $flag = ($pageData['page_id'] == $pageId) ? 1 : 0;
+        //Incase if there is no more pageChildren
+        $tmp2 = array(
+            'label' =>  (!empty($pageData['pseo_meta_title'])) ? "<b>" .$pageData['pseo_meta_title'] . "</b>" : "<b>" . $pageData['page_name'] ."</b>" ,
+            'idPage' => $pageData['page_id'],
+            'isActive' => $flag,
+        );
+
+       // $pageBreadcrumb = $treeSrv->getAllPages($pageId);
+        //$pageBreadcrumb = $this->getBreadCrumbsRec($pageBreadcrumb['children'],$pageId);
+        $pageBreadcrumb = $treeSrv->getPageChildren($pageId)->toArray();
         $breadcrumb = array();
-        
+       // $breadcrumb = $pageBreadcrumb;
+
         if (is_array($pageBreadcrumb))
         {
             foreach ($pageBreadcrumb As $key => $val)
             {
-                if (in_array($val->page_type, array('PAGE', 'SITE')))
+                if (in_array($val['page_type'], array('PAGE', 'SITE')))
                 {
                     // Checking if the pageId is the current viewed
-                    $flag = ($val->page_id == $pageId) ? 1 : 0;
-                    
-                    $label = (!empty($val->pseo_meta_title)) ? $val->pseo_meta_title : $val->page_name;
+                    $flag = ($val['page_id'] == $pageId) ? 1 : 0;
+
+                    $label = (!empty($val['pseo_meta_title'])) ? $val['pseo_meta_title'] : $val['page_name'];
                     $tmp = array(
                         'label' => $label,
-                        'menu' => $val->page_menu,
-                        'uri' => $treeSrv->getPageLink($val->page_id, false),
-                        'idPage' => $val->page_id,
-                        'lastEditDate' => $val->page_edit_date,
-                        'pageStat' => $val->page_status,
-                        'pageType' => $val->page_type,
+                        'menu' => $val['page_menu'],
+                        'uri' => $treeSrv->getPageLink($val['page_id'], false),
+                        'idPage' => $val['page_id'],
+                        'lastEditDate' => $val['page_edit_date'],
+                        'pageStat' => $val['page_status'],
+                        'pageType' => $val['page_type'],
                         'isActive' => $flag,
                     );
-                    
+
                     array_push($breadcrumb, $tmp);
                 }
             }
         }
-        
+
+        //Add the current page
+        array_unshift($breadcrumb, $tmp2);
+
         // Create an array with the variables that will be available in the view
         $viewVariables = array(
             'pluginId' => $data['id'],
@@ -245,5 +263,32 @@ class MelisFrontBreadcrumbPlugin extends MelisTemplatingPlugin
         return $xmlValueFormatted;
     }
 
+    private function getBreadCrumbsRec($pages, $pageId, $data = [])
+    {
+        $treeSrv = $this->getServiceLocator()->get('MelisEngineTree');
+
+        foreach($pages as $pageData => $val)
+        {
+            $flag = ($val['page_id'] == $pageId) ? 1 : 0;
+            $label = (!empty($val['pseo_meta_title'])) ? $val['pseo_meta_title'] : $val['page_name'];
+
+            $data[] = array(
+                'label'        => $label,
+                'menu'         => $val['page_menu'],
+                'uri'          => $treeSrv->getPageLink($val['page_id'], false),
+                'idPage'       => $val['page_id'],
+                'lastEditDate' => $val['page_edit_date'],
+                'pageStat'     => $val['page_status'],
+                'pageType'     => $val['page_type'],
+                'isActive'     => $flag,
+            );
+
+            if(isset($val['children'])){
+                $data = $this->getBreadCrumbsRec($val['children'], $pageId, $data);
+            }
+        }
+
+        return $data;
+    }
 
 }
