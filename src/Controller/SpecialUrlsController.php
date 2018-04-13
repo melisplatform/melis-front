@@ -83,13 +83,16 @@ class SpecialUrlsController extends AbstractActionController
         foreach ($subArray as $itemSubArray)
         {
             $itemToPush = $itemSubArray;
-            if (!empty($itemSubArray['pages']))
-               unset($itemToPush['pages']);
-            array_push($mainArray, $itemToPush);
-            
+            $pageStat   = $itemSubArray['pageStat'] ?? null;
+
+            if($pageStat){
+                if (!empty($itemSubArray['pages']))
+                    unset($itemToPush['pages']);
+                array_push($mainArray, $itemToPush);
+
+            }
             if (!empty($itemSubArray['pages']))
                 $mainArray = $this->getAllPagesInOneArray($mainArray, $itemSubArray['pages']);
-            
         }
         
         return $mainArray;

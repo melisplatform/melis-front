@@ -87,16 +87,18 @@ class MelisFrontNavigation extends DefaultNavigationFactory
 		$melisTree = $this->serviceLocator->get('MelisEngineTree');
 		
 		$publishedOnly = 1;
-		$pages = $melisTree->getPageChildren($idPage, $publishedOnly);
-		
+		$pages = $melisTree->getPageChildren($idPage,2);
+
 		if ($pages)
 		{
 		    $rpages = $pages->toArray();
 			
 			foreach ($rpages as $page)
 			{
+
 				$tmp = $this->formatPageInArray($page);
 				$children = $this->getChildrenRecursive($page['tree_page_id']);
+
 				if (!empty($children))
 					$tmp['pages'] = $children;
 				
