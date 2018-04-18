@@ -47,7 +47,7 @@ class SpecialUrlsController extends AbstractActionController
 		            $menu[] = $navigation->formatPageInArray($datasPageRes);
 		        }
 		        
-                $menuTmp = $navigation->getChildrenRecursive($siteMainPage);
+                $menuTmp = $navigation->getAllSubpages($siteMainPage);
                 $menuTmp = $this->getAllPagesInOneArray(array(), $menuTmp);
                 
                 $menu = array_merge($menu, $menuTmp);
