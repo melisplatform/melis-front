@@ -1,0 +1,26 @@
+<melis-front>
+	<package_info>
+		<mp_title>Melis Front</mp_title>
+		<mp_subtitle>The module that handles the display of websites.</mp_subtitle>
+		<mp_description>
+			This module is essential in order to display a website.<br />
+			It is literally the front office the platform. It is used to render the pages from their pageId and templates.<br />
+			It is also used by MelisCms to display the page's edition mode in MelisCms.<br />
+			This module also brings all the default plugin used to contruct a template such as:<br />
+			- tags plugins (wysiwyg edition)<br />
+			- breadcrumb plugin<br />
+			- menu plugin<br />
+			- folder listing<br />
+			- search engine
+		</mp_description>
+		<mp_maintainers>melisplatform</mp_maintainers>
+		<mp_group>Melis Cms</mp_group>
+	</package_info>
+	<package_images>
+		<img_1>
+			<mpi_image_title>Melis Front</mpi_image_title>
+			<mpi_image_file>melis-front.JPG</mpi_image_file>
+			<mpi_image_main>1</mpi_image_main>
+		</img_1>
+	</package_images>
+</melis-front>
