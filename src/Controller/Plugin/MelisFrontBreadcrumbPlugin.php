@@ -64,15 +64,15 @@ class MelisFrontBreadcrumbPlugin extends MelisTemplatingPlugin
     {
         // Get the parameters and config from $this->pluginFrontConfig (default > hardcoded > get > post)
         $data = $this->getFormData();
-        
         // Retrieving the pageId from config
-        $pageId = (!empty($data['pageIdRootBreadcrumb'])) ? $data['pageIdRootBreadcrumb'] : null;
-        
+        $pageId = (!empty($data['pageId'])) ? $data['pageId'] : null;
+        $startingPage = $data['pageIdRootBreadcrumb'] ??  $data['pageIdRootBreadcrumb'];
+
         $treeSrv = $this->getServiceLocator()->get('MelisEngineTree');
         $pageBreadcrumb = $treeSrv->getPageBreadcrumb($pageId, 0, true);
-        
+
         $breadcrumb = array();
-        
+
         if (is_array($pageBreadcrumb))
         {
             foreach ($pageBreadcrumb As $key => $val)
@@ -81,24 +81,37 @@ class MelisFrontBreadcrumbPlugin extends MelisTemplatingPlugin
                 {
                     // Checking if the pageId is the current viewed
                     $flag = ($val->page_id == $pageId) ? 1 : 0;
-                    
+
                     $label = (!empty($val->pseo_meta_title)) ? $val->pseo_meta_title : $val->page_name;
                     $tmp = array(
-                        'label' => $label,
-                        'menu' => $val->page_menu,
-                        'uri' => $treeSrv->getPageLink($val->page_id, false),
-                        'idPage' => $val->page_id,
+                        'label'        => $label,
+                        'menu'         => $val->page_menu,
+                        'uri'          => $treeSrv->getPageLink($val->page_id, false),
+                        'idPage'       => $val->page_id,
                         'lastEditDate' => $val->page_edit_date,
-                        'pageStat' => $val->page_status,
-                        'pageType' => $val->page_type,
-                        'isActive' => $flag,
+                        'pageStat'     => $val->page_status,
+                        'pageType'     => $val->page_type,
+                        'isActive'     => $flag,
                     );
-                    
+
                     array_push($breadcrumb, $tmp);
+                }
+
+            }
+        }
+
+
+        //for starting page where the breadcrumb should start
+        foreach ($breadcrumb as $key => $val){
+            if($val['idPage'] == $startingPage){
+                $ctr = 0;
+                $ctr = $key;
+                for($i = 0; $i < $ctr ; $i++){
+                    array_shift($breadcrumb);
                 }
             }
         }
-        
+
         // Create an array with the variables that will be available in the view
         $viewVariables = array(
             'pluginId' => $data['id'],

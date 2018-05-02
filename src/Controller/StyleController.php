@@ -26,8 +26,11 @@ class StyleController extends AbstractActionController
 
         $css     = '[class^="plugin-width"] {float: left;margin: 0 5px 30px;}';
         $pageId  = (int) $this->params()->fromQuery('idpage');
+
         $pageSvc = $this->getServiceLocator()->get('MelisEnginePage');
         $data    = $pageSvc->getDatasPage($pageId);
+
+
 
         if($data) {
 

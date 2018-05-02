@@ -44,6 +44,7 @@ class MelisFrontSearchController extends AbstractActionController
             }
             
             $status = $searchIndex->createIndex($moduleName, $pageId, $exPageIds);
+           // $status = $searchIndex->createIndexForPages($moduleName, $pageId, $exPageIds);
         }
 
         $view = new ViewModel();

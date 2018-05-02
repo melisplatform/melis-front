@@ -87,16 +87,18 @@ class MelisFrontNavigation extends DefaultNavigationFactory
 		$melisTree = $this->serviceLocator->get('MelisEngineTree');
 		
 		$publishedOnly = 1;
-		$pages = $melisTree->getPageChildren($idPage, $publishedOnly);
-		
+		$pages = $melisTree->getPageChildren($idPage,$publishedOnly);
+
 		if ($pages)
 		{
 		    $rpages = $pages->toArray();
 			
 			foreach ($rpages as $page)
 			{
+
 				$tmp = $this->formatPageInArray($page);
 				$children = $this->getChildrenRecursive($page['tree_page_id']);
+
 				if (!empty($children))
 					$tmp['pages'] = $children;
 				
@@ -107,7 +109,7 @@ class MelisFrontNavigation extends DefaultNavigationFactory
 		return $results;
 	}
 	
-	public function formatPageInArray($page)
+	public function formatPageInArray($page,$pageSearchType = null)
 	{
 		$melisTree = $this->serviceLocator->get('MelisEngineTree');
 
@@ -135,6 +137,7 @@ class MelisFrontNavigation extends DefaultNavigationFactory
 	        'lastEditDate' => $page['page_edit_date'],
 	        'pageStat' => $page['page_status'],
 	        'pageType' => $page['page_type'],
+	        'pageSearchType' => $pageSearchType,
 	    );
 	    
 	    if ($this->idpage == $page['tree_page_id'])
@@ -201,4 +204,56 @@ class MelisFrontNavigation extends DefaultNavigationFactory
 		
 		return $this->pages;
 	}
+
+    /**
+     * Get all Subpages including published and unplublished
+     * @param $pageId
+     * @return array
+     */
+    public function getAllSubpages($pageId)
+    {
+        $results = array();
+        //Services
+        $melisTree = $this->serviceLocator->get('MelisEngineTree');
+        $pagePub   = $this->getServiceLocator()->get('MelisEngineTablePagePublished');
+        $pageSave  = $this->getServiceLocator()->get('MelisEngineTablePageSaved');
+
+        $pageSearchType = null;
+        $pages = $melisTree->getPageChildren($pageId,2);
+        
+        
+        if($pages)
+        {
+            $rpages = $pages->toArray();
+            
+            foreach ($rpages as $page)
+            {
+                $pageStat = $page['page_status'] ?? null;
+                //if the page is published
+                if($pageStat){
+                    $pageData       = $pagePub->getEntryById($page['tree_page_id'])->current();
+                    $pageSearchType = $pageData->page_search_type ?? null;
+                }
+                //if the page is unpublished
+                else{
+                    $pageData = $pageSave->getEntryById($page['tree_page_id'])->current();
+                    //if the unpublishedData is not present in page_saved table
+                    if(!$pageData){
+                        //Get the pageData in page_published table
+                        $pageData = $pagePub->getEntryById($page['tree_page_id'])->current();
+                    }
+                    $pageSearchType = $pageData->page_search_type ?? null;
+                }
+
+                $tmp = $this->formatPageInArray($page,$pageSearchType);
+                $children = $this->getAllSubpages($page['tree_page_id'] ?? null);
+
+                if (!empty($children))
+                    $tmp['pages'] = $children;
+
+                $results[] = $tmp;
+            }
+        }
+        return $results;
+    }
 }
