@@ -123,10 +123,7 @@ class MelisFrontNavigation extends DefaultNavigationFactory
 		
 	    if (empty($page['page_edit_date']))
 	        $page['page_edit_date'] = date('Y-m-d H:i:s');
-	    
-	    if (!empty($page['pseo_meta_title']))
-	        $pageName = $page['pseo_meta_title'];
-	    else
+
 	        $pageName = $page['page_name'];
 	        
 	    $tmp = array(
