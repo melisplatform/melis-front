@@ -82,7 +82,8 @@ class MelisFrontBreadcrumbPlugin extends MelisTemplatingPlugin
                     // Checking if the pageId is the current viewed
                     $flag = ($val->page_id == $pageId) ? 1 : 0;
 
-                    $label = (!empty($val->pseo_meta_title)) ? $val->pseo_meta_title : $val->page_name;
+                    //Show only the page_name
+                    $label = $val->page_name ?? null;
                     $tmp = array(
                         'label'        => $label,
                         'menu'         => $val->page_menu,

@@ -6,11 +6,10 @@ All notable changes to this project will be documented in this file.
 
 ### Changed   
 
-
 ### Removed  
 
 ## Release Notes
-## v2.4.0 - 2018-05-03
-* Added bundled CSS and JS
-* Updated composer.json dependencies
-* Fixed issue on page indexing
+## v2.5.0 - 2018-07-31
+* composer.json and dependencies  
+* Fixed meta title, & meta description handling of accents
+* Updaed translations

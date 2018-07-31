@@ -62,34 +62,45 @@ class MelisFrontHeadService implements MelisFrontHeadServiceInterface, ServiceLo
 				/**
 				 * Description tag
 				 */
-				if (!empty($datasPageSeo))
+				if (!empty($datasPageSeo = $datasPageSeo->current()))
 				{
-					$datasPageSeo = $datasPageSeo->current();
-					if (!empty($datasPageSeo))
-					{
+					if (!empty($datasPageSeo)) {
 						$descriptionPage = addslashes($datasPageSeo->pseo_meta_description);
-						
-						if ($descriptionPage != '')
-						{
-							$descriptionTag = "\n<meta name='description' content='$descriptionPage' />\n";
-							$descriptionRegex = '/(<meta[^>]*name=[\"\']description[\"\'][^>]*content=[\"\'](.*?)[\"\'][^>]*>)/i';
-							preg_match($descriptionRegex, $contentGenerated, $descriptions);
-							
-							if (!empty($descriptions))
-							{
-								// Replace existing title in source with the page name
-								$newContent = preg_replace($descriptionRegex, $descriptionTag, $contentGenerated);
-							}
-							else
-							{
-								// Title doesn't exist, look for head tag to add
-								// if no head tag, then nothing will happen
-								$headRegex = '/(<head[^>]*>)/im';
-								$newContent = preg_replace($headRegex, "$1$descriptionTag", $contentGenerated);
-							}
-							
-							$contentGenerated = $newContent;
-						}
+                        $descriptionPage = str_replace("\'", "'", $descriptionPage);
+
+                        $titlePage = addslashes($datasPageSeo->pseo_meta_title);
+                        $titlePage = str_replace("\'", "'", $titlePage);
+						if ($descriptionPage != '') {
+                            $descriptionTag = "\n<meta name=\"description\" content=\"$descriptionPage\" />\n";
+                            $titleTag = "<title>$titlePage</title>";
+                            $descriptionRegex = '/(<meta[^>]*name=[\"\']description[\"\'][^>]*content=[\"\'](.*?)[\"\'][^>]*>)/i';
+                            $titleReg = '/\<title\>+(.*?)+\<\/title>/';
+
+                            preg_match($descriptionRegex, $contentGenerated, $descriptions);
+                            preg_match($titleReg, $contentGenerated, $titles);
+
+                            if (!empty($descriptions)) {
+                                // Replace existing title in source with the page name
+                                $newContent = preg_replace($descriptionRegex, $descriptionTag, $contentGenerated);
+                            } else {
+                                // Title doesn't exist, look for head tag to add
+                                // if no head tag, then nothing will happen
+                                $headRegex = '/(<head[^>]*>)/im';
+                                $newContent = preg_replace($headRegex, "$1$descriptionTag", $contentGenerated);
+                            }
+
+                            if (!empty($titles)) {
+                                // Replace existing title in source with the page name
+                                $newContent = preg_replace($titleReg, $titleTag, $newContent);
+                            } else {
+                                // Title doesn't exist, look for head tag to add
+                                // if no head tag, then nothing will happen
+                                $headRegex = '/(<head[^>]*>)/im';
+                                $newContent = preg_replace($headRegex, "$1$titleTag", $newContent);
+                            }
+
+                            $contentGenerated = $newContent;
+                        }
 					}
 				}
 

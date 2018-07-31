@@ -128,12 +128,7 @@ class MelisFront404CatcherListener implements ListenerAggregateInterface
         		                            {
         		                                if (!empty($datasSite) && $datasSite->site_main_page_id == $page->page_id)
         		                                    continue;
-        		                
-        		                                    if (!empty($page->pseo_meta_title))
-        		                                        $namePage = $page->pseo_meta_title;
-        		                                        else
         		                                            $namePage = $page->page_name;
-        		                
         		                                            $seoUrl .= $namePage . '/';
         		                            }
         		                            $seoUrl .= 'id/' . $idPage;
