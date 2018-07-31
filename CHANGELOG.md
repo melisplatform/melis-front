@@ -6,6 +6,9 @@ All notable changes to this project will be documented in this file.
 
 ### Changed   
 * composer.json and dependencies  
+* Fixed meta title, & meta description handling of accents
+* Updaed translations
+
 
 ### Removed  
 
