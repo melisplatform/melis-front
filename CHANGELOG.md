@@ -5,13 +5,11 @@ All notable changes to this project will be documented in this file.
 ### Added  
 
 ### Changed   
-* composer.json and dependencies  
-* Fixed meta title, & meta description handling of accents
-* Updaed translations
-
 
 ### Removed  
 
-
-## [2.2.1] - 2017-10-17
-Latest stable version
+## Release Notes
+## v2.5.0 - 2018-07-31
+* composer.json and dependencies  
+* Fixed meta title, & meta description handling of accents
+* Updaed translations
