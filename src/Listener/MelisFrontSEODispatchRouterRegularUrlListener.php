@@ -147,6 +147,12 @@ class MelisFrontSEODispatchRouterRegularUrlListener
                                    }
                            }
                        }
+                   }else{
+                       if (!empty($datasPage->getMelisPageTree())) {
+                           $container = new Container('melisplugins');
+                           $container['melis-plugins-lang-id'] = $datasPage->getMelisPageTree()->plang_lang_id;
+                           $container['melis-plugins-lang-locale'] = $datasPage->getMelisPageTree()->lang_cms_locale;
+                       }
                    }
                    
                    /**
