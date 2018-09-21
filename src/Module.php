@@ -111,6 +111,24 @@ class Module
                 $container = new Container('meliscore');
                 $locale = $container['melis-lang-locale'];
             }
+            else
+            {
+                // Session langage for front
+                if (!empty($param['idpage'])) {
+                    $sm = $e->getApplication()->getServiceManager();
+                    $melisPagelangTbl = $sm->get('MelisEngine\Model\Tables\MelisPageLangTable');
+                    $currentPage = $melisPagelangTbl->getEntryByField('plang_page_id', $param['idpage'])->current();
+
+                    $melisCmsLang = $sm->get('MelisEngine\Model\Tables\MelisCmsLangTable');
+                    $currentPageLang = $melisCmsLang->getEntryById($currentPage->plang_lang_id)->current();
+                    if (!empty($currentPageLang)) {
+                        $container = new Container('melisplugins');
+                        $container['melis-plugins-lang-id'] = $currentPageLang->lang_cms_id;
+                        $container['melis-plugins-lang-locale'] = $currentPageLang->lang_cms_locale;
+                        $locale = $currentPageLang->lang_cms_locale;
+                    }
+                }
+            }
         }
         else
         {
