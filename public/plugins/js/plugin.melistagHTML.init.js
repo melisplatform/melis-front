@@ -40,8 +40,5 @@ $("body").on("blur", "div.html-editable", function(){
     melisPluginEdition.calcFrameHeight();
     melisPluginEdition.savePluginUpdate(data);
 });
-$("body").on("keyup", "div.html-editable", function(){
-    melisPluginEdition.calcFrameHeight();
-});
 
 melistagHTML_init();
