@@ -117,7 +117,7 @@ class MelisFrontHeadService implements MelisFrontHeadServiceInterface, ServiceLo
 				if (!empty($titles))
 				{
 					// Replace existing title in source with the page name
-					$newContent = preg_replace($titleRegex, "$1$titlePage$3", $contentGenerated);
+					$newContent = preg_replace($titleRegex, "$1$titlePage$3", $contentGenerated,1);
 				}
 				else
 				{
@@ -125,7 +125,7 @@ class MelisFrontHeadService implements MelisFrontHeadServiceInterface, ServiceLo
 					// if no head tag, then nothing will happen
 					$headRegex = '/(<head[^>]*>)/im';
 					$titleTag = "\n<title>$titlePage</title>\n";
-					$newContent = preg_replace($headRegex, "$1$titleTag", $contentGenerated);
+					$newContent = preg_replace($headRegex, "$1$titleTag", $contentGenerated, 1);
 				}
 				
 			}
