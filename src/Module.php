@@ -113,12 +113,12 @@ class Module
             }
             else
             {
-                // Session langage for front
-                if (!empty($param['idpage'])) {
+                // Session language for front
+                if (!empty($param['idpage']) || !empty($param['frontIdpage'])) {
+                    $idpage = !empty($param['idpage']) ? $param['idpage'] : $param['frontIdpage'];
                     $sm = $e->getApplication()->getServiceManager();
                     $melisPagelangTbl = $sm->get('MelisEngine\Model\Tables\MelisPageLangTable');
-                    $currentPage = $melisPagelangTbl->getEntryByField('plang_page_id', $param['idpage'])->current();
-
+                    $currentPage = $melisPagelangTbl->getEntryByField('plang_page_id', $idpage)->current();
                     $melisCmsLang = $sm->get('MelisEngine\Model\Tables\MelisCmsLangTable');
                     $currentPageLang = $melisCmsLang->getEntryById($currentPage->plang_lang_id)->current();
                     if (!empty($currentPageLang)) {
