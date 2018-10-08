@@ -81,7 +81,8 @@ class MelisSiteActionController extends AbstractActionController
     				'pageLangId' => $this->pageLangId,
     				'pageLangLocale' => $this->pageLangLocale,
     		        'pageBreadCrumb' => $pageBreadCrumb,
-    		        'mainPageId' => $mainPageId
+    		        'mainPageId' => $mainPageId,
+    		        'pageTemplate' => $pageTemplate,
     		));
     
     		$this->oMelisPage = $datasPage;
