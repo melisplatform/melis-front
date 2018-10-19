@@ -73,16 +73,24 @@ class MelisSiteActionController extends AbstractActionController
     	            $mainPageId = $sitePageId->site_main_page_id;
     	        }
     	    }
+		
+	    // Site language for site translations
+            $melisEnginLangService = $this->getServiceLocator()->get('MelisEngineLang');
+            $siteLang = $melisEnginLangService->getSiteLanguage();
+            $siteLangId = $siteLang['langId'];
+            $siteLangLocale = $siteLang['langLocale'];
         	
     		$this->layout()->setVariables(array(
-    				'idPage' => $this->idPage,
-    				'renderType' => $this->renderType,
-    				'renderMode' => $this->renderMode,
-    				'pageLangId' => $this->pageLangId,
-    				'pageLangLocale' => $this->pageLangLocale,
-    		        'pageBreadCrumb' => $pageBreadCrumb,
-    		        'mainPageId' => $mainPageId,
-    		        'pageTemplate' => $pageTemplate,
+			'idPage' => $this->idPage,
+			'renderType' => $this->renderType,
+			'renderMode' => $this->renderMode,
+			'pageLangId' => $this->pageLangId,
+			'pageLangLocale' => $this->pageLangLocale,
+			'pageBreadCrumb' => $pageBreadCrumb,
+			'mainPageId' => $mainPageId,
+			'pageTemplate' => $pageTemplate,
+			'siteLangId' => $siteLangId,
+			'siteLangLocale' => $siteLangLocale,
     		));
     
     		$this->oMelisPage = $datasPage;
