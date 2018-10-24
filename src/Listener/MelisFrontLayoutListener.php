@@ -103,7 +103,7 @@ class MelisFrontLayoutListener implements ListenerAggregateInterface
                             $melisPage = $sm->get('MelisEnginePage');
                             $datasPage = $melisPage->getDatasPage($idpage, 'saved');
                             $melisCmsConfig = $sm->get('MelisCoreConfig');
-                            print_r($melisCmsConfig->getItem('meliscms/conf')['pluginResizable']);
+                            
 
                             $resizeConfig   = $melisCmsConfig->getItem('meliscms/conf')['pluginResizable'] ?? 0;
 
