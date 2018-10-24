@@ -9,6 +9,9 @@
     {
         echo '<link href="' . $css . '" media="screen" rel="stylesheet" type="text/css">' . "\n";
     }
+
+    # For Optional Plugin Resizable
+    $pluginResizable = $this->pluginsResizable ? 1 : 0;
 ?>
 
 <script type="text/javascript" src="/MelisCore/js/library/tinymce/tinymce.min.js"></script>
@@ -41,6 +44,7 @@
         }
     ?>
     var order = 0;
+    var pluginResizable = <?= $pluginResizable ?>;
     // properly load script in order
     function loadScriptInOrder(){
         if(order == scriptMap.length) { return; }
