@@ -25,8 +25,6 @@ class MelisPluginRendererController extends AbstractActionController
         $pluginId = $this->getRequest()->getQuery('pluginId', $this->params()->fromRoute('pluginId', null));
         $fromDragDropZone = $this->getRequest()->getQuery('fromDragDropZone', $this->params()->fromRoute('fromDragDropZone', false));
         $encapsulatedPlugin = $this->getRequest()->getQuery('encapsulatedPlugin', true);
-        $melisCoreConf = $this->getServiceLocator()->get('MelisCoreConfig');
-        $resizeConfig   = $melisCoreConf->getItem('meliscms/conf')['pluginResizable'] ?? null;
         $post = $this->getRequest()->getPost()->toArray();
         $pluginHardcodedConfig = array();
         if (!empty($post['pluginHardcodedConfig']))
@@ -118,10 +116,6 @@ class MelisPluginRendererController extends AbstractActionController
                             'init' => $pluginConfFOBO
                         )
                     );
-                    # Optional for resizing the plugins
-                    if (!empty($resizeConfig)) {
-                        $results['datas']['resizable'] = $resizeConfig;
-                    }
                 }
                 catch (Exception $e)
                 {

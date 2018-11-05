@@ -102,10 +102,6 @@ class MelisFrontLayoutListener implements ListenerAggregateInterface
                             $siteModule = getenv('MELIS_MODULE');
                             $melisPage = $sm->get('MelisEnginePage');
                             $datasPage = $melisPage->getDatasPage($idpage, 'saved');
-                            $melisCmsConfig = $sm->get('MelisCoreConfig');
-                            
-
-                            $resizeConfig   = $melisCmsConfig->getItem('meliscms/conf')['pluginResizable'] ?? 0;
 
                             if($datasPage)
                             {
@@ -119,9 +115,6 @@ class MelisFrontLayoutListener implements ListenerAggregateInterface
 
                             // Setting special layout
                             $finalView->setTemplate('layout/layoutMelis');
-                            # Set variable for optional resizing the plugins
-                            $finalView->setVariable('pluginsResizable',$resizeConfig);
-
                             $forwardPlugin = $sm->get('ControllerPluginManager')->get('Forward');
 
                             // Including the plugins menu by getting the view
