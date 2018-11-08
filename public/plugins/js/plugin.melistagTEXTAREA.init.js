@@ -38,7 +38,7 @@ $("body").on("blur", "div.textarea-editable", function(){
 		tagValue : content,
     };
     melisPluginEdition.calcFrameHeight();
-    melisPluginEdition.savePluginUpdate(data);
+    melisPluginEdition.savePluginUpdate(data, currentdata.siteModule);
 });
 
 melistagTEXTAREA_init();

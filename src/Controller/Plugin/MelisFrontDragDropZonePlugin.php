@@ -154,6 +154,23 @@ class MelisFrontDragDropZonePlugin extends MelisTemplatingPlugin
         $viewModel->pluginName = $this->pluginName;
         $viewModel->pluginXmlDbKey = $this->pluginXmlDbKey;
 
+        $pageId = (!empty($this->pluginFrontConfig['pageId'])) ? $this->pluginFrontConfig['pageId'] : 0;
+
+        $siteModule = getenv('MELIS_MODULE');
+        $melisPage = $this->getServiceLocator()->get('MelisEnginePage');
+        $datasPage = $melisPage->getDatasPage($pageId, 'saved');
+        if($datasPage)
+        {
+            $datasTemplate = $datasPage->getMelisTemplate();
+
+            if(!empty($datasTemplate))
+            {
+                $siteModule = $datasTemplate->tpl_zf2_website_folder;
+            }
+        }
+
+        $viewModel->siteModule = $siteModule;
+
         return $viewModel;
     }
 
