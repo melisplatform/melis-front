@@ -102,6 +102,7 @@ class MelisFrontLayoutListener implements ListenerAggregateInterface
                             $siteModule = getenv('MELIS_MODULE');
                             $melisPage = $sm->get('MelisEnginePage');
                             $datasPage = $melisPage->getDatasPage($idpage, 'saved');
+
                             if($datasPage)
                             {
                                 $datasTemplate = $datasPage->getMelisTemplate();
@@ -114,7 +115,6 @@ class MelisFrontLayoutListener implements ListenerAggregateInterface
 
                             // Setting special layout
                             $finalView->setTemplate('layout/layoutMelis');
-
                             $forwardPlugin = $sm->get('ControllerPluginManager')->get('Forward');
 
                             // Including the plugins menu by getting the view

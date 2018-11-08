@@ -6,9 +6,14 @@
         $pluginId = $this->pluginFrontConfig['id'];
     
 ?>
-<div class='melis-dragdropzone no-content' <?= $data_dragdropzone_id; ?> data-module="<?= $this->configPluginKey; ?>"
-		data-plugin="<?= $this->pluginName; ?>" data-plugin-id="<?= $pluginId; ?>" data-melis-tag="<?= $this->pluginXmlDbKey; ?>">
-<?php 
+<div class='melis-dragdropzone no-content'
+    <?= $data_dragdropzone_id; ?>
+     data-module="<?= $this->configPluginKey; ?>"
+     data-plugin="<?= $this->pluginName; ?>"
+     data-plugin-id="<?= $pluginId; ?>"
+     data-melis-tag="<?= $this->pluginXmlDbKey; ?>"
+     data-site-module="<?= $this->siteModule; ?>">
+<?php
     echo $this->viewFront;
 ?>
 </div>

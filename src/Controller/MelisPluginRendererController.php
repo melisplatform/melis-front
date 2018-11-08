@@ -25,7 +25,6 @@ class MelisPluginRendererController extends AbstractActionController
         $pluginId = $this->getRequest()->getQuery('pluginId', $this->params()->fromRoute('pluginId', null));
         $fromDragDropZone = $this->getRequest()->getQuery('fromDragDropZone', $this->params()->fromRoute('fromDragDropZone', false));
         $encapsulatedPlugin = $this->getRequest()->getQuery('encapsulatedPlugin', true);
-
         $post = $this->getRequest()->getPost()->toArray();
         $pluginHardcodedConfig = array();
         if (!empty($post['pluginHardcodedConfig']))
