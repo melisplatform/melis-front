@@ -65,14 +65,14 @@ class MelisFrontSEOReformatToRoutePageUrlListener implements ListenerAggregateIn
     		    }
     		    
     		    // Removing the optional parameters from url before checking
-    		    $params = '';
-    		    $parameters = explode('/', $uri);
-    		    if (count($parameters) > 1)
-    		    {
-    		        for ($i = 1; $i < count($parameters); $i++)
-    		            $params .= '/' . $parameters[$i];
-    		            $uri = str_replace($params, '', $uri);
-    		    }
+//    		    $params = '';
+//    		    $parameters = explode('/', $uri);
+//    		    if (count($parameters) > 1)
+//    		    {
+//    		        for ($i = 1; $i < count($parameters); $i++)
+//    		            $params .= '/' . $parameters[$i];
+//    		            $uri = str_replace($params, '', $uri);
+//    		    }
     		     
     		    // Trying to find an URL in Melis SEO
     		    $melisTablePageSeo = $sm->get('MelisEngineTablePageSeo');
@@ -94,7 +94,7 @@ class MelisFrontSEOReformatToRoutePageUrlListener implements ListenerAggregateIn
     		                    'renderType' => 'melis_zf2_mvc',
     		                    'renderMode' => 'front',
     		                    'preview' => false,
-    		                    'urlparams' => $params,
+    		                    'urlparams' => $getString,
     		                )
     		            ));
     		            
