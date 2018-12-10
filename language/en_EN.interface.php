@@ -74,5 +74,7 @@ return array(
     
     'tr_front_plugin_search_pagination_nbPerPage tooltip' => 'Number of results displayed on a single page',
     'tr_front_plugin_search_pagination_nbPageBeforeAfter tooltip' => 'The display of the pagination generate a certain number of links before and after the current page, this field allows to limit this number of inks',
+
+    'tr_PluginSection_MelisMiniTemplate' => 'Mini Template',
 );
 ?>

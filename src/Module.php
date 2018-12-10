@@ -182,7 +182,66 @@ class Module
             $config = ArrayUtils::merge($config, $file);
         }
 
+        if(!empty($this->prepareMiniTemplateConfig())){
+            $config = ArrayUtils::merge($config, $this->prepareMiniTemplateConfig());
+        }
+
         return $config;
+    }
+
+    /**
+     * Function to prepare the Mini Template config
+     *
+     * @return array
+     */
+    public function prepareMiniTemplateConfig()
+    {
+        $pluginsFormat = array();
+        $userSites = $_SERVER['DOCUMENT_ROOT'] . '/../module/MelisSites';
+        if(file_exists($userSites) && is_dir($userSites)) {
+            $sites = $this->getDir($userSites);
+            if(!empty($sites)){
+                foreach($sites as $key => $val) {
+                    //public site folder
+                    $publicFolder = $userSites . DIRECTORY_SEPARATOR . $val . DIRECTORY_SEPARATOR . 'public';
+                    //mini template image folder
+//                    $imgFolder = $publicFolder . DIRECTORY_SEPARATOR . 'images' .DIRECTORY_SEPARATOR . 'miniTemplate';
+                    //get the mini template folder path
+                    $miniTplPath = $publicFolder . DIRECTORY_SEPARATOR . 'miniTemplatesTinyMce';
+                    //check if directory is available
+                    if(file_exists($miniTplPath) && is_dir($miniTplPath)) {
+                        //get the plugin config format
+                        $pluginsConfig = include __DIR__ . '/../config/plugins/MiniTemplatePlugin.config.php';
+                        if(!empty($pluginsConfig)) {
+                            //get all the mini template
+                            $tpls = array_diff(scandir($miniTplPath), array('..', '.'));
+                            if (!empty($tpls)) {
+                                //set the site name as sub category title
+                                $pluginsConfig['melis']['subcategory']['title'] = $val;
+                                //set the id of the plugin
+                                $pluginsConfig['melis']['subcategory']['id'] = $pluginsConfig['melis']['subcategory']['id'] . '_' . $val;
+                                //get the content of the mini template
+                                foreach ($tpls as $k => $v) {
+                                    //remove the file extension from the filename
+                                    $name = pathinfo($v, PATHINFO_FILENAME);
+                                    //create a plugin post name
+                                    $postName = $k . strtolower($name);
+                                    //prepare the content of the mini template
+                                    $content = $miniTplPath . DIRECTORY_SEPARATOR . $v;
+                                    //set the default layout for the plugin based on mini template
+                                    $pluginsConfig['front']['default'] = file_get_contents($content);
+                                    //set the plugin name using the template name
+                                    $pluginsConfig['melis']['name'] = $name;
+                                    //include the mini tpl plugin config
+                                    $pluginsFormat['plugins']['MelisMiniTemplate']['plugins']['MiniTemplatePlugin_' . $postName] = $pluginsConfig;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return $pluginsFormat;
     }
 
     public function getAutoloaderConfig()
@@ -194,6 +253,29 @@ class Module
                 ),
             ),
         );
+    }
+
+    /**
+     * Returns all the sub-folders in the provided path
+     * @param String $dir
+     * @param array $excludeSubFolders
+     * @return array
+     */
+    protected function getDir($dir, $excludeSubFolders = array())
+    {
+        $directories = array();
+        if(file_exists($dir)) {
+            $excludeDir = array_merge(array('.', '..', '.gitignore'), $excludeSubFolders);
+            $directory  = array_diff(scandir($dir), $excludeDir);
+
+            foreach($directory as $d) {
+                if(is_dir($dir.'/'.$d)) {
+                    $directories[] = $d;
+                }
+            }
+
+        }
+        return $directories;
     }
 
 }

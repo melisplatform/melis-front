@@ -58,7 +58,21 @@ class MelisPluginRendererController extends AbstractActionController
                 
                 try
                 {
-                    $melisPlugin = $this->getServiceLocator()->get('ControllerPluginManager')->get($pluginName);
+                    /**
+                     * check if plugin is came from the mini template
+                     */
+                    if (strpos($pluginName, 'MiniTemplatePlugin') !== false) {
+                        $old = $pluginName;
+                        //explode to get the original plugin name
+                        $plugin = explode('_', $pluginName);
+                        //set the original plugin name
+                        $pluginName = $plugin[0];
+
+                        $melisPlugin = $this->getServiceLocator()->get('ControllerPluginManager')->get($pluginName);
+                        $melisPlugin->setMiniTplPluginName($old);
+                    }else{
+                        $melisPlugin = $this->getServiceLocator()->get('ControllerPluginManager')->get($pluginName);
+                    }
                     
                     // dragdrop, delete only if plugin is not hardcoded
                     if (empty($pluginId))
