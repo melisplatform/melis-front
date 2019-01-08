@@ -1,15 +1,8 @@
-# Changelog
-All notable changes to this project will be documented in this file.  
-
-## [Unreleased]  
-### Added  
-
-### Changed   
-
-### Removed  
+## Changelog
 
 ## Release Notes
-## v2.5.0 - 2018-07-31
+## v3.0.0 - 2018-07-31
 * composer.json and dependencies  
-* Fixed meta title, & meta description handling of accents
-* Updaed translations
+* Fixed freezing tinyMCe when initializing other tinyMCE plugin
+* Added else statement in order to ge the page lang id inside seo listener
+* Added session plugin language for front
