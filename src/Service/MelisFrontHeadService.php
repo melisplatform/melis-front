@@ -105,37 +105,39 @@ class MelisFrontHeadService implements MelisFrontHeadServiceInterface, ServiceLo
                     /**
                      * Canonical Tag
                      */
-                    $canonicalUrl = addslashes($datasPageSeo->pseo_canonical);
-                    $canonicalUrl = str_replace("\'", "'", $canonicalUrl);
-                    if ($canonicalUrl != '') {
-                        $canonicalUrlTag = "\n<link rel=\"canonical\" href=\"$canonicalUrl\" />\n";
-                        $canonicalRegex = '/(<meta[^>]*name=[\"\']description[\"\'][^>]*content=[\"\'](.*?)[\"\'][^>]*>)/i';
-                        preg_match($canonicalRegex, $contentGenerated, $canonicalFound);
-                        if(!empty($canonicalFound)){
-                            $newContent = preg_replace($canonicalRegex, $canonicalUrlTag, $contentGenerated);
-                        }else {
-                            $headRegex = '/(<head[^>]*>)/im';
-                            $newContent = preg_replace($headRegex, "$1$canonicalUrlTag", $contentGenerated);
-                        }
-                        $contentGenerated = $newContent;
-                    }else{
-                        /**
-                         * @var MelisTreeService
-                         */
-                        $pageService = $this->serviceLocator->get('MelisEngineTree');
-                        $pageUrl = $pageService->getPageLink($idPage);
+                    if(isset($datasPageSeo->pseo_canonical)){
+                        $canonicalUrl = addslashes($datasPageSeo->pseo_canonical);
+                        $canonicalUrl = str_replace("\'", "'", $canonicalUrl);
+                        if ($canonicalUrl != '') {
+                            $canonicalUrlTag = "\n<link rel=\"canonical\" href=\"$canonicalUrl\" />\n";
+                            $canonicalRegex = '/(<meta[^>]*name=[\"\']description[\"\'][^>]*content=[\"\'](.*?)[\"\'][^>]*>)/i';
+                            preg_match($canonicalRegex, $contentGenerated, $canonicalFound);
+                            if(!empty($canonicalFound)){
+                                $newContent = preg_replace($canonicalRegex, $canonicalUrlTag, $contentGenerated);
+                            }else {
+                                $headRegex = '/(<head[^>]*>)/im';
+                                $newContent = preg_replace($headRegex, "$1$canonicalUrlTag", $contentGenerated);
+                            }
+                            $contentGenerated = $newContent;
+                        }else{
+                            /**
+                             * @var MelisTreeService
+                             */
+                            $pageService = $this->serviceLocator->get('MelisEngineTree');
+                            $pageUrl = $pageService->getPageLink($idPage);
 
-                        $canonicalUrlTag = "\n<link rel=\"canonical\" href=\"$pageUrl\" />\n";
-                        $canonicalRegex = '/(<meta[^>]*name=[\"\']description[\"\'][^>]*content=[\"\'](.*?)[\"\'][^>]*>)/i';
-                        preg_match($canonicalRegex, $contentGenerated, $canonicalFound);
-                        if(!empty($canonicalFound)){
-                            $newContent = preg_replace($canonicalRegex, $canonicalUrlTag, $contentGenerated);
-                        }else {
-                            $headRegex = '/(<head[^>]*>)/im';
-                            $newContent = preg_replace($headRegex, "$1$canonicalUrlTag", $contentGenerated);
-                        }
-                        $contentGenerated = $newContent;
+                            $canonicalUrlTag = "\n<link rel=\"canonical\" href=\"$pageUrl\" />\n";
+                            $canonicalRegex = '/(<meta[^>]*name=[\"\']description[\"\'][^>]*content=[\"\'](.*?)[\"\'][^>]*>)/i';
+                            preg_match($canonicalRegex, $contentGenerated, $canonicalFound);
+                            if(!empty($canonicalFound)){
+                                $newContent = preg_replace($canonicalRegex, $canonicalUrlTag, $contentGenerated);
+                            }else {
+                                $headRegex = '/(<head[^>]*>)/im';
+                                $newContent = preg_replace($headRegex, "$1$canonicalUrlTag", $contentGenerated);
+                            }
+                            $contentGenerated = $newContent;
 
+                        }
                     }
 				}
 
