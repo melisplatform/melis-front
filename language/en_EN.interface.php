@@ -74,5 +74,11 @@ return array(
     
     'tr_front_plugin_search_pagination_nbPerPage tooltip' => 'Number of results displayed on a single page',
     'tr_front_plugin_search_pagination_nbPageBeforeAfter tooltip' => 'The display of the pagination generate a certain number of links before and after the current page, this field allows to limit this number of inks',
+
+    //Minify Assets
+    'tr_front_minify_assets_compiled_successfully' => 'Compiled successfully.',
+    'tr_front_minify_assets_nothing_to_compile' => 'There is nothing to compile.',
+    'tr_front_minify_assets_error_occurred' => 'An error occurred while compiling assets.',
+    'tr_front_minify_assets_success' => 'Compiling assets successful.',
 );
 ?>

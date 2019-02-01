@@ -147,6 +147,19 @@ return array(
                     ),
                 ),
             ),
+            'rnc-minify-assets' => array(
+                'type'    => 'segment',
+                'options' => array(
+                    'route'    =>  '/minify-assets',
+                    'constraints' => array(
+                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                    ),
+                    'defaults' => array(
+                        'controller' => 'MelisFront\Controller\MinifyAssets',
+                        'action'     => 'minifyAssets',
+                    ),
+                ),
+            ),
         ),
     ),
     'translator' => array(
@@ -162,6 +175,7 @@ return array(
         'factories' => array(
             'MelisFrontHead' => 'MelisFront\Service\Factory\MelisFrontHeadServiceFactory',
             'MelisFrontNavigation' => 'MelisFront\Navigation\Factory\MelisFrontNavigationFactory',
+            'MinifyAssets' => 'MelisFront\Service\Factory\MinifyAssetsServiceFactory',
 
             'MelisFront\Listener\MelisFront404To301Listener' => 'MelisFront\Listener\Factory\MelisFront404To301ListenerFactory',
         ),
@@ -173,6 +187,7 @@ return array(
             'MelisFront\Controller\MelisFrontSearch' => 'MelisFront\Controller\MelisFrontSearchController',
             'MelisFront\Controller\MelisPluginRenderer' => 'MelisFront\Controller\MelisPluginRendererController',
             'MelisFront\Controller\Style' => 'MelisFront\Controller\StyleController',
+            'MelisFront\Controller\MinifyAssets' => 'MelisFront\Controller\MinifyAssetsController',
         ),
     ),
     'controller_plugins' => array(

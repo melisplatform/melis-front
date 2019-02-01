@@ -77,5 +77,11 @@ return array(
     
     'tr_front_plugin_search_pagination_nbPerPage tooltip' => 'Nombre de résultats s&#39;affichant sur une même page',
     'tr_front_plugin_search_pagination_nbPageBeforeAfter tooltip' => 'L&#39;affichage de la pagination génére un certains nombre de liens avant et après la page en cours, ce champ permet de limiter ce nombe de liens',
+
+    //Minify Assets
+    'tr_front_minify_assets_compiled_successfully' => 'Compiled successfully.',
+    'tr_front_minify_assets_nothing_to_compile' => 'There is nothing to compile.',
+    'tr_front_minify_assets_error_occurred' => 'An error occurred while compiling assets.',
+    'tr_front_minify_assets_success' => 'Compiling assets successful.',
 );
 ?>
