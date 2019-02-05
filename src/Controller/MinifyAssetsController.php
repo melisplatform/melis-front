@@ -22,19 +22,16 @@ class MinifyAssetsController extends AbstractActionController
     {
         $result = array();
         $request = $this->getRequest();
-        if($request->isPost()) {
-            $siteID = $request->getPost('siteId');
+        $siteID = $request->getPost('siteId');
+        /** @var \MelisFront\Service\MinifyAssetsService $minifyAssets */
+        $minifyAssets = $this->getServiceLocator()->get('MinifyAssets');
+        $result = $minifyAssets->minifyAssets($siteID);
 
-            /** @var \MelisFront\Service\MinifyAssetsService $minifyAssets */
-            $minifyAssets = $this->getServiceLocator()->get('MinifyAssets');
-            $result = $minifyAssets->minifyAssets($siteID);
-        }
-
-        $title = 'Compiling assets for '.$result['siteName'];
+        $title = 'Compiling assets';
 
         return new JsonModel(array(
             'title' => $title,
-            'errors' => $result['errors'],
+            'errors' => $result['results'],
         ));
     }
 }

@@ -24,13 +24,15 @@ class MinifyAssetsService extends MelisCoreGeneralService
         $arrayParameters = $this->makeArrayFromParameters(__METHOD__, func_get_args());
         // Sending service start event
         $arrayParameters = $this->sendEvent('melis_front_minify_assets_start', $arrayParameters);
-        $errors = array();
-        $siteName = '';
+        $results = array();
         try {
             $dir = $_SERVER['DOCUMENT_ROOT'] . '/../module/MelisSites';
 
             if(!empty($arrayParameters['siteId'])) {
-                //compile only this site
+                /**
+                 * This will compile only the assets
+                 * of the specified site
+                 */
                 $melisEngineTableSite = $this->getServiceLocator()->get('MelisEngineTableSite');
                 //get the site information by site id
                 $sites = $melisEngineTableSite->getSiteById($arrayParameters['siteId'], getenv('MELIS_PLATFORM'))->toArray();
@@ -43,22 +45,39 @@ class MinifyAssetsService extends MelisCoreGeneralService
                             //get the content of the asset config
                             $files = include($siteConfigDir);
                             //process the assets to make a bundle
-                            $errors = $this->generateAllAssets($files, $dir, $site['site_name']);
+                            $res = $this->generateAllAssets($files, $dir, $site['site_name']);
+                            array_push($results, array($siteName => $res));
+
                         }else{
-                            $errors = array('Error' => $site['site_name'].'/config/assets.config.php not found.');
+                            array_push($results, array($siteName => $site.'/config/assets.config.php not found.'));
                         }
                     }
                 }
             }else{
-                //compile all assets in every site
+                /**
+                 * This will compile all the assets
+                 * in every sites
+                 */
+                $sitesList = $this->getAllSites($dir);
+                foreach($sitesList as $key => $site){
+                    $siteConfigDir = $dir.'/'.$site.'/config/assets.config.php';
+                    if(file_exists($siteConfigDir)){
+                        //get the content of the asset config
+                        $files = include($siteConfigDir);
+                        //process the assets to make a bundle
+                        $res = $this->generateAllAssets($files, $dir, $site);
+                        array_push($results, array($site => $res));
+                    }else{
+                        array_push($results, array($site => $site.'/config/assets.config.php not found.'));
+                    }
+                }
             }
         }catch (\Exception $ex){
-           $errors = array('Error' => $ex->getMessage());
+           $results = array('Error' => $ex->getMessage());
         }
 
         $arrayParameters['result'] = array(
-            'errors' => $errors,
-            'siteName' => $siteName,
+            'results' => $results,
             'siteId' => $arrayParameters['siteId']
         );
         $this->sendEvent('melis_front_minify_assets_end', $arrayParameters);
@@ -157,11 +176,11 @@ class MinifyAssetsService extends MelisCoreGeneralService
         return $minifier;
     }
 
-    private function getRenAssets($assetsDir)
+    private function getAllSites($sitesDir)
     {
         $modules = array();
-        if($this->checkDir($assetsDir)) {
-            $modules = $this->getDir($assetsDir);
+        if($this->checkDir($sitesDir)) {
+            $modules = $this->getDir($sitesDir);
         }
 
         return $modules;
