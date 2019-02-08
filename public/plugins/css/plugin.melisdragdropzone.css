@@ -15,6 +15,7 @@
     border: 1px dashed #de7d79;
     border-radius: 4px;
     bottom: -25px;
+    width: inherit;
 }
 
 .melis-dragdropzone:after {
@@ -45,7 +46,7 @@
 
 .melis-dragdropzone .melis-ui-outlined {
     float: left;
-    margin: 0 5px 30px;
+    margin: 0 5px 30px 0;
 }
 .wrapper div.melis-dragdropzone:last-of-type {
     margin-bottom: 35px;
