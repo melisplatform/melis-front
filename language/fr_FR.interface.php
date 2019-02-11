@@ -79,5 +79,7 @@ return array(
     'tr_front_plugin_search_pagination_nbPageBeforeAfter tooltip' => 'L&#39;affichage de la pagination génére un certains nombre de liens avant et après la page en cours, ce champ permet de limiter ce nombe de liens',
 
     'tr_PluginSection_MelisMiniTemplate' => 'Mini Template',
+    // plugin config
+    'tr_melis_front_bloc_plugin_description' => 'Le plugin Block ajoute un simple block vide'
 );
 ?>

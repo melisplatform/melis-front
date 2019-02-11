@@ -22,7 +22,7 @@ return array(
                         ),
                         'name' => 'Block',
                         'thumbnail' => '/MelisFront/plugins/images/MelisFrontBlockPlugin_thumb.jpg',
-                        'description' => 'Add a section block in the drag drop zone',
+                        'description' => 'tr_melis_front_bloc_plugin_description',
 
                     ),
                 ),
