@@ -186,6 +186,7 @@ return array(
             'MelisFrontShowListFromFolderPlugin' => 'MelisFront\Controller\Plugin\MelisFrontShowListFromFolderPlugin',
             'MelisFrontSearchResultsPlugin' => 'MelisFront\Controller\Plugin\MelisFrontSearchResultsPlugin',
             'MelisFrontBlockSectionPlugin' => 'MelisFront\Controller\Plugin\MelisFrontBlockSectionPlugin',
+            'MiniTemplatePlugin' => 'MelisFront\Controller\Plugin\MiniTemplatePlugin',
         )
     ),
     'view_helpers' => array(
@@ -221,6 +222,9 @@ return array(
             'MelisFront/list-paginator'                  => __DIR__ . '/../view/melis-front/plugins/list-paginator.phtml',
             'MelisFront/block-section'                   => __DIR__ . '/../view/melis-front/plugins/block-section.phtml',
             'MelisFront/block-section-container'         => __DIR__ . '/../view/melis-front/plugins/block-section-container.phtml',
+
+            //Mini Template plugins
+            'MiniTemplate/Content'                      =>  __DIR__ . '/../view/melis-front/plugins/mini-template-default.phtml',
         ),
         'template_path_stack' => array(
             __DIR__ . '/../view',

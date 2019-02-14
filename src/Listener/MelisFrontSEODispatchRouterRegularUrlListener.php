@@ -202,7 +202,53 @@ class MelisFrontSEODispatchRouterRegularUrlListener
                        foreach ($routingResult as $keyResult => $result)
                            $routeMatch->setParam($keyResult, $result);
                    }
-            	   
+                    /**
+                     * Checking of the :
+                     *  - Controller
+                     *  - Controller action
+                     *  - layout / template
+                     */
+                    $moduleTemplate = $datasTemplate;
+                    if (! empty($datasTemplate)) {
+                        $templateType   = $datasTemplate->tpl_type;
+                        if ($templateType == 'ZF2') {
+                            $siteModule  = $datasTemplate->tpl_zf2_website_folder;
+                            $controller  = $datasTemplate->tpl_zf2_controller;
+                            $action      = $datasTemplate->tpl_zf2_action;
+                            $layout      = $datasTemplate->tpl_zf2_layout;
+
+                            // check controller class if exists
+                            $controllerClassName = "\\{$siteModule}\\Controller\\{$controller}Controller";
+                            if (class_exists($controllerClassName)) {
+                                $routingResult['controller'] = $siteModule . '\Controller\\' . $controller;
+                                $tmpClass = new $controllerClassName;
+                                if (method_exists($tmpClass,$action . "Action")) {
+                                    $routingResult['action'] = $action;
+                                } else {
+                                    echo "<p>Controller :[ <strong>" . $controller . "</strong> ] found in Module : [ <strong>{$siteModule}</strong> ]but </p> ";
+                                    echo "<p>action: [ <strong>" . $action . "</strong> ] not found in Controller : [ <strong>{$controllerClassName}</strong> ]</p>";
+                                    die;// die because we dont want to show errors everywhere
+                                }
+                            } else {
+                                echo "<p>Controller : [ <strong>" . $controller . "</strong> ] not found in Module : [ <strong>{$siteModule}</strong> ]</p>";
+                                die;// die because we dont want to show errors everywhere
+                            }
+                            // checking of the layout / zend template
+                            $config = $sm->get('config');
+                            // get all template_map so we could check if the given template is present on a module
+                            $templateMap = $config['view_manager']['template_map'];
+                            // template to search
+                            $templateName = $siteModule . "/" . $layout;
+                            $checkTemplate = array_key_exists($templateName,$templateMap);
+                            if ($checkTemplate === false) {
+                                // message
+                                $message1 = "<p>Controller [ <strong>{$controller}</strong> ] and action [ <strong>{$action}</strong> ] found but</p>";
+                                $message2 = "<p>layout / template: [ <strong>{$templateName}</strong> ] not found in Module : [ <strong>{$siteModule}</strong> ]</p>";
+                                echo $message1 . $message2;
+                                die; // die because we dont want to show errors everywhere
+                            }
+                        }
+                    }
                 }
             },
         100);
