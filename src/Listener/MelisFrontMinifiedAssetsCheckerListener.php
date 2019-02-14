@@ -111,16 +111,29 @@ class MelisFrontMinifiedAssetsCheckerListener implements ListenerAggregateInterf
     }
 
     /**
+     * @param $content
+     * @param $cssToAdd
+     * @param $jsToAdd
+     * @return null|string|string[]
+     */
+    private function createLink($content, $cssToAdd, $jsToAdd)
+    {
+        $content = $this->createCssLink($content, $cssToAdd);
+        $content = $this->createJsLink($content, $jsToAdd);
+        return $content;
+    }
+
+    /**
      * Function to create js link
      *
      * @param $content
-     * @param $jsToLoad
+     * @param $jsToAdd
      * @return null|string|string[]
      */
-    private function createJsLink($content, $jsToLoad)
+    private function createJsLink($content, $jsToAdd)
     {
         $bodyRegex = '/(<\/body>)/im';
-        $newContent = preg_replace($bodyRegex, "$jsToLoad$1", $content);
+        $newContent = preg_replace($bodyRegex, "$jsToAdd$1", $content);
         return $newContent;
     }
 
@@ -135,7 +148,7 @@ class MelisFrontMinifiedAssetsCheckerListener implements ListenerAggregateInterf
      */
     private function loadAssetsFromConfig($content, $dir, $type = null)
     {
-        $newContent = '';
+        $newContent = $content;
         $assetsConfig = $dir.'assets.config.php';
         /**
          * check if the config exist
@@ -155,22 +168,21 @@ class MelisFrontMinifiedAssetsCheckerListener implements ListenerAggregateInterf
                         /**
                          * this will load the assets from the config
                          */
+                        $cssToAdd = "\n";
+                        $jsToLoad = "\n";
                         if (strtolower($key) == 'css') {
-                            $cssToAdd = "\n";
                             foreach ($file as $k => $css) {
                                 $css = str_replace('/public', '', $css);
                                 $cssToAdd .= '<link href="' . $css . '" media="screen" rel="stylesheet" type="text/css">' . "\n";
                             }
-                            $newContent .= $this->createCssLink($content, $cssToAdd);
                         }
                         elseif (strtolower($key) == 'js') {
-                            $jsToLoad = "\n";
                             foreach ($file as $k => $js) {
                                 $js = str_replace('/public', '', $js);
                                 $jsToLoad .= '<script type="text/javascript" src="' . $js . '"></script>' . "\n";
                             }
-                            $newContent .= $this->createJsLink($content, $jsToLoad);
                         }
+                        $newContent = $this->createLink($newContent, $cssToAdd, $jsToLoad);
                     }
                     elseif($type == 'css'){
                         /**
@@ -183,7 +195,7 @@ class MelisFrontMinifiedAssetsCheckerListener implements ListenerAggregateInterf
                                 $css = str_replace('/public', '', $css);
                                 $cssToAdd .= '<link href="' . $css . '" media="screen" rel="stylesheet" type="text/css">' . "\n";
                             }
-                            $newContent .= $this->createCssLink($content, $cssToAdd);
+                            $newContent = $this->createCssLink($content, $cssToAdd);
                         }
                     }elseif($type == 'js'){
                         /**
@@ -195,23 +207,11 @@ class MelisFrontMinifiedAssetsCheckerListener implements ListenerAggregateInterf
                                 $js = str_replace('/public', '', $js);
                                 $jsToLoad .= '<script type="text/javascript" src="' . $js . '"></script>' . "\n";
                             }
-                            $newContent .= $this->createJsLink($content, $jsToLoad);
+                            $newContent = $this->createJsLink($content, $jsToLoad);
                         }
                     }
                 }
-            }else{
-                /**
-                 * do nothing
-                 * just return the original content
-                 */
-                $newContent = $content;
             }
-        }else{
-            /**
-             * do nothing
-             * just return the original content
-             */
-            $newContent = $content;
         }
         return $newContent;
     }
