@@ -24,7 +24,7 @@ class MelisFrontMinifiedAssetsCheckerListener implements ListenerAggregateInterf
         $callBackHandler = $events->attach(
             MvcEvent::EVENT_FINISH,
             function(MvcEvent $e){
-                
+
                 // Get route match to know if we are displaying in back or front
                 $routeMatch = $e->getRouteMatch();
 
@@ -32,8 +32,8 @@ class MelisFrontMinifiedAssetsCheckerListener implements ListenerAggregateInterf
 
                     $params = $routeMatch->getParams();
 
-                    if ($params['renderMode'] == 'front')
-                    {
+//                    if ($params['renderMode'] == 'front')
+//                    {
                         $response = $e->getResponse();
                         $content = $response->getContent();
                         $newContent = $content;
@@ -88,7 +88,7 @@ class MelisFrontMinifiedAssetsCheckerListener implements ListenerAggregateInterf
                          * to the body of the page
                          */
                         $response->setContent($newContent);
-                    }
+//                    }
                 }
 
             }
