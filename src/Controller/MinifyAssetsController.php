@@ -29,9 +29,26 @@ class MinifyAssetsController extends AbstractActionController
 
         $title = 'Compiling assets';
 
+        /**
+         * modify a little the result
+         */
+        $success = true;
+        $message = '';
+        if(!empty($result['results'][0])){
+            foreach($result['results'][0] as $key => $val){
+                if(!empty($val['error'])){
+                    if(!$val['error']['success']){
+                        $success = false;
+                        $message = $val['error']['message'];
+                    }
+                }
+            }
+        }
+
         return new JsonModel(array(
             'title' => $title,
-            'errors' => $result['results'],
+            'message' => wordwrap($message, 20, "\n", true),
+            'success' => $success,
         ));
     }
 }

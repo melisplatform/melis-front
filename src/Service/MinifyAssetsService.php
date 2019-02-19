@@ -99,20 +99,31 @@ class MinifyAssetsService extends MelisCoreGeneralService
         $jsMinifier = new Minify\JS();
 
         $bundleDir = $dir.'/'.$siteName.'/public/';
-
         $messages = array();
-        if(!empty($files)){
-            foreach($files as $key => $file){
-                //create a bundle for js
-                $key = strtolower($key);
-                if($key == 'js'){
-                    $messages['Js'] = $this->createBundleFile($jsMinifier,'bundle.js', $file, $dir, $bundleDir);
+
+        //check if the directory for the bundle is exist
+        if($this->checkDir($bundleDir)) {
+            //check if bundle is writable
+            if (is_writable($bundleDir)) {
+
+                if (!empty($files)) {
+                    foreach ($files as $key => $file) {
+                        //create a bundle for js
+                        $key = strtolower($key);
+                        if ($key == 'js') {
+                            $messages['error'] = $this->createBundleFile($jsMinifier, 'bundle.js', $file, $dir, $bundleDir);
+                        }
+                        //create a bundle for css
+                        if ($key == 'css') {
+                            $messages['error'] = $this->createBundleFile($cssMinifier, 'bundle.css', $file, $dir, $bundleDir);
+                        }
+                    }
                 }
-                //create a bundle for css
-                if($key == 'css'){
-                    $messages['Css'] = $this->createBundleFile($cssMinifier, 'bundle.css', $file, $dir, $bundleDir);
-                }
+            }else {
+                $messages['error'] = array('message' => $bundleDir . ' is not writable.', 'success' => false);
             }
+        }else{
+            $messages['error'] = array('message' => $bundleDir . ' does not exist.', 'success' => false);
         }
         return $messages;
     }
@@ -130,38 +141,36 @@ class MinifyAssetsService extends MelisCoreGeneralService
     private function createBundleFile ($minifier, $fileName, $files, $dir, $bundleDir)
     {
         $translator = $this->getServiceLocator()->get('translator');
-        $error = array();
-        //check if the directory for the bundle is exist
-        if($this->checkDir($bundleDir)) {
-            //check if bundle is writable
-            if (is_writable($bundleDir)) {
-                if (!empty($files)) {
-                    try {
-                        foreach ($files as $key => $file) {
-                            //add the file to minify later
-                            $minifier->add($dir . $file);
-//                            $minifier = $this->getFileContentsViaCurl($minifier, $file);
-                        }
-                        //minify all the files
-                        $minifier->minify($bundleDir . $fileName);
-                        array_push($error, $translator->translate('tr_front_minify_assets_compiled_successfully'));
-                    } catch (\Exception $ex) {
-                        /**
-                         * this will occur only if the bundle.css or bundle.js
-                         * is not writable or no permission
-                         */
-                        array_push($error, wordwrap($ex->getMessage(), 20, "\n", true));
-                    }
-                }else{
-                    array_push($error, $translator->translate('tr_front_minify_assets_nothing_to_compile'));
+        $result = array();
+        $message = '';
+        $success = false;
+        if (!empty($files)) {
+            try {
+                foreach ($files as $key => $file) {
+                    //add the file to minify later
+                    $minifier->add($dir . $file);
+//                 $minifier = $this->getFileContentsViaCurl($minifier, $file);
                 }
-            } else {
-                array_push($error, $bundleDir . ' is not writable.');
+                //minify all the files
+                $minifier->minify($bundleDir . $fileName);
+                $message = $translator->translate('tr_front_minify_assets_compiled_successfully');
+                $success = true;
+            } catch (\Exception $ex) {
+                /**
+                 * this will occur only if the bundle.css or bundle.js
+                 * is not writable or no permission or other errors
+                 */
+                  $message = wordwrap($ex->getMessage(), 20, "\n", true);
             }
         }else{
-            array_push($error, $bundleDir . ' does not exist.');
+//          $message = $translator->translate('tr_front_minify_assets_nothing_to_compile');
+            $success = true;
         }
-        return $error;
+
+        return array(
+            'message' => $message,
+            'success' => $success
+        );
     }
 
     public function getFileContentsViaCurl($minifier, $url)
