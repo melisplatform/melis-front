@@ -34,13 +34,11 @@ class MinifyAssetsController extends AbstractActionController
          */
         $success = true;
         $message = '';
-        if(!empty($result['results'][0])){
-            foreach($result['results'][0] as $key => $val){
-                if(!empty($val['error'])){
-                    if(!$val['error']['success']){
-                        $success = false;
-                        $message = $val['error']['message'];
-                    }
+        if(!empty($result['results'])){
+            foreach($result['results'] as $key => $val){
+                if(!$val['success']){
+                    $success = false;
+                    $message = $val['message'];
                 }
             }
         }

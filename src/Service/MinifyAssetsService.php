@@ -45,11 +45,12 @@ class MinifyAssetsService extends MelisCoreGeneralService
                             //get the content of the asset config
                             $files = include($siteConfigDir);
                             //process the assets to make a bundle
-                            $res = $this->generateAllAssets($files, $dir, $site['site_name']);
-                            array_push($results, array($siteName => $res));
+                            $results = $this->generateAllAssets($files, $dir, $site['site_name']);
+//                            array_push($results, array($siteName => $res));
 
                         }else{
-                            array_push($results, array($siteName => $site.'/config/assets.config.php not found.'));
+//                            array_push($results, array($siteName => $site.'/config/assets.config.php not found.', 'success' => false));
+                            $results = array('error' => array('message' => $site.'/config/assets.config.php not found.', 'success' => false));
                         }
                     }
                 }
@@ -68,12 +69,12 @@ class MinifyAssetsService extends MelisCoreGeneralService
                         $res = $this->generateAllAssets($files, $dir, $site);
                         array_push($results, array($site => $res));
                     }else{
-                        array_push($results, array($site => $site.'/config/assets.config.php not found.'));
+                        $results = array('error' => array('message' => $site.'/config/assets.config.php not found.', 'success' => false));
                     }
                 }
             }
         }catch (\Exception $ex){
-           $results = array('Error' => $ex->getMessage());
+            $results = array('error' => array('message' => $ex->getMessage(), 'success' => false));
         }
 
         $arrayParameters['result'] = array(
