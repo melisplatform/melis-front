@@ -46,11 +46,9 @@ class MinifyAssetsService extends MelisCoreGeneralService
                             $files = include($siteConfigDir);
                             //process the assets to make a bundle
                             $results = $this->generateAllAssets($files, $dir, $site['site_name']);
-//                            array_push($results, array($siteName => $res));
 
                         }else{
-//                            array_push($results, array($siteName => $site.'/config/assets.config.php not found.', 'success' => false));
-                            $results = array('error' => array('message' => $site.'/config/assets.config.php not found.', 'success' => false));
+                            $results = array('error' => array('message' => $siteConfigDir.' not found.', 'success' => false));
                         }
                     }
                 }
@@ -69,7 +67,7 @@ class MinifyAssetsService extends MelisCoreGeneralService
                         $res = $this->generateAllAssets($files, $dir, $site);
                         array_push($results, array($site => $res));
                     }else{
-                        $results = array('error' => array('message' => $site.'/config/assets.config.php not found.', 'success' => false));
+                        $results = array('error' => array('message' => $siteConfigDir.' not found.', 'success' => false));
                     }
                 }
             }

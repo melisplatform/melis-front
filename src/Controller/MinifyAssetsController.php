@@ -20,7 +20,6 @@ class MinifyAssetsController extends AbstractActionController
      */
     public function minifyAssetsAction ()
     {
-        $result = array();
         $request = $this->getRequest();
         $siteID = $request->getPost('siteId');
         /** @var \MelisFront\Service\MinifyAssetsService $minifyAssets */
