@@ -77,7 +77,12 @@ return array(
 
     'tr_PluginSection_MelisMiniTemplate' => 'Mini Template',
     // plugin config
-    'tr_melis_front_bloc_plugin_description' => 'The plugin Block adds a simple empty block'
+    'tr_melis_front_bloc_plugin_description' => 'The plugin Block adds a simple empty block',
 
+    //Minify Assets
+    'tr_front_minify_assets_compiled_successfully' => 'Compiled successfully.',
+    'tr_front_minify_assets_nothing_to_compile' => 'There is nothing to compile.',
+    'tr_front_minify_assets_error_occurred' => 'An error occurred while compiling assets.',
+    'tr_front_minify_assets_success' => 'Compiling assets successful.',
 );
 ?>
