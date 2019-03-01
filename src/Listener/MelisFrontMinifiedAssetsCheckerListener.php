@@ -32,16 +32,16 @@ class MelisFrontMinifiedAssetsCheckerListener implements ListenerAggregateInterf
 
                     $params = $routeMatch->getParams();
 
-//                    if ($params['renderMode'] == 'front')
-//                    {
+                    if (!empty($params['module']))
+                    {
                         $response = $e->getResponse();
                         $content = $response->getContent();
                         $newContent = $content;
 
                         $cssBundleLoaded = false;
                         $jsBundleLoaded = false;
-                        $module = $params['module'] ?? null;
-                        $siteDir = $_SERVER['DOCUMENT_ROOT'] . '/../module/MelisSites/'.$module.'/';
+
+                        $siteDir = $_SERVER['DOCUMENT_ROOT'] . '/../module/MelisSites/'.$params['module'].'/';
                         $publicDir = $siteDir.'public/';
                         $configDir = $siteDir.'config/';
                         /**
@@ -88,7 +88,7 @@ class MelisFrontMinifiedAssetsCheckerListener implements ListenerAggregateInterf
                          * to the body of the page
                          */
                         $response->setContent($newContent);
-//                    }
+                    }
                 }
 
             }
