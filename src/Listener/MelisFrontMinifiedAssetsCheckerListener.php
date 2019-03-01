@@ -40,8 +40,8 @@ class MelisFrontMinifiedAssetsCheckerListener implements ListenerAggregateInterf
 
                         $cssBundleLoaded = false;
                         $jsBundleLoaded = false;
-
-                        $siteDir = $_SERVER['DOCUMENT_ROOT'] . '/../module/MelisSites/'.$params['module'].'/';
+                        $module = $params['module'] ?? null;
+                        $siteDir = $_SERVER['DOCUMENT_ROOT'] . '/../module/MelisSites/'.$module.'/';
                         $publicDir = $siteDir.'public/';
                         $configDir = $siteDir.'config/';
                         /**
