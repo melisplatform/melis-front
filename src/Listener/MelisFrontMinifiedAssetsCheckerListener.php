@@ -32,8 +32,8 @@ class MelisFrontMinifiedAssetsCheckerListener implements ListenerAggregateInterf
 
                     $params = $routeMatch->getParams();
 
-//                    if ($params['renderMode'] == 'front')
-//                    {
+                    if (!empty($params['module']))
+                    {
                         $response = $e->getResponse();
                         $content = $response->getContent();
                         $newContent = $content;
@@ -88,7 +88,7 @@ class MelisFrontMinifiedAssetsCheckerListener implements ListenerAggregateInterf
                          * to the body of the page
                          */
                         $response->setContent($newContent);
-//                    }
+                    }
                 }
 
             }
