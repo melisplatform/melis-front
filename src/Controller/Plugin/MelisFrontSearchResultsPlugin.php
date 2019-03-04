@@ -10,24 +10,24 @@
 namespace MelisFront\Controller\Plugin;
 
 use MelisEngine\Controller\Plugin\MelisTemplatingPlugin;
-use Zend\Paginator\Paginator;
 use Zend\Paginator\Adapter\ArrayAdapter;
+use Zend\Paginator\Paginator;
 use Zend\View\Model\ViewModel;
-use Zend\Session\Container;
+
 /**
  * This plugin implements the business logic of the
  * "SearchResults" plugin.
- * 
+ *
  * Please look inside app.plugins.php for possible awaited parameters
  * in front and back function calls.
- * 
+ *
  * front() and back() are the only functions to create / update.
  * front() generates the website view
- * 
+ *
  * Configuration can be found in $pluginConfig / $pluginFrontConfig / $pluginBackConfig
  * Configuration is automatically merged with the parameters provided when calling the plugin.
  * Merge detects automatically from the route if rendering must be done for front or back.
- * 
+ *
  * How to call this plugin without parameters:
  * $plugin = $this->MelisFrontSearchResultsPlugin();
  * $pluginView = $plugin->render();
@@ -38,140 +38,127 @@ use Zend\Session\Container;
  *      'template_path' => 'MySiteTest/search/search-results'
  * );
  * $pluginView = $plugin->render($parameters);
- * 
+ *
  * How to add to your controller's view:
  * $view->addChild($pluginView, 'searchresults');
- * 
+ *
  * How to display in your controller's view:
  * echo $this->searchresults;
- * 
- * 
+ *
+ *
  */
 class MelisFrontSearchResultsPlugin extends MelisTemplatingPlugin
 {
-    public function __construct($updatesPluginConfig = array())
+    private const MELIS_SITES = '/../module/MelisSites/';
+    private const VENDOR = '/../vendor/melisplatform/';
+
+    public function __construct($updatesPluginConfig = [])
     {
         $this->configPluginKey = 'melisfront';
         $this->pluginXmlDbKey = 'MelisFrontSearchResultsPlugin';
         parent::__construct($updatesPluginConfig);
     }
-    
+
     /**
      * This function gets the datas and create an array of variables
      * that will be associated with the child view generated.
+     * @return array
      */
     public function front()
     {
         // Get the parameters and config from $this->pluginFrontConfig (default > hardcoded > get > post)
         $data = $this->getFormData();
-        
-        // Plugin properties
-        $pageId     = (!empty($data['pageId']))         ? $data['pageId']           : null;
-        $moduleName = (!empty($data['siteModuleName'])) ? $data['siteModuleName']   : getenv('MELIS_MODULE');
-        $keyword    = (!empty($data['keyword']))        ? $data['keyword']          : null;
-        
-        // Pagination
-        $current                = (!empty($data['current']))            ? $data['current']              : 1;
-        $nbPerPage              = (!empty($data['nbPerPage']))          ? $data['nbPerPage']            : 10;
-        $nbPageBeforeAfter      = (!empty($data['nbPageBeforeAfter']))  ? $data['nbPageBeforeAfter']    : 0;
-        
-        $moduleDirWritable = true;
 
+        // Plugin properties
+        $pageId = empty($data['pageId']) ? null : $data['pageId'];
+        $moduleName = empty($data['siteModuleName']) ? getenv('MELIS_MODULE') : $data['siteModuleName'];
+        $keyword = empty($data['keyword']) ? null : $data['keyword'];
+
+        // Pagination
+        $current = empty($data['current']) ? 1 : $data['current'];
+        $nbPerPage = empty($data['nbPerPage']) ? 10 : $data['nbPerPage'];
+        $nbPageBeforeAfter = empty($data['nbPageBeforeAfter']) ? 0 : $data['nbPageBeforeAfter'];
+
+        $moduleDirWritable = true;
         $indexUrl = '';
         $isIndex = false;
         $siteDirExist = true;
-        
-        if (!is_null($moduleName))
-        {
-            if (is_dir($_SERVER['DOCUMENT_ROOT'].'/../module/MelisSites/'.$moduleName))
-            {
-                if (file_exists($_SERVER['DOCUMENT_ROOT'].'/../module/MelisSites/'.$moduleName.'/luceneIndex/indexes'))
-                {
+
+        if (!is_null($moduleName)) {
+            $moduleDirectory = '';
+            if (is_dir($_SERVER['DOCUMENT_ROOT'] . self::MELIS_SITES . $moduleName)) {
+                /** Module is located inside MelisSites folder */
+                $moduleDirectory = $_SERVER['DOCUMENT_ROOT'] . self::MELIS_SITES . $moduleName;
+            } elseif (is_dir($_SERVER['DOCUMENT_ROOT'] . self::VENDOR . $moduleName)) {
+                /** Module is located inside Vendor folder */
+                $moduleDirectory = $_SERVER['DOCUMENT_ROOT'] . self::VENDOR . $moduleName;
+            } else {
+                $siteDirExist = false;
+            }
+
+            if ($siteDirExist === true) {
+                if (file_exists($moduleDirectory . '/luceneIndex/indexes')) {
                     $isIndex = true;
                     $indexUrl = '';
-                }
-                else
-                {
-                    if (!is_writable($_SERVER['DOCUMENT_ROOT'].'/../module/MelisSites/'.$moduleName.'/luceneIndex/'))
-                    {
-                        $moduleDirWritable = false;
-                    }
-                    else
-                    {
-                        
-                        
-                        if (is_null($pageId))
-                        {
+                } else {
+                    if (is_writable($moduleDirectory . '/luceneIndex/')) {
+                        if (is_null($pageId)) {
                             /**
                              * Getting the current page id
                              */
                             $renderMode = $this->getController()->params()->fromRoute('renderMode');
-                            
-                            if ($renderMode == 'front')
-                            {
+
+                            if ($renderMode == 'front') {
                                 $pageId = $this->getController()->params()->fromRoute('idpage');
-                            }
-                            else
-                            {
+                            } else {
                                 $pageId = $data['pageId'];
                             }
-                            
                         }
-                        
+
                         /**
                          * Indexing Site will use the main page of the Site
                          */
                         $pageTreeSrv = $this->getServiceLocator()->get('MelisEngineTree');
                         $pageSite = $pageTreeSrv->getSiteByPageId($pageId);
-                
-                        $mainPageId = 1;
-                        if (!is_null($pageSite))
-                        {
-                            $mainPageId = $pageSite->site_main_page_id;
-                        }
-                
+                        $mainPageId = empty($pageSite->site_main_page_id) ? 1 : $pageSite->site_main_page_id;
+
                         // Get the current server protocol
-                        $protocol = stripos($_SERVER['SERVER_PROTOCOL'],'https') === true ? 'https://' : 'http://';
-                
-                        $indexUrl = $protocol.$_SERVER['SERVER_NAME'].'/melissearchindex/module/'.$moduleName.'/pageid/'.$mainPageId.'/exclude-pageid/0';
+                        $protocol = stripos($_SERVER['SERVER_PROTOCOL'], 'https') === true ? 'https://' : 'http://';
+
+                        $indexUrl = $protocol . $_SERVER['SERVER_NAME'] . '/melissearchindex/module/' . $moduleName . '/pageid/' . $mainPageId . '/exclude-pageid/0';
+                    } else {
+                        $moduleDirWritable = false;
                     }
                 }
             }
-            else 
-            {
-                $siteDirExist = false;
-            }
         }
-        
-        $searchresults = array();
-        if ($isIndex && $keyword)
-        {
+
+        $searchresults = [];
+        if ($isIndex && $keyword) {
             $searchSvc = $this->getServiceLocator()->get('MelisSearch');
             $searchresults = $searchSvc->search($keyword, $moduleName, true);
-            if (!empty($searchresults))
-            {
+            if (!empty($searchresults)) {
                 $searchresults = str_replace('&', '&amp;', $searchresults);
-                
-                $searchresults = (Array) simplexml_load_string($searchresults);
-                $searchresults = (!empty($searchresults['result'])) ? $searchresults['result'] : array();
-                
+
+                $searchresults = (Array)simplexml_load_string($searchresults);
+                $searchresults = (!empty($searchresults['result'])) ? $searchresults['result'] : [];
+
                 // Checking if the Search array result is multidimensional array or single array
-                if (is_object($searchresults))
-                {
+                if (is_object($searchresults)) {
                     // Making the search result to be multidimensional array
                     $temp[] = $searchresults;
                     $searchresults = $temp;
                 }
             }
         }
-        
+
         $paginator = new Paginator(new ArrayAdapter($searchresults));
         $paginator->setCurrentPageNumber($current)
-                    ->setItemCountPerPage($nbPerPage)
-                    ->setPageRange(($nbPageBeforeAfter*2) + 1);
-        
+            ->setItemCountPerPage($nbPerPage)
+            ->setPageRange(($nbPageBeforeAfter * 2) + 1);
+
         // Create an array with the variables that will be available in the view
-        $viewVariables = array(
+        $viewVariables = [
             'pluginId' => $this->pluginFrontConfig['id'],
             'moduleName' => $moduleName,
             'indexerOk' => $isIndex,
@@ -181,47 +168,20 @@ class MelisFrontSearchResultsPlugin extends MelisTemplatingPlugin
             'nbPageBeforeAfter' => $nbPageBeforeAfter,
             'siteDirExist' => $siteDirExist,
             'searchKey' => $keyword,
-        );
-        
+        ];
+
         // return the variable array and let the view be created
         return $viewVariables;
     }
-    
+
     /**
-     * Removes invalid XML
-     *
-     * @access public
-     * @param string $value
-     * @return string
+     * Returns the data to populate the form inside the modals when invoked
+     * @return array|bool|null
      */
-    private function stripInvalidXml($value)
+    public function getFormData()
     {
-        $ret = "";
-        $current;
-        if (empty($value))
-        {
-            return $ret;
-        }
-        
-        $length = strlen($value);
-        for ($i=0; $i < $length; $i++)
-        {
-            $current = ord($value{$i});
-            if (($current == 0x9) ||
-                ($current == 0xA) ||
-                ($current == 0xD) ||
-                (($current >= 0x20) && ($current <= 0xD7FF)) ||
-                (($current >= 0xE000) && ($current <= 0xFFFD)) ||
-                (($current >= 0x10000) && ($current <= 0x10FFFF)))
-            {
-                $ret .= chr($current);
-            }
-            else
-            {
-                $ret .= " ";
-            }
-        }
-        return $ret;
+        $data = parent::getFormData();
+        return $data;
     }
 
     /**
@@ -238,7 +198,7 @@ class MelisFrontSearchResultsPlugin extends MelisTemplatingPlugin
         $formConfig = $this->pluginBackConfig['modal_form'];
 
         $response = [];
-        $render   = [];
+        $render = [];
         if (!empty($formConfig)) {
             foreach ($formConfig as $formKey => $config) {
                 $form = $factory->createForm($config);
@@ -251,7 +211,7 @@ class MelisFrontSearchResultsPlugin extends MelisTemplatingPlugin
                     $viewModelTab = new ViewModel();
                     $viewModelTab->setTemplate($config['tab_form_layout']);
                     $viewModelTab->modalForm = $form;
-                    $viewModelTab->formData   = $this->getFormData();
+                    $viewModelTab->formData = $this->getFormData();
                     $viewRender = $this->getServiceLocator()->get('ViewRenderer');
                     $html = $viewRender->render($viewModelTab);
                     array_push($render, [
@@ -260,17 +220,14 @@ class MelisFrontSearchResultsPlugin extends MelisTemplatingPlugin
                             'html' => $html
                         ]
                     );
-                }
-                else {
+                } else {
 
                     // validate the forms and send back an array with errors by tabs
                     $post = get_object_vars($request->getPost());
                     $success = false;
                     $form->setData($post);
 
-                    $errors = array();
                     if ($form->isValid()) {
-                        $data = $form->getData();
                         $success = true;
                         array_push($response, [
                             'name' => $this->pluginBackConfig['modal_form'][$formKey]['tab_title'],
@@ -303,21 +260,10 @@ class MelisFrontSearchResultsPlugin extends MelisTemplatingPlugin
 
         if (!isset($parameters['validate'])) {
             return $render;
-        }
-        else {
+        } else {
             return $response;
         }
 
-    }
-
-    /**
-     * Returns the data to populate the form inside the modals when invoked
-     * @return array|bool|null
-     */
-    public function getFormData()
-    {
-        $data = parent::getFormData();
-        return $data;
     }
 
     /**
@@ -327,11 +273,10 @@ class MelisFrontSearchResultsPlugin extends MelisTemplatingPlugin
      */
     public function loadDbXmlToPluginConfig()
     {
-        $configValues = array();
+        $configValues = [];
 
         $xml = simplexml_load_string($this->pluginXmlDbValue);
-        if ($xml)
-        {
+        if ($xml) {
             if (!empty($xml->template_path))
                 $configValues['template_path'] = (string)$xml->template_path;
 
@@ -365,16 +310,16 @@ class MelisFrontSearchResultsPlugin extends MelisTemplatingPlugin
         // template_path is mendatory for all plugins
         if (!empty($parameters['template_path']))
             $xmlValueFormatted .= "\t\t" . '<template_path><![CDATA[' . $parameters['template_path'] . ']]></template_path>';
-        if(!empty($parameters['siteModuleName']))
-            $xmlValueFormatted .= "\t\t" . '<siteModuleName><![CDATA['   . $parameters['siteModuleName'] . ']]></siteModuleName>';
-        if(!empty($parameters['keyword']))
-            $xmlValueFormatted .= "\t\t" . '<keyword><![CDATA['   . $parameters['keyword'] . ']]></keyword>';
-        if(!empty($parameters['current']))
-            $xmlValueFormatted .= "\t\t" . '<current><![CDATA['   . $parameters['current'] . ']]></current>';
-        if(!empty($parameters['nbPerPage']))
-            $xmlValueFormatted .= "\t\t" . '<nbPerPage><![CDATA['   . $parameters['nbPerPage'] . ']]></nbPerPage>';
-        if(!empty($parameters['nbPageBeforeAfter']))
-            $xmlValueFormatted .= "\t\t" . '<nbPageBeforeAfter><![CDATA['   . $parameters['nbPageBeforeAfter'] . ']]></nbPageBeforeAfter>';
+        if (!empty($parameters['siteModuleName']))
+            $xmlValueFormatted .= "\t\t" . '<siteModuleName><![CDATA[' . $parameters['siteModuleName'] . ']]></siteModuleName>';
+        if (!empty($parameters['keyword']))
+            $xmlValueFormatted .= "\t\t" . '<keyword><![CDATA[' . $parameters['keyword'] . ']]></keyword>';
+        if (!empty($parameters['current']))
+            $xmlValueFormatted .= "\t\t" . '<current><![CDATA[' . $parameters['current'] . ']]></current>';
+        if (!empty($parameters['nbPerPage']))
+            $xmlValueFormatted .= "\t\t" . '<nbPerPage><![CDATA[' . $parameters['nbPerPage'] . ']]></nbPerPage>';
+        if (!empty($parameters['nbPageBeforeAfter']))
+            $xmlValueFormatted .= "\t\t" . '<nbPageBeforeAfter><![CDATA[' . $parameters['nbPageBeforeAfter'] . ']]></nbPageBeforeAfter>';
 
         // Something has been saved, let's generate an XML for DB
         $xmlValueFormatted = "\t" . '<' . $this->pluginXmlDbKey . ' id="' . $parameters['melisPluginId'] . '">' .
