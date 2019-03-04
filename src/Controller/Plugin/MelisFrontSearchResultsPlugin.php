@@ -51,6 +51,8 @@ class MelisFrontSearchResultsPlugin extends MelisTemplatingPlugin
 {
     private const MELIS_SITES = '/../module/MelisSites/';
     private const VENDOR = '/../vendor/melisplatform/';
+    private const SEARCH_PATH_MELIS_SITES = 'module/MelisSites/';
+    private const SEARCH_PATH_VENDOR = 'vendor/melisplatform/';
 
     public function __construct($updatesPluginConfig = [])
     {
@@ -84,14 +86,16 @@ class MelisFrontSearchResultsPlugin extends MelisTemplatingPlugin
         $isIndex = false;
         $siteDirExist = true;
 
+        $moduleDirectory = '';
+        $searchModulePath = self::SEARCH_PATH_MELIS_SITES;
         if (!is_null($moduleName)) {
-            $moduleDirectory = '';
             if (is_dir($_SERVER['DOCUMENT_ROOT'] . self::MELIS_SITES . $moduleName)) {
                 /** Module is located inside MelisSites folder */
                 $moduleDirectory = $_SERVER['DOCUMENT_ROOT'] . self::MELIS_SITES . $moduleName;
             } elseif (is_dir($_SERVER['DOCUMENT_ROOT'] . self::VENDOR . $moduleName)) {
                 /** Module is located inside Vendor folder */
                 $moduleDirectory = $_SERVER['DOCUMENT_ROOT'] . self::VENDOR . $moduleName;
+                $searchModulePath = self::SEARCH_PATH_VENDOR;
             } else {
                 $siteDirExist = false;
             }
@@ -135,8 +139,9 @@ class MelisFrontSearchResultsPlugin extends MelisTemplatingPlugin
 
         $searchresults = [];
         if ($isIndex && $keyword) {
+            /** @var \MelisEngine\Service\MelisSearchService $searchSvc */
             $searchSvc = $this->getServiceLocator()->get('MelisSearch');
-            $searchresults = $searchSvc->search($keyword, $moduleName, true);
+            $searchresults = $searchSvc->search($keyword, $moduleName, true, $searchModulePath);
             if (!empty($searchresults)) {
                 $searchresults = str_replace('&', '&amp;', $searchresults);
 
