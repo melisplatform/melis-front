@@ -147,7 +147,7 @@ return array(
                     ),
                 ),
             ),
-            'rnc-minify-assets' => array(
+            'sites-minify-assets' => array(
                 'type'    => 'segment',
                 'options' => array(
                     'route'    =>  '/minify-assets',
