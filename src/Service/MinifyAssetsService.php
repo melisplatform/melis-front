@@ -149,7 +149,18 @@ class MinifyAssetsService extends MelisCoreGeneralService
         $cssMinifier = new Minify\CSS();
         $jsMinifier = new Minify\JS();
 
-        $bundleDir = ($isFromVendor) ? $sitePath.'/public/' : $sitePath.'/'.$siteName.'/public/';
+        if($isFromVendor){
+            $bundleDir = $sitePath.'/public/';
+            /**
+             * we need to remove the site name on the path
+             * since the site name is already included
+             * in the file name inside the assets.config
+             */
+//            $sitePath = dirname($sitePath);
+        }else{
+            $bundleDir = $sitePath.'/'.$siteName.'/public/';
+        }
+
         $messages = array();
 
         //check if the directory for the bundle is exist
@@ -166,7 +177,7 @@ class MinifyAssetsService extends MelisCoreGeneralService
                         }
                         //create a bundle for css
                         if ($key == 'css') {
-                            $messages['error'] = $this->createBundleFile($cssMinifier, 'bundle.css', $file, $sitePath, $bundleDir);
+                            $messages['error'] = $this->createBundleFile($cssMinifier, 'bundle.css', $file, $sitePath, $bundleDir, false);
                         }
                     }
                 }
@@ -187,9 +198,10 @@ class MinifyAssetsService extends MelisCoreGeneralService
      * @param $files
      * @param $sitePath
      * @param $bundleDir
+     * @param $cleanCode
      * @return array
      */
-    private function createBundleFile ($minifier, $fileName, $files, $sitePath, $bundleDir)
+    private function createBundleFile ($minifier, $fileName, $files, $sitePath, $bundleDir, $cleanCode = true)
     {
         $translator = $this->getServiceLocator()->get('translator');
         $message = '';
@@ -198,9 +210,13 @@ class MinifyAssetsService extends MelisCoreGeneralService
             try {
                 foreach ($files as $key => $file) {
                     //remove comments
-                    $cleanStr = $this->removeComments($sitePath . $file);
+                    if($cleanCode) {
+                        $codeToAdd = $this->removeComments($sitePath . $file);
+                    }else{
+                        $codeToAdd = $sitePath . $file;
+                    }
                     //add the file to minify later
-                    $minifier->add($cleanStr);
+                    $minifier->add($codeToAdd);
 //                 $minifier = $this->getFileContentsViaCurl($minifier, $file);
                 }
                 //minify all the files

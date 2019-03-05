@@ -27,6 +27,7 @@ class MelisFrontMinifiedAssetsCheckerListener implements ListenerAggregateInterf
 
                 // Get route match to know if we are displaying in back or front
                 $routeMatch = $e->getRouteMatch();
+                $sm = $e->getApplication()->getServiceManager();
 
                 if($routeMatch) {
 
@@ -41,7 +42,20 @@ class MelisFrontMinifiedAssetsCheckerListener implements ListenerAggregateInterf
                         $cssBundleLoaded = false;
                         $jsBundleLoaded = false;
 
-                        $siteDir = $_SERVER['DOCUMENT_ROOT'] . '/../module/MelisSites/'.$params['module'].'/';
+                        $moduleSrv = $sm->get('MelisAssetManagerModulesService');
+                        /**
+                         * Check to determine where does the site came from.
+                         * From vendor or MelisSites
+                         */
+                        $siteVendorPath = $moduleSrv->getComposerModulePath($params['module']);
+                        if(!empty($siteVendorPath)){
+                            $siteDir = $siteVendorPath.'/';
+                            $isFromVendor = true;
+                        }else{
+                            $siteDir = $_SERVER['DOCUMENT_ROOT'] . '/../module/MelisSites/'.$params['module'].'/';
+                            $isFromVendor = false;
+                        }
+
                         $publicDir = $siteDir.'public/';
                         $configDir = $siteDir.'config/';
                         /**
@@ -76,11 +90,11 @@ class MelisFrontMinifiedAssetsCheckerListener implements ListenerAggregateInterf
                          * the css or js.
                          */
                         if($cssBundleLoaded && !$jsBundleLoaded){
-                            $newContent = $this->loadAssetsFromConfig($newContent, $configDir, 'js');
+                            $newContent = $this->loadAssetsFromConfig($newContent, $configDir, 'js', $isFromVendor, $params['module']);
                         }elseif(!$cssBundleLoaded && $jsBundleLoaded){
-                            $newContent = $this->loadAssetsFromConfig($newContent, $configDir, 'css');
+                            $newContent = $this->loadAssetsFromConfig($newContent, $configDir, 'css', $isFromVendor, $params['module']);
                         }elseif(!$cssBundleLoaded && !$jsBundleLoaded){
-                            $newContent = $this->loadAssetsFromConfig($newContent, $configDir);
+                            $newContent = $this->loadAssetsFromConfig($newContent, $configDir, null, $isFromVendor, $params['module']);
                         }
 
                         /**
@@ -144,9 +158,11 @@ class MelisFrontMinifiedAssetsCheckerListener implements ListenerAggregateInterf
      * @param $content
      * @param $dir
      * @param null $type
+     * @param bool $isFromVendor
+     * @param string $siteName
      * @return string
      */
-    private function loadAssetsFromConfig($content, $dir, $type = null)
+    private function loadAssetsFromConfig($content, $dir, $type = null, $isFromVendor = false, $siteName = '')
     {
         $newContent = $content;
         $assetsConfig = $dir.'assets.config.php';
@@ -173,12 +189,14 @@ class MelisFrontMinifiedAssetsCheckerListener implements ListenerAggregateInterf
                         if (strtolower($key) == 'css') {
                             foreach ($file as $k => $css) {
                                 $css = str_replace('/public', '', $css);
+                                $css = $this->editFileName($css, $isFromVendor, $siteName);
                                 $cssToAdd .= '<link href="' . $css . '" media="screen" rel="stylesheet" type="text/css">' . "\n";
                             }
                         }
                         elseif (strtolower($key) == 'js') {
                             foreach ($file as $k => $js) {
                                 $js = str_replace('/public', '', $js);
+                                $js = $this->editFileName($js, $isFromVendor, $siteName);
                                 $jsToLoad .= '<script type="text/javascript" src="' . $js . '"></script>' . "\n";
                             }
                         }
@@ -193,6 +211,7 @@ class MelisFrontMinifiedAssetsCheckerListener implements ListenerAggregateInterf
                             $cssToAdd = "\n";
                             foreach ($file as $k => $css) {
                                 $css = str_replace('/public', '', $css);
+                                $css = $this->editFileName($css, $isFromVendor, $siteName);
                                 $cssToAdd .= '<link href="' . $css . '" media="screen" rel="stylesheet" type="text/css">' . "\n";
                             }
                             $newContent = $this->createCssLink($content, $cssToAdd);
@@ -205,6 +224,7 @@ class MelisFrontMinifiedAssetsCheckerListener implements ListenerAggregateInterf
                             $jsToLoad = "\n";
                             foreach ($file as $k => $js) {
                                 $js = str_replace('/public', '', $js);
+                                $js = $this->editFileName($js, $isFromVendor, $siteName);
                                 $jsToLoad .= '<script type="text/javascript" src="' . $js . '"></script>' . "\n";
                             }
                             $newContent = $this->createJsLink($content, $jsToLoad);
@@ -214,6 +234,14 @@ class MelisFrontMinifiedAssetsCheckerListener implements ListenerAggregateInterf
             }
         }
         return $newContent;
+    }
+
+    private function editFileName($fileName, $isFromVendor, $siteName){
+        if($isFromVendor){
+            return '/'.$siteName.$fileName;
+        }else{
+            return $fileName;
+        }
     }
 
     public function detach(EventManagerInterface $events)
