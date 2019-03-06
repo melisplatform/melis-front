@@ -236,12 +236,28 @@ class MelisFrontMinifiedAssetsCheckerListener implements ListenerAggregateInterf
         return $newContent;
     }
 
+    /**
+     * Edit the filename only if site came from vendor
+     * to make the module name camel case
+     * Ex. melis-demo-cms turns into MelisDemoCms
+     *
+     * @param $fileName
+     * @param $isFromVendor
+     * @param $siteName
+     * @return string|string[]|null
+     */
     private function editFileName($fileName, $isFromVendor, $siteName){
         if($isFromVendor){
-            return '/'.$siteName.$fileName;
-        }else{
-            return $fileName;
+            $pathInfo = explode('/', $fileName);
+            for($i = 0; $i <= sizeof($pathInfo); $i++){
+                if(!empty($pathInfo[1])){
+                    if(str_replace('-', '', ucwords($pathInfo[1], '-')) == $siteName){
+                        $fileName = preg_replace('/'.$pathInfo[1].'/', $siteName, $fileName, 1);
+                    }
+                }
+            }
         }
+        return $fileName;
     }
 
     public function detach(EventManagerInterface $events)

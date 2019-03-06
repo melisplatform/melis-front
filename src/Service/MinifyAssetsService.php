@@ -156,7 +156,7 @@ class MinifyAssetsService extends MelisCoreGeneralService
              * since the site name is already included
              * in the file name inside the assets.config
              */
-//            $sitePath = dirname($sitePath);
+            $sitePath = dirname($sitePath);
         }else{
             $bundleDir = $sitePath.'/'.$siteName.'/public/';
         }
