@@ -146,8 +146,16 @@ class MelisFrontMinifiedAssetsCheckerListener implements ListenerAggregateInterf
      */
     private function createJsLink($content, $jsToAdd)
     {
-        $bodyRegex = '/(<\/body>)/im';
-        $newContent = preg_replace($bodyRegex, "$jsToAdd$1", $content);
+//        $bodyRegex = '/(<\/body>)/im';
+        /**
+         * This will load just under the last
+         * </div> of the page instead of before
+         * the </body> because there are some
+         * scripts are directly attached to the view
+         * from the controller
+         */
+        $bodyRegex = '/(<\/div>(?![\s\S]*<\/div>[\s\S]*$))/im';
+        $newContent = preg_replace($bodyRegex, "$1$jsToAdd", $content);
         return $newContent;
     }
 
