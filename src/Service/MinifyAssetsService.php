@@ -26,8 +26,6 @@ class MinifyAssetsService extends MelisCoreGeneralService
         $arrayParameters = $this->sendEvent('melis_front_minify_assets_start', $arrayParameters);
         $results = array();
         try {
-            $dir = $_SERVER['DOCUMENT_ROOT'] . '/../module/MelisSites';
-
             if(!empty($arrayParameters['siteId'])) {
                 /**
                  * This will compile only the assets
@@ -39,13 +37,25 @@ class MinifyAssetsService extends MelisCoreGeneralService
                 if(!empty($sites)) {
                     foreach ($sites as $key => $site) {
                         $siteName = $site['site_name'];
-                        $siteConfigDir = $dir.'/'.$siteName.'/config/assets.config.php';
+                        /**
+                         * This will check if the sites is came from
+                         * the vendor or it came from the MelisSites
+                         */
+                        if(!empty($this->getSitesVendorPath($siteName))) {
+                            $sitePath = $this->getSitesVendorPath($siteName);
+                            $siteConfigDir = $sitePath.'/config/assets.config.php';
+                            $fromVendor = true;
+                        }else{
+                            $sitePath = $this->getSitesModulePath();
+                            $siteConfigDir = $sitePath.'/'.$siteName.'/config/assets.config.php';
+                            $fromVendor = false;
+                        }
                         //check if assets config is exist
                         if(file_exists($siteConfigDir)){
                             //get the content of the asset config
                             $files = include($siteConfigDir);
                             //process the assets to make a bundle
-                            $results = $this->generateAllAssets($files, $dir, $site['site_name']);
+                            $results = $this->generateAllAssets($files, $sitePath, $site['site_name'], $fromVendor);
 
                         }else{
                             $results = array('error' => array('message' => $siteConfigDir.' not found.', 'success' => false));
@@ -55,19 +65,40 @@ class MinifyAssetsService extends MelisCoreGeneralService
             }else{
                 /**
                  * This will compile all the assets
-                 * in every sites
+                 * in every sites from MelisSites
                  */
-                $sitesList = $this->getAllSites($dir);
+                $sitePath = $this->getSitesModulePath();
+                $sitesList = $this->getAllSites($sitePath);
                 foreach($sitesList as $key => $site){
-                    $siteConfigDir = $dir.'/'.$site.'/config/assets.config.php';
+                    $siteConfigDir = $sitePath.'/'.$site.'/config/assets.config.php';
                     if(file_exists($siteConfigDir)){
                         //get the content of the asset config
                         $files = include($siteConfigDir);
                         //process the assets to make a bundle
-                        $res = $this->generateAllAssets($files, $dir, $site);
+                        $res = $this->generateAllAssets($files, $sitePath, $site, false);
                         array_push($results, array($site => $res));
                     }else{
-                        $results = array('error' => array('message' => $siteConfigDir.' not found.', 'success' => false));
+                        array_push($results, array('error' => array('message' => $siteConfigDir.' not found.', 'success' => false)));
+                    }
+                }
+
+                /**
+                 * This will minify all the SITE assets in
+                 * vendor
+                 */
+                if($results['error']['success']){
+                    $siteVendorList = $this->minifySitesVendorAssets();
+                    foreach($siteVendorList as $sitePath){
+                        $siteConfigDir = $sitePath['path'].'/config/assets.config.php';
+                        if(file_exists($siteConfigDir)){
+                            //get the content of the asset config
+                            $files = include($siteConfigDir);
+                            //process the assets to make a bundle
+                            $res = $this->generateAllAssets($files, $sitePath['path'], $sitePath['module'], true);
+                            array_push($results, array($sitePath['module'] => $res));
+                        }else{
+                            array_push($results, array('error' => array('message' => $siteConfigDir.' not found.', 'success' => false)));
+                        }
                     }
                 }
             }
@@ -85,19 +116,51 @@ class MinifyAssetsService extends MelisCoreGeneralService
     }
 
     /**
+     * @return array
+     */
+    public function minifySitesVendorAssets()
+    {
+        $moduleSrv = $this->getServiceLocator()->get('MelisAssetManagerModulesService');
+        $vendordModules = $moduleSrv->getVendorModules();
+
+        $moduleFolders = array();
+        foreach ($vendordModules as $key => $module){
+            //check if module is site
+            if($moduleSrv->isSiteModule($module)){
+                //get the full path of the site module
+                $path = $moduleSrv->getComposerModulePath($module);
+                array_push($moduleFolders, array('path' => $path, 'module' => $module));
+            }
+        }
+        return $moduleFolders;
+    }
+
+    /**
      * Function to generate all assets
      *
      * @param $files
-     * @param $dir
+     * @param $sitePath
      * @param $siteName
+     * @param $isFromVendor
      * @return array
      */
-    public function generateAllAssets ($files, $dir, $siteName)
+    public function generateAllAssets ($files, $sitePath, $siteName, $isFromVendor)
     {
         $cssMinifier = new Minify\CSS();
         $jsMinifier = new Minify\JS();
 
-        $bundleDir = $dir.'/'.$siteName.'/public/';
+        if($isFromVendor){
+            $bundleDir = $sitePath.'/public/';
+            /**
+             * we need to remove the site name on the path
+             * since the site name is already included
+             * in the file name inside the assets.config
+             */
+            $sitePath = dirname($sitePath);
+        }else{
+            $bundleDir = $sitePath.'/'.$siteName.'/public/';
+        }
+
         $messages = array();
 
         //check if the directory for the bundle is exist
@@ -110,11 +173,11 @@ class MinifyAssetsService extends MelisCoreGeneralService
                         //create a bundle for js
                         $key = strtolower($key);
                         if ($key == 'js') {
-                            $messages['error'] = $this->createBundleFile($jsMinifier, 'bundle.js', $file, $dir, $bundleDir);
+                            $messages['error'] = $this->createBundleFile($jsMinifier, 'bundle.js', $file, $sitePath, $bundleDir);
                         }
                         //create a bundle for css
                         if ($key == 'css') {
-                            $messages['error'] = $this->createBundleFile($cssMinifier, 'bundle.css', $file, $dir, $bundleDir);
+                            $messages['error'] = $this->createBundleFile($cssMinifier, 'bundle.css', $file, $sitePath, $bundleDir, false);
                         }
                     }
                 }
@@ -133,21 +196,27 @@ class MinifyAssetsService extends MelisCoreGeneralService
      * @param $minifier
      * @param $fileName
      * @param $files
-     * @param $dir
+     * @param $sitePath
      * @param $bundleDir
+     * @param $cleanCode
      * @return array
      */
-    private function createBundleFile ($minifier, $fileName, $files, $dir, $bundleDir)
+    private function createBundleFile ($minifier, $fileName, $files, $sitePath, $bundleDir, $cleanCode = true)
     {
         $translator = $this->getServiceLocator()->get('translator');
-        $result = array();
         $message = '';
         $success = false;
         if (!empty($files)) {
             try {
                 foreach ($files as $key => $file) {
+                    //remove comments
+                    if($cleanCode) {
+                        $codeToAdd = $this->removeComments($sitePath . $file);
+                    }else{
+                        $codeToAdd = $sitePath . $file;
+                    }
                     //add the file to minify later
-                    $minifier->add($dir . $file);
+                    $minifier->add($codeToAdd);
 //                 $minifier = $this->getFileContentsViaCurl($minifier, $file);
                 }
                 //minify all the files
@@ -162,7 +231,6 @@ class MinifyAssetsService extends MelisCoreGeneralService
                   $message = wordwrap($ex->getMessage(), 20, "\n", true);
             }
         }else{
-//          $message = $translator->translate('tr_front_minify_assets_nothing_to_compile');
             $success = true;
         }
 
@@ -172,6 +240,11 @@ class MinifyAssetsService extends MelisCoreGeneralService
         );
     }
 
+    /**
+     * @param $minifier
+     * @param $url
+     * @return mixed
+     */
     public function getFileContentsViaCurl($minifier, $url)
     {
         $curlSession = curl_init();
@@ -184,6 +257,10 @@ class MinifyAssetsService extends MelisCoreGeneralService
         return $minifier;
     }
 
+    /**
+     * @param $sitesDir
+     * @return array
+     */
     private function getAllSites($sitesDir)
     {
         $modules = array();
@@ -192,6 +269,38 @@ class MinifyAssetsService extends MelisCoreGeneralService
         }
 
         return $modules;
+    }
+
+    /**
+     * @return string
+     */
+    private function getSitesModulePath()
+    {
+        return $_SERVER['DOCUMENT_ROOT'] . '/../module/MelisSites';
+    }
+
+    /**
+     * @param $siteName
+     * @return mixed
+     */
+    private function getSitesVendorPath($siteName)
+    {
+        $moduleSrv = $this->getServiceLocator()->get('MelisAssetManagerModulesService');
+        return $moduleSrv->getComposerModulePath($siteName);
+    }
+
+    /**
+     * Remove comments from the file
+     * to make it will be minified
+     *
+     * @param $fileStr
+     * @return string|string[]|null
+     */
+    private function removeComments($fileStr)
+    {
+        $fileStr = file_get_contents($fileStr);
+        $text = preg_replace('!/\*.*?\*/!s', '', $fileStr);
+        return $text;
     }
 
     /**
