@@ -11,18 +11,14 @@ namespace MelisFront\View\Helper;
 
 use Zend\View\Helper\AbstractHelper;
 
-/**
- * This helper will translates
- */
-class MelisSiteTranslateHelper extends AbstractHelper
+
+class MelisSiteTranslationteHelper extends AbstractHelper
 {
     public $serviceManager;
-    public $dataBreadcrumbs;
     
     public function __construct($sm)
     {
         $this->serviceManager = $sm;
-        $this->dataBreadcrumbs = array();
     }
     
     /**

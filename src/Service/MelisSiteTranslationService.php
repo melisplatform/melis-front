@@ -344,7 +344,7 @@ class MelisSiteTranslationService extends MelisEngineGeneralService
      *
      * @param null $langId
      * @param null $translationKey
-     * @param null $siteId
+     * @param int $siteId
      * @return array
      */
     public function getSiteTranslationFromDb($translationKey = null, $langId = null, $siteId = 0)
@@ -356,11 +356,7 @@ class MelisSiteTranslationService extends MelisEngineGeneralService
 
         $transFromDb = array();
         $mstTable = $this->getServiceLocator()->get('MelisSiteTranslationTable');
-        if (empty($arrayParameters['translationKey']) && empty($arrayParameters['langId'])) {
-            $translationFromDb = $mstTable->getTranslationAll()->toArray();
-        } else {
-            $translationFromDb = $mstTable->getSiteTranslation($arrayParameters['translationKey'], $arrayParameters['langId'], $arrayParameters['siteId'])->toArray();
-        }
+        $translationFromDb = $mstTable->getSiteTranslation($arrayParameters['translationKey'], $arrayParameters['langId'], $arrayParameters['siteId'])->toArray();
 
         foreach ($translationFromDb as $keyDb => $valueDb) {
             array_push($transFromDb, array('mst_id' => $valueDb['mst_id'], 'mstt_id' => $valueDb['mstt_id'], 'mst_site_id' => $valueDb['mst_site_id'], 'mstt_lang_id' => $valueDb['mstt_lang_id'], 'mst_key' => $valueDb['mst_key'], 'mstt_text' => $valueDb['mstt_text'], 'module' => null));

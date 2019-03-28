@@ -210,7 +210,7 @@ return array(
             'MelisDragDropZone' => 'MelisFront\View\Helper\Factory\MelisDragDropZoneHelperFactory',
             'MelisTag' => 'MelisFront\View\Helper\Factory\MelisTagsHelperFactory',
             'MelisLink' => 'MelisFront\View\Helper\Factory\MelisLinksHelperFactory',
-            'siteTranslate' => 'MelisFront\View\Helper\Factory\MelisSiteTranslateHelperFactory',
+            'siteTranslate' => 'MelisFront\View\Helper\Factory\MelisSiteTranslationHelperFactory',
         ),
     ),
     'view_manager' => array(
