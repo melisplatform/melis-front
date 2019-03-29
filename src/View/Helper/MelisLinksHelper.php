@@ -36,7 +36,7 @@ class MelisLinksHelper extends AbstractHelper
 		if (empty($this->dataBreadcrumbs[$idPage]))
 		{
 			$melisTree = $this->serviceManager->get('MelisEngineTree');
-			$link = $melisTree->getPageLink($idPage, $absolute);
+            $link = $melisTree->getPageLink($idPage, $absolute);
 			$this->dataBreadcrumbs[$idPage] = $link;
 		}
 		else
