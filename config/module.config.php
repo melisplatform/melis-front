@@ -211,6 +211,8 @@ return array(
             'MelisDragDropZone' => 'MelisFront\View\Helper\Factory\MelisDragDropZoneHelperFactory',
             'MelisTag' => 'MelisFront\View\Helper\Factory\MelisTagsHelperFactory',
             'MelisLink' => 'MelisFront\View\Helper\Factory\MelisLinksHelperFactory',
+            'MelisPageLangLink' => 'MelisFront\View\Helper\Factory\MelisPageLangVersionLinkHelperFactory',
+            'MelisHomePageLink' => 'MelisFront\View\Helper\Factory\MelisHomePageLinkHelperFactory',
             'siteTranslate' => 'MelisFront\View\Helper\Factory\MelisSiteTranslationHelperFactory',
         ),
     ),
