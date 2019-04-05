@@ -1,4 +1,4 @@
-window.MelisFrontGdprBanner = (function () {
+window.MelisGdprBanner = (function () {
     /**
      * To make a "persistent cookie" (a cookie that "never expires"),
      * we need to set a date/time in a distant future (one that possibly exceeds the user's
@@ -7,8 +7,8 @@ window.MelisFrontGdprBanner = (function () {
      * src: https://stackoverflow.com/a/22479460/7870472
      */
     const MAX_COOKIE_AGE = 2147483647000;
-    const BANNER_COOKIE_NAME = "melis-cms-gdpr-banner-cookie";
-    const BANNER_CONTAINER = "melis-cms-gdpr-banner-container";
+    const BANNER_COOKIE_NAME = "melis-gdpr-banner-cookie";
+    const BANNER_CONTAINER = "melis-gdpr-banner-container";
 
     /**
      * Usage : setCookie('user', 'John', {secure: true, 'expires': 3600});
@@ -55,7 +55,7 @@ window.MelisFrontGdprBanner = (function () {
         setCookie: setCookie,
         getCookie: getCookie,
         deleteCookie: deleteCookie,
-        /** You can always use a different cookie name */
+        /** You can always set a different cookie name & banner container*/
         cookieName: BANNER_COOKIE_NAME,
         container: BANNER_CONTAINER,
     };

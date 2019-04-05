@@ -1,17 +1,17 @@
-<div id="<?= $this->pluginId; ?>" class="melis-cms-gdpr-banner-container" data-render-mode="<?= $this->renderMode; ?>">
+<div id="<?= $this->pluginId; ?>" class="melis-gdpr-banner-container" data-render-mode="<?= $this->renderMode; ?>">
     <div class="row">
         <div class="col-md-12 col-xs-12">
-            <div class="melis-cms-gdpr-banner-content">
+            <div class="melis-gdpr-banner-content">
                 <?= $this->bannerContents; ?>
-                <a class="btn btn-success gdpr-banner-agree"
+                <a class="btn btn-success melis-gdpr-banner-agree"
                    data-plugin-id="<?= $this->pluginId; ?>"
                    data-render-mode="<?= $this->renderMode; ?>">
-                    <?= $this->translate($this->labels['agree']); ?>
+                    <?= $this->labels['agree']; ?>
                 </a>
             </div>
         </div>
     </div>
 </div>
 <?php if ($this->renderMode === 'melis'): ?>
-    <pre class="melis-cms-gdpr-banner-loaded"><?= $this->labels['pluginLoaded']; ?></pre>
+    <pre class="melis-gdpr-banner-loaded"><?= $this->labels['pluginLoaded']; ?></pre>
 <?php endif; ?>
