@@ -12,6 +12,7 @@ namespace MelisFront\Service;
 
 use Composer\Composer;
 use MelisCore\Service\MelisCoreModulesService;
+use MelisEngine\Service\MelisEngineComposerService;
 use MelisEngine\Service\MelisEngineGeneralService;
 
 class MelisSiteTranslationService extends MelisEngineGeneralService
@@ -502,16 +503,16 @@ class MelisSiteTranslationService extends MelisEngineGeneralService
      */
     public function getSiteTranslationsFromVendor()
     {
-        /** @var MelisCoreModulesService $moduleSrv */
-        $moduleSrv = $this->getServiceLocator()->get('ModulesService');
-        $vendordModules = $moduleSrv->getVendorModules();
+        /** @var MelisEngineComposerService $composerSrv */
+        $composerSrv = $this->getServiceLocator()->get('MelisEngineComposer');
+        $vendordModules = $composerSrv->getVendorModules();
 
         $moduleFolders = array();
         foreach ($vendordModules as $key => $module){
             //check if module is site
-            if($moduleSrv->isSiteModule($module)){
+            if($composerSrv->isSiteModule($module)){
                 //get the full path of the site module
-                $path = $moduleSrv->getComposerModulePath($module);
+                $path = $composerSrv->getComposerModulePath($module);
                 array_push($moduleFolders, array('path' => $path, 'module' => $module));
             }
         }
