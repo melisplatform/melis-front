@@ -11,7 +11,7 @@ window.MelisFrontGdprBanner = (function () {
     const BANNER_CONTAINER = "melis-cms-gdpr-banner-container";
 
     /**
-     * Usage : setCookie('user', 'John', {secure: true, 'max-age': 3600});
+     * Usage : setCookie('user', 'John', {secure: true, 'expires': 3600});
      * @param name
      * @param value
      * @param options

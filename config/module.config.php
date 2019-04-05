@@ -238,7 +238,7 @@ return array(
             'MelisFront/list-paginator'                  => __DIR__ . '/../view/melis-front/plugins/list-paginator.phtml',
             'MelisFront/block-section'                   => __DIR__ . '/../view/melis-front/plugins/block-section.phtml',
             'MelisFront/block-section-container'         => __DIR__ . '/../view/melis-front/plugins/block-section-container.phtml',
-            'MelisFront/gdpr-banner'                     => __DIR__ . '/../view/melis-front/plugins/banner.phtml',
+            'MelisFront/gdpr-banner'                     => __DIR__ . '/../view/melis-front/plugins/gdpr-banner.phtml',
             'MelisFront/modal-template-form'             => __DIR__ . '/../view/melis-front/plugins/modal-template-form.phtml',
 
             //Mini Template plugins

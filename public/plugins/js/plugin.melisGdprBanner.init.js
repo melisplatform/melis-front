@@ -4,7 +4,7 @@
  * - "data-plugin-id
  * - your container id & class
  */
-function MelisFrontGdprBannerPlugin_init(pluginId) {
+function melisGdprBanner_init(pluginId) {
     if (pluginId === undefined) {
         /** pluginId is initially "undefined" when the plugin is loaded in front */
         let bannerContainer = $("." + MelisFrontGdprBanner.container);
@@ -14,7 +14,6 @@ function MelisFrontGdprBannerPlugin_init(pluginId) {
             });
         }
     }
-
     if (typeof pluginId !== 'undefined' && pluginId) {
         let banner = $("#" + pluginId);
         let renderMode = banner.data("renderMode");
@@ -25,8 +24,7 @@ function MelisFrontGdprBannerPlugin_init(pluginId) {
             MelisFrontGdprBanner.setCookie(MelisFrontGdprBanner.cookieName, true);
             bannerCookie = true;
         }
-
-        if (renderMode === "melis" || bannerCookie === "true") {
+        if (renderMode === "melis" || bannerCookie === true) {
             /** Show banner if bannerCookie is true || during back office page edition */
             banner.show();
         }
@@ -53,4 +51,4 @@ $(document).ready(function () {
     });
 });
 
-MelisFrontGdprBannerPlugin_init();
+melisGdprBanner_init();
