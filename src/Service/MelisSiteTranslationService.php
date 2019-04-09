@@ -396,7 +396,7 @@ class MelisSiteTranslationService extends MelisEngineGeneralService
                 $folderName = $tlpData->tpl_zf2_website_folder;
 
                 //check if site is came from the vendor
-                $moduleSrv = $this->getServiceLocator()->get('ModulesService');
+                $moduleSrv = $this->getServiceLocator()->get('MelisEngineComposer');
                 if(!empty($moduleSrv->getComposerModulePath($folderName))){
                     $modulePath = $moduleSrv->getComposerModulePath($folderName);
                 }else {

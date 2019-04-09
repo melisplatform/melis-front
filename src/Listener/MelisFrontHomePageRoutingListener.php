@@ -77,7 +77,18 @@ class MelisFrontHomePageRoutingListener implements ListenerAggregateInterface
                         $langId = $langData->lang_cms_id;
                         $siteHomeTable = $sm->get('MelisEngineTableCmsSiteHome');
                         $siteHomeData = $siteHomeTable->getHomePageBySiteIdAndLangId($siteId, $langId)->current();
-                        $pageId = $siteHomeData->shome_page_id;
+                        /**
+                         * Check if site home page id exit from site home table,
+                         * else we used the default main page id
+                         * from the table site
+                         */
+                        if(!empty($siteHomeData)) {
+                            $pageId = $siteHomeData->shome_page_id;
+                        }else{
+                            $siteTbl = $sm->get('MelisEngineTableSite');
+                            $siteDatas = $siteTbl->getEntryById($siteId)->current();
+                            $pageId = $siteDatas->site_main_page_id;
+                        }
                         /**
                          * Check if page is empty
                          */
@@ -98,7 +109,7 @@ class MelisFrontHomePageRoutingListener implements ListenerAggregateInterface
                                     'defaults' => array(
                                         'controller' => 'MelisFront\Controller\Index',
                                         'action' => 'index',
-                                        'idpage' => $pageId,
+                                        'idpage' => 1,
                                         'renderType' => 'melis_zf2_mvc',
                                         'renderMode' => 'front',
                                         'preview' => false,
