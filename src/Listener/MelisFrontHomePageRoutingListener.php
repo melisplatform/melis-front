@@ -109,7 +109,7 @@ class MelisFrontHomePageRoutingListener implements ListenerAggregateInterface
                                     'defaults' => array(
                                         'controller' => 'MelisFront\Controller\Index',
                                         'action' => 'index',
-                                        'idpage' => 1,
+                                        'idpage' => $pageId,
                                         'renderType' => 'melis_zf2_mvc',
                                         'renderMode' => 'front',
                                         'preview' => false,
