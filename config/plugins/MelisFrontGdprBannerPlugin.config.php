@@ -17,7 +17,6 @@ return [
                                 '/MelisFront/plugins/css/plugin.gdprBanner.css',
                             ],
                             'js' => [
-                                '/MelisFront/plugins/js/plugin.melisGdprBanner.js',
                                 '/MelisFront/plugins/js/plugin.melisGdprBanner.init.js',
                             ],
                         ],
@@ -35,7 +34,6 @@ return [
                                 '/MelisFront/plugins/css/plugin.gdprBanner.css'
                             ],
                             'js' => [
-                                '/MelisFront/plugins/js/plugin.melisGdprBanner.js',
                                 '/MelisFront/plugins/js/plugin.melisGdprBanner.init.js',
                             ],
                         ],
