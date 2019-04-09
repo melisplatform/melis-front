@@ -98,6 +98,8 @@ class MelisFrontGdprBannerPlugin extends MelisTemplatingPlugin
         $bannerContents = $bannerService->getGdprBannerText((int)$siteId, (int)$langId)->toArray();
         if (!empty($bannerContents[0])) {
             $bannerContents = $bannerContents[0]['mcgdpr_text_value'];
+        } else {
+            $bannerContents = "";
         }
 
         $labels = [
