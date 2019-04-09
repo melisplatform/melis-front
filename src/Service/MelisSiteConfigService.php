@@ -9,14 +9,64 @@
 
 namespace MelisFront\Service;
 
+use MelisEngine\Service\MelisEngineComposerService;
 use MelisEngine\Service\MelisEngineGeneralService;
 use Zend\Stdlib\ArrayUtils;
 
 class MelisSiteConfigService extends MelisEngineGeneralService
 {
     /**
+     * Function to return site config by page id
+     *
+     * @param $pageId
+     * @return array
+     */
+    public function getSiteConfigByPageId($pageId)
+    {
+        $config = array(
+            'siteConfig' => array(),
+            'allSites' => array(),
+        );
+        if(!empty($pageId)) {
+            /**
+             * get the language if the page
+             */
+            $cmsPageLang = $this->getServiceLocator()->get('MelisEngineTablePageLang');
+            $pageLang = $cmsPageLang->getEntryByField('plang_page_id', $pageId)->current();
+            /**
+             * get page lang locale
+             */
+            $langData = array();
+            if (!empty($pageLang)) {
+                $langCmsTbl = $this->getServiceLocator()->get('MelisEngineTableCmsLang');
+                $langData = $langCmsTbl->getEntryById($pageLang->plang_lang_id)->current();
+
+            }
+            /**
+             * get the site config
+             */
+            if(!empty($langData)){
+                $treeSrv = $this->getServiceLocator()->get('MelisEngineTree');
+                $datasSite = $treeSrv->getSiteByPageId($pageId);
+                if(!empty($datasSite->site_id)){
+                    $siteId = $datasSite->site_id;
+                    $siteName = $datasSite->site_name;
+                    $siteConf = $this->getSiteConfig($datasSite->site_id, true);
+                    if(!empty($siteConf)){
+                        $config['siteConfig'] = $siteConf['site'][$siteName][$siteId][$langData->lang_cms_locale];
+                        $config['siteConfig']['site_id'] = $siteId;
+                        $config['allSites'] = $siteConf['site'][$siteName]['allSites'];
+                    }
+                }
+            }
+        }
+        return $config;
+    }
+
+    /**
      * Returns Merged Site Config (File and DB)
      * @param $siteId
+     * @param $returnAll
      * @return array
      */
     public function getSiteConfig($siteId, $returnAll = false)
@@ -29,7 +79,6 @@ class MelisSiteConfigService extends MelisEngineGeneralService
         $siteId = $arrayParameters['siteId'];
         $site = $this->getSiteDataById($siteId);
         $siteName = $site['site_name'];
-
         $configFromFile = $this->getConfig($siteName);
         $siteConfig = [];
 
@@ -61,8 +110,8 @@ class MelisSiteConfigService extends MelisEngineGeneralService
                                     ],
                                 ]
                             ],
-                            true)
-                        ;
+                            true
+                        );
                     }
                 }
             }
@@ -91,9 +140,12 @@ class MelisSiteConfigService extends MelisEngineGeneralService
                     $siteConfig['site'][$siteName][$siteId][$langConfigKey] = ArrayUtils::merge($siteConfig['site'][$siteName][$siteId][$langConfigKey], $langConfigVal, true);
                 }
             }
+
+            $arrayParameters['config'] = ($arrayParameters['returnAll']) ? $siteConfig : $siteConfig['site'][$siteName][$siteId];
+        } else {
+            $arrayParameters['config'] = [];
         }
 
-        $arrayParameters['config'] = ($arrayParameters['returnAll']) ? $siteConfig : $siteConfig['site'][$siteName][$siteId];
         $arrayParameters = $this->sendEvent('meliscms_site_tool_get_site_config_end', $arrayParameters);
         return $arrayParameters['config'];
     }
@@ -105,16 +157,21 @@ class MelisSiteConfigService extends MelisEngineGeneralService
      */
     private function getConfig($siteName)
     {
-        $moduleSrv = $this->getServiceLocator()->get('ModulesService');
+        /** @var MelisEngineComposerService $composerSrv */
+        $composerSrv  = $this->getServiceLocator()->get('MelisEngineComposer');
+        $config = [];
 
-        if (!empty($moduleSrv->getComposerModulePath($siteName))) {
-            $modulePath = $moduleSrv->getComposerModulePath($siteName);
+        if (!empty($composerSrv->getComposerModulePath($siteName))) {
+            $modulePath = $composerSrv->getComposerModulePath($siteName);
         } else {
             $modulePath = $_SERVER['DOCUMENT_ROOT'] . '/../module/MelisSites/' . $siteName;
         }
 
-        $configPath = include $modulePath . '/config/' . $siteName . '.config.php';
-        return $configPath;
+        if (file_exists($modulePath . '/config/' . $siteName . '.config.php')) {
+            $config = include $modulePath . '/config/' . $siteName . '.config.php';
+        }
+
+        return $config;
     }
 
     /**

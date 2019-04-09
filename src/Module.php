@@ -10,6 +10,7 @@
 namespace MelisFront;
 
 use MelisFront\Listener\CrisListener;
+use MelisFront\Listener\MelisFrontHomePageIdOverrideListener;
 use MelisFront\Listener\MelisFrontHomePageRoutingListener;
 use MelisFront\Listener\MelisFrontMinifiedAssetsCheckerListener;
 use Zend\Mvc\ModuleRouteListener;
@@ -100,6 +101,8 @@ class Module
             $eventManager->attach(new MelisFrontMinifiedAssetsCheckerListener());
 
             $eventManager->attach(new MelisFrontHomePageRoutingListener());
+
+            $eventManager->attach(new MelisFrontHomePageIdOverrideListener());
         }
     }
 
