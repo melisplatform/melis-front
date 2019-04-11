@@ -35,11 +35,10 @@ class MelisFrontHomePageIdOverrideListener implements ListenerAggregateInterface
                 $routeMatch = $e->getRouteMatch();
                 $sm = $e->getApplication()->getServiceManager();
                 $params = $routeMatch->getParams();
-
                 /**
                  * Check if we are on front
                  */
-                if($params['renderMode'] == 'front') {
+                if(!empty($params['renderMode']) && $params['renderMode'] == 'front') {
                     if ($routeMatch) {
                         /**
                          * Get domain data
