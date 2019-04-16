@@ -84,9 +84,44 @@ class MelisSiteConfigService extends MelisEngineGeneralService
 
         if (array_key_exists('site', $configFromFile)) {
             $dbConfigData = $this->getSiteConfigFromDb($siteId);
-
             // merge config from file and from the db | the one on the db will be prioritized
             $siteConfig = ArrayUtils::merge($siteConfig, $configFromFile, true);
+            $activeSiteLangs = $this->getSiteActiveLanguages($siteId);
+
+            // add langauges that are active but not on the config file
+            foreach ($activeSiteLangs as $lang) {
+                if (!array_key_exists($lang['lang_cms_locale'], $siteConfig['site'][$siteName][$siteId])) {
+                    $siteConfig['site'][$siteName][$siteId][$lang['lang_cms_locale']] = [];
+                }
+            }
+
+            // also merge all language config (except the general one) because some variables could be defined in one
+            // one language but not on the other
+            if (!empty($siteConfig['site'][$siteName][$siteId])) {
+                foreach ($siteConfig['site'][$siteName][$siteId] as $langConfigKey => $langConfigVal) {
+                    foreach ($siteConfig['site'][$siteName][$siteId] as $otherLangConfigKey => $otherLangConfigVal) {
+                        if ($langConfigKey !== $otherLangConfigKey) {
+                            foreach ($otherLangConfigVal as $configKey => $configValue) {
+                                if (!array_key_exists($configKey, $siteConfig['site'][$siteName][$siteId][$langConfigKey])) {
+                                    if (is_array($configValue)) {
+                                        $arr = [];
+
+                                        foreach ($configValue as $key => $val) {
+                                            if (!is_array($val)) {
+                                                $arr[$key] = '';
+                                            }
+                                        }
+
+                                        $siteConfig['site'][$siteName][$siteId][$langConfigKey] = ArrayUtils::merge($siteConfig['site'][$siteName][$siteId][$langConfigKey], [$configKey => $arr], true);
+                                    } else {
+                                        $siteConfig['site'][$siteName][$siteId][$langConfigKey] = ArrayUtils::merge($siteConfig['site'][$siteName][$siteId][$langConfigKey], [$configKey => ''], true);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
 
             if (!empty($dbConfigData)) {
                 foreach ($dbConfigData as $dbConf) {
@@ -116,31 +151,6 @@ class MelisSiteConfigService extends MelisEngineGeneralService
                 }
             }
 
-            $activeSiteLangs = $this->getSiteActiveLanguages($siteId);
-
-            // insert field for all languages
-            foreach ($activeSiteLangs as $lang) {
-                if (!array_key_exists($lang['lang_cms_locale'], $siteConfig['site'][$siteName][$siteId])) {
-                    $siteConfig['site'][$siteName][$siteId][$lang['lang_cms_locale']] = [];
-                }
-            }
-
-            // also merge all language config (except the general one) because some variables could be defined in one
-            // one language but not on the other
-            if (!empty($siteConfig['site'][$siteName][$siteId])) {
-                foreach ($siteConfig['site'][$siteName][$siteId] as $langConfigKey => $langConfigVal) {
-                    // merge all language config to get all possible fields
-                    foreach ($siteConfig['site'][$siteName][$siteId] as $otherLangConfigKey => $otherLangConfigVal) {
-                        if ($langConfigKey !== $otherLangConfigKey) {
-                            $siteConfig['site'][$siteName][$siteId][$langConfigKey] = ArrayUtils::merge($siteConfig['site'][$siteName][$siteId][$langConfigKey], $otherLangConfigVal, true);
-                        }
-                    }
-
-                    // override it with the current lang to preserve the correct values for the language
-                    $siteConfig['site'][$siteName][$siteId][$langConfigKey] = ArrayUtils::merge($siteConfig['site'][$siteName][$siteId][$langConfigKey], $langConfigVal, true);
-                }
-            }
-
             $arrayParameters['config'] = ($arrayParameters['returnAll']) ? $siteConfig : $siteConfig['site'][$siteName][$siteId];
         } else {
             $arrayParameters['config'] = [];
@@ -151,11 +161,11 @@ class MelisSiteConfigService extends MelisEngineGeneralService
     }
 
     /**
-     * Returns Config
+     * Returns Config From File
      * @param $siteName
      * @return mixed
      */
-    private function getConfig($siteName)
+    public function getConfig($siteName)
     {
         /** @var MelisEngineComposerService $composerSrv */
         $composerSrv  = $this->getServiceLocator()->get('MelisEngineComposer');
