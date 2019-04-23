@@ -29,6 +29,12 @@ class MelisFrontMiniTemplateConfigListener
 
         if(!empty($_SERVER['REQUEST_URI'])){
             $uri = $_SERVER['REQUEST_URI'];
+
+            //we don't want listener to be executed if it's not a php code
+            preg_match('/.*\.((?!php).)+(?:\?.*|)$/i', $uri, $matches, PREG_OFFSET_CAPTURE);
+            if (count($matches) > 1)
+                return;
+
             $uri1 = '';
             $tabUri = explode('/', $uri);
             if (!empty($tabUri[1]))
