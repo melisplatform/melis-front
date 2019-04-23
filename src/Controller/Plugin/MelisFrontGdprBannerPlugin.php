@@ -72,13 +72,13 @@ class MelisFrontGdprBannerPlugin extends MelisTemplatingPlugin
          */
         $langId = null;
         $siteId = null;
-        $pageId = $data['pageId'] ?? null;
+        $pageId = empty($data['pageId']) ? null : $data['pageId'];
         if (!empty($pageId)) {
             $pageService = $this->getServiceLocator()->get('MelisEnginePage');
-            $pageData = $pageService->getDatasPage($pageId)->getMelisPageTree();
+            $pageData = $pageService->getDatasPage($pageId, 'saved')->getMelisPageTree();
             if (!empty($pageData)) {
-                $langId = $pageData->lang_cms_id ?? $langId;
-                $locale = $pageData->lang_cms_locale;
+                $langId = empty($pageData->lang_cms_id) ? $langId : $pageData->lang_cms_id;
+                $locale = empty($pageData->lang_cms_locale) ? $locale : $pageData->lang_cms_locale;
                 if (!empty($pageData->page_tpl_id)) {
                     /** @var \MelisEngine\Model\Tables\MelisTemplateTable $tplTable */
                     $tplTable = $this->getServiceLocator()->get('MelisEngineTableTemplate');
