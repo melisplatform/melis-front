@@ -86,72 +86,79 @@ class MelisSiteConfigService extends MelisEngineGeneralService
             $dbConfigData = $this->getSiteConfigFromDb($siteId);
             // merge config from file and from the db | the one on the db will be prioritized
             $siteConfig = ArrayUtils::merge($siteConfig, $configFromFile, true);
-            $activeSiteLangs = $this->getSiteActiveLanguages($siteId);
+            /**
+             * Make sure that we are accessing the correct config
+             */
+            if(isset($siteConfig['site'][$siteName][$siteId])) {
+                $activeSiteLangs = $this->getSiteActiveLanguages($siteId);
 
-            // add langauges that are active but not on the config file
-            foreach ($activeSiteLangs as $lang) {
-                if (!array_key_exists($lang['lang_cms_locale'], $siteConfig['site'][$siteName][$siteId])) {
-                    $siteConfig['site'][$siteName][$siteId][$lang['lang_cms_locale']] = [];
+                // add langauges that are active but not on the config file
+                foreach ($activeSiteLangs as $lang) {
+                    if (!array_key_exists($lang['lang_cms_locale'], $siteConfig['site'][$siteName][$siteId])) {
+                        $siteConfig['site'][$siteName][$siteId][$lang['lang_cms_locale']] = [];
+                    }
                 }
-            }
 
-            // also merge all language config (except the general one) because some variables could be defined in one
-            // one language but not on the other
-            if (!empty($siteConfig['site'][$siteName][$siteId])) {
-                foreach ($siteConfig['site'][$siteName][$siteId] as $langConfigKey => $langConfigVal) {
-                    foreach ($siteConfig['site'][$siteName][$siteId] as $otherLangConfigKey => $otherLangConfigVal) {
-                        if ($langConfigKey !== $otherLangConfigKey) {
-                            foreach ($otherLangConfigVal as $configKey => $configValue) {
-                                if (!array_key_exists($configKey, $siteConfig['site'][$siteName][$siteId][$langConfigKey])) {
-                                    if (is_array($configValue)) {
-                                        $arr = [];
+                // also merge all language config (except the general one) because some variables could be defined in one
+                // one language but not on the other
+                if (!empty($siteConfig['site'][$siteName][$siteId])) {
+                    foreach ($siteConfig['site'][$siteName][$siteId] as $langConfigKey => $langConfigVal) {
+                        foreach ($siteConfig['site'][$siteName][$siteId] as $otherLangConfigKey => $otherLangConfigVal) {
+                            if ($langConfigKey !== $otherLangConfigKey) {
+                                foreach ($otherLangConfigVal as $configKey => $configValue) {
+                                    if (!array_key_exists($configKey, $siteConfig['site'][$siteName][$siteId][$langConfigKey])) {
+                                        if (is_array($configValue)) {
+                                            $arr = [];
 
-                                        foreach ($configValue as $key => $val) {
-                                            if (!is_array($val)) {
-                                                $arr[$key] = '';
+                                            foreach ($configValue as $key => $val) {
+                                                if (!is_array($val)) {
+                                                    $arr[$key] = '';
+                                                }
                                             }
-                                        }
 
-                                        $siteConfig['site'][$siteName][$siteId][$langConfigKey] = ArrayUtils::merge($siteConfig['site'][$siteName][$siteId][$langConfigKey], [$configKey => $arr], true);
-                                    } else {
-                                        $siteConfig['site'][$siteName][$siteId][$langConfigKey] = ArrayUtils::merge($siteConfig['site'][$siteName][$siteId][$langConfigKey], [$configKey => ''], true);
+                                            $siteConfig['site'][$siteName][$siteId][$langConfigKey] = ArrayUtils::merge($siteConfig['site'][$siteName][$siteId][$langConfigKey], [$configKey => $arr], true);
+                                        } else {
+                                            $siteConfig['site'][$siteName][$siteId][$langConfigKey] = ArrayUtils::merge($siteConfig['site'][$siteName][$siteId][$langConfigKey], [$configKey => ''], true);
+                                        }
                                     }
                                 }
                             }
                         }
                     }
                 }
-            }
 
-            if (!empty($dbConfigData)) {
-                foreach ($dbConfigData as $dbConf) {
-                    if ($dbConf['sconf_lang_id'] === '-1') {
-                        $siteConfig = ArrayUtils::merge(
-                            $siteConfig,
-                            [
-                                'site' => [
-                                    $siteName => unserialize($dbConf['sconf_datas'])
-                                ],
-                            ],
-                            true
-                        );
-                    } else {
-                        $siteConfig = ArrayUtils::merge(
-                            $siteConfig,
-                            [
-                                'site' => [
-                                    $siteName => [
-                                        $siteId => unserialize($dbConf['sconf_datas'])
+                if (!empty($dbConfigData)) {
+                    foreach ($dbConfigData as $dbConf) {
+                        if ($dbConf['sconf_lang_id'] === '-1') {
+                            $siteConfig = ArrayUtils::merge(
+                                $siteConfig,
+                                [
+                                    'site' => [
+                                        $siteName => unserialize($dbConf['sconf_datas'])
                                     ],
-                                ]
-                            ],
-                            true
-                        );
+                                ],
+                                true
+                            );
+                        } else {
+                            $siteConfig = ArrayUtils::merge(
+                                $siteConfig,
+                                [
+                                    'site' => [
+                                        $siteName => [
+                                            $siteId => unserialize($dbConf['sconf_datas'])
+                                        ],
+                                    ]
+                                ],
+                                true
+                            );
+                        }
                     }
                 }
-            }
 
-            $arrayParameters['config'] = ($arrayParameters['returnAll']) ? $siteConfig : $siteConfig['site'][$siteName][$siteId];
+                $arrayParameters['config'] = ($arrayParameters['returnAll']) ? $siteConfig : $siteConfig['site'][$siteName][$siteId];
+            }else{
+                $arrayParameters['config'] = [];
+            }
         } else {
             $arrayParameters['config'] = [];
         }

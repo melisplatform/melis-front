@@ -374,7 +374,6 @@ class MelisSiteTranslationService extends MelisEngineGeneralService
      * @param null $langId
      * @param $translationKey
      * @param $siteId
-     * @param $isFromModal
      * @return array
      */
     public function getSiteTranslationFromFile($translationKey = null, $langId = null, $siteId = 0)
@@ -390,21 +389,21 @@ class MelisSiteTranslationService extends MelisEngineGeneralService
 
         $moduleFolders = array();
         if (!empty($arrayParameters['siteId'])) {
-            $tplTable = $this->serviceLocator->get('MelisEngineTableTemplate');
-            $tlpData = $tplTable->getEntryByField('tpl_site_id', $arrayParameters['siteId'])->current();
-            if (!empty($tlpData)) {
-                $folderName = $tlpData->tpl_zf2_website_folder;
+            $siteTbl = $this->getServiceLocator()->get('MelisEngineTableSite');
+            $siteData = $siteTbl->getEntryById($arrayParameters['siteId'])->current();
+            if (!empty($siteData)) {
+                $siteName = $siteData->site_name;
 
                 //check if site is came from the vendor
                 $moduleSrv = $this->getServiceLocator()->get('MelisEngineComposer');
-                if(!empty($moduleSrv->getComposerModulePath($folderName))){
-                    $modulePath = $moduleSrv->getComposerModulePath($folderName);
+                if(!empty($moduleSrv->getComposerModulePath($siteName))){
+                    $modulePath = $moduleSrv->getComposerModulePath($siteName);
                 }else {
-                    $modulePath = $_SERVER['DOCUMENT_ROOT'] . '/../module/MelisSites/' . $folderName;
+                    $modulePath = $_SERVER['DOCUMENT_ROOT'] . '/../module/MelisSites/' . $siteName;
                 }
 
                 if (is_dir($modulePath)) {
-                    array_push($moduleFolders, array('path' => $modulePath, 'module' => $folderName));
+                    array_push($moduleFolders, array('path' => $modulePath, 'module' => $siteName));
                 }
             }
         } else {
