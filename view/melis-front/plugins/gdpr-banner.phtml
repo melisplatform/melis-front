@@ -12,6 +12,6 @@
         </div>
     </div>
 </div>
-<?php if ($this->renderMode === 'melis'): ?>
+<?php if ($this->isInBackOffice): ?>
     <pre class="melis-gdpr-banner-loaded"><?= $this->labels['pluginLoaded']; ?></pre>
 <?php endif; ?>

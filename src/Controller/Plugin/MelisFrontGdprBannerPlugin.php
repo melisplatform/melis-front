@@ -110,11 +110,38 @@ class MelisFrontGdprBannerPlugin extends MelisTemplatingPlugin
         $viewVariables = [
             'labels' => $labels,
             'pluginId' => $data['id'],
-            'renderMode' => $this->renderMode,
+            'isInBackOffice' => $this->isInBackOffice(),
             'bannerContents' => $bannerContents,
         ];
 
         return $viewVariables;
+    }
+
+    /**
+     * @return bool
+     */
+    private function isInBackOffice()
+    {
+        $request = $this->getController()->getRequest();
+        $routeMatch = $this->getServiceLocator()->get('router')->match($request);
+        $routeName = $routeMatch->getMatchedRouteName();
+        $module = explode('/', $routeName);
+
+        /**
+         * Page edition: melis_front_melisrender
+         */
+        if (is_int(array_search('melis_front_melisrender', $module))) {
+            return true;
+        }
+
+        /**
+         * Page preview: melis_front_previewender
+         */
+        if (is_int(array_search('melis_front_previewender', $module))) {
+            return false;
+        }
+
+        return false;
     }
 
     /**
