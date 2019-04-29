@@ -61,12 +61,6 @@ window.MelisGdprBanner = (function () {
     };
 })();
 
-/**
- * When customizing your own view file, please place set the ff:
- * - "data-render-mode"
- * - "data-plugin-id
- * - your container id & class
- */
 function melisGdprBanner_init(pluginId) {
     if (pluginId === undefined) {
         /** pluginId is initially "undefined" when the plugin is loaded in front */
