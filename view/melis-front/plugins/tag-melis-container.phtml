@@ -71,7 +71,7 @@
     $tag_id = " id='$this->tagId'";
     
 ?>
-    <div class='<?= $this->type; ?>-editable melis-editable' <?= $data_tag_type; ?> <?= $data_tag_id; ?> <?= $data_id_page; ?> <?= $tag_id; ?> data-plugin-hardcode="true" data-module="<?= $this->configPluginKey; ?>"
+    <div class='<?= $this->type; ?>-editable melis-editable clearfix' <?= $data_tag_type; ?> <?= $data_tag_id; ?> <?= $data_id_page; ?> <?= $tag_id; ?> data-plugin-hardcode="true" data-module="<?= $this->configPluginKey; ?>"
 		data-plugin="<?= $this->pluginName; ?>" data-plugin-id="<?= $pluginId; ?>"  data-melis-tag="<?= $this->pluginXmlDbKey; ?>" data-site-module="<?= $this->siteModule; ?>">
     <?php 
         echo $this->viewFront;
