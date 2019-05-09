@@ -64,10 +64,11 @@ class MelisFrontSiteConfigListener
                     /**
                      * remove other site data from the config
                      */
-                    if(!empty($config['site'][$siteData->site_name])){
-                        foreach($config['site'][$siteData->site_name] as $id => $site){
-                            if($id != $siteId && $id != 'allSites'){
-                                unset($config['site'][$siteData->site_name][$id]);
+                    if (!empty($config['site'][$siteData->site_name])) {
+                        foreach ($config['site'][$siteData->site_name] as $id => $site) {
+                            if ($id != $siteId && $id != 'allSites') {
+                                if (is_int($id))
+                                    unset($config['site'][$siteData->site_name][$id]);
                             }
                         }
                     }
