@@ -27,7 +27,7 @@ class MelisPageLangVersionLinkHelper extends AbstractHelper
      * @param $absolute
      * @return mixed
      */
-    public function __invoke($idPage, $locale, $absolute)
+    public function __invoke($idPage, $locale, $absolute = false)
     {
         /** @var MelisTreeService $melisTree */
         $melisTree = $this->serviceManager->get('MelisEngineTree');
