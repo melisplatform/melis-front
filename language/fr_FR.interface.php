@@ -73,7 +73,7 @@ return array(
     
     'tr_front_plugin_search_pagination' => 'Pagination',
     'tr_front_plugin_search_pagination_nbPerPage' => 'Résultats par page',
-    'tr_front_plugin_search_pagination_nbPageBeforeAfter' => 'Nombre de lien avant et après la page courante',
+    'tr_front_plugin_search_pagination_nbPageBeforeAfter' => 'Nombre de liens avant et après la page courante',
     
     'tr_front_plugin_search_pagination_nbPerPage tooltip' => 'Nombre de résultats s&#39;affichant sur une même page',
     'tr_front_plugin_search_pagination_nbPageBeforeAfter tooltip' => 'L&#39;affichage de la pagination génére un certains nombre de liens avant et après la page en cours, ce champ permet de limiter ce nombe de liens',
