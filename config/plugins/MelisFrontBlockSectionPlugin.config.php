@@ -23,7 +23,17 @@ return array(
                         'name' => 'Block',
                         'thumbnail' => '/MelisFront/plugins/images/MelisFrontBlockPlugin_thumb.jpg',
                         'description' => 'tr_melis_front_bloc_plugin_description',
-
+                        /*
+                         * if set this plugin will belong to a specific marketplace section,
+                         * if not it will go directly to ( Others ) section
+                         *  - available section for templating plugins as of 2019-05-16
+                         *    - MelisCms
+                         *    - MelisMarketing
+                         *    - MelisSite
+                         *    - Others
+                         *    - CustomProjects
+                         */
+                        'section' => 'MelisCms',
                     ),
                 ),
             ),
