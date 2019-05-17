@@ -89,12 +89,20 @@ class MelisFrontSearchResultsPlugin extends MelisTemplatingPlugin
         $moduleDirectory = '';
         $searchModulePath = self::SEARCH_PATH_MELIS_SITES;
         if (!is_null($moduleName)) {
+            /**
+             * Folder names inside vendor/melisplatform is in lowercase-delimited-by-hyphens
+             * Ex. $vendorSiteName = 'melis-demo-cms';
+             */
+            $vendorSiteName = preg_split('/(?=[A-Z])/', $moduleName, null, PREG_SPLIT_NO_EMPTY);
+            $vendorSiteName = array_map('strtolower', $vendorSiteName);
+            $vendorSiteName = implode('-', $vendorSiteName);
+
             if (is_dir($_SERVER['DOCUMENT_ROOT'] . self::MELIS_SITES . $moduleName)) {
-                /** Module is located inside MelisSites folder */
+                /** Module is located inside MelisSites folder. Ex. $moduleName = "MelisDemoCms" */
                 $moduleDirectory = $_SERVER['DOCUMENT_ROOT'] . self::MELIS_SITES . $moduleName;
-            } elseif (is_dir($_SERVER['DOCUMENT_ROOT'] . self::VENDOR . $moduleName)) {
-                /** Module is located inside Vendor folder */
-                $moduleDirectory = $_SERVER['DOCUMENT_ROOT'] . self::VENDOR . $moduleName;
+            } elseif (is_dir($_SERVER['DOCUMENT_ROOT'] . self::VENDOR . $vendorSiteName)) {
+                /** Module is located inside Vendor folder. Ex. $moduleName = "melis-demo-cms" */
+                $moduleDirectory = $_SERVER['DOCUMENT_ROOT'] . self::VENDOR . $vendorSiteName;
                 $searchModulePath = self::SEARCH_PATH_VENDOR;
             } else {
                 $siteDirExist = false;
