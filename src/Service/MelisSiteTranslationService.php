@@ -328,7 +328,7 @@ class MelisSiteTranslationService extends MelisEngineGeneralService
             }
 
             //merge all the translations
-            $translationData = array_merge($transFromFile, $transFromDb);
+            $translationData = array_merge($transFromDb, $transFromFile);
             $translationData = array_values(array_unique($translationData, SORT_REGULAR));
 
             $arrayParameters['results'] = $translationData;
