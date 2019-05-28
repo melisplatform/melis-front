@@ -1,0 +1,36 @@
+.melis-gdpr-banner-container {
+    display: none;
+    height: 60px;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    z-index: 99999;
+    width: 100%;
+    background: #cc3333;
+    color: #fff;
+    text-align: center;
+    vertical-align: middle;
+    opacity: 0.95;
+}
+
+.melis-gdpr-banner-loaded {
+    background-color: #eeffe1;
+}
+
+.melis-gdpr-banner-content {
+    margin-bottom: 0;
+    line-height: 60px;
+}
+
+.melis-gdpr-banner-agree {
+    padding: 0 1em;
+    margin: 0 0.5em;
+    border: 0;
+    border-radius: 20px;
+    background-color: #4e924e;
+}
+
+.melis-gdpr-banner-agree:hover {
+    border: 0;
+    background-color: #47a947;
+}

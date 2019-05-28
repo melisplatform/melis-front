@@ -202,6 +202,7 @@ return array(
             'MelisFrontSearchResultsPlugin' => 'MelisFront\Controller\Plugin\MelisFrontSearchResultsPlugin',
             'MelisFrontBlockSectionPlugin' => 'MelisFront\Controller\Plugin\MelisFrontBlockSectionPlugin',
             'MiniTemplatePlugin' => 'MelisFront\Controller\Plugin\MiniTemplatePlugin',
+            'MelisFrontGdprBannerPlugin' => 'MelisFront\Controller\Plugin\MelisFrontGdprBannerPlugin',
         )
     ),
     'view_helpers' => array(
@@ -237,6 +238,8 @@ return array(
             'MelisFront/list-paginator'                  => __DIR__ . '/../view/melis-front/plugins/list-paginator.phtml',
             'MelisFront/block-section'                   => __DIR__ . '/../view/melis-front/plugins/block-section.phtml',
             'MelisFront/block-section-container'         => __DIR__ . '/../view/melis-front/plugins/block-section-container.phtml',
+            'MelisFront/gdpr-banner'                     => __DIR__ . '/../view/melis-front/plugins/gdpr-banner.phtml',
+            'MelisFront/modal-template-form'             => __DIR__ . '/../view/melis-front/plugins/modal-template-form.phtml',
 
             //Mini Template plugins
             'MiniTemplate/Content'                      =>  __DIR__ . '/../view/melis-front/plugins/mini-template-default.phtml',
