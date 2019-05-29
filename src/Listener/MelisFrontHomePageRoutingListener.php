@@ -117,7 +117,7 @@ class MelisFrontHomePageRoutingListener implements ListenerAggregateInterface
                                     )
                                 ));
                                 // add the route to the router
-                                $router->addRoute('melis-front-page-seo', $route);
+                                $router->addRoute('melis-front-home-page', $route);
                             }
                         }
                     }
