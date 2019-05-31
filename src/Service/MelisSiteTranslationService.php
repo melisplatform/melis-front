@@ -101,9 +101,10 @@ class MelisSiteTranslationService extends MelisEngineGeneralService
      * Function to save translation
      *
      * @param array $transData
+     * @param array $transToDelete
      * @return mixed
      */
-    public function saveTranslation($transData = array())
+    public function saveTranslation($transData = array(), $transToDelete = array())
     {
         // Event parameters prepare
         $arrayParameters = $this->makeArrayFromParameters(__METHOD__, func_get_args());
@@ -144,6 +145,16 @@ class MelisSiteTranslationService extends MelisEngineGeneralService
                     }
                 }
             }
+
+            /**
+             * check if there are some translation need to delete
+             */
+            if(!empty($transToDelete)){
+                foreach($transToDelete as $key => $data){
+                    $this->deleteTranslation($data);
+                }
+            }
+
             $con->commit();
             $success = true;
             $message = 'Success';
@@ -547,7 +558,7 @@ class MelisSiteTranslationService extends MelisEngineGeneralService
      */
     protected function checkDir($dir)
     {
-        if (file_exists($dir) && is_dir($dir)) {
+        if (file_exists($dir) && is_dir($dir) && is_writable($dir)) {
             return true;
         }
 
@@ -563,7 +574,7 @@ class MelisSiteTranslationService extends MelisEngineGeneralService
     protected function getDir($dir, $excludeSubFolders = array())
     {
         $directories = array();
-        if (file_exists($dir)) {
+        if (file_exists($dir) && is_writable($dir)) {
             $excludeDir = array_merge(array('.', '..', '.gitignore'), $excludeSubFolders);
             $directory = array_diff(scandir($dir), $excludeDir);
 
