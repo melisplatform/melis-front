@@ -98,6 +98,26 @@ class MelisSiteTranslationService extends MelisEngineGeneralService
     }
 
     /**
+     * @param $mstId
+     * @return mixed
+     */
+    public function deleteTranslationTextByMstId($mstId)
+    {
+        // Event parameters prepare
+        $arrayParameters = $this->makeArrayFromParameters(__METHOD__, func_get_args());
+        // Sending service start event
+        $arrayParameters = $this->sendEvent('melis_site_translation_delete_translation_text_by_mst_id_start', $arrayParameters);
+
+        $msttTable = $this->getServiceLocator()->get('MelisSiteTranslationTextTable');
+        $res = $msttTable->deleteByField('mstt_mst_id', $arrayParameters['mstId']);
+
+        $arrayParameters['results'] = $res;
+        $arrayParameters = $this->sendEvent('melis_site_translation_delete_translation_text_by_mst_id_end', $arrayParameters);
+
+        return $arrayParameters['results'];
+    }
+
+    /**
      * Function to save translation
      *
      * @param array $transData
