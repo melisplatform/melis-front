@@ -214,6 +214,7 @@ return array(
             'MelisPageLangLink' => 'MelisFront\View\Helper\Factory\MelisPageLangVersionLinkHelperFactory',
             'MelisHomePageLink' => 'MelisFront\View\Helper\Factory\MelisHomePageLinkHelperFactory',
             'siteTranslate' => 'MelisFront\View\Helper\Factory\MelisSiteTranslationHelperFactory',
+            'SiteConfig' => 'MelisFront\View\Helper\Factory\SiteConfigViewHelperFactory',
         ),
     ),
     'view_manager' => array(

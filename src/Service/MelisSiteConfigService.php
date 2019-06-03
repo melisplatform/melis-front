@@ -15,18 +15,80 @@ use Zend\Stdlib\ArrayUtils;
 
 class MelisSiteConfigService extends MelisEngineGeneralService
 {
+
+    /**
+     * Function to the site config by key
+     *
+     * @param $key
+     * @param string $section
+     * @param null $language
+     * @return array|string
+     */
+    public function getSiteConfigByKey($key, $section = 'sites', $language = null)
+    {
+        /**
+         * get the page id via the request
+         */
+        $router = $this->serviceLocator->get('router');
+        $request = $this->serviceLocator->get('request');
+        $routeMatch = $router->match($request);
+        $params = $routeMatch->getParams();
+
+        try {
+
+            if(empty($section))
+                $section = 'sites';
+
+            if ($section == 'sites' || $section == 'allSites') {
+                $siteConfigData = $this->getSiteConfigByPageId($params['idpage']);
+                if ($section == 'sites') {
+                    if (empty($language)) {
+                        return $siteConfigData['siteConfig'][$key];
+                    } else {
+                        $langLocale = strtolower($language) . '_' . strtoupper($language);
+                        $siteConfigData = $this->getSiteConfigByPageId($params['idpage'], $langLocale);
+                        return $siteConfigData['siteConfig'][$key];
+                    }
+                } else {
+                    return $siteConfigData['allSites'][$key];
+                }
+            } else {
+                $siteConfigData = $this->getSiteConfig($section);
+                $data = [];
+                foreach ($siteConfigData as $locale => $value) {
+                    $data[$locale] = array($key => $value[$key]);
+                }
+                if (empty($language))
+                    return $data;
+                else {
+                    $langLocale = strtolower($language) . '_' . strtoupper($language);
+                    return $data[$langLocale][$key];
+                }
+            }
+        }catch (\Exception $ex) {
+            return null;
+        }
+    }
+
     /**
      * Function to return site config by page id
      *
      * @param $pageId
+     * @param $langLocale - ex: en_EN, fr_FR
      * @return array
      */
-    public function getSiteConfigByPageId($pageId)
+    public function getSiteConfigByPageId($pageId, $langLocale = false)
     {
-        $config = array(
+        $siteConfig = array(
             'siteConfig' => array(),
             'allSites' => array(),
         );
+
+        /**
+         * get the site config
+         */
+        $config = $this->serviceLocator->get('config');
+
         if(!empty($pageId)) {
             /**
              * get the language if the page
@@ -51,16 +113,19 @@ class MelisSiteConfigService extends MelisEngineGeneralService
                 if(!empty($datasSite->site_id)){
                     $siteId = $datasSite->site_id;
                     $siteName = $datasSite->site_name;
-                    $siteConf = $this->getSiteConfig($datasSite->site_id, true);
-                    if(!empty($siteConf)){
-                        $config['siteConfig'] = $siteConf['site'][$siteName][$siteId][$langData->lang_cms_locale];
-                        $config['siteConfig']['site_id'] = $siteId;
-                        $config['allSites'] = $siteConf['site'][$siteName]['allSites'];
+                    if(!empty($config['site'])){
+                        if($langLocale){
+                            $siteConfig['siteConfig'] = $config['site'][$siteName][$siteId][$langLocale];
+                        }else {
+                            $siteConfig['siteConfig'] = $config['site'][$siteName][$siteId][$langData->lang_cms_locale];
+                        }
+                        $siteConfig['siteConfig']['site_id'] = $siteId;
+                        $siteConfig['allSites'] = $config['site'][$siteName]['allSites'];
                     }
                 }
             }
         }
-        return $config;
+        return $siteConfig;
     }
 
     /**
