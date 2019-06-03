@@ -73,7 +73,7 @@ return array(
     
     'tr_front_plugin_search_pagination' => 'Pagination',
     'tr_front_plugin_search_pagination_nbPerPage' => 'Résultats par page',
-    'tr_front_plugin_search_pagination_nbPageBeforeAfter' => 'Nombre de lien avant et après la page courante',
+    'tr_front_plugin_search_pagination_nbPageBeforeAfter' => 'Nombre de liens avant et après la page courante',
     
     'tr_front_plugin_search_pagination_nbPerPage tooltip' => 'Nombre de résultats s&#39;affichant sur une même page',
     'tr_front_plugin_search_pagination_nbPageBeforeAfter tooltip' => 'L&#39;affichage de la pagination génére un certains nombre de liens avant et après la page en cours, ce champ permet de limiter ce nombe de liens',
@@ -82,11 +82,17 @@ return array(
     // plugin config
     'tr_melis_front_bloc_plugin_description' => 'Le plugin Block ajoute un simple block vide',
 
+    // plugin: GDPR banner
+    'tr_melis_front_gdpr_banner_agree_en_EN' => 'OK, I understand',
+    'tr_melis_front_gdpr_banner_agree_fr_FR' => 'Accepter',
+
     //Minify Assets
     'tr_front_minify_assets_compiled_successfully' => 'Compiled successfully.',
     'tr_front_minify_assets_nothing_to_compile' => 'There is nothing to compile.',
     'tr_front_minify_assets_error_occurred' => 'An error occurred while compiling assets.',
     'tr_front_minify_assets_success' => 'Compiling assets successful.',
 
+    //DragDrop Zone
+    'tr_front_drag_drop_zone_label' => 'Déposez le plugin ici',
 );
 ?>

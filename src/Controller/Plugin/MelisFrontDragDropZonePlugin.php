@@ -147,12 +147,14 @@ class MelisFrontDragDropZonePlugin extends MelisTemplatingPlugin
     {
         $viewModel = new ViewModel();
         $viewModel->setTemplate('MelisFront/dragdropzone/meliscontainer');
+        $translator = $this->getServiceLocator()->get('translator');
 
         $viewModel->pluginFrontConfig = $this->pluginFrontConfig;
         $viewModel->dragdropzoneId = $this->pluginFrontConfig['id'];
         $viewModel->configPluginKey = $this->configPluginKey;
         $viewModel->pluginName = $this->pluginName;
         $viewModel->pluginXmlDbKey = $this->pluginXmlDbKey;
+        $viewModel->dragDropLabel = $translator->translate('tr_front_drag_drop_zone_label');
 
         $pageId = (!empty($this->pluginFrontConfig['pageId'])) ? $this->pluginFrontConfig['pageId'] : 0;
 

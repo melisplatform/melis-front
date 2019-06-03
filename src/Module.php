@@ -189,7 +189,7 @@ class Module
             include __DIR__ . '/../config/plugins/MelisFrontShowListFromFolderPlugin.config.php',
             include __DIR__ . '/../config/plugins/MelisFrontSearchResultsPlugin.config.php',
             include __DIR__ . '/../config/plugins/MelisFrontBlockSectionPlugin.config.php',
-
+            include __DIR__ . '/../config/plugins/MelisFrontGdprBannerPlugin.config.php',
         );
 
         foreach ($configFiles as $file) {

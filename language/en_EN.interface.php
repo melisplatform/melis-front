@@ -79,10 +79,17 @@ return array(
     // plugin config
     'tr_melis_front_bloc_plugin_description' => 'The plugin Block adds a simple empty block',
 
+    // plugin: GDPR banner
+    'tr_melis_front_gdpr_banner_agree_en_EN' => 'OK, I understand',
+    'tr_melis_front_gdpr_banner_agree_fr_FR' => 'Accepter',
+
     //Minify Assets
     'tr_front_minify_assets_compiled_successfully' => 'Compiled successfully.',
     'tr_front_minify_assets_nothing_to_compile' => 'There is nothing to compile.',
     'tr_front_minify_assets_error_occurred' => 'An error occurred while compiling assets.',
     'tr_front_minify_assets_success' => 'Compiling assets successful.',
+
+    //DragDrop Zone
+    'tr_front_drag_drop_zone_label' => 'DRAG PLUGIN HERE!',
 );
 ?>
