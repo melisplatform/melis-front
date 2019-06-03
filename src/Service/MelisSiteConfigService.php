@@ -43,11 +43,11 @@ class MelisSiteConfigService extends MelisEngineGeneralService
                 $siteConfigData = $this->getSiteConfigByPageId($params['idpage']);
                 if ($section == 'sites') {
                     if (empty($language)) {
-                        return $siteConfigData['siteConfig'][$key];
+                        return (isset($siteConfigData['siteConfig'][$key])) ? $siteConfigData['siteConfig'][$key] : null;
                     } else {
                         $langLocale = strtolower($language) . '_' . strtoupper($language);
                         $siteConfigData = $this->getSiteConfigByPageId($params['idpage'], $langLocale);
-                        return $siteConfigData['siteConfig'][$key];
+                        return (isset($siteConfigData['siteConfig'][$key])) ? $siteConfigData['siteConfig'][$key] : null;
                     }
                 } else {
                     return $siteConfigData['allSites'][$key];
@@ -79,15 +79,15 @@ class MelisSiteConfigService extends MelisEngineGeneralService
      */
     public function getSiteConfigByPageId($pageId, $langLocale = false)
     {
+        $router = $this->serviceLocator->get('router');
+        $request = $this->serviceLocator->get('request');
+        $routeMatch = $router->match($request);
+        $params = $routeMatch->getParams();
+
         $siteConfig = array(
             'siteConfig' => array(),
             'allSites' => array(),
         );
-
-        /**
-         * get the site config
-         */
-        $config = $this->serviceLocator->get('config');
 
         if(!empty($pageId)) {
             /**
@@ -113,14 +113,24 @@ class MelisSiteConfigService extends MelisEngineGeneralService
                 if(!empty($datasSite->site_id)){
                     $siteId = $datasSite->site_id;
                     $siteName = $datasSite->site_name;
+                    /**
+                     * get the site config
+                     */
+                    if($params['renderMode'] == 'melis') {
+                        $config = $this->getSiteConfig($siteId, true);
+                    }else{
+                        $config = $this->serviceLocator->get('config');
+                    }
                     if(!empty($config['site'])){
-                        if($langLocale){
-                            $siteConfig['siteConfig'] = $config['site'][$siteName][$siteId][$langLocale];
-                        }else {
-                            $siteConfig['siteConfig'] = $config['site'][$siteName][$siteId][$langData->lang_cms_locale];
+                        if(!empty($config['site'][$siteName][$siteId])) {
+                            if ($langLocale) {
+                                $siteConfig['siteConfig'] = $config['site'][$siteName][$siteId][$langLocale];
+                            } else {
+                                $siteConfig['siteConfig'] = $config['site'][$siteName][$siteId][$langData->lang_cms_locale];
+                            }
+                            $siteConfig['siteConfig']['site_id'] = $siteId;
+                            $siteConfig['allSites'] = $config['site'][$siteName]['allSites'];
                         }
-                        $siteConfig['siteConfig']['site_id'] = $siteId;
-                        $siteConfig['allSites'] = $config['site'][$siteName]['allSites'];
                     }
                 }
             }
