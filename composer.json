@@ -34,8 +34,8 @@
     "ext-openssl": "*",
     "ext-json": "*",
     "ext-pdo_mysql": "*",
-    "melisplatform/melis-core": "^2.3.0",
-    "melisplatform/melis-engine": "^2.3.0",
+    "melisplatform/melis-core": "*",
+    "melisplatform/melis-engine": "*",
     "justinrainbow/json-schema": "5.2.1",
     "matthiasmullie/minify": "^1.3"
   },
