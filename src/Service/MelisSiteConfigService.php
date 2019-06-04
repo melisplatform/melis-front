@@ -108,11 +108,10 @@ class MelisSiteConfigService extends MelisEngineGeneralService
              * get the site config
              */
             if(!empty($langData)){
-                $treeSrv = $this->getServiceLocator()->get('MelisEngineTree');
-                $datasSite = $treeSrv->getSiteByPageId($pageId);
-                if(!empty($datasSite->site_id)){
-                    $siteId = $datasSite->site_id;
-                    $siteName = $datasSite->site_name;
+                $siteData = $this->getSiteDataByPageId($pageId);
+                if(!empty($siteData)){
+                    $siteId = $siteData->site_id;
+                    $siteName = $siteData->site_name;
                     /**
                      * get the site config
                      */
@@ -297,5 +296,50 @@ class MelisSiteConfigService extends MelisEngineGeneralService
     {
         $siteTable = $this->getServiceLocator()->get('MelisEngineTableSite');
         return $siteTable->getEntryById($siteId)->toArray()[0];
+    }
+
+    /**
+     * Function to get the site data
+     * using the page id
+     *
+     * @param $pageId
+     * @return array|object
+     */
+    private function getSiteDataByPageId($pageId)
+    {
+        $siteData = [];
+        $siteId = 0;
+
+        $pageSaved = $this->getServiceLocator()->get('MelisEngineTablePageSaved');
+        $pagePublished = $this->getServiceLocator()->get('MelisEngineTablePagePublished');
+        $template = $this->getServiceLocator()->get('MelisEngineTableTemplate');
+
+        if(!empty($pageId)){
+            /**
+             * check first if there is data on page saved
+             */
+            $pageSavedData = $pageSaved->getEntryById($pageId)->current();
+            if(!empty($pageSavedData)){
+                $tplId = $pageSavedData->page_tpl_id;
+            }else{
+                //try to get the data from the page published
+                $pagePublishedData = $pagePublished->getEntryById($pageId)->current();
+                $tplId = $pagePublishedData->page_tpl_id;
+            }
+
+            if(!empty($tplId)){
+                $tplData = $template->getEntryById($tplId)->current();
+                if(!empty($tplData)){
+                    $siteId = $tplData->tpl_site_id;
+                }
+            }
+        }
+
+        if(!empty($siteId)){
+            $siteTbl = $this->getServiceLocator()->get('MelisEngineTableSite');
+            $siteData = $siteTbl->getEntryById($siteId)->current();
+        }
+
+        return $siteData;
     }
 }
