@@ -9,8 +9,11 @@
 
 namespace MelisFront;
 
+use MelisFront\Listener\MelisFrontHomePageIdOverrideListener;
+use MelisFront\Listener\MelisFrontHomePageRoutingListener;
 use MelisFront\Listener\MelisFrontMinifiedAssetsCheckerListener;
 use MelisFront\Listener\MelisFrontMiniTemplateConfigListener;
+use MelisFront\Listener\MelisFrontSiteConfigListener;
 use Zend\ModuleManager\ModuleEvent;
 use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
@@ -38,6 +41,10 @@ class Module
         // Registering a listener at default priority, 1, which will trigger
         // after the ConfigListener merges config.
         $events->attach(ModuleEvent::EVENT_LOAD_MODULES_POST, array(new MelisFrontMiniTemplateConfigListener, 'onLoadModulesPost'));
+        /**
+         * get the site config (merged with db)
+         */
+        $events->attach(ModuleEvent::EVENT_LOAD_MODULES_POST, array(new MelisFrontSiteConfigListener, 'onLoadModulesPost'));
     }
 
     public function onBootstrap(MvcEvent $e)
@@ -107,6 +114,10 @@ class Module
             $eventManager->attach(new MelisFrontPageCacheListener());
 
             $eventManager->attach(new MelisFrontMinifiedAssetsCheckerListener());
+
+            $eventManager->attach(new MelisFrontHomePageRoutingListener());
+
+            $eventManager->attach(new MelisFrontHomePageIdOverrideListener());
         }
     }
 

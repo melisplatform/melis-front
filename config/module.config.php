@@ -176,6 +176,8 @@ return array(
             'MelisFrontHead' => 'MelisFront\Service\Factory\MelisFrontHeadServiceFactory',
             'MelisFrontNavigation' => 'MelisFront\Navigation\Factory\MelisFrontNavigationFactory',
             'MinifyAssets' => 'MelisFront\Service\Factory\MinifyAssetsServiceFactory',
+            'MelisSiteTranslationService' => 'MelisFront\Service\Factory\MelisSiteTranslationServiceFactory',
+            'MelisSiteConfigService' => 'MelisFront\Service\Factory\MelisSiteConfigServiceFactory',
 
             'MelisFront\Listener\MelisFront404To301Listener' => 'MelisFront\Listener\Factory\MelisFront404To301ListenerFactory',
         ),
@@ -210,6 +212,10 @@ return array(
             'MelisDragDropZone' => 'MelisFront\View\Helper\Factory\MelisDragDropZoneHelperFactory',
             'MelisTag' => 'MelisFront\View\Helper\Factory\MelisTagsHelperFactory',
             'MelisLink' => 'MelisFront\View\Helper\Factory\MelisLinksHelperFactory',
+            'MelisPageLangLink' => 'MelisFront\View\Helper\Factory\MelisPageLangVersionLinkHelperFactory',
+            'MelisHomePageLink' => 'MelisFront\View\Helper\Factory\MelisHomePageLinkHelperFactory',
+            'siteTranslate' => 'MelisFront\View\Helper\Factory\MelisSiteTranslationHelperFactory',
+            'SiteConfig' => 'MelisFront\View\Helper\Factory\SiteConfigViewHelperFactory',
         ),
     ),
     'view_manager' => array(
