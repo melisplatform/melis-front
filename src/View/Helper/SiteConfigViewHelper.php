@@ -9,6 +9,7 @@
 
 namespace MelisFront\View\Helper;
 
+use MelisFront\Service\MelisSiteConfigService;
 use Zend\View\Helper\AbstractHelper;
 
 
@@ -31,8 +32,18 @@ class SiteConfigViewHelper extends AbstractHelper
      */
     public function __invoke($key, $section = null, $language = null)
     {
+        /**
+         * access the router to get the
+         * page id
+         */
+        $router = $this->serviceManager->get('router');
+        $request = $this->serviceManager->get('request');
+        $routeMatch = $router->match($request);
+        $params = $routeMatch->getParams();
+
+        /** @var MelisSiteConfigService $siteConfigSrv */
         $siteConfigSrv = $this->serviceManager->get('MelisSiteConfigService');
-        $config = $siteConfigSrv->getSiteConfigByKey($key, $section, $language);
+        $config = $siteConfigSrv->getSiteConfigByKey($key, $params['idpage'], $section, $language);
         
         return $config;
     }

@@ -21,10 +21,11 @@ class MelisSiteConfigService extends MelisEngineGeneralService
      *
      * @param $key
      * @param string $section
+     * @param int $pageId
      * @param null $language
      * @return array|string
      */
-    public function getSiteConfigByKey($key, $section = 'sites', $language = null)
+    public function getSiteConfigByKey($key, $pageId, $section = 'sites', $language = null)
     {
         try {
             if(empty($section))
@@ -35,7 +36,7 @@ class MelisSiteConfigService extends MelisEngineGeneralService
              * or from the allSites
              */
             if ($section == 'sites' || $section == 'allSites') {
-                $siteConfigData = $this->getSiteConfigByPageId($this->getPageId());
+                $siteConfigData = $this->getSiteConfigByPageId($pageId);
                 if ($section == 'sites') {
                     if (empty($language)) {
                         //return the value if the given key
@@ -43,7 +44,7 @@ class MelisSiteConfigService extends MelisEngineGeneralService
                     } else {
                         //return the given key value from its specific language
                         $langLocale = strtolower($language) . '_' . strtoupper($language);
-                        $siteConfigData = $this->getSiteConfigByPageId($this->getPageId(), $langLocale);
+                        $siteConfigData = $this->getSiteConfigByPageId($pageId, $langLocale);
                         return (isset($siteConfigData['siteConfig'][$key])) ? $siteConfigData['siteConfig'][$key] : null;
                     }
                 } else {
@@ -353,24 +354,5 @@ class MelisSiteConfigService extends MelisEngineGeneralService
         }
 
         return $siteData;
-    }
-
-    /**
-     * Function to get the current page id
-     */
-    private function getPageId(){
-        /**
-         * get the page id via the request
-         */
-        $router = $this->serviceLocator->get('router');
-        $request = $this->serviceLocator->get('request');
-        $routeMatch = $router->match($request);
-        $params = $routeMatch->getParams();
-
-        if(!empty($params['idpage'])){
-            return $params['idpage'];
-        }else{
-            return null;
-        }
     }
 }
