@@ -26,13 +26,14 @@ class MelisSiteTranslationteHelper extends AbstractHelper
      * 
      * @param string $key
      * @param int $langId
+     * @param int $siteId
      * @return string
      */
-    public function __invoke($key, $langId)
+    public function __invoke($key, $langId, $siteId)
     {
         $siteTransSrv = $this->serviceManager->get('MelisSiteTranslationService');
         
-        $str = $siteTransSrv->getText($key, $langId);
+        $str = $siteTransSrv->getText($key, $langId, $siteId);
         
         return $str;
     }

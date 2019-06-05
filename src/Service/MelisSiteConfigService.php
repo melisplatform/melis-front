@@ -79,6 +79,9 @@ class MelisSiteConfigService extends MelisEngineGeneralService
      */
     public function getSiteConfigByPageId($pageId, $langLocale = false)
     {
+        /**
+         * access the router to get the renderMode
+         */
         $router = $this->serviceLocator->get('router');
         $request = $this->serviceLocator->get('request');
         $routeMatch = $router->match($request);

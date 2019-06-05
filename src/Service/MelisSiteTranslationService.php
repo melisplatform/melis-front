@@ -267,10 +267,11 @@ class MelisSiteTranslationService extends MelisEngineGeneralService
      * Function to get the translated text by key
      *
      * @param String $translationKey
-     * @param null $langId
+     * @param int $langId
+     * @param int $siteId
      * @return mixed|null
      */
-    public function getText($translationKey, $langId = null)
+    public function getText($translationKey, $langId, $siteId)
     {
         // Event parameters prepare
         $arrayParameters = $this->makeArrayFromParameters(__METHOD__, func_get_args());
@@ -280,7 +281,7 @@ class MelisSiteTranslationService extends MelisEngineGeneralService
         $arrayParameters = $this->sendEvent('melis_site_translation_get_trans_by_key_start', $arrayParameters);
         if (!is_null($arrayParameters['langId']) && !empty($arrayParameters['langId'])) {
             //get the data
-            $getAllTransMsg = $this->getSiteTranslation($arrayParameters['translationKey'], $arrayParameters['langId']);
+            $getAllTransMsg = $this->getSiteTranslation($arrayParameters['translationKey'], $arrayParameters['langId'], $arrayParameters['siteId']);
             if ($getAllTransMsg) {
                 //get the translated text
                 foreach ($getAllTransMsg as $transKey => $transMsg) {
@@ -302,8 +303,7 @@ class MelisSiteTranslationService extends MelisEngineGeneralService
      *
      * @param null $langId
      * @param null $translationKey - if provided, it will get only the translated text by key
-     * @param null $siteId
-     * @param null $isFromModal
+     * @param int $siteId
      * @return array
      */
     public function getSiteTranslation($translationKey = null, $langId = null, $siteId = 0)
@@ -313,26 +313,6 @@ class MelisSiteTranslationService extends MelisEngineGeneralService
             $arrayParameters = $this->makeArrayFromParameters(__METHOD__, func_get_args());
             // Sending service start event
             $arrayParameters = $this->sendEvent('melis_site_translation_get_trans_list_start', $arrayParameters);
-            /**
-             * get site id from page in the the route
-             */
-            if (empty($arrayParameters['siteId'])) {
-                $router = $this->serviceLocator->get('router');
-                $request = $this->serviceLocator->get('request');
-
-                $routeMatch = $router->match($request);
-                $params = $routeMatch->getParams();
-                if (!empty($params)) {
-                    if (isset($params['idpage'])) {
-                        $pageId = $params['idpage'];
-                        $pageTreeService = $this->getServiceLocator()->get('MelisEngineTree');
-                        $site = $pageTreeService->getSiteByPageId($pageId);
-                        if (!empty($site)) {
-                            $arrayParameters['siteId'] = $site->site_id;
-                        }
-                    }
-                }
-            }
             /**
              * Get the translation from the database
              */
