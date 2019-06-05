@@ -17,7 +17,7 @@ class MelisSiteConfigService extends MelisEngineGeneralService
 {
 
     /**
-     * Function to the site config by key
+     * Function to get the site config by key
      *
      * @param $key
      * @param string $section
@@ -26,31 +26,29 @@ class MelisSiteConfigService extends MelisEngineGeneralService
      */
     public function getSiteConfigByKey($key, $section = 'sites', $language = null)
     {
-        /**
-         * get the page id via the request
-         */
-        $router = $this->serviceLocator->get('router');
-        $request = $this->serviceLocator->get('request');
-        $routeMatch = $router->match($request);
-        $params = $routeMatch->getParams();
-
         try {
-
             if(empty($section))
                 $section = 'sites';
 
+            /**
+             * check if we are getting it from the current site config
+             * or from the allSites
+             */
             if ($section == 'sites' || $section == 'allSites') {
-                $siteConfigData = $this->getSiteConfigByPageId($params['idpage']);
+                $siteConfigData = $this->getSiteConfigByPageId($this->getPageId());
                 if ($section == 'sites') {
                     if (empty($language)) {
+                        //return the value if the given key
                         return (isset($siteConfigData['siteConfig'][$key])) ? $siteConfigData['siteConfig'][$key] : null;
                     } else {
+                        //return the given key value from its specific language
                         $langLocale = strtolower($language) . '_' . strtoupper($language);
-                        $siteConfigData = $this->getSiteConfigByPageId($params['idpage'], $langLocale);
+                        $siteConfigData = $this->getSiteConfigByPageId($this->getPageId(), $langLocale);
                         return (isset($siteConfigData['siteConfig'][$key])) ? $siteConfigData['siteConfig'][$key] : null;
                     }
                 } else {
-                    return $siteConfigData['allSites'][$key];
+                    //return given key value from allSites
+                    return (isset($siteConfigData['allSites'][$key])) ? $siteConfigData['allSites'][$key] : null;
                 }
             } else {
                 $siteConfigData = $this->getSiteConfig($section);
@@ -79,13 +77,11 @@ class MelisSiteConfigService extends MelisEngineGeneralService
      */
     public function getSiteConfigByPageId($pageId, $langLocale = false)
     {
-        /**
-         * access the router to get the renderMode
-         */
-        $router = $this->serviceLocator->get('router');
-        $request = $this->serviceLocator->get('request');
-        $routeMatch = $router->match($request);
-        $params = $routeMatch->getParams();
+
+        // Event parameters prepare
+        $arrayParameters = $this->makeArrayFromParameters(__METHOD__, func_get_args());
+        // Sending service start event
+        $arrayParameters = $this->sendEvent('meliscms_site_tool_get_site_config_by_page_id_start', $arrayParameters);
 
         $siteConfig = array(
             'siteConfig' => array(),
@@ -97,7 +93,7 @@ class MelisSiteConfigService extends MelisEngineGeneralService
              * get the language if the page
              */
             $cmsPageLang = $this->getServiceLocator()->get('MelisEngineTablePageLang');
-            $pageLang = $cmsPageLang->getEntryByField('plang_page_id', $pageId)->current();
+            $pageLang = $cmsPageLang->getEntryByField('plang_page_id', $arrayParameters['pageId'])->current();
             /**
              * get page lang locale
              */
@@ -111,22 +107,32 @@ class MelisSiteConfigService extends MelisEngineGeneralService
              * get the site config
              */
             if(!empty($langData)){
-                $siteData = $this->getSiteDataByPageId($pageId);
+                $siteData = $this->getSiteDataByPageId($arrayParameters['pageId']);
                 if(!empty($siteData)){
                     $siteId = $siteData->site_id;
                     $siteName = $siteData->site_name;
+
                     /**
-                     * get the site config
+                     * First, let's try fetch the site config
+                     * using the config service that has been updated
+                     * through a listener
                      */
-                    if($params['renderMode'] == 'melis') {
-                        $config = $this->getSiteConfig($siteId, true);
-                    }else{
-                        $config = $this->serviceLocator->get('config');
-                    }
+                    $config = $this->serviceLocator->get('config');
+
                     if(!empty($config['site'])){
+                        /**
+                         * If site config not in the list,
+                         * let's try again to get it directly from the
+                         * db and file
+                         */
+                        if(empty($config['site'][$siteName][$siteId])) {
+                            $config = $this->getSiteConfig($siteId, true);
+                        }
+
                         if(!empty($config['site'][$siteName][$siteId])) {
-                            if ($langLocale) {
-                                $siteConfig['siteConfig'] = $config['site'][$siteName][$siteId][$langLocale];
+
+                            if ($arrayParameters['langLocale']) {
+                                $siteConfig['siteConfig'] = $config['site'][$siteName][$siteId][$arrayParameters['langLocale']];
                             } else {
                                 $siteConfig['siteConfig'] = $config['site'][$siteName][$siteId][$langData->lang_cms_locale];
                             }
@@ -137,7 +143,10 @@ class MelisSiteConfigService extends MelisEngineGeneralService
                 }
             }
         }
-        return $siteConfig;
+        $arrayParameters['result'] = $siteConfig;
+        $arrayParameters = $this->sendEvent('meliscms_site_tool_get_site_config_by_page_id_end', $arrayParameters);
+
+        return $arrayParameters['result'];
     }
 
     /**
@@ -344,5 +353,24 @@ class MelisSiteConfigService extends MelisEngineGeneralService
         }
 
         return $siteData;
+    }
+
+    /**
+     * Function to get the current page id
+     */
+    private function getPageId(){
+        /**
+         * get the page id via the request
+         */
+        $router = $this->serviceLocator->get('router');
+        $request = $this->serviceLocator->get('request');
+        $routeMatch = $router->match($request);
+        $params = $routeMatch->getParams();
+
+        if(!empty($params['idpage'])){
+            return $params['idpage'];
+        }else{
+            return null;
+        }
     }
 }
