@@ -147,7 +147,7 @@ MelisFront provides many services to be used in other modules:
 Provides services to retrieve the config for your sites.  
 File: `/melis-front/src/Service/MelisSiteConfigService.php`  
 
-    `MelisFrontSiteConfigListener` was made to automatically override the regular config with the site config by retrieving the config for your site from the config file merged with the one on the database.
+    `MelisFrontSiteConfigListener` used to update the site's config on the regular config service by merging the config from the file and the one on the database.
     * `getSiteConfigByKey(key, section = 'sites', language = null)`  
     This function retrieves a specific config by key.  
     
@@ -194,7 +194,28 @@ File: `/melis-front/src/Service/MelisSiteConfigService.php`
         // Returns the key from the allSites section of the config
         // Language for the page is not applied but still used to get the site id and name to map for the config
         ```
-        
+* MelisSiteTranslationService  
+  Provides services to translate text and list all site translations  
+  File: `/melis-front/src/Service/MelisSiteTranslationService.php`  
+  
+  * `getText(translationKey, langId, siteId)`  .
+    
+    Parameter      | Type    |Description
+    ------------   |-------- | -----
+    translationKey | String  | Key of the translation.
+    langId         | Int     | An identifier on which language to get the translation
+    siteId         | Int     | An identifier on which site to get the translation
+    
+    To call the service.
+    ```
+    $melisSiteTranslationSvc = $this->getServiceLocator()->get('MelisSiteTranslationService');
+    ```
+    To translate a certain text. You need to specify the translation key along with the lang id and site id.
+    ```
+    $test = $melisSiteTranslationService->getText('key', 1, 1);
+    // Retrieves the translation for the language id 1 and site id 1.
+    ```
+  
 ### View Helpers
 
 Melis Front comes with 3 View Helpers:  
@@ -259,6 +280,26 @@ Function: `SiteConfig(key, sectiom = 'sites', language = null)`
     ```
     $config = $this->SiteConfig('key', 'allSites');
     // Returns the key from the allSites section of the config
+    ```
+* MelisSiteTranslation  
+This helper is used to get a specific translation for a site.  
+File: `/melis-front/src/View/Helper/MelisSiteTranslationHelper.php`  
+Function: `getText(translationkey, langId, siteId)`  
+
+    Parameter      | Type    |Description
+    ------------   |-------- | -----
+    translationKey | String  | Key of the translation.
+    langId         | Int     | An identifier on which language to get the translation
+    siteId         | Int     | An identifier on which site to get the translation
+    
+    To call the helper method.
+    ```
+    $this->SiteTranslation('translationKey', 'langId', 'siteId');
+    ```
+    To translate a certain text. You need to specify the translation key along with the lang id and site id.
+    ```
+    $text = $this->SiteTranslation('key', 1, 1);
+    // Retrieves the translation for the language id 1 and site id 1.
     ```
 
 ### Special URLs
