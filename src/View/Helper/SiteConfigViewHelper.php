@@ -16,6 +16,7 @@ use Zend\View\Helper\AbstractHelper;
 class SiteConfigViewHelper extends AbstractHelper
 {
     public $serviceManager;
+    public $request;
     
     public function __construct($sm)
     {
@@ -32,6 +33,8 @@ class SiteConfigViewHelper extends AbstractHelper
      */
     public function __invoke($key, $section = null, $language = null)
     {
+        $pageId = null;
+
         /**
          * access the router to get the
          * page id
@@ -41,9 +44,17 @@ class SiteConfigViewHelper extends AbstractHelper
         $routeMatch = $router->match($request);
         $params = $routeMatch->getParams();
 
+        /**
+         * check page id
+         */
+        if(!empty($params['idpage'])){
+            $pageId = $params['idpage'];
+        }else{
+            $pageId = (!empty($_GET['pageId'])) ? $_GET['pageId'] : $_POST['pageId'];
+        }
         /** @var MelisSiteConfigService $siteConfigSrv */
         $siteConfigSrv = $this->serviceManager->get('MelisSiteConfigService');
-        $config = $siteConfigSrv->getSiteConfigByKey($key, $params['idpage'], $section, $language);
+        $config = $siteConfigSrv->getSiteConfigByKey($key, $pageId, $section, $language);
         
         return $config;
     }
