@@ -152,13 +152,13 @@ File: `/melis-front/src/Service/MelisSiteConfigService.php`
     This function retrieves a specific config by key.  
     
         Parameter    | Type       |Description
-        ------------ |:----------:|:---:
+        ------------ |:----------:|-----
         key          | String     |Key of the config.
         pageId       | Int        |Used determine the site id, name, and language on where to get the config
         section      | String/Int |The section on where to get the config or site Id
         language     | String     |Language on which to get the config  
         
-        First, call the service. 
+        To call the service. 
         ```
         $siteConfigSvc = $this->getServiceLocator()->get('MelisSiteConfigService');
         ```
@@ -227,8 +227,8 @@ This helper is used to get a specific config for a site.
 File: `/melis-front/src/View/Helper/MelisDragDropZoneHelper.php`  
 Function: SiteConfig(key, sectiom = 'sites', language = null)
 
-    Parameter    | Type       |Description
-    ------------ |:----------:|:---:
+    Parameter    | Type       | Description
+    ------------ |:----------:| ------
     key          | String     |Key of the config.
     section      | String/Int |The section on where to get the config or site Id
     language     | String     |Language on which to get the config  
