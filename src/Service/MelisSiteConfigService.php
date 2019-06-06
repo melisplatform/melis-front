@@ -99,6 +99,7 @@ class MelisSiteConfigService extends MelisEngineGeneralService
              * get page lang locale
              */
             $langData = array();
+            $langId = null;
             if (!empty($pageLang)) {
                 $langCmsTbl = $this->getServiceLocator()->get('MelisEngineTableCmsLang');
                 $langData = $langCmsTbl->getEntryById($pageLang->plang_lang_id)->current();
@@ -134,10 +135,16 @@ class MelisSiteConfigService extends MelisEngineGeneralService
 
                             if ($arrayParameters['langLocale']) {
                                 $siteConfig['siteConfig'] = $config['site'][$siteName][$siteId][$arrayParameters['langLocale']];
+                                $siteLangData = $langCmsTbl->getEntryByField('lang_cms_locale', $arrayParameters['langLocale'])->current();
+                                if(!empty($siteLangData)){
+                                    $langId = $siteLangData->lang_cms_id;
+                                }
                             } else {
                                 $siteConfig['siteConfig'] = $config['site'][$siteName][$siteId][$langData->lang_cms_locale];
+                                $langId = $langData->lang_cms_id;
                             }
                             $siteConfig['siteConfig']['site_id'] = $siteId;
+                            $siteConfig['siteConfig']['default_lang_id'] = $langId;
                             $siteConfig['allSites'] = $config['site'][$siteName]['allSites'];
                         }
                     }
