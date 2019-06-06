@@ -154,7 +154,7 @@ File: `/melis-front/src/Service/MelisSiteConfigService.php`
         Parameter    | Type       |Description
         ------------ |:----------:|-----
         key          | String     |Key of the config.
-        pageId       | Int        |Used determine the site id, name, and language on where to get the config
+        pageId       | Int        |Used determine the site id, name, and language and on where to get the config
         section      | String/Int |The section on where to get the config or site Id
         language     | String     |Language on which to get the config  
         
