@@ -210,7 +210,7 @@ File: `/melis-front/src/Service/MelisSiteConfigService.php`
     ```
     $melisSiteTranslationSvc = $this->getServiceLocator()->get('MelisSiteTranslationService');
     ```
-    To translate a certain text. You need to specify the translation key along with the lang id and site id.
+    To get a particular translation, You need to specify the translation key along with the lang id and site id.
     ```
     $test = $melisSiteTranslationService->getText('key', 1, 1);
     // Retrieves the translation for the language id 1 and site id 1.
@@ -296,7 +296,7 @@ Function: `getText(translationkey, langId, siteId)`
     ```
     $this->SiteTranslation('translationKey', 'langId', 'siteId');
     ```
-    To translate a certain text. You need to specify the translation key along with the lang id and site id.
+    To get a particular translation, You need to specify the translation key along with the lang id and site id.
     ```
     $text = $this->SiteTranslation('key', 1, 1);
     // Retrieves the translation for the language id 1 and site id 1.
