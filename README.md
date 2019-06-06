@@ -148,7 +148,7 @@ Provides services to retrieve the config for your sites.
 File: `/melis-front/src/Service/MelisSiteConfigService.php`  
 
     `MelisFrontSiteConfigListener` was made to automatically override the regular config with the site config by retrieving the config for your site from the config file merged with the one on the database.
-    * getSiteConfigByKey(key, section = 'sites', language = null)  
+    * `getSiteConfigByKey(key, section = 'sites', language = null)`  
     This function retrieves a specific config by key.  
     
         Parameter    | Type       |Description
@@ -225,7 +225,7 @@ echo $this->MelisDragDropZone($this->idPage, "dragdropzone_zone_1");
 * MelisSiteConfigHelper  
 This helper is used to get a specific config for a site.  
 File: `/melis-front/src/View/Helper/MelisDragDropZoneHelper.php`  
-Function: SiteConfig(key, sectiom = 'sites', language = null)
+Function: `SiteConfig(key, sectiom = 'sites', language = null)`
 
     Parameter    | Type       | Description
     ------------ |:----------:| ------
