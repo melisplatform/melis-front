@@ -13,6 +13,7 @@ use MelisFront\Listener\MelisFrontHomePageIdOverrideListener;
 use MelisFront\Listener\MelisFrontHomePageRoutingListener;
 use MelisFront\Listener\MelisFrontMinifiedAssetsCheckerListener;
 use MelisFront\Listener\MelisFrontMiniTemplateConfigListener;
+use MelisFront\Listener\MelisFrontPluginLangSessionUpdateListener;
 use MelisFront\Listener\MelisFrontSiteConfigListener;
 use Zend\ModuleManager\ModuleEvent;
 use Zend\Mvc\ModuleRouteListener;
@@ -58,9 +59,6 @@ class Module
 
         $isBackOffice = false;
 
-        $container = new Container('melisplugins');
-        $container['melis-plugins-lang-id'] = 1;
-        $container['melis-plugins-lang-locale'] = 'en_EN';
 
         if (!empty($routeMatch))
         {
@@ -80,6 +78,7 @@ class Module
 
 
         }
+
 
         // do not load listeners if working on back-office
         if(!$isBackOffice)
@@ -118,7 +117,11 @@ class Module
             $eventManager->attach(new MelisFrontHomePageRoutingListener());
 
             $eventManager->attach(new MelisFrontHomePageIdOverrideListener());
+
+        }else{
+            $eventManager->attach(new MelisFrontPluginLangSessionUpdateListener());
         }
+
     }
 
     public function createTranslations($e, $routeMatch)
