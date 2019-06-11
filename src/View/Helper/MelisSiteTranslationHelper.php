@@ -12,7 +12,7 @@ namespace MelisFront\View\Helper;
 use Zend\View\Helper\AbstractHelper;
 
 
-class MelisSiteTranslationteHelper extends AbstractHelper
+class MelisSiteTranslationHelper extends AbstractHelper
 {
     public $serviceManager;
     

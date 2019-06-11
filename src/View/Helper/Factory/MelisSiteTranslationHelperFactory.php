@@ -9,7 +9,7 @@
 
 namespace MelisFront\View\Helper\Factory;
 
-use MelisFront\View\Helper\MelisSiteTranslationteHelper;
+use MelisFront\View\Helper\MelisSiteTranslationHelper;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\ServiceManager\FactoryInterface;
 
@@ -18,7 +18,7 @@ class MelisSiteTranslationHelperFactory implements FactoryInterface
 	public function createService(ServiceLocatorInterface $sl)
 	{
 		$serviceLoc = $sl->getServiceLocator();
-		$helper = new MelisSiteTranslationteHelper($serviceLoc);
+		$helper = new MelisSiteTranslationHelper($serviceLoc);
 	    
 	    return $helper;
 	}

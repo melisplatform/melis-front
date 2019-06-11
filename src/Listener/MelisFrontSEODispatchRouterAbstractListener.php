@@ -244,4 +244,67 @@ abstract class MelisFrontSEODispatchRouterAbstractListener
             }
         }
     }
+    public function createTranslationsOfLoadedModules($e, $siteId,$locale = "en_EN")
+    {
+        // get serivce manager
+        $sm = $e->getApplication()->getServiceManager();
+        // get site table
+        $siteTable = $sm->get('MelisEngineTableSite');
+        // get site data
+        $site = $siteTable->getEntryById($siteId)->current();
+        // module name
+        $moduleName = $site->site_name;
+        // melis asset manager module service
+        $moduleSvc  = $sm->get('MelisAssetManagerModulesService');
+        // get module path
+        $modulePath = $moduleSvc->getModulePath($moduleName);
+        // module load file
+        $moduleLoadFile = "module.load.php";
+        if (file_exists($modulePath . "/config/$moduleLoadFile")) {
+            // include file
+            $modules = include $modulePath . "/config/$moduleLoadFile" ?? [];
+            // set excluded modules
+            $excludedModules = [
+                'MelisAssetManager',
+                $moduleName
+            ];
+            // remove exluded modules
+            $modules = array_diff($modules,$excludedModules);
+            if (! empty($modules)) {
+                // get translator
+                $translator = $sm->get('translator');
+                $translationType = array(
+                    'interface',
+                    'install',
+                    'setup',
+                    'forms',
+                    'form'
+                );
+                // module config translation type
+                $translationList = array();
+                if(file_exists($_SERVER['DOCUMENT_ROOT'].'/../module/MelisModuleConfig/config/translation.list.php')){
+                    $translationList = include 'module/MelisModuleConfig/config/translation.list.php';
+                }
+                $moduleTranslationsPath = [];
+                // create translations for every module that is loaded
+                foreach ($modules as $idx => $module) {
+                    $modulePath = $moduleSvc->getModulePath($module);
+                    foreach ($translationType as $type) {
+                        $localeFile = "$locale.$type.php";
+                        if (file_exists($modulePath. "/language/$localeFile")) {
+                            // seperate into onther variable to avoid multiple loops
+                            $moduleTranslationsPath[] = $modulePath. "/language/$localeFile";
+                        }
+                    }
+                }
+                if (! empty($moduleTranslationsPath)) {
+                    foreach ($moduleTranslationsPath as $idx => $modulepath) {
+                        $translator->addTranslationFile('phparray', $modulepath);
+                    }
+                }
+
+            }
+        }
+
+    }
 }
