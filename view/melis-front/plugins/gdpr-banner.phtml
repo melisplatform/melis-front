@@ -1,0 +1,17 @@
+<div id="<?= $this->pluginId; ?>" class="melis-gdpr-banner-container" data-is-bo="<?= $this->isInBackOffice ? 'true' : 'false'; ?>">
+    <div class="row">
+        <div class="col-md-12 col-xs-12">
+            <div class="melis-gdpr-banner-content">
+                <?= $this->bannerContents; ?>
+                <a class="btn btn-success melis-gdpr-banner-agree"
+                   data-plugin-id="<?= $this->pluginId; ?>"
+                   data-is-bo="<?= $this->isInBackOffice ? 'true' : 'false'; ?>">
+                    <?= $this->labels['agree']; ?>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+<?php if ($this->isInBackOffice): ?>
+    <pre class="melis-gdpr-banner-loaded"><?= $this->labels['pluginLoaded']; ?></pre>
+<?php endif; ?>

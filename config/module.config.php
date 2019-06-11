@@ -176,6 +176,8 @@ return array(
             'MelisFrontHead' => 'MelisFront\Service\Factory\MelisFrontHeadServiceFactory',
             'MelisFrontNavigation' => 'MelisFront\Navigation\Factory\MelisFrontNavigationFactory',
             'MinifyAssets' => 'MelisFront\Service\Factory\MinifyAssetsServiceFactory',
+            'MelisSiteTranslationService' => 'MelisFront\Service\Factory\MelisSiteTranslationServiceFactory',
+            'MelisSiteConfigService' => 'MelisFront\Service\Factory\MelisSiteConfigServiceFactory',
 
             'MelisFront\Listener\MelisFront404To301Listener' => 'MelisFront\Listener\Factory\MelisFront404To301ListenerFactory',
         ),
@@ -202,6 +204,7 @@ return array(
             'MelisFrontSearchResultsPlugin' => 'MelisFront\Controller\Plugin\MelisFrontSearchResultsPlugin',
             'MelisFrontBlockSectionPlugin' => 'MelisFront\Controller\Plugin\MelisFrontBlockSectionPlugin',
             'MiniTemplatePlugin' => 'MelisFront\Controller\Plugin\MiniTemplatePlugin',
+            'MelisFrontGdprBannerPlugin' => 'MelisFront\Controller\Plugin\MelisFrontGdprBannerPlugin',
         )
     ),
     'view_helpers' => array(
@@ -209,6 +212,10 @@ return array(
             'MelisDragDropZone' => 'MelisFront\View\Helper\Factory\MelisDragDropZoneHelperFactory',
             'MelisTag' => 'MelisFront\View\Helper\Factory\MelisTagsHelperFactory',
             'MelisLink' => 'MelisFront\View\Helper\Factory\MelisLinksHelperFactory',
+            'MelisPageLangLink' => 'MelisFront\View\Helper\Factory\MelisPageLangVersionLinkHelperFactory',
+            'MelisHomePageLink' => 'MelisFront\View\Helper\Factory\MelisHomePageLinkHelperFactory',
+            'siteTranslate' => 'MelisFront\View\Helper\Factory\MelisSiteTranslationHelperFactory',
+            'SiteConfig' => 'MelisFront\View\Helper\Factory\SiteConfigViewHelperFactory',
         ),
     ),
     'view_manager' => array(
@@ -237,6 +244,8 @@ return array(
             'MelisFront/list-paginator'                  => __DIR__ . '/../view/melis-front/plugins/list-paginator.phtml',
             'MelisFront/block-section'                   => __DIR__ . '/../view/melis-front/plugins/block-section.phtml',
             'MelisFront/block-section-container'         => __DIR__ . '/../view/melis-front/plugins/block-section-container.phtml',
+            'MelisFront/gdpr-banner'                     => __DIR__ . '/../view/melis-front/plugins/gdpr-banner.phtml',
+            'MelisFront/modal-template-form'             => __DIR__ . '/../view/melis-front/plugins/modal-template-form.phtml',
 
             //Mini Template plugins
             'MiniTemplate/Content'                      =>  __DIR__ . '/../view/melis-front/plugins/mini-template-default.phtml',

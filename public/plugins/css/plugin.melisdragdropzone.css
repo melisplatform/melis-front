@@ -88,7 +88,7 @@
 /*.melis-dragdropzone.highlight:before,*/
 .melis-dragdropzone.no-content:before,
 .melis-dragdropzone.no-content.highlight:before {
-    content: "Drag plugin here!";
+    content: attr(data-after);
     position: absolute;
     top: 49%;
     transform: translateY(145%);
