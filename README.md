@@ -218,7 +218,7 @@ File: `/melis-front/src/Service/MelisSiteConfigService.php`
   
 ### View Helpers
 
-Melis Front comes with 3 View Helpers:  
+Melis Front View Helpers:  
 
 * MelisTagsHelper: When called it will create an editable zone in the template of the page.  
 The tag must take 3 parameters: the id of page, its own id (unique) and a default text that will be displayed (used when no text has been filled into the zone, so that something is displayed and the template still looks like a template).  
