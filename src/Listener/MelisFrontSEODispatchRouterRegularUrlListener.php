@@ -188,13 +188,15 @@ class MelisFrontSEODispatchRouterRegularUrlListener
                        unset($routingResult['301']);
                        unset($routingResult['404']);
                        $datasPage = $routingResult['datasPage'];
-                       
+
                        if (!empty($datasPage->getMelisTemplate()))
                        {
                            // Setting the template and creating translations and session for the site module
                            $e->getViewModel()->setTemplate($datasPage->getMelisTemplate()->tpl_zf2_website_folder . '/' . $datasTemplate->tpl_zf2_layout);
                            $this->createTranslations($e, $datasPage->getMelisTemplate()->tpl_zf2_website_folder,
                                                      $datasPage->getMelisPageTree()->lang_cms_locale);
+                            // create translations for loaded modules
+                           $this->createTranslationsOfLoadedModules($e,$datasTemplate->tpl_site_id,$pageTree->lang_cms_locale);
                            $this->initSession($datasPage->getMelisTemplate()->tpl_zf2_website_folder);
                        }
                        
