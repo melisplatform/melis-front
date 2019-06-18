@@ -88,6 +88,9 @@ class MelisFrontSearchResultsPlugin extends MelisTemplatingPlugin
 
         $moduleDirectory = '';
         $searchModulePath = self::SEARCH_PATH_MELIS_SITES;
+
+        $newModuleName = $moduleName;
+
         if (!is_null($moduleName)) {
             /**
              * Folder names inside vendor/melisplatform is in lowercase-delimited-by-hyphens
@@ -100,10 +103,12 @@ class MelisFrontSearchResultsPlugin extends MelisTemplatingPlugin
             if (is_dir($_SERVER['DOCUMENT_ROOT'] . self::MELIS_SITES . $moduleName)) {
                 /** Module is located inside MelisSites folder. Ex. $moduleName = "MelisDemoCms" */
                 $moduleDirectory = $_SERVER['DOCUMENT_ROOT'] . self::MELIS_SITES . $moduleName;
+                $newModuleName = $moduleName;
             } elseif (is_dir($_SERVER['DOCUMENT_ROOT'] . self::VENDOR . $vendorSiteName)) {
                 /** Module is located inside Vendor folder. Ex. $moduleName = "melis-demo-cms" */
                 $moduleDirectory = $_SERVER['DOCUMENT_ROOT'] . self::VENDOR . $vendorSiteName;
                 $searchModulePath = self::SEARCH_PATH_VENDOR;
+                $newModuleName = $vendorSiteName;
             } else {
                 $siteDirExist = false;
             }
@@ -137,7 +142,7 @@ class MelisFrontSearchResultsPlugin extends MelisTemplatingPlugin
                         // Get the current server protocol
                         $protocol = stripos($_SERVER['SERVER_PROTOCOL'], 'https') === true ? 'https://' : 'http://';
 
-                        $indexUrl = $protocol . $_SERVER['SERVER_NAME'] . '/melissearchindex/module/' . $moduleName . '/pageid/' . $mainPageId . '/exclude-pageid/0';
+                        $indexUrl = $protocol . $_SERVER['SERVER_NAME'] . '/melissearchindex/module/' . $newModuleName . '/pageid/' . $mainPageId . '/exclude-pageid/0';
                     } else {
                         $moduleDirWritable = false;
                     }
@@ -149,7 +154,7 @@ class MelisFrontSearchResultsPlugin extends MelisTemplatingPlugin
         if ($isIndex && $keyword) {
             /** @var \MelisEngine\Service\MelisSearchService $searchSvc */
             $searchSvc = $this->getServiceLocator()->get('MelisSearch');
-            $searchresults = $searchSvc->search($keyword, $moduleName, true, $searchModulePath);
+            $searchresults = $searchSvc->search($keyword, $newModuleName, true, $searchModulePath);
             if (!empty($searchresults)) {
                 $searchresults = str_replace('&', '&amp;', $searchresults);
 
