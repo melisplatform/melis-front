@@ -14,6 +14,7 @@ use MelisFront\Listener\MelisFrontHomePageRoutingListener;
 use MelisFront\Listener\MelisFrontMinifiedAssetsCheckerListener;
 use MelisFront\Listener\MelisFrontMiniTemplateConfigListener;
 use MelisFront\Listener\MelisFrontPluginLangSessionUpdateListener;
+use MelisFront\Listener\MelisFrontSEORouteListener;
 use MelisFront\Listener\MelisFrontSiteConfigListener;
 use Zend\ModuleManager\ModuleEvent;
 use Zend\Mvc\ModuleRouteListener;
@@ -46,6 +47,11 @@ class Module
          * get the site config (merged with db)
          */
         $events->attach(ModuleEvent::EVENT_LOAD_MODULES_POST, array(new MelisFrontSiteConfigListener, 'onLoadModulesPost'));
+        /**
+         *  - Catching PAGE SEO URLs to update Router
+         *    > create SEO route first so the modules can have a route match in creating translations
+         */
+        $events->attach(ModuleEvent::EVENT_LOAD_MODULES_POST, array(new MelisFrontSEORouteListener(), 'onLoadModulesPost'));
     }
 
     public function onBootstrap(MvcEvent $e)
@@ -84,7 +90,7 @@ class Module
         if(!$isBackOffice)
         {
             // Catching PAGE SEO URLs to update Router
-            $eventManager->attach(new MelisFrontSEOReformatToRoutePageUrlListener());
+            //$eventManager->attach(new MelisFrontSEOReformatToRoutePageUrlListener()); -> refer init() Listener: MelisFrontSEORouteListener, issueL no translations of melis-modules
 
             // Adding css linked to the page
             $eventManager->attach(new MelisFrontAttachCssListener());
