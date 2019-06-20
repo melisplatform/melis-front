@@ -17,7 +17,7 @@ window.MelisGdprBanner = (function () {
      * @param options
      */
     function setCookie(name, value, options = {}) {
-        let defaultOptions = {
+        var defaultOptions = {
             path: '/',
             expires: new Date(MAX_COOKIE_AGE).toUTCString()
         };
@@ -29,8 +29,10 @@ window.MelisGdprBanner = (function () {
          *
          * src: https://zellwk.com/blog/looping-through-js-objects/
          */
-        options = Object.entries({...defaultOptions, ...options});
-        let updatedCookie = encodeURIComponent(name) + "=" + encodeURIComponent(value);
+        options = Object.entries({...defaultOptions,...options
+    })
+        ;
+        var updatedCookie = encodeURIComponent(name) + "=" + encodeURIComponent(value);
         for (const [key, value] of options) {
             updatedCookie += "; " + key + "=" + value;
         }
@@ -39,7 +41,7 @@ window.MelisGdprBanner = (function () {
     }
 
     function getCookie(name) {
-        let matches = document.cookie.match(new RegExp(
+        var matches = document.cookie.match(new RegExp(
             "(?:^|; )" + name.replace("/([\.$?*|{}\(\)\[\]\\\/\+^])/g", '\\$1') + "=([^;]*)"
         ));
         return matches ? decodeURIComponent(matches[1]) : undefined;
@@ -57,14 +59,14 @@ window.MelisGdprBanner = (function () {
         deleteCookie: deleteCookie,
         /** You can always set a different cookie name & banner container*/
         cookieName: BANNER_COOKIE_NAME,
-        container: BANNER_CONTAINER,
+        container: BANNER_CONTAINER
     };
 })();
 
 function melisGdprBanner_init(pluginId) {
     if (pluginId === undefined) {
         /** pluginId is initially "undefined" when the plugin is loaded in front */
-        let bannerContainer = $("." + MelisGdprBanner.container);
+        var bannerContainer = $("." + MelisGdprBanner.container);
         if (bannerContainer.length > 0) {
             bannerContainer.each(function () {
                 pluginId = this.id;
@@ -73,10 +75,10 @@ function melisGdprBanner_init(pluginId) {
     }
 
     if (typeof pluginId !== 'undefined' && pluginId) {
-        let banner = $("#" + pluginId);
-        let isBackOffice = banner.data("isBo");
+        var banner = $("#" + pluginId);
+        var isBackOffice = banner.data("isBo");
 
-        let bannerCookie = MelisGdprBanner.getCookie(MelisGdprBanner.cookieName);
+        var bannerCookie = MelisGdprBanner.getCookie(MelisGdprBanner.cookieName);
         if (isBackOffice === false && bannerCookie === undefined) {
             /** User's first visit: Declare banner cookie for this site */
             MelisGdprBanner.setCookie(MelisGdprBanner.cookieName, "true");
@@ -91,11 +93,11 @@ function melisGdprBanner_init(pluginId) {
 }
 
 $(document).ready(function () {
-    let $body = $("body");
+    var $body = $("body");
 
     /** Agree to the site's cookie policy */
     $body.on('click', '.melis-gdpr-banner-agree', function () {
-        let banner = $body.find(this).data();
+        var banner = $body.find(this).data();
 
         if (typeof banner.isBo !== 'undefined' && banner.isBo === false) {
             MelisGdprBanner.setCookie(MelisGdprBanner.cookieName, false);
