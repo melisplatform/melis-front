@@ -55,20 +55,22 @@ class MelisFrontSiteConfigListener
                      */
                     $siteTable = $serviceManager->get('MelisEngineTableSite');
                     $siteData = $siteTable->getEntryById($siteId)->current();
-                    /**
-                     * get the site config
-                     */
-                    $siteConfig = $serviceManager->get('MelisSiteConfigService');
-                    $siteConfig = $siteConfig->getSiteConfig($siteId, true);
-                    $config = ArrayUtils::merge($config, $siteConfig, true);
-                    /**
-                     * remove other site data from the config
-                     */
-                    if (!empty($config['site'][$siteData->site_name])) {
-                        foreach ($config['site'][$siteData->site_name] as $id => $site) {
-                            if ($id != $siteId && $id != 'allSites') {
-                                if (is_int($id))
-                                    unset($config['site'][$siteData->site_name][$id]);
+                    if(!empty($siteData)) {
+                        /**
+                         * get the site config
+                         */
+                        $siteConfig = $serviceManager->get('MelisSiteConfigService');
+                        $siteConfig = $siteConfig->getSiteConfig($siteId, true);
+                        $config = ArrayUtils::merge($config, $siteConfig, true);
+                        /**
+                         * remove other site data from the config
+                         */
+                        if (!empty($config['site'][$siteData->site_name])) {
+                            foreach ($config['site'][$siteData->site_name] as $id => $site) {
+                                if ($id != $siteId && $id != 'allSites') {
+                                    if (is_int($id))
+                                        unset($config['site'][$siteData->site_name][$id]);
+                                }
                             }
                         }
                     }
