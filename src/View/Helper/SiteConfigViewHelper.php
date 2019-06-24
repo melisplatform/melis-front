@@ -45,20 +45,22 @@ class SiteConfigViewHelper extends AbstractHelper
         $routeMatch = $router->match($request);
         $params = $routeMatch->getParams();
 
-        $pageId = $params['idpage'];
+        $pageId = null;
+
+        if (!empty($params['idpage']))
+            $pageId = $params['idpage'];
         //if page id is still empty, try to get it on the post
-        if(empty($pageId)){
-            $postVal = $request->getPost();
+        $postVal = $request->getPost();
+        if(empty($pageId) && !empty($postVal['idpage'])){
             $pageId = $postVal['idpage'];
         }
-
         /**
          * if page id is still empty,
          * try to get it from the global $_GET & _POST variable
          * with pageId as variable name
          */
         if(empty($pageId)){
-            $pageId = (!empty($_GET['pageId'])) ? $_GET['pageId'] : $_POST['pageId'];
+            $pageId = (!empty($_GET['pageId'])) ? $_GET['pageId'] : !empty($_POST['pageId']) ? $_POST['pageId'] : null;
         }
 
         /** @var MelisSiteConfigService $siteConfigSrv */
