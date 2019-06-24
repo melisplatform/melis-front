@@ -10,6 +10,7 @@
 namespace MelisFront\View\Helper;
 
 use MelisFront\Service\MelisSiteConfigService;
+use Zend\Http\Request;
 use Zend\View\Helper\AbstractHelper;
 
 
@@ -44,14 +45,22 @@ class SiteConfigViewHelper extends AbstractHelper
         $routeMatch = $router->match($request);
         $params = $routeMatch->getParams();
 
+        $pageId = $params['idpage'];
+        //if page id is still empty, try to get it on the post
+        if(empty($pageId)){
+            $postVal = $request->getPost();
+            $pageId = $postVal['idpage'];
+        }
+
         /**
-         * check page id
+         * if page id is still empty,
+         * try to get it from the global $_GET & _POST variable
+         * with pageId as variable name
          */
-        if(!empty($params['idpage'])){
-            $pageId = $params['idpage'];
-        }else{
+        if(empty($pageId)){
             $pageId = (!empty($_GET['pageId'])) ? $_GET['pageId'] : $_POST['pageId'];
         }
+
         /** @var MelisSiteConfigService $siteConfigSrv */
         $siteConfigSrv = $this->serviceManager->get('MelisSiteConfigService');
         $config = $siteConfigSrv->getSiteConfigByKey($key, $pageId, $section, $language);
