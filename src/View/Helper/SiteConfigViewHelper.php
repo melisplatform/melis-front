@@ -54,13 +54,19 @@ class SiteConfigViewHelper extends AbstractHelper
         if(empty($pageId) && !empty($postVal['idpage'])){
             $pageId = $postVal['idpage'];
         }
+        if(empty($pageId) && !empty($postVal['pageId'])){
+            $pageId = $postVal['pageId'];
+        }
         /**
          * if page id is still empty,
          * try to get it from the global $_GET & _POST variable
          * with pageId as variable name
          */
         if(empty($pageId)){
-            $pageId = (!empty($_GET['pageId'])) ? $_GET['pageId'] : !empty($_POST['pageId']) ? $_POST['pageId'] : null;
+            if(!empty($_GET['pageId']))
+                $pageId = $_GET['pageId'];
+            if(!empty($_POST['pageId']) && empty($pageId))
+                $pageId = $_POST['pageId'];
         }
 
         /** @var MelisSiteConfigService $siteConfigSrv */
