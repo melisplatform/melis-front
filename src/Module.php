@@ -187,7 +187,10 @@ class Module
 
             $sm = $e->getApplication()->getServiceManager();
             $translator = $sm->get('translator');
-            $translator->addTranslationFile('phparray', $transPath);
+            if (file_exists($transPath)){
+                $translator->addTranslationFile('phparray', $transPath);
+            }
+
         }
     }
 
