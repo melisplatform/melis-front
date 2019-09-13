@@ -14,10 +14,10 @@ use Zend\Session\Container;
 use Zend\View\Model\ViewModel;
 
 /**
- * Creates a GDPR Banner
+ * Creates a list from folder
  *
  */
-class MelisGdprBannerHelper extends AbstractHelper
+class MelisListFromFolderHelper extends AbstractHelper
 {
 	public $serviceManager;
 	public $renderMode;
@@ -31,14 +31,14 @@ class MelisGdprBannerHelper extends AbstractHelper
 	}
 	
 	
-	public function __invoke($bannerParameters)
+	public function __invoke($parameters)
 	{
-        $melisGdprBannerPlugin = $this->serviceManager->get('ControllerPluginManager')->get('MelisFrontGdprBannerPlugin');
-	    $melisGdprBannerPluginView = $melisGdprBannerPlugin->render($bannerParameters);
+        $listPlugin = $this->serviceManager->get('ControllerPluginManager')->get('MelisFrontShowListFromFolderPlugin');
+	    $listPluginView = $listPlugin->render($parameters);
 	    
 	    $viewRender = $this->serviceManager->get('ViewRenderer');
-	    $bannerHtml = $viewRender->render($melisGdprBannerPluginView);
+	    $listHtml = $viewRender->render($listPluginView);
 
-		return $bannerHtml;
+		return $listHtml;
 	}
 }
