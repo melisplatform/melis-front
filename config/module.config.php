@@ -217,6 +217,7 @@ return array(
             'MelisHomePageLink' => 'MelisFront\View\Helper\Factory\MelisHomePageLinkHelperFactory',
             'siteTranslate' => 'MelisFront\View\Helper\Factory\MelisSiteTranslationHelperFactory',
             'SiteConfig' => 'MelisFront\View\Helper\Factory\SiteConfigViewHelperFactory',
+            'MelisGdprBannerPlugin' => 'MelisFront\View\Helper\Factory\MelisGdprBannerHelperFactory',
         ),
     ),
     'view_manager' => array(
