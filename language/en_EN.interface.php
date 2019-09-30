@@ -89,7 +89,10 @@ return array(
     'tr_front_minify_assets_error_occurred' => 'An error occurred while compiling assets.',
     'tr_front_minify_assets_success' => 'Compiling assets successful.',
 
+    // Plugins
+    'tr_front_plugin_common_tab_properties' => 'Properties',
+    'tr_front_plugin_common_no_param' => 'No parameters to edit',
+
     //DragDrop Zone
     'tr_front_drag_drop_zone_label' => 'DRAG PLUGIN HERE!',
 );
-?>
