@@ -130,21 +130,18 @@ class MelisFrontSEODispatchRouterRegularUrlListener
                            $container = new Container('melisplugins');
                            $container['melis-plugins-lang-id'] = $datasPage->getMelisPageTree()->plang_lang_id;
                            $container['melis-plugins-lang-locale'] = $datasPage->getMelisPageTree()->lang_cms_locale;
-                            
-                           if (!empty($datasTemplate))
-                           {
-                               if ($datasTemplate->tpl_type == 'ZF2')
-                               {
+
+                           if (!empty($datasTemplate)) {
+                               if ($datasTemplate->tpl_type == 'ZF2' || $datasTemplate->tpl_type == 'TWG') {
                                    $routingResult['module'] = $datasTemplate->tpl_zf2_website_folder;
                                    $routingResult['controller'] = $datasTemplate->tpl_zf2_website_folder . '\Controller\\' . $datasTemplate->tpl_zf2_controller;
                                    $routingResult['action'] = $datasTemplate->tpl_zf2_action;
-                               }
-                               else
-                                   if ($datasTemplate->tpl_type == 'PHP')
-                                   {
+                               } else {
+                                   if ($datasTemplate->tpl_type == 'PHP') {
                                        $routingResult['action'] = 'phprenderer';
                                        $routingResult['renderType'] = 'melis_php';
                                    }
+                               }
                            }
                        }
                    }else{
@@ -211,7 +208,7 @@ class MelisFrontSEODispatchRouterRegularUrlListener
                     $moduleTemplate = $datasTemplate;
                     if (! empty($datasTemplate)) {
                         $templateType   = $datasTemplate->tpl_type;
-                        if ($templateType == 'ZF2') {
+                        if ($templateType == 'ZF2' || $templateType == 'TWG') {
                             $siteModule  = $datasTemplate->tpl_zf2_website_folder;
                             $controller  = $datasTemplate->tpl_zf2_controller;
                             $action      = $datasTemplate->tpl_zf2_action;

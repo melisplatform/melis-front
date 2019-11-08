@@ -211,11 +211,14 @@ return array(
         'factories' => array(
             'MelisDragDropZone' => 'MelisFront\View\Helper\Factory\MelisDragDropZoneHelperFactory',
             'MelisTag' => 'MelisFront\View\Helper\Factory\MelisTagsHelperFactory',
+            'MelisMenu' => 'MelisFront\View\Helper\Factory\MelisMenuHelperFactory',
             'MelisLink' => 'MelisFront\View\Helper\Factory\MelisLinksHelperFactory',
             'MelisPageLangLink' => 'MelisFront\View\Helper\Factory\MelisPageLangVersionLinkHelperFactory',
             'MelisHomePageLink' => 'MelisFront\View\Helper\Factory\MelisHomePageLinkHelperFactory',
             'siteTranslate' => 'MelisFront\View\Helper\Factory\MelisSiteTranslationHelperFactory',
             'SiteConfig' => 'MelisFront\View\Helper\Factory\SiteConfigViewHelperFactory',
+            'MelisGdprBannerPlugin' => 'MelisFront\View\Helper\Factory\MelisGdprBannerHelperFactory',
+            'MelisListFromFolderPlugin' => 'MelisFront\View\Helper\Factory\MelisListFromFolderHelperFactory',
         ),
     ),
     'view_manager' => array(
