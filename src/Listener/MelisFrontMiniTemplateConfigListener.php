@@ -128,7 +128,7 @@ class MelisFrontMiniTemplateConfigListener
                             //remove the file extension from the filename
                             $name = pathinfo($v, PATHINFO_FILENAME);
                             //create a plugin post name
-                            $postName = $k . strtolower($name).'_'. strtolower($siteName);
+                            $postName = strtolower($name).'_'. strtolower($siteName);
                             //prepare the content of the mini template
                             $content = $path . DIRECTORY_SEPARATOR . $v;
                             //set the default layout for the plugin based on mini template
