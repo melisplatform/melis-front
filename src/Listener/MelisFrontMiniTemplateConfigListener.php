@@ -158,11 +158,17 @@ class MelisFrontMiniTemplateConfigListener
                              * - Set as thumbnail if image file is any of the available thumbnails
                              * - Otherwise, leave it blank (it will be up to the view file to set a default image)
                              */
-                            $img = '';
+                            $img = null;
                             foreach ($imgExtensions as $ext) {
                                 if (in_array("$name.$ext", $availableThumbnails)) {
                                     $img = self::DS . $siteName . self::DS . self::MINI_TEMPLATES_FOLDER . self::DS;
                                     $img .= "$name.$ext";
+                                    break;
+                                }
+                                // thumbnail filename in UPPER CASE
+                                if (in_array(strtoupper($name) . ".$ext", $availableThumbnails)) {
+                                    $img = self::DS . $siteName . self::DS . self::MINI_TEMPLATES_FOLDER . self::DS;
+                                    $img .= strtoupper($name) . ".$ext";
                                     break;
                                 }
                             }
