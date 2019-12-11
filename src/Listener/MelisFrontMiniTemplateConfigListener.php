@@ -22,6 +22,9 @@ use Zend\Stdlib\ArrayUtils;
  */
 class MelisFrontMiniTemplateConfigListener
 {
+    private const MINI_TEMPLATES_FOLDER = 'miniTemplatesTinyMce';
+    private const DS = DIRECTORY_SEPARATOR;
+
     public function onLoadModulesPost(ModuleEvent $e)
     {
         /** @var ServiceManager $serviceManager */
@@ -110,14 +113,27 @@ class MelisFrontMiniTemplateConfigListener
      */
     public function prepareMiniTemplateConfig($miniTplPath)
     {
+        $imgExtensions = ['jpg', 'JPG', 'jpeg', 'JPEG', 'png', 'PNG', 'gif', 'GIF'];
         $pluginsFormat = array();
-        foreach($miniTplPath as $siteName => $path) {
+
+        foreach ($miniTplPath as $siteName => $path) {
+
             if (file_exists($path) && is_dir($path)) {
+
                 //get the plugin config format
                 $pluginsConfig = include __DIR__ . '/../../config/plugins/MiniTemplatePlugin.config.php';
                 if (!empty($pluginsConfig)) {
+
                     //get all the mini template
-                    $tpls = array_diff(scandir($path), array('..', '.'));
+                    $tpls = array_map(function ($tpl) {
+                        return basename($tpl);
+                    }, glob("$path/*.{phtml,PHTML,php,PHP,html,HTML}", GLOB_BRACE));
+
+                    // Get the list of images inside the mini templates folder
+                    $availableThumbnails = array_map(function ($tpl) {
+                        return basename($tpl);
+                    }, glob("$path/*.{" . implode(',', $imgExtensions) . "}", GLOB_BRACE));
+
                     if (!empty($tpls)) {
                         //set the site name as sub category title
                         $pluginsConfig['melis']['subcategory']['title'] = $siteName;
@@ -128,13 +144,30 @@ class MelisFrontMiniTemplateConfigListener
                             //remove the file extension from the filename
                             $name = pathinfo($v, PATHINFO_FILENAME);
                             //create a plugin post name
-                            $postName = $k . strtolower($name).'_'. strtolower($siteName);
+                            $postName = $k . strtolower($name) . '_' . strtolower($siteName);
                             //prepare the content of the mini template
                             $content = $path . DIRECTORY_SEPARATOR . $v;
                             //set the default layout for the plugin based on mini template
                             $pluginsConfig['front']['default'] = file_get_contents($content);
                             //set the plugin name using the template name
                             $pluginsConfig['melis']['name'] = $name;
+
+                            /**
+                             * Set plugin thumbmail
+                             * - check MiniTemplate folder for a possible image file with the same name as the plugin
+                             * - Set as thumbnail if image file is any of the available thumbnails
+                             * - Otherwise, leave it blank (it will be up to the view file to set a default image)
+                             */
+                            $img = '';
+                            foreach ($imgExtensions as $ext) {
+                                if (in_array("$name.$ext", $availableThumbnails)) {
+                                    $img = self::DS . $siteName . self::DS . self::MINI_TEMPLATES_FOLDER . self::DS;
+                                    $img .= "$name.$ext";
+                                    break;
+                                }
+                            }
+                            $pluginsConfig['melis']['thumbnail'] = $img;
+
                             //include the mini tpl plugin config
                             $pluginsFormat['plugins']['MelisMiniTemplate']['plugins']['MiniTemplatePlugin_' . $postName] = $pluginsConfig;
                         }
@@ -142,6 +175,7 @@ class MelisFrontMiniTemplateConfigListener
                 }
             }
         }
+
         return $pluginsFormat;
     }
 
