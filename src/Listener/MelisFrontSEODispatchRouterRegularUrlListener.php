@@ -111,7 +111,8 @@ class MelisFrontSEODispatchRouterRegularUrlListener
                            $routingResult['301_type'] = 'seoURL';
                    
                        // No SEO, then try regular Page Url
-                       if ($routingResult['301'] == null)
+                       if ($routingResult['301'] == null &&
+                           (empty($routingResult['norewrite']) || !$routingResult['norewrite']))
                        {
                            $routingResult['301'] = $this->redirectPageMelisURL($e, $idpage);
                            if ($routingResult['301'] != null)
