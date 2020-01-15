@@ -118,6 +118,10 @@ class MelisFrontMiniTemplateConfigListener
                 if (!empty($pluginsConfig)) {
                     //get all the mini template
                     $tpls = array_diff(scandir($path), array('..', '.'));
+                    foreach ($tpls as $key => $tpl){
+                        if(strpos($tpl, 'PNG') !== false) unset($tpls[$key]);
+                        if(strpos($tpl, 'png') !== false) unset($tpls[$key]);
+                    }
                     if (!empty($tpls)) {
                         //set the site name as sub category title
                         $pluginsConfig['melis']['subcategory']['title'] = $siteName;
