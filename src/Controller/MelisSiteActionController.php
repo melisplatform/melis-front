@@ -32,6 +32,7 @@ class MelisSiteActionController extends AbstractActionController
 	
 	public function onDispatch(MvcEvent $event)
 	{
+
     	$this->idPage = $this->params()->fromRoute('idpage');
 		$this->renderType = $this->params()->fromRoute('renderType');
 		if (empty($this->renderType))
@@ -79,23 +80,24 @@ class MelisSiteActionController extends AbstractActionController
             $siteLang = $melisEnginLangService->getSiteLanguage();
             $siteLangId = $siteLang['langId'];
             $siteLangLocale = $siteLang['langLocale'];
-        	
+
     		$this->layout()->setVariables(array(
-			'idPage' => $this->idPage,
-			'renderType' => $this->renderType,
-			'renderMode' => $this->renderMode,
-			'pageLangId' => $this->pageLangId,
-			'pageLangLocale' => $this->pageLangLocale,
-			'pageBreadCrumb' => $pageBreadCrumb,
-			'mainPageId' => $mainPageId,
-			'pageTemplate' => $pageTemplate,
-			'siteLangId' => $siteLangId,
-			'siteLangLocale' => $siteLangLocale,
+                'idPage' => $this->idPage,
+                'renderType' => $this->renderType,
+                'renderMode' => $this->renderMode,
+                'pageLangId' => $this->pageLangId,
+                'pageLangLocale' => $this->pageLangLocale,
+                'pageBreadCrumb' => $pageBreadCrumb,
+                'mainPageId' => $mainPageId,
+                'pageTemplate' => $pageTemplate,
+                'siteLangId' => $siteLangId,
+                'siteLangLocale' => $siteLangLocale,
+                'preview'    => $this->params()->fromRoute('preview')
     		));
     
     		$this->oMelisPage = $datasPage;
     	}
-    	
+
         return parent::onDispatch($event);
     }
 
