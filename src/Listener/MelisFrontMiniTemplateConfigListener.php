@@ -110,6 +110,8 @@ class MelisFrontMiniTemplateConfigListener
      */
     public function prepareMiniTemplateConfig($miniTplPath)
     {
+        $image_ext = ['PNG', 'png', 'JPG', 'jpg', 'JPEG', 'jpeg'];
+        $tplImgList = [];
         $pluginsFormat = array();
         foreach($miniTplPath as $siteName => $path) {
             if (file_exists($path) && is_dir($path)) {
@@ -118,10 +120,21 @@ class MelisFrontMiniTemplateConfigListener
                 if (!empty($pluginsConfig)) {
                     //get all the mini template
                     $tpls = array_diff(scandir($path), array('..', '.'));
+                    /**
+                     * Remove all the images
+                     */
                     foreach ($tpls as $key => $tpl){
-                        if(strpos($tpl, 'PNG') !== false) unset($tpls[$key]);
-                        if(strpos($tpl, 'png') !== false) unset($tpls[$key]);
+                        foreach($image_ext as $ext){
+                            //if image found, store the image path with the template name as the key
+                            if(strpos($tpl, $ext) !== false) {
+                                $fName = pathinfo($tpl, PATHINFO_FILENAME);
+                                $tplImgList[$fName] = '/'.$siteName.'/miniTemplatesTinyMce/'.$fName.'.'.$ext;
+                                //remove the image
+                                unset($tpls[$key]);
+                            }
+                        }
                     }
+
                     if (!empty($tpls)) {
                         //set the site name as sub category title
                         $pluginsConfig['melis']['subcategory']['title'] = $siteName;
@@ -139,6 +152,8 @@ class MelisFrontMiniTemplateConfigListener
                             $pluginsConfig['front']['default'] = file_get_contents($content);
                             //set the plugin name using the template name
                             $pluginsConfig['melis']['name'] = $name;
+                            //apply minitemplate thumbnail
+                            $pluginsConfig['melis']['thumbnail'] = $tplImgList[$name] ?? '/MelisFront/plugins/images/default.jpg';
                             //include the mini tpl plugin config
                             $pluginsFormat['plugins']['MelisMiniTemplate']['plugins']['MiniTemplatePlugin_' . $postName] = $pluginsConfig;
                         }
