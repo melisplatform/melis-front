@@ -1,0 +1,10 @@
+.revalidation-plugin {
+    max-width: 62%;
+    margin:20px auto;
+}
+.revalidation-info {
+    max-width: 515px;
+    margin:0 auto 20px;
+    font-size:18px;
+    line-height: 33px;
+}

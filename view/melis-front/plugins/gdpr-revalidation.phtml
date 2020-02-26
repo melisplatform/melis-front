@@ -1,0 +1,16 @@
+<div class="revalidation-plugin text-center">
+    <?php if($this->isUservalid) {?>
+        <p class="revalidation-info">You subscription to our services must be revalidated according to the GDPR requirements as you have not been active for a long time. Failure to revalidate will automatically activate the suppression of your account.</p>
+        <?php
+            $this->revalidationForm->prepare();
+            echo $this->form()->openTag($this->revalidationForm);
+            echo $this->formCollection($this->revalidationForm);
+            echo $this->form()->closeTag();
+        ?>
+        <button class="btn btn-success btn-lg">Confirm</button>
+    <?php } else { ?>
+        <div class="alert alert-warning">
+            <p>This link doesn’t seem to work or is not recognized.</p>
+        </div>
+    <?php } ?>
+</div>
