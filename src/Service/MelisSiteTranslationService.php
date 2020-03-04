@@ -438,8 +438,20 @@ class MelisSiteTranslationService extends MelisEngineGeneralService
          * if langId is null or empty, get all the languages
          */
         if (is_null($arrayParameters['langId']) && empty($arrayParameters['langId'])) {
-            //get the language list
-            $langList = $langTable->fetchAll()->toArray();
+            if(!empty($arrayParameters['siteId'])) {
+                //get the site language list
+                $sitelangsTable = $this->getServiceLocator()->get('MelisEngineTableCmsSiteLangs');
+                $siteLangs = $sitelangsTable->getSiteLanguagesBySiteId($arrayParameters['siteId'])->toArray();
+                $langList = [];
+                foreach ($siteLangs as $key => $data) {
+                    $cmsLang = $langTable->getEntryById($data['slang_lang_id'])->toArray();
+                    foreach ($cmsLang as $k => $lang) {
+                        array_push($langList, $lang);
+                    }
+                }
+            }else{
+                $langList = $langTable->fetchAll()->toArray();
+            }
         } else {
             $langList = $langTable->getEntryById($arrayParameters['langId'])->toArray();
         }
