@@ -1,99 +1,98 @@
 <?php  echo $this->content; ?>
-<!-- Rendered with Melis CMS V2 - <?= date("Y-m-d H:i:s"); ?> -->
+    <!-- Rendered with Melis CMS V2 - <?= date("Y-m-d H:i:s"); ?> -->
 
-<link href="https://fonts.googleapis.com/css?family=Lato:400,700,900" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700" rel="stylesheet" type="text/css">
-<link rel="stylesheet" type="text/css" href="/MelisCore/assets/components/library/icons/fontawesome/assets/css/font-awesome.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Lato:400,700,900" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" type="text/css" href="/MelisCore/assets/components/library/icons/fontawesome/assets/css/font-awesome.min.css">
 
-<?php 
-    foreach ($this->assets['css']as $css)
-    {
-        echo '<link href="' . $css . '" media="screen" rel="stylesheet" type="text/css">' . "\n";
-    }
+<?php
+foreach ($this->assets['css']as $css)
+{
+    echo '<link href="' . $css . '" media="screen" rel="stylesheet" type="text/css">' . "\n";
+}
 ?>
 
-<script type="text/javascript" src="/MelisCore/js/library/tinymce/tinymce.min.js"></script>
-<script type="text/javascript" src="/melis/MelisCore/Language/getTranslations"></script>
-<script type="text/javascript">
-    var jQueryChecker = null;
-    var melisActivePageId = <?php echo $this->idPage ?>;
+    <script type="text/javascript" src="/MelisCore/js/library/tinymce/tinymce.min.js"></script>
+    <script type="text/javascript" src="/melis/MelisCore/Language/getTranslations"></script>
+    <script type="text/javascript">
+        var jQueryChecker = null;
+        var melisActivePageId = <?php echo $this->idPage ?>;
 
-    <?php
-    /**
-     * This JS function will check if JQuery is already added in the template
-     * currently being edited as adding a new one would destroy instances already created.
-     * If no JQuery, then we add it.
-     */
-    ?>
-    // default js
-    var scriptMap =[
-        "/MelisCore/js/tinyMCE/tinymce_cleaner.js",
-        "/MelisCore/js/tinyMCE/melis_tinymce.js",
-        "/MelisCms/js/tools/findpage.tool.js",
-        "/MelisCms/js/plugins/plugins.edition.js"
-    ];
+        <?php
+        /**
+         * This JS function will check if JQuery is already added in the template
+         * currently being edited as adding a new one would destroy instances already created.
+         * If no JQuery, then we add it.
+         */
+        ?>
+        // default js
+        var scriptMap =[
+            "/MelisCore/js/tinyMCE/tinymce_cleaner.js",
+            "/MelisCore/js/tinyMCE/melis_tinymce.js",
+            "/MelisCms/js/tools/findpage.tool.js",
+            "/MelisCms/js/plugins/plugins.edition.js",
+        ];
 
 
-    <?php
+        <?php
         // plugins js
         foreach ($this->assets['js']as $js)
         {
             echo 'scriptMap.push("'.$js.'");' . "\n";
         }
-    ?>
-    var order = 0;
-    // properly load script in order
-    function loadScriptInOrder(){
-        if(order == scriptMap.length) { return; }
-        var JSLink = scriptMap[order];
-        var JSElement = document.createElement('script');
-        JSElement.src = JSLink;
-        JSElement.onload = callback;
-        document.getElementsByTagName('body')[0].appendChild(JSElement);
+        ?>
+        var order = 0;
+        // properly load script in order
+        function loadScriptInOrder(){
+            if(order == scriptMap.length) { return; }
+            var JSLink = scriptMap[order];
+            var JSElement = document.createElement('script');
+            JSElement.src = JSLink;
+            JSElement.onload = callback;
+            document.getElementsByTagName('body')[0].appendChild(JSElement);
 
-        function callback(){
-            order++;
-            loadScriptInOrder();
-        }
-    }
-
-    function loadScript(url, callback) {
-        var body = document.getElementsByTagName('body')[0];
-        var script = document.createElement('script');
-        script.type = 'text/javascript';
-        script.src = url;
-        script.onreadystatechange = callback;
-        script.onload = callback;
-        body.appendChild(script);
-    }
-
-    (function() {
-        // check jQuery
-        if ('undefined' == typeof window.jQuery) {
-            // add jQuery
-            // moved jquery script to render-plugins-menu.phtml (cms)
-            // loadScript("/MelisCore/assets/components/library/jquery/jquery.min.js?v=v1.2.3");
-        }
-
-        // raw js disable all links
-        var anchors = document.getElementsByTagName('a');
-        for(i=0, len=anchors.length; i<len; i++) {
-            anchors[i].addEventListener('click', function(e){e.preventDefault();});
-        }
-
-        // jQuery checker if properly loaded
-        var checkjQueryExists = setInterval(function() {
-        	if(window.jQuery !== undefined) {
-                $( document ).ready(function() {
-                    $('form').submit(false);
-                    loadScriptInOrder();
-                });
-                clearInterval(checkjQueryExists);
+            function callback(){
+                order++;
+                loadScriptInOrder();
             }
-        }, 500);
-    })();
-</script>
+        }
+
+        function loadScript(url, callback) {
+            var body = document.getElementsByTagName('body')[0];
+            var script = document.createElement('script');
+            script.type = 'text/javascript';
+            script.src = url;
+            script.onreadystatechange = callback;
+            script.onload = callback;
+            body.appendChild(script);
+        }
+
+        (function() {
+            // check jQuery
+            if ('undefined' == typeof window.jQuery) {
+                // add jQuery
+                loadScript("/MelisCore/assets/components/library/jquery/jquery.min.js?v=v1.2.3");
+            }
+
+            // raw js disable all links
+            var anchors = document.getElementsByTagName('a');
+            for(i=0, len=anchors.length; i<len; i++) {
+                anchors[i].addEventListener('click', function(e){e.preventDefault();});
+            }
+
+            // jQuery checker if properly loaded
+            var checkjQueryExists = setInterval(function() {
+                if(window.jQuery !== undefined) {
+                    $( document ).ready(function() {
+                        $('form').submit(false);
+                        loadScriptInOrder();
+                    });
+                    clearInterval(checkjQueryExists);
+                }
+            }, 500);
+        })();
+    </script>
 
 <?php
-    echo $this->pluginsMenu;
+echo $this->pluginsMenu;
 ?>
