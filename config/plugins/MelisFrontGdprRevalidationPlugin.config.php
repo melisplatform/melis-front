@@ -9,7 +9,7 @@ return [
                         'template_path' => ['MelisFront/gdpr-revalidation'],
                         'id' => 'MelisFrontGdprRevalidation',
                         'site_id' => null,
-                        'module_associated' => null,
+                        'module' => null,
                         // List the files to be automatically included for the correct display of the plugin
                         // To overide a key, just add it again in your site module
                         // To delete an entry, use the keyword "disable" instead of the file path for the same key
@@ -110,11 +110,13 @@ return [
                                     ],
                                     [
                                         'spec' => [
-                                            'name' => 'module_associated',
+                                            'name' => 'module',
                                             'type' => 'MelisCoreGdprModuleSelect',
                                             'options' => [
                                                 'label' => 'Associated Module',
                                                 'tooltip' => 'The module associated to this plugin',
+                                                'empty_option' => 'tr_melis_Plugins_Choose',
+                                                'disable_inarray_validator' => true,
                                             ],
                                             'attributes' => [
                                                 'id' => 'module_associated',
@@ -156,7 +158,7 @@ return [
 //                                        'filters' => [],
                                     ],
                                     'module_associated' => [
-                                        'name' => 'module_associated',
+                                        'name' => 'module',
                                         'required' => true,
 //                                        'validators' => [
 //                                            [

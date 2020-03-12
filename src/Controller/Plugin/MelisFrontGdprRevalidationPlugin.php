@@ -10,7 +10,11 @@
 namespace MelisFront\Controller\Plugin;
 
 
+use MelisCore\Service\MelisCoreGdprAutoDeleteService;
 use MelisEngine\Controller\Plugin\MelisTemplatingPlugin;
+use MelisEngine\Service\MelisGdprAutoDeleteService;
+use MelisFront\Service\MelisSiteConfigService;
+use Zend\Db\Sql\Sql;
 use Zend\Form\Factory;
 use Zend\View\Model\ViewModel;
 
@@ -29,11 +33,11 @@ use Zend\View\Model\ViewModel;
  * Merge detects automatically from the route if rendering must be done for front or back.
  *
  * How to call this plugin without parameters:
- * $plugin = $this->MelisFrontGdprBannerPlugin();
+ * $plugin = $this->MelisFrontGdprRevalidationPlugin();
  * $pluginView = $plugin->render();
  *
  * How to call this plugin with custom parameters:
- * $plugin = $this->MelisFrontGdprBannerPlugin();
+ * $plugin = $this->MelisFrontGdprRevalidationPlugin();
  * $parameters = array(
  *      'template_path' => 'MySiteTest/cms/gdprBanner'
  * );
@@ -43,12 +47,26 @@ use Zend\View\Model\ViewModel;
  * $view->addChild($pluginView, 'gdprBanner');
  *
  * How to display in your controller's view:
- * echo $this->gdprBanner;
+ * echo $this->gdpr-revalidation;
  *
  *
  */
 class MelisFrontGdprRevalidationPlugin extends MelisTemplatingPlugin
 {
+    /**
+     * @var
+     */
+    protected $errors;
+
+    /**
+     * @var
+     */
+    protected $service;
+
+    /**
+     * MelisFrontGdprRevalidationPlugin constructor.
+     * @param array $updatesPluginConfig
+     */
     public function __construct($updatesPluginConfig = array())
     {
         parent::__construct($updatesPluginConfig);
@@ -64,17 +82,87 @@ class MelisFrontGdprRevalidationPlugin extends MelisTemplatingPlugin
     public function front()
     {
         $locale = 'en_EN';
-        $data = $this->getFormData();
+        $revalidated = false;
+        $userAlreadyRevalidated = false;
+        /** @var MelisGdprAutoDeleteService $gdprAutoDeleteService */
+        $gdprAutoDeleteService = $this->getServiceLocator()->get('MelisGdprAutoDeleteService');
+        $pluginData = $this->getFormData();
+        // request
+        $request = $this->getServiceLocator()->get('request');
+        // get user data and check if user is valid
+        $userData = $this->verifyUser($request, $pluginData);
+        //$this->queryNumberOfDaysInactive($pluginData);
+        // check the gdpr_last date if it's already validated
+//        if ($gdprAutoDeleteService->getDaysDiff(date('Y-m-d', strtotime($userData->uac_gdpr_lastdate)), date('Y-m-d')) < 0) {
+//
+//            echo "went here";
+//        }
+//        die;
+        // revalidate user
+        if ($request->isPost()) {
+            $post = get_object_vars($request->getPost());
+            // check user if check the box
+            if ($post['revalidate_account']) {
+                // update user status
+                $revalidated = $this->service->updateGdprUserStatus($request->getQuery('u'));
+            }
+        }
 
         $viewVariables = [
-            'formData'         => $data,
+            'formData'         => $pluginData,
             'revalidationForm' => $this->getRevalidationForm($this->pluginFrontConfig['forms']['gdpr_revalidation_form']),
-            'isUservalid'      => $this->isUserValid($this->getServiceLocator()->get('request'))
+            'userData'         => $userData,
+            'isRevalidated'    => $revalidated,
+            'userAlreadyRevalidated' => true,
+            'errors'           => $this->errors
         ];
 
         return $viewVariables;
     }
 
+    private function queryNumberOfDaysInactive($pluginData)
+    {
+        $table = $this->getServiceLocator()->get('MelisEngineTablePlatformIds');
+        $tableGateway = $table->getTableGateway();
+        $tableGateway->getSql()->setTable('melis_core_gdpr_delete_config');
+        $select = $tableGateway->getSql()->select()->where('mgdprc_site_id = ' . $pluginData['site_id'])->where('mgdprc_module_name = ' . $pluginData['module']);
+        $data = $tableGateway->prepareStatement($select);
+        print_r(get_class_methods($data));
+        print_r(get_class_methods($select));
+        print_r(get_class_methods($tableGateway));
+        die;
+
+        echo "ok pa";die;
+        $select->where->equalTo('mgdprc_site_id',$pluginData['site_id']);
+        $data = $tableGateway->selectWith($select);
+        print_r($data);
+
+        die;
+        $select = $sql->select('melis_core_gdpr_delete_config')
+            ->where('mgdprc_site_id = ' . $pluginData['site_id'])
+            ->where('mgdprc_module_name = ' . $pluginData['module']);
+        print_r($select);
+        die;
+        $data = $sql->prepareStatementForSqlObject($select);
+        print_r($data);
+        die;
+        print_r(get_class_methods($tableGateway));
+        die;
+        echo $tableGateway->getTable();
+        die;
+        $table->getTableGateway()->setTable('melis_core_gdpr_delete_config');
+        print_r(get_class_methods($table->getTable()));
+        die;
+        print_r(get_class_methods($table));die;
+//        $config = $this->getServiceLocator()->get('config');
+//        $adapter = new \Zend\Db\Adapter\Adapter($config['db']);
+//        $sql = new Sql($adapter);
+//        $select = $sql->select('melis_core_gdpr_delete_config')->where('mgdprc_site_id = ' . $pluginData['site_id'])->where('mgdprc_module_name = ' . $pluginData['module']);
+//        $data = $sql->prepareStatementForSqlObject($select)->execute();
+//        echo "boto";
+//        print_r($data);
+//        die;
+    }
     /**
      * create zend form
      * @param $formConfig
@@ -91,12 +179,39 @@ class MelisFrontGdprRevalidationPlugin extends MelisTemplatingPlugin
 
        return $factory->createForm($formConfig);
     }
-    private function isUserValid($request)
-    {
-        //TODO:: validate user
 
-        return false;
+    /**
+     * @param $request
+     * @param $pluginData
+     * @return mixed
+     */
+    private function verifyUser($request, $pluginData)
+    {
+        $userData = null;
+        /** @var MelisGdprAutoDeleteService $gdprAutoDeleteService */
+        $gdprAutoDeleteService = $this->getServiceLocator()->get('MelisGdprAutoDeleteService');
+        // get service class
+        $service = $gdprAutoDeleteService->getServiceClassByModule($pluginData['module']);
+        // if service class is set
+        if (!empty($service)) {
+            $service = $this->getServiceLocator()->get($service);
+            // check if method exists
+            if (in_array('getUserPerValidationKey', get_class_methods($service))) {
+                // return user data
+                $userData = $service->getUserPerValidationKey($request->getQuery('u'));
+                // set service for later uses
+                $this->service = $service;
+
+            } else {
+                $this->errors[] =  "Method getUserPerValidationKey is missing on the service class";
+            }
+        } else {
+            $this->errors[] = "Service not set";
+        }
+
+        return $userData;
     }
+
     /**
      * Returns the data to populate the form inside the modals when invoked
      * @return array|bool|null
@@ -202,6 +317,12 @@ class MelisFrontGdprRevalidationPlugin extends MelisTemplatingPlugin
             if (!empty($xml->template_path)) {
                 $configValues['template_path'] = (string)$xml->template_path;
             }
+            if (!empty($xml->site_id)) {
+                $configValues['site_id'] = (string)$xml->site_id;
+            }
+            if (!empty($xml->module_associated)) {
+                $configValues['module'] = (string)$xml->module_associated;
+            }
         }
 
         return $configValues;
@@ -214,13 +335,32 @@ class MelisFrontGdprRevalidationPlugin extends MelisTemplatingPlugin
     public function savePluginConfigToXml($parameters)
     {
         $xmlValueFormatted = '';
-
         // template_path is mendatory for all plugins
         if (!empty($parameters['template_path']))
             $xmlValueFormatted .= "\t\t" . '<template_path><![CDATA[' . $parameters['template_path'] . ']]></template_path>';
+        if (!empty($parameters['site_id']))
+            $xmlValueFormatted .= "\t\t" . '<site_id><![CDATA[' . $parameters['site_id'] . ']]></site_id>';
+        if (!empty($parameters['module']))
+            $xmlValueFormatted .= "\t\t" . '<module><![CDATA[' . $parameters['module'] . ']]></module>';
 
+        // for resizing
+        $widthDesktop = null;
+        $widthMobile   = null;
+        $widthTablet  = null;
+
+        if (! empty($parameters['melisPluginDesktopWidth'])) {
+            $widthDesktop =  " width_desktop=\"" . $parameters['melisPluginDesktopWidth'] . "\" ";
+        }
+        if (! empty($parameters['melisPluginMobileWidth'])) {
+            $widthMobile =  "width_mobile=\"" . $parameters['melisPluginMobileWidth'] . "\" ";
+        }
+        if (! empty($parameters['melisPluginTabletWidth'])) {
+            $widthTablet =  "width_tablet=\"" . $parameters['melisPluginTabletWidth'] . "\" ";
+        }
+
+        //
         // Something has been saved, let's generate an XML for DB
-        $xmlValueFormatted = "\t" . '<' . $this->pluginXmlDbKey . ' id="' . $parameters['melisPluginId'] . '">' .
+        $xmlValueFormatted = "\t" . '<' . $this->pluginXmlDbKey . ' id="' . $parameters['melisPluginId'] . '"' .$widthDesktop . $widthMobile . $widthTablet . ' >' .
             $xmlValueFormatted .
             "\t" . '</' . $this->pluginXmlDbKey . '>' . "\n";
 
