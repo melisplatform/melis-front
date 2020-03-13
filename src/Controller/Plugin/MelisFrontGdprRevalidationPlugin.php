@@ -104,6 +104,8 @@ class MelisFrontGdprRevalidationPlugin extends MelisTemplatingPlugin
             if ($post['revalidate_account']) {
                 // update user status
                 $revalidated = $this->service->updateGdprUserStatus($request->getQuery('u'));
+                // remove data in table melis_core_gdpr_delete_emails_sent
+                $this->getServiceLocator()->get('MelisGdprDeleteEmailsSentTable')->deleteByField('mgdprs_validation_key',$request->getQuery('u'));
             }
         }
 
