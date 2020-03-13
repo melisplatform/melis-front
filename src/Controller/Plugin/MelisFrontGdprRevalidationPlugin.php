@@ -84,6 +84,7 @@ class MelisFrontGdprRevalidationPlugin extends MelisTemplatingPlugin
         $locale = 'en_EN';
         $revalidated = false;
         $userAlreadyRevalidated = false;
+        $userStillActive = false;
         /** @var MelisGdprAutoDeleteService $gdprAutoDeleteService */
         $gdprAutoDeleteService = $this->getServiceLocator()->get('MelisGdprAutoDeleteService');
         $pluginData = $this->getFormData();
@@ -91,13 +92,11 @@ class MelisFrontGdprRevalidationPlugin extends MelisTemplatingPlugin
         $request = $this->getServiceLocator()->get('request');
         // get user data and check if user is valid
         $userData = $this->verifyUser($request, $pluginData);
-        //$this->queryNumberOfDaysInactive($pluginData);
-        // check the gdpr_last date if it's already validated
-//        if ($gdprAutoDeleteService->getDaysDiff(date('Y-m-d', strtotime($userData->uac_gdpr_lastdate)), date('Y-m-d')) < 0) {
-//
-//            echo "went here";
-//        }
-//        die;
+        // check the gdpr_last date if it's already validated or days of inactivity is less than to the set auto delete alert email days
+        $userDaysOfInactive = $gdprAutoDeleteService->getDaysDiff(date('Y-m-d', strtotime($userData->uac_gdpr_lastdate)), date('Y-m-d'));
+        if ($userDaysOfInactive < $this->queryNumberOfDaysInactive($pluginData)) {
+            $userStillActive = true;
+        }
         // revalidate user
         if ($request->isPost()) {
             $post = get_object_vars($request->getPost());
@@ -113,7 +112,7 @@ class MelisFrontGdprRevalidationPlugin extends MelisTemplatingPlugin
             'revalidationForm' => $this->getRevalidationForm($this->pluginFrontConfig['forms']['gdpr_revalidation_form']),
             'userData'         => $userData,
             'isRevalidated'    => $revalidated,
-            'userAlreadyRevalidated' => true,
+            'userStillActive'  => $userStillActive,
             'errors'           => $this->errors
         ];
 
@@ -122,46 +121,18 @@ class MelisFrontGdprRevalidationPlugin extends MelisTemplatingPlugin
 
     private function queryNumberOfDaysInactive($pluginData)
     {
+        // get a table
         $table = $this->getServiceLocator()->get('MelisEngineTablePlatformIds');
+        // get table gateway
         $tableGateway = $table->getTableGateway();
+        // set table
         $tableGateway->getSql()->setTable('melis_core_gdpr_delete_config');
-        $select = $tableGateway->getSql()->select()->where('mgdprc_site_id = ' . $pluginData['site_id'])->where('mgdprc_module_name = ' . $pluginData['module']);
-        $data = $tableGateway->prepareStatement($select);
-        print_r(get_class_methods($data));
-        print_r(get_class_methods($select));
-        print_r(get_class_methods($tableGateway));
-        die;
+        // query to table
+        $select = $tableGateway->getSql()->select()->where('mgdprc_site_id = ' . $pluginData['site_id'])->where('mgdprc_module_name = "' . $pluginData['module'] . '"');
+        // execute and get data
+        $data = $tableGateway->getSql()->prepareStatementForSqlObject($select)->execute()->current();
 
-        echo "ok pa";die;
-        $select->where->equalTo('mgdprc_site_id',$pluginData['site_id']);
-        $data = $tableGateway->selectWith($select);
-        print_r($data);
-
-        die;
-        $select = $sql->select('melis_core_gdpr_delete_config')
-            ->where('mgdprc_site_id = ' . $pluginData['site_id'])
-            ->where('mgdprc_module_name = ' . $pluginData['module']);
-        print_r($select);
-        die;
-        $data = $sql->prepareStatementForSqlObject($select);
-        print_r($data);
-        die;
-        print_r(get_class_methods($tableGateway));
-        die;
-        echo $tableGateway->getTable();
-        die;
-        $table->getTableGateway()->setTable('melis_core_gdpr_delete_config');
-        print_r(get_class_methods($table->getTable()));
-        die;
-        print_r(get_class_methods($table));die;
-//        $config = $this->getServiceLocator()->get('config');
-//        $adapter = new \Zend\Db\Adapter\Adapter($config['db']);
-//        $sql = new Sql($adapter);
-//        $select = $sql->select('melis_core_gdpr_delete_config')->where('mgdprc_site_id = ' . $pluginData['site_id'])->where('mgdprc_module_name = ' . $pluginData['module']);
-//        $data = $sql->prepareStatementForSqlObject($select)->execute();
-//        echo "boto";
-//        print_r($data);
-//        die;
+        return $data['mgdprc_alert_email_days'];
     }
     /**
      * create zend form
