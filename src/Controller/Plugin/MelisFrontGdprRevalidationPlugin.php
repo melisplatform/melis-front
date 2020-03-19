@@ -98,14 +98,14 @@ class MelisFrontGdprRevalidationPlugin extends MelisTemplatingPlugin
             $userStillActive = true;
         }
         // revalidate user
-        if ($request->isPost()) {
+        if ($request->isPost() && $userStillActive) {
             $post = get_object_vars($request->getPost());
             // check user if check the box
             if ($post['revalidate_account']) {
-                // update user status
+                // update user status by the services from modules
                 $revalidated = $this->service->updateGdprUserStatus($request->getQuery('u'));
-                // remove data in table melis_core_gdpr_delete_emails_sent
-                $this->getServiceLocator()->get('MelisGdprDeleteEmailsSentTable')->deleteByField('mgdprs_validation_key',$request->getQuery('u'));
+                // remove entry after revalidation
+                $this->removeUserEntryOnDeleteSentEmail($request->getQuery('u'));
             }
         }
 
@@ -121,6 +121,10 @@ class MelisFrontGdprRevalidationPlugin extends MelisTemplatingPlugin
         return $viewVariables;
     }
 
+    /**
+     * @param $pluginData
+     * @return mixed
+     */
     private function queryNumberOfDaysInactive($pluginData)
     {
         // get a table
@@ -136,6 +140,16 @@ class MelisFrontGdprRevalidationPlugin extends MelisTemplatingPlugin
 
         return $data['mgdprc_alert_email_days'];
     }
+
+    /**
+     * remove data entry in table melis_core_gdpr_delete_emails_sent
+     * @param $validationKey
+     */
+    private function removeUserEntryOnDeleteSentEmail($validationKey)
+    {
+        return $this->getServiceLocator()->get('MelisGdprDeleteEmailsSentTable')->deleteByField('mgdprs_validation_key', $validationKey);
+    }
+
     /**
      * create zend form
      * @param $formConfig
