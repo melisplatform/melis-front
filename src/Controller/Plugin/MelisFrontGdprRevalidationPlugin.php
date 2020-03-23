@@ -83,7 +83,6 @@ class MelisFrontGdprRevalidationPlugin extends MelisTemplatingPlugin
     {
         $locale = 'en_EN';
         $revalidated = false;
-        $userAlreadyRevalidated = false;
         $userStillActive = false;
         /** @var MelisGdprAutoDeleteService $gdprAutoDeleteService */
         $gdprAutoDeleteService = $this->getServiceLocator()->get('MelisGdprAutoDeleteService');
@@ -98,7 +97,7 @@ class MelisFrontGdprRevalidationPlugin extends MelisTemplatingPlugin
             $userStillActive = true;
         }
         // revalidate user
-        if ($request->isPost() && $userStillActive) {
+        if ($request->isPost() && !$userStillActive) {
             $post = get_object_vars($request->getPost());
             // check user if check the box
             if ($post['revalidate_account']) {
