@@ -15,7 +15,6 @@
     border: 1px dashed #de7d79;
     border-radius: 4px;
     bottom: -25px;
-    width: inherit;
 }
 
 .melis-dragdropzone:after {
