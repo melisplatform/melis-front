@@ -91,22 +91,25 @@ class MelisFrontGdprRevalidationPlugin extends MelisTemplatingPlugin
         $request = $this->getServiceLocator()->get('request');
         // get user data and check if user is valid
         $userData = $this->verifyUser($request, $pluginData);
-        // check the gdpr_last date if it's already validated or days of inactivity is less than to the set auto delete alert email days
-        $userDaysOfInactive = $gdprAutoDeleteService->getDaysDiff(date('Y-m-d', strtotime($userData->uac_gdpr_lastdate)), date('Y-m-d'));
-        if ($userDaysOfInactive < $this->queryNumberOfDaysInactive($pluginData)) {
-            $userStillActive = true;
-        }
-        // revalidate user
-        if ($request->isPost() && !$userStillActive) {
-            $post = get_object_vars($request->getPost());
-            // check user if check the box
-            if ($post['revalidate_account']) {
-                // update user status by the services from modules
-                $revalidated = $this->service->updateGdprUserStatus($request->getQuery('u'));
-                // remove entry after revalidation
-                $this->removeUserEntryOnDeleteSentEmail($request->getQuery('u'));
+        if (! empty($userData)) {
+            // check the gdpr_last date if it's already validated or days of inactivity is less than to the set auto delete alert email days
+            $userDaysOfInactive = $gdprAutoDeleteService->getDaysDiff(date('Y-m-d', strtotime($userData->uac_gdpr_lastdate)), date('Y-m-d'));
+            if ($userDaysOfInactive < $this->queryNumberOfDaysInactive($pluginData)) {
+                $userStillActive = true;
+            }
+            // revalidate user
+            if ($request->isPost() && !$userStillActive) {
+                $post = get_object_vars($request->getPost());
+                // check user if check the box
+                if ($post['revalidate_account']) {
+                    // update user status by the services from modules
+                    $revalidated = $this->service->updateGdprUserStatus($request->getQuery('u'));
+                    // remove entry after revalidation
+                    $this->removeUserEntryOnDeleteSentEmail($request->getQuery('u'));
+                }
             }
         }
+
 
         $viewVariables = [
             'formData'         => $pluginData,
