@@ -10,9 +10,9 @@
 namespace MelisFront\Controller\Plugin;
 
 use MelisEngine\Controller\Plugin\MelisTemplatingPlugin;
-use Zend\Paginator\Adapter\ArrayAdapter;
-use Zend\Paginator\Paginator;
-use Zend\View\Model\ViewModel;
+use Laminas\Paginator\Adapter\ArrayAdapter;
+use Laminas\Paginator\Paginator;
+use Laminas\View\Model\ViewModel;
 
 /**
  * This plugin implements the business logic of the
@@ -210,7 +210,7 @@ class MelisFrontSearchResultsPlugin extends MelisTemplatingPlugin
     {
         $this->loadDbXmlToPluginConfig();
         // construct form
-        $factory = new \Zend\Form\Factory();
+        $factory = new \Laminas\Form\Factory();
         $formElements = $this->getServiceLocator()->get('FormElementManager');
         $factory->setFormElementManager($formElements);
         $formConfig = $this->pluginBackConfig['modal_form'];

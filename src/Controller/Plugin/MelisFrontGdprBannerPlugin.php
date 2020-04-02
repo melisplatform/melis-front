@@ -11,8 +11,8 @@ namespace MelisFront\Controller\Plugin;
 
 
 use MelisEngine\Controller\Plugin\MelisTemplatingPlugin;
-use Zend\Form\Factory;
-use Zend\View\Model\ViewModel;
+use Laminas\Form\Factory;
+use Laminas\View\Model\ViewModel;
 
 /**
  * This plugin implements the business logic of the

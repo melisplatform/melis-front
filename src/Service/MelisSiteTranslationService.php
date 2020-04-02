@@ -36,7 +36,7 @@ class MelisSiteTranslationService extends MelisEngineGeneralService
         // Sending service start event
         $arrayParameters = $this->sendEvent('melis_site_translation_delete_translation_start', $arrayParameters);
 
-        $db = $this->getServiceLocator()->get('Zend\Db\Adapter\Adapter');//get db adapter
+        $db = $this->getServiceLocator()->get('Laminas\Db\Adapter\Adapter');//get db adapter
         $con = $db->getDriver()->getConnection();//get db driver connection
         $con->beginTransaction();//begin transaction
         try {
@@ -131,7 +131,7 @@ class MelisSiteTranslationService extends MelisEngineGeneralService
         // Sending service start event
         $arrayParameters = $this->sendEvent('melis_site_translation_save_translation_start', $arrayParameters);
 
-        $db = $this->getServiceLocator()->get('Zend\Db\Adapter\Adapter');//get db adapter
+        $db = $this->getServiceLocator()->get('Laminas\Db\Adapter\Adapter');//get db adapter
         $con = $db->getDriver()->getConnection();//get db driver connection
         $con->beginTransaction();//begin transaction
         try {

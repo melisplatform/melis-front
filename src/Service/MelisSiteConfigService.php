@@ -11,7 +11,7 @@ namespace MelisFront\Service;
 
 use MelisEngine\Service\MelisEngineComposerService;
 use MelisEngine\Service\MelisEngineGeneralService;
-use Zend\Stdlib\ArrayUtils;
+use Laminas\Stdlib\ArrayUtils;
 
 class MelisSiteConfigService extends MelisEngineGeneralService
 {

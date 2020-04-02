@@ -9,7 +9,7 @@
 
 namespace MelisFront\View\Helper;
 
-use Zend\View\Helper\AbstractHelper;
+use Laminas\View\Helper\AbstractHelper;
 
 /**
  * This helper will generate links for a melis page

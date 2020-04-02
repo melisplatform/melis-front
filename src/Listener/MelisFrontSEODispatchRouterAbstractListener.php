@@ -9,11 +9,11 @@
 
 namespace MelisFront\Listener;
 
-use Zend\EventManager\EventManagerInterface;
-use Zend\EventManager\ListenerAggregateInterface;
-use Zend\Mvc\MvcEvent;
-use Zend\Session\Container;
-use Zend\Session\SessionManager;
+use Laminas\EventManager\EventManagerInterface;
+use Laminas\EventManager\ListenerAggregateInterface;
+use Laminas\Mvc\MvcEvent;
+use Laminas\Session\Container;
+use Laminas\Session\SessionManager;
 
 /**
  * This abstract class is used by SEO listener

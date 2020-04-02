@@ -10,8 +10,8 @@
 namespace MelisFront\Service\Factory;
 
 use MelisFront\Service\MelisSiteConfigService;
-use Zend\ServiceManager\ServiceLocatorInterface;
-use Zend\ServiceManager\FactoryInterface;
+use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\FactoryInterface;
 
 class MelisSiteConfigServiceFactory implements FactoryInterface
 {

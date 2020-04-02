@@ -9,11 +9,11 @@
 
 namespace MelisFront\Listener;
 
-use Zend\EventManager\EventManagerInterface;
-use Zend\EventManager\ListenerAggregateInterface;
-use Zend\Mvc\MvcEvent;
-use Zend\View\Model\ViewModel;
-use Zend\Json\Json;
+use Laminas\EventManager\EventManagerInterface;
+use Laminas\EventManager\ListenerAggregateInterface;
+use Laminas\Mvc\MvcEvent;
+use Laminas\View\Model\ViewModel;
+use Laminas\Json\Json;
 /**
  * This listener choose to apply or not the Melis layout for the templates shown
  * resulting in adding JS scripts for TinyMCE.

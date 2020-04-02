@@ -9,11 +9,11 @@
 
 namespace MelisFront\Navigation;
 
-use Zend\Navigation\Service\DefaultNavigationFactory;
+use Laminas\Navigation\Service\DefaultNavigationFactory;
 use Interop\Container\ContainerInterface;
-use Zend\ServiceManager\ServiceManager;
-use Zend\EventManager\EventManager;
-use Zend\EventManager\EventManagerInterface;
+use Laminas\ServiceManager\ServiceManager;
+use Laminas\EventManager\EventManager;
+use Laminas\EventManager\EventManagerInterface;
 
 /**
  * Generate zend navigation based on Melis Page System
@@ -160,7 +160,7 @@ class MelisFrontNavigation extends DefaultNavigationFactory
 	 * @param ContainerInterface $container
 	 * 
 	 * {@inheritDoc}
-	 * @see \Zend\Navigation\Service\AbstractNavigationFactory::getPages()
+	 * @see \Laminas\Navigation\Service\AbstractNavigationFactory::getPages()
 	 */
 	protected function getPages(ContainerInterface $container)
 	{

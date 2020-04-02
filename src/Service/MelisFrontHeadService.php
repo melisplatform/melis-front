@@ -9,10 +9,10 @@
 
 namespace MelisFront\Service;
 
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\ServiceLocatorAwareInterface;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 use MelisEngine\Model\MelisPage;
-use Zend\Filter\HtmlEntities;
+use Laminas\Filter\HtmlEntities;
 
 /**
  * This class updates the Meta datas description and title

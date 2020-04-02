@@ -9,8 +9,8 @@
 
 namespace MelisFront\Navigation\Factory;
 
-use Zend\ServiceManager\ServiceLocatorInterface;
-use Zend\ServiceManager\FactoryInterface;
+use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\FactoryInterface;
 use MelisFront\Navigation\MelisFrontNavigation;
 
 class MelisFrontNavigationFactory implements FactoryInterface

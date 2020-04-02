@@ -9,9 +9,9 @@
 
 namespace MelisFront\Controller;
 
-use Zend\Mvc\Controller\AbstractActionController;
-use Zend\View\Model\ViewModel;
-use Zend\View\Model\FeedModel;
+use Laminas\Mvc\Controller\AbstractActionController;
+use Laminas\View\Model\ViewModel;
+use Laminas\View\Model\FeedModel;
 
 class SpecialUrlsController extends AbstractActionController
 {

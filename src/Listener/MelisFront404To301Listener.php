@@ -9,10 +9,10 @@
 
 namespace MelisFront\Listener;
 
-use Zend\EventManager\EventManagerInterface;
-use Zend\EventManager\Event;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Laminas\EventManager\EventManagerInterface;
+use Laminas\EventManager\Event;
+use Laminas\ServiceManager\ServiceLocatorAwareInterface;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 
 use MelisFront\Listener\MelisFrontSEODispatchRouterAbstractListener;
 /**

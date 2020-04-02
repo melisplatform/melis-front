@@ -9,8 +9,8 @@
 
 namespace MelisFront\View\Helper\Factory;
 
-use Zend\ServiceManager\ServiceLocatorInterface;
-use Zend\ServiceManager\FactoryInterface;
+use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\FactoryInterface;
 use MelisFront\View\Helper\MelisDragDropZoneHelper;
 
 class MelisDragDropZoneHelperFactory implements FactoryInterface

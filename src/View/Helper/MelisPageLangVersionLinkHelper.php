@@ -10,7 +10,7 @@
 namespace MelisFront\View\Helper;
 
 use MelisEngine\Service\MelisTreeService;
-use Zend\View\Helper\AbstractHelper;
+use Laminas\View\Helper\AbstractHelper;
 
 class MelisPageLangVersionLinkHelper extends AbstractHelper
 {

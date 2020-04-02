@@ -61,7 +61,7 @@ return array(
                                     'method' => '',
                                     'action' => '',
                                 ),
-                                'hydrator'  => 'Zend\Stdlib\Hydrator\ArraySerializable',
+                                'hydrator'  => 'Laminas\Stdlib\Hydrator\ArraySerializable',
                                 'elements' => array(
                                     array(
                                         'spec' => array(
@@ -107,7 +107,7 @@ return array(
                                                 'name' => 'NotEmpty',
                                                 'options' => array(
                                                     'messages' => array(
-                                                        \Zend\Validator\NotEmpty::IS_EMPTY => 'tr_front_template_path_empty',
+                                                        \Laminas\Validator\NotEmpty::IS_EMPTY => 'tr_front_template_path_empty',
                                                     ),
                                                 ),
                                             ),
@@ -123,8 +123,8 @@ return array(
                                                 'name'    => 'Digits',
                                                 'options' => array(
                                                     'messages' => array(
-                                                        \Zend\Validator\Digits::NOT_DIGITS => 'tr_front_common_input_not_digit',
-                                                        \Zend\Validator\Digits::STRING_EMPTY => '',
+                                                        \Laminas\Validator\Digits::NOT_DIGITS => 'tr_front_common_input_not_digit',
+                                                        \Laminas\Validator\Digits::STRING_EMPTY => '',
                                                     ),
                                                 ),
                                             ),
@@ -132,7 +132,7 @@ return array(
                                                 'name' => 'NotEmpty',
                                                 'options' => array(
                                                     'messages' => array(
-                                                        \Zend\Validator\NotEmpty::IS_EMPTY => 'tr_front_common_input_empty',
+                                                        \Laminas\Validator\NotEmpty::IS_EMPTY => 'tr_front_common_input_empty',
                                                     ),
                                                 ),
                                             ),

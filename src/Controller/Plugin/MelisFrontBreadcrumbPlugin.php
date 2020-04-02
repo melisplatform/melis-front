@@ -11,8 +11,8 @@ namespace MelisFront\Controller\Plugin;
 
 use MelisEngine\Controller\Plugin\MelisTemplatingPlugin;
 use MelisFront\Navigation\MelisFrontNavigation;
-use Zend\View\Model\ViewModel;
-use Zend\Session\Container;
+use Laminas\View\Model\ViewModel;
+use Laminas\Session\Container;
 /**
  * This plugin implements the business logic of the
  * "Breadcrumb" plugin.
@@ -131,7 +131,7 @@ class MelisFrontBreadcrumbPlugin extends MelisTemplatingPlugin
     public function createOptionsForms()
     {
         // construct form
-        $factory = new \Zend\Form\Factory();
+        $factory = new \Laminas\Form\Factory();
         $formElements = $this->getServiceLocator()->get('FormElementManager');
         $factory->setFormElementManager($formElements);
         $formConfig = $this->pluginBackConfig['modal_form'];

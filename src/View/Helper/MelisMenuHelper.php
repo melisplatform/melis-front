@@ -9,9 +9,9 @@
 
 namespace MelisFront\View\Helper;
 
-use Zend\View\Helper\AbstractHelper;
-use Zend\Session\Container;
-use Zend\View\Model\ViewModel;
+use Laminas\View\Helper\AbstractHelper;
+use Laminas\Session\Container;
+use Laminas\View\Model\ViewModel;
 
 /**
  * This helper creates a menu inside the template to be used with the plugins

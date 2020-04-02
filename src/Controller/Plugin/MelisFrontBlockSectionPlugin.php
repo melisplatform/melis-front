@@ -11,8 +11,8 @@ namespace MelisFront\Controller\Plugin;
 
 use MelisEngine\Controller\Plugin\MelisTemplatingPlugin;
 use MelisFront\Navigation\MelisFrontNavigation;
-use Zend\View\Model\ViewModel;
-use Zend\Session\Container;
+use Laminas\View\Model\ViewModel;
+use Laminas\Session\Container;
 /**
  * This plugin implements the business logic of the
  * "Breadcrumb" plugin.

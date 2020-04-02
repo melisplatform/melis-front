@@ -10,8 +10,8 @@
 namespace MelisFront\View\Helper;
 
 use MelisFront\Service\MelisSiteConfigService;
-use Zend\Http\Request;
-use Zend\View\Helper\AbstractHelper;
+use Laminas\Http\Request;
+use Laminas\View\Helper\AbstractHelper;
 
 
 class SiteConfigViewHelper extends AbstractHelper

@@ -9,10 +9,10 @@
 
 namespace MelisFront\Listener;
 
-use Zend\ModuleManager\ModuleEvent;
-use Zend\Mvc\Router\Http\Segment;
-use Zend\ServiceManager\ServiceManager;
-use Zend\Stdlib\ArrayUtils;
+use Laminas\ModuleManager\ModuleEvent;
+use Laminas\Mvc\Router\Http\Segment;
+use Laminas\ServiceManager\ServiceManager;
+use Laminas\Stdlib\ArrayUtils;
 
 
 class MelisFrontSEORouteListener

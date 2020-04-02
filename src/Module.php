@@ -16,12 +16,12 @@ use MelisFront\Listener\MelisFrontMiniTemplateConfigListener;
 use MelisFront\Listener\MelisFrontPluginLangSessionUpdateListener;
 use MelisFront\Listener\MelisFrontSEORouteListener;
 use MelisFront\Listener\MelisFrontSiteConfigListener;
-use Zend\ModuleManager\ModuleEvent;
-use Zend\Mvc\ModuleRouteListener;
-use Zend\Mvc\MvcEvent;
-use Zend\ModuleManager\ModuleManager;
-use Zend\ServiceManager\ServiceManager;
-use Zend\Stdlib\ArrayUtils;
+use Laminas\ModuleManager\ModuleEvent;
+use Laminas\Mvc\ModuleRouteListener;
+use Laminas\Mvc\MvcEvent;
+use Laminas\ModuleManager\ModuleManager;
+use Laminas\ServiceManager\ServiceManager;
+use Laminas\Stdlib\ArrayUtils;
 
 use MelisFront\Listener\MelisFrontLayoutListener;
 use MelisFront\Listener\MelisFrontAttachCssListener;
@@ -32,7 +32,7 @@ use MelisFront\Listener\MelisFrontSEODispatchRouterRegularUrlListener;
 use MelisFront\Listener\MelisFront404To301Listener;
 use MelisFront\Listener\MelisFront404CatcherListener;
 use MelisFront\Listener\MelisFrontXSSParameterListener;
-use Zend\Session\Container;
+use Laminas\Session\Container;
 use MelisFront\Listener\MelisFrontPageCacheListener;
 
 class Module
@@ -211,7 +211,7 @@ class Module
     public function getAutoloaderConfig()
     {
         return [
-            'Zend\Loader\StandardAutoloader' => [
+            'Laminas\Loader\StandardAutoloader' => [
                 'namespaces' => [
                     __NAMESPACE__ => __DIR__ . '/src/' . __NAMESPACE__,
                 ],

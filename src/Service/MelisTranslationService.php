@@ -11,7 +11,7 @@ namespace MelisFront\Service;
 
 use MelisAssetManager\Service\MelisModulesService;
 use MelisEngine\Service\MelisEngineGeneralService;
-use Zend\Session\Container;
+use Laminas\Session\Container;
 
 class MelisTranslationService extends MelisEngineGeneralService
 {

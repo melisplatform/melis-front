@@ -8,7 +8,7 @@
 namespace MelisFront\Controller\Plugin;
 use MelisEngine\Controller\Plugin\MelisTemplatingPlugin;
 use MelisFront\Navigation\MelisFrontNavigation;
-use Zend\View\Model\ViewModel;
+use Laminas\View\Model\ViewModel;
 /**
  * This plugin implements the business logic of the
  * "Tag" plugin.

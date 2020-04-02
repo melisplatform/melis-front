@@ -10,8 +10,8 @@
 namespace MelisFront\View\Helper\Factory;
 
 use MelisFront\View\Helper\MelisPageLangVersionLinkHelper;
-use Zend\ServiceManager\ServiceLocatorInterface;
-use Zend\ServiceManager\FactoryInterface;
+use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\FactoryInterface;
 
 class MelisPageLangVersionLinkHelperFactory implements FactoryInterface
 {

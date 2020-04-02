@@ -9,9 +9,9 @@
 
 namespace MelisFront\Listener;
 
-use Zend\ModuleManager\ModuleEvent;
-use Zend\ServiceManager\ServiceManager;
-use Zend\Stdlib\ArrayUtils;
+use Laminas\ModuleManager\ModuleEvent;
+use Laminas\ServiceManager\ServiceManager;
+use Laminas\Stdlib\ArrayUtils;
 
 /**
  * Prepare the mini template config
