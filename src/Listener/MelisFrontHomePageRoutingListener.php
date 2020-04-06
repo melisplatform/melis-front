@@ -23,7 +23,7 @@ use Laminas\Mvc\Router\Http\Segment;
  */
 class MelisFrontHomePageRoutingListener implements ListenerAggregateInterface
 {
-    public function attach(EventManagerInterface $events)
+    public function attach(EventManagerInterface $events, $priority = 1)
     {
         $callBackHandler = $events->attach(
         	MvcEvent::EVENT_ROUTE, 

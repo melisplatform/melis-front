@@ -9,10 +9,10 @@
 
 namespace MelisFront\Service;
 
-use MelisCore\Service\MelisCoreGeneralService;
+use MelisEngine\Service\MelisEngineGeneralService;
 use MatthiasMullie\Minify;
 
-class MinifyAssetsService extends MelisCoreGeneralService
+class MinifyAssetsService extends MelisEngineGeneralService
 {
     /**
      * @param null $siteId
@@ -31,7 +31,7 @@ class MinifyAssetsService extends MelisCoreGeneralService
                  * This will compile only the assets
                  * of the specified site
                  */
-                $melisEngineTableSite = $this->getServiceLocator()->get('MelisEngineTableSite');
+                $melisEngineTableSite = $this->getServiceManager()->get('MelisEngineTableSite');
                 //get the site information by site id
                 $sites = $melisEngineTableSite->getSiteById($arrayParameters['siteId'], getenv('MELIS_PLATFORM'))->toArray();
                 if(!empty($sites)) {
@@ -120,7 +120,7 @@ class MinifyAssetsService extends MelisCoreGeneralService
      */
     public function minifySitesVendorAssets()
     {
-        $moduleSrv = $this->getServiceLocator()->get('MelisAssetManagerModulesService');
+        $moduleSrv = $this->getServiceManager()->get('MelisAssetManagerModulesService');
         $vendordModules = $moduleSrv->getVendorModules();
 
         $moduleFolders = array();
@@ -203,7 +203,7 @@ class MinifyAssetsService extends MelisCoreGeneralService
      */
     private function createBundleFile ($minifier, $fileName, $files, $sitePath, $bundleDir, $cleanCode = true)
     {
-        $translator = $this->getServiceLocator()->get('translator');
+        $translator = $this->getServiceManager()->get('translator');
         $message = '';
         $success = false;
         if (!empty($files)) {
@@ -285,7 +285,7 @@ class MinifyAssetsService extends MelisCoreGeneralService
      */
     private function getSitesVendorPath($siteName)
     {
-        $moduleSrv = $this->getServiceLocator()->get('MelisAssetManagerModulesService');
+        $moduleSrv = $this->getServiceManager()->get('MelisAssetManagerModulesService');
         return $moduleSrv->getComposerModulePath($siteName);
     }
 

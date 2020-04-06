@@ -65,7 +65,7 @@ class MelisFrontGdprBannerPlugin extends MelisTemplatingPlugin
     {
         $locale = 'en_EN';
         $data = $this->getFormData();
-        $translator = $this->getServiceLocator()->get('translator');
+        $translator = $this->getServiceManager()->get('translator');
         /**
          * Get site & language from the page id
          * @var \MelisEngine\Service\MelisPageService $pageService
@@ -74,14 +74,14 @@ class MelisFrontGdprBannerPlugin extends MelisTemplatingPlugin
         $siteId = null;
         $pageId = empty($data['pageId']) ? null : $data['pageId'];
         if (!empty($pageId)) {
-            $pageService = $this->getServiceLocator()->get('MelisEnginePage');
+            $pageService = $this->getServiceManager()->get('MelisEnginePage');
             $pageData = $pageService->getDatasPage($pageId, 'saved')->getMelisPageTree();
             if (!empty($pageData)) {
                 $langId = empty($pageData->lang_cms_id) ? $langId : $pageData->lang_cms_id;
                 $locale = empty($pageData->lang_cms_locale) ? $locale : $pageData->lang_cms_locale;
                 if (!empty($pageData->page_tpl_id)) {
                     /** @var \MelisEngine\Model\Tables\MelisTemplateTable $tplTable */
-                    $tplTable = $this->getServiceLocator()->get('MelisEngineTableTemplate');
+                    $tplTable = $this->getServiceManager()->get('MelisEngineTableTemplate');
                     $tplData = $tplTable->getEntryById($pageData->page_tpl_id)->toArray();
                     if (!empty($tplData [0]['tpl_site_id'])) {
                         $siteId = $tplData [0]['tpl_site_id'];
@@ -94,7 +94,7 @@ class MelisFrontGdprBannerPlugin extends MelisTemplatingPlugin
          * Get banner content for this site & language
          * @var \MelisEngine\Service\MelisGdprService $bannerService
          */
-        $bannerService = $this->getServiceLocator()->get('MelisGdprService');
+        $bannerService = $this->getServiceManager()->get('MelisGdprService');
         $bannerContents = $bannerService->getGdprBannerText((int)$siteId, (int)$langId)->toArray();
         if (!empty($bannerContents[0])) {
             $bannerContents = $bannerContents[0]['mcgdpr_text_value'];
@@ -123,7 +123,7 @@ class MelisFrontGdprBannerPlugin extends MelisTemplatingPlugin
     private function isInBackOffice()
     {
         $request = $this->getController()->getRequest();
-        $routeMatch = $this->getServiceLocator()->get('router')->match($request);
+        $routeMatch = $this->getServiceManager()->get('router')->match($request);
         $routeName = $routeMatch->getMatchedRouteName();
         $module = explode('/', $routeName);
 
@@ -162,17 +162,17 @@ class MelisFrontGdprBannerPlugin extends MelisTemplatingPlugin
     {
         // construct form
         $factory = new Factory();
-        $formElements = $this->getServiceLocator()->get('FormElementManager');
+        $formElements = $this->getServiceManager()->get('FormElementManager');
         $factory->setFormElementManager($formElements);
         $formConfig = $this->pluginBackConfig['modal_form'];
-        $tool = $this->getServiceLocator()->get('translator');
+        $tool = $this->getServiceManager()->get('translator');
 
         $response = [];
         $render = [];
         if (!empty($formConfig)) {
             foreach ($formConfig as $formKey => $config) {
                 $form = $factory->createForm($config);
-                $request = $this->getServiceLocator()->get('request');
+                $request = $this->getServiceManager()->get('request');
                 $parameters = $request->getQuery()->toArray();
 
                 if (!isset($parameters['validate'])) {
@@ -186,7 +186,7 @@ class MelisFrontGdprBannerPlugin extends MelisTemplatingPlugin
                         'noPropsMsg' => $tool->translate('tr_melis_cms_gdpr_banner_plugin_empty_props'),
                     ];
 
-                    $viewRender = $this->getServiceLocator()->get('ViewRenderer');
+                    $viewRender = $this->getServiceManager()->get('ViewRenderer');
                     $html = $viewRender->render($viewModelTab);
                     array_push($render, [
                             'name' => $config['tab_title'],

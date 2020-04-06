@@ -36,7 +36,7 @@ class MelisSiteTranslationService extends MelisEngineGeneralService
         // Sending service start event
         $arrayParameters = $this->sendEvent('melis_site_translation_delete_translation_start', $arrayParameters);
 
-        $db = $this->getServiceLocator()->get('Laminas\Db\Adapter\Adapter');//get db adapter
+        $db = $this->getServiceManager()->get('Laminas\Db\Adapter\Adapter');//get db adapter
         $con = $db->getDriver()->getConnection();//get db driver connection
         $con->beginTransaction();//begin transaction
         try {
@@ -66,7 +66,7 @@ class MelisSiteTranslationService extends MelisEngineGeneralService
         // Sending service start event
         $arrayParameters = $this->sendEvent('melis_site_translation_delete_translation_key_start', $arrayParameters);
 
-        $mstTable = $this->getServiceLocator()->get('MelisSiteTranslationTable');
+        $mstTable = $this->getServiceManager()->get('MelisSiteTranslationTable');
         $res = $mstTable->deleteById($arrayParameters['id']);
 
         $arrayParameters['results'] = $res;
@@ -88,7 +88,7 @@ class MelisSiteTranslationService extends MelisEngineGeneralService
         // Sending service start event
         $arrayParameters = $this->sendEvent('melis_site_translation_delete_translation_text_start', $arrayParameters);
 
-        $msttTable = $this->getServiceLocator()->get('MelisSiteTranslationTextTable');
+        $msttTable = $this->getServiceManager()->get('MelisSiteTranslationTextTable');
         $res = $msttTable->deleteById($arrayParameters['id']);
 
         $arrayParameters['results'] = $res;
@@ -108,7 +108,7 @@ class MelisSiteTranslationService extends MelisEngineGeneralService
         // Sending service start event
         $arrayParameters = $this->sendEvent('melis_site_translation_delete_translation_text_by_mst_id_start', $arrayParameters);
 
-        $msttTable = $this->getServiceLocator()->get('MelisSiteTranslationTextTable');
+        $msttTable = $this->getServiceManager()->get('MelisSiteTranslationTextTable');
         $res = $msttTable->deleteByField('mstt_mst_id', $arrayParameters['mstId']);
 
         $arrayParameters['results'] = $res;
@@ -131,7 +131,7 @@ class MelisSiteTranslationService extends MelisEngineGeneralService
         // Sending service start event
         $arrayParameters = $this->sendEvent('melis_site_translation_save_translation_start', $arrayParameters);
 
-        $db = $this->getServiceLocator()->get('Laminas\Db\Adapter\Adapter');//get db adapter
+        $db = $this->getServiceManager()->get('Laminas\Db\Adapter\Adapter');//get db adapter
         $con = $db->getDriver()->getConnection();//get db driver connection
         $con->beginTransaction();//begin transaction
         try {
@@ -207,7 +207,7 @@ class MelisSiteTranslationService extends MelisEngineGeneralService
         // Sending service start event
         $arrayParameters = $this->sendEvent('melis_site_translation_save_translation_key_start', $arrayParameters);
 
-        $mstTable = $this->getServiceLocator()->get('MelisSiteTranslationTable');
+        $mstTable = $this->getServiceManager()->get('MelisSiteTranslationTable');
 
         if (!is_null($data) && !empty($data) && sizeof($data) > 0) {
             //check whether we update or we insert the record
@@ -242,7 +242,7 @@ class MelisSiteTranslationService extends MelisEngineGeneralService
         $arrayParameters['results'] = null;
         // Sending service start event
         $arrayParameters = $this->sendEvent('melis_site_translation_save_translation_text_start', $arrayParameters);
-        $msttTable = $this->getServiceLocator()->get('MelisSiteTranslationTextTable');
+        $msttTable = $this->getServiceManager()->get('MelisSiteTranslationTextTable');
 
         if (!is_null($data) && !empty($data) && sizeof($data) > 0) {
             //check whether we update or we insert the record
@@ -367,7 +367,7 @@ class MelisSiteTranslationService extends MelisEngineGeneralService
         $arrayParameters = $this->sendEvent('melis_site_translation_get_trans_db_start', $arrayParameters);
 
         $transFromDb = array();
-        $mstTable = $this->getServiceLocator()->get('MelisSiteTranslationTable');
+        $mstTable = $this->getServiceManager()->get('MelisSiteTranslationTable');
         $translationFromDb = $mstTable->getSiteTranslation($arrayParameters['translationKey'], $arrayParameters['langId'], $arrayParameters['siteId'])->toArray();
 
         foreach ($translationFromDb as $keyDb => $valueDb) {
@@ -400,13 +400,13 @@ class MelisSiteTranslationService extends MelisEngineGeneralService
 
         $moduleFolders = array();
         if (!empty($arrayParameters['siteId'])) {
-            $siteTbl = $this->getServiceLocator()->get('MelisEngineTableSite');
+            $siteTbl = $this->getServiceManager()->get('MelisEngineTableSite');
             $siteData = $siteTbl->getEntryById($arrayParameters['siteId'])->current();
             if (!empty($siteData)) {
                 $siteName = $siteData->site_name;
 
                 //check if site is came from the vendor
-                $moduleSrv = $this->getServiceLocator()->get('MelisEngineComposer');
+                $moduleSrv = $this->getServiceManager()->get('MelisEngineComposer');
                 if(!empty($moduleSrv->getComposerModulePath($siteName))){
                     $modulePath = $moduleSrv->getComposerModulePath($siteName);
                 }else {
@@ -433,14 +433,14 @@ class MelisSiteTranslationService extends MelisEngineGeneralService
         $transFiles = array();
         $tmpTrans = array();
 
-        $langTable = $this->getServiceLocator()->get('MelisEngineTableCmsLang');
+        $langTable = $this->getServiceManager()->get('MelisEngineTableCmsLang');
         /**
          * if langId is null or empty, get all the languages
          */
         if (is_null($arrayParameters['langId']) && empty($arrayParameters['langId'])) {
             if(!empty($arrayParameters['siteId'])) {
                 //get the site language list
-                $sitelangsTable = $this->getServiceLocator()->get('MelisEngineTableCmsSiteLangs');
+                $sitelangsTable = $this->getServiceManager()->get('MelisEngineTableCmsSiteLangs');
                 $siteLangs = $sitelangsTable->getSiteLanguagesBySiteId($arrayParameters['siteId'])->toArray();
                 $langList = [];
                 foreach ($siteLangs as $key => $data) {
@@ -526,7 +526,7 @@ class MelisSiteTranslationService extends MelisEngineGeneralService
     public function getSiteTranslationsFromVendor()
     {
         /** @var MelisEngineComposerService $composerSrv */
-        $composerSrv = $this->getServiceLocator()->get('MelisEngineComposer');
+        $composerSrv = $this->getServiceManager()->get('MelisEngineComposer');
         $vendordModules = $composerSrv->getVendorModules();
 
         $moduleFolders = array();

@@ -9,8 +9,8 @@
 
 namespace MelisFront\Controller;
 
-use Laminas\Mvc\Controller\AbstractActionController;
 use Laminas\View\Model\ViewModel;
+
 class IndexController extends AbstractActionController
 {
     public function indexAction()
@@ -20,7 +20,6 @@ class IndexController extends AbstractActionController
     
     public function phprendererAction()
     { 
-		    	
     	$idPage = $this->params()->fromRoute('idpage');
     	$renderMode = $this->params()->fromRoute('renderMode');
     	$templatePath = $this->params()->fromRoute('templatePath');
@@ -32,7 +31,7 @@ class IndexController extends AbstractActionController
     	else
     		$getmode = 'published';
     	
-    	$melisPage = $this->getServiceLocator()->get('MelisEnginePage');
+    	$melisPage = $this->getServiceManager()->get('MelisEnginePage');
     	$datasPage = $melisPage->getDatasPage($idPage, $getmode);
     	
    // 	$melisRender = new MelisRender($sl);
@@ -56,7 +55,7 @@ class IndexController extends AbstractActionController
         $data    = array();
 
         if($this->request()->isPost()){
-            $melisFront = $this->getServiceLocator()->get("MelisFrontService");
+            $melisFront = $this->getServiceManager()->get("MelisFrontService");
             $data       = $melisFront->indexData();
         }
 

@@ -21,7 +21,7 @@ use Laminas\Json\Json;
  */
 class MelisFrontLayoutListener implements ListenerAggregateInterface
 {
-    public function attach(EventManagerInterface $events)
+    public function attach(EventManagerInterface $events, $priority = 1)
     {
         $callBackHandler = $events->attach(
             MvcEvent::EVENT_FINISH,

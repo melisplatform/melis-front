@@ -9,8 +9,6 @@
 
 namespace MelisFront\Controller;
 
-
-use Laminas\Mvc\Controller\AbstractActionController;
 use Laminas\View\Model\ViewModel;
 
 class MelisFrontSearchController extends AbstractActionController
@@ -37,7 +35,7 @@ class MelisFrontSearchController extends AbstractActionController
         $status = '';
 
         /** @var \MelisEngine\Service\MelisSearchService $searchIndex */
-        $searchIndex = $this->getServiceLocator()->get('MelisSearch');
+        $searchIndex = $this->getServiceManager()->get('MelisSearch');
 
         if ($moduleName && $pageId) {
             $tmpexPageIds = explode(';', $excludes);
@@ -103,7 +101,7 @@ class MelisFrontSearchController extends AbstractActionController
         $moduleName = $this->params()->fromRoute('moduleName', null);
         $status = '';
 
-        $searchIndex = $this->getServiceLocator()->get('MelisSearch');
+        $searchIndex = $this->getServiceManager()->get('MelisSearch');
 
         if ($moduleName)
             $status = $searchIndex->optimizeIndex($moduleName);

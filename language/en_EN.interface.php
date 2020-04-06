@@ -1,5 +1,12 @@
 <?php
-return array(
+/**
+ * Melis Technology (http://www.melistechnology.com)
+ *
+ * @copyright Copyright (c) 2015 Melis Technology (http://www.melistechnology.com)
+ *
+ */
+
+return [
     
     // Plugins
     'tr_meliscms_Plugins' => 'Plugins',
@@ -95,4 +102,4 @@ return array(
 
     //DragDrop Zone
     'tr_front_drag_drop_zone_label' => 'DRAG PLUGIN HERE!',
-);
+];

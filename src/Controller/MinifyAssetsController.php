@@ -9,7 +9,6 @@
 
 namespace MelisFront\Controller;
 
-use Laminas\Mvc\Controller\AbstractActionController;
 use Laminas\View\Model\JsonModel;
 
 class MinifyAssetsController extends AbstractActionController
@@ -23,7 +22,7 @@ class MinifyAssetsController extends AbstractActionController
         $request = $this->getRequest();
         $siteID = $request->getPost('siteId');
         /** @var \MelisFront\Service\MinifyAssetsService $minifyAssets */
-        $minifyAssets = $this->getServiceLocator()->get('MinifyAssets');
+        $minifyAssets = $this->getServiceManager()->get('MinifyAssets');
         $result = $minifyAssets->minifyAssets($siteID);
 
         $title = 'Compiling assets';

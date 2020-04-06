@@ -9,7 +9,6 @@
 
 namespace MelisFront\Controller;
 
-use Laminas\Mvc\Controller\AbstractActionController;
 use Laminas\View\Model\ViewModel;
 use Laminas\View\Model\FeedModel;
 
@@ -21,14 +20,14 @@ class SpecialUrlsController extends AbstractActionController
         $menu = array();
         
         $domain = $_SERVER['SERVER_NAME'];
-        $melisTableDomain = $this->getServiceLocator()->get('MelisEngineTableSiteDomain');
+        $melisTableDomain = $this->getServiceManager()->get('MelisEngineTableSiteDomain');
         $datasDomain = $melisTableDomain->getEntryByField('sdom_domain', $domain);
         if (!empty($datasDomain) || !empty($datasDomain->current()))
         {
             $siteDomain = $datasDomain->current();
             $siteId = $siteDomain->sdom_site_id;
 
-            $melisTableSite = $this->getServiceLocator()->get('MelisEngineTableSite');
+            $melisTableSite = $this->getServiceManager()->get('MelisEngineTableSite');
             $datasSite = $melisTableSite->getEntryById($siteId);
             if (!empty($datasSite) || !empty($datasSite->current()))
             {
@@ -36,10 +35,10 @@ class SpecialUrlsController extends AbstractActionController
                 $siteMainPage = $site->site_main_page_id;
                 
                 $menu = array();
-                $navigation = new \MelisFront\Navigation\MelisFrontNavigation($this->getServiceLocator(),
+                $navigation = new \MelisFront\Navigation\MelisFrontNavigation($this->getServiceManager(),
                     $siteMainPage, 'front');
 
-                $melisPage = $this->getServiceLocator()->get('MelisEnginePage');
+                $melisPage = $this->getServiceManager()->get('MelisEnginePage');
 		        $datasPageRes = $melisPage->getDatasPage($siteMainPage);
 		        if (!empty($datasPageRes))
 		        {

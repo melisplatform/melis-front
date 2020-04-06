@@ -9,7 +9,6 @@
 
 namespace MelisFront\Controller;
 
-use Laminas\Mvc\Controller\AbstractActionController;
 use Laminas\Mvc\MvcEvent;
 
 /**
@@ -51,9 +50,9 @@ class MelisSiteActionController extends AbstractActionController
     	
     	if (!empty($this->idPage))
     	{
-        	$melisEnginePage = $this->getServiceLocator()->get('MelisEnginePage');
-        	$melisEngineTree = $this->getServiceLocator()->get('MelisEngineTree');
-        	$melisEngineTableSite = $this->getServiceLocator()->get('MelisEngineTableSite');
+        	$melisEnginePage = $this->getServiceManager()->get('MelisEnginePage');
+        	$melisEngineTree = $this->getServiceManager()->get('MelisEngineTree');
+        	$melisEngineTableSite = $this->getServiceManager()->get('MelisEngineTableSite');
         	
         	// Get Current Pages Breadcrumb
         	$pageBreadCrumb = $melisEngineTree->getPageBreadcrumb($this->idPage);
@@ -76,7 +75,7 @@ class MelisSiteActionController extends AbstractActionController
     	    }
 		
 	    // Site language for site translations
-            $melisEnginLangService = $this->getServiceLocator()->get('MelisEngineLang');
+            $melisEnginLangService = $this->getServiceManager()->get('MelisEngineLang');
             $siteLang = $melisEnginLangService->getSiteLanguage();
             $siteLangId = $siteLang['langId'];
             $siteLangLocale = $siteLang['langLocale'];
@@ -109,9 +108,9 @@ class MelisSiteActionController extends AbstractActionController
 
         if (!empty($this->idPage))
         {
-            $melisEnginePage = $this->getServiceLocator()->get('MelisEnginePage');
-            $melisEngineTree = $this->getServiceLocator()->get('MelisEngineTree');
-            $melisEngineTableSite = $this->getServiceLocator()->get('MelisEngineTableSite');
+            $melisEnginePage = $this->getServiceManager()->get('MelisEnginePage');
+            $melisEngineTree = $this->getServiceManager()->get('MelisEngineTree');
+            $melisEngineTableSite = $this->getServiceManager()->get('MelisEngineTableSite');
 
 
             $this->layout()->setVariables(array(

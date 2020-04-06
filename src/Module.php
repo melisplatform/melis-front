@@ -80,46 +80,45 @@ class Module
             }
         }
 
-
         // do not load listeners if working on back-office
         if(!$isBackOffice) {
             // Catching PAGE SEO URLs to update Router
-            //$eventManager->attach(new MelisFrontSEOReformatToRoutePageUrlListener()); -> refer init() Listener: MelisFrontSEORouteListener, issueL no translations of melis-modules
+            //(new MelisFrontSEOReformatToRoutePageUrlListener())->attach($eventManager); -> refer init() Listener: MelisFrontSEORouteListener, issueL no translations of melis-modules
 
             // Adding css linked to the page
-            $eventManager->attach(new MelisFrontAttachCssListener());
+            (new MelisFrontAttachCssListener())->attach($eventManager);
 
             // Adding different layout if displayed in front or front for melis back office
-            $eventManager->attach(new MelisFrontLayoutListener());
+            (new MelisFrontLayoutListener())->attach($eventManager);
 
             // Adding SEO meta datas to page
-            $eventManager->attach(new MelisFrontSEOMetaPageListener());
+            (new MelisFrontSEOMetaPageListener())->attach($eventManager);
 
             // Adding Plugins Ressources to page
-            $eventManager->attach(new MelisFrontPluginsToLayoutListener());
+            (new MelisFrontPluginsToLayoutListener())->attach($eventManager);
 
             // Checking if Url is correct and redirect if not
-            $eventManager->attach(new MelisFrontSEODispatchRouterRegularUrlListener());
+            (new MelisFrontSEODispatchRouterRegularUrlListener())->attach($eventManager);
 
             // Checking if Url is 404 and try to check if url has new Url
-            $eventManager->attach($sm->get('MelisFront\Listener\MelisFront404To301Listener'));
+            (new MelisFront404To301Listener())->attach($eventManager);
 
             // This will try to look another url if 404 occured
-            $eventManager->attach(new MelisFront404CatcherListener());
+            (new MelisFront404CatcherListener())->attach($eventManager);
 
             // This will automatically prevent XSS attacks
-            $eventManager->attach(new MelisFrontXSSParameterListener());
+            (new MelisFrontXSSParameterListener())->attach($eventManager);
 
-            $eventManager->attach(new MelisFrontPageCacheListener());
+            (new MelisFrontPageCacheListener())->attach($eventManager);
 
-            $eventManager->attach(new MelisFrontMinifiedAssetsCheckerListener());
+            (new MelisFrontMinifiedAssetsCheckerListener())->attach($eventManager);
 
-            $eventManager->attach(new MelisFrontHomePageRoutingListener());
+            (new MelisFrontHomePageRoutingListener())->attach($eventManager);
 
-            $eventManager->attach(new MelisFrontHomePageIdOverrideListener());
+            (new MelisFrontHomePageIdOverrideListener())->attach($eventManager);
 
         } else {
-            $eventManager->attach(new MelisFrontPluginLangSessionUpdateListener());
+            (new MelisFrontPluginLangSessionUpdateListener())->attach($eventManager);
         }
     }
 

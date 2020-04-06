@@ -23,7 +23,7 @@ use Laminas\Session\SessionManager;
 abstract class MelisFrontSEODispatchRouterAbstractListener 
     implements ListenerAggregateInterface
 {
-    abstract public function attach(EventManagerInterface $events);
+    abstract public function attach(EventManagerInterface $events, $priority = 1);
 
     /**
      * 

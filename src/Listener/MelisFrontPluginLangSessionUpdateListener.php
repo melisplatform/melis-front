@@ -28,7 +28,7 @@ use Laminas\Session\Container;
  */
 class MelisFrontPluginLangSessionUpdateListener extends MelisFrontSEODispatchRouterAbstractListener
 {
-    public function attach(EventManagerInterface $events)
+    public function attach(EventManagerInterface $events, $priority = 1)
     {
 
         $callBackHandler = $events->attach(

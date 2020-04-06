@@ -135,7 +135,7 @@ class MelisFrontSearchResultsPlugin extends MelisTemplatingPlugin
                         /**
                          * Indexing Site will use the main page of the Site
                          */
-                        $pageTreeSrv = $this->getServiceLocator()->get('MelisEngineTree');
+                        $pageTreeSrv = $this->getServiceManager()->get('MelisEngineTree');
                         $pageSite = $pageTreeSrv->getSiteByPageId($pageId);
                         $mainPageId = empty($pageSite->site_main_page_id) ? 1 : $pageSite->site_main_page_id;
 
@@ -153,7 +153,7 @@ class MelisFrontSearchResultsPlugin extends MelisTemplatingPlugin
         $searchresults = [];
         if ($isIndex && $keyword) {
             /** @var \MelisEngine\Service\MelisSearchService $searchSvc */
-            $searchSvc = $this->getServiceLocator()->get('MelisSearch');
+            $searchSvc = $this->getServiceManager()->get('MelisSearch');
             $searchresults = $searchSvc->search($keyword, $newModuleName, true, $searchModulePath);
             if (!empty($searchresults)) {
                 $searchresults = str_replace('&', '&amp;', $searchresults);
@@ -211,7 +211,7 @@ class MelisFrontSearchResultsPlugin extends MelisTemplatingPlugin
         $this->loadDbXmlToPluginConfig();
         // construct form
         $factory = new \Laminas\Form\Factory();
-        $formElements = $this->getServiceLocator()->get('FormElementManager');
+        $formElements = $this->getServiceManager()->get('FormElementManager');
         $factory->setFormElementManager($formElements);
         $formConfig = $this->pluginBackConfig['modal_form'];
 
@@ -220,7 +220,7 @@ class MelisFrontSearchResultsPlugin extends MelisTemplatingPlugin
         if (!empty($formConfig)) {
             foreach ($formConfig as $formKey => $config) {
                 $form = $factory->createForm($config);
-                $request = $this->getServiceLocator()->get('request');
+                $request = $this->getServiceManager()->get('request');
                 $parameters = $request->getQuery()->toArray();
 
                 if (!isset($parameters['validate'])) {
@@ -230,7 +230,7 @@ class MelisFrontSearchResultsPlugin extends MelisTemplatingPlugin
                     $viewModelTab->setTemplate($config['tab_form_layout']);
                     $viewModelTab->modalForm = $form;
                     $viewModelTab->formData = $this->getFormData();
-                    $viewRender = $this->getServiceLocator()->get('ViewRenderer');
+                    $viewRender = $this->getServiceManager()->get('ViewRenderer');
                     $html = $viewRender->render($viewModelTab);
                     array_push($render, [
                             'name' => $config['tab_title'],

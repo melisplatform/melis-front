@@ -10,7 +10,7 @@
 namespace MelisFront\Navigation;
 
 use Laminas\Navigation\Service\DefaultNavigationFactory;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Laminas\ServiceManager\ServiceManager;
 use Laminas\EventManager\EventManager;
 use Laminas\EventManager\EventManagerInterface;
@@ -21,37 +21,43 @@ use Laminas\EventManager\EventManagerInterface;
  */
 class MelisFrontNavigation extends DefaultNavigationFactory
 {
-	private $serviceLocator;
+	private $serviceManager;
 	private $idpage;
 	private $renderMode;
 	
 	/**
 	 * Constructor
 	 * 
-	 * @param ServiceManager $serviceLocator
+	 * @param ServiceManager $$this->getServiceManager()
 	 * @param int $idpage
 	 * @param string $renderMode
 	 */
-	public function __construct($serviceLocator, $idpage, $renderMode)
+	public function __construct(ServiceManager $serviceManager, $idpage, $renderMode)
 	{
-		$this->setServiceLocator($serviceLocator);
+		$this->setServiceManager($serviceManager);
 		$this->idpage = $idpage;
 		$this->renderMode = $renderMode;
 	}
-	
-	public function setServiceLocator($serviceLocator)
+
+    /**
+     * @param ServiceManager $serviceManager
+     */
+	public function setServiceManager(ServiceManager $serviceManager)
 	{
-		$this->serviceLocator = $serviceLocator;
+		$this->serviceManager = $serviceManager;
 	}
-	
-	public function getServiceLocator()
+
+    /**
+     * @return $serviceManager
+     */
+	public function getServiceManager()
 	{
-		return $this->serviceLocator;
+		return $this->serviceManager;
 	}
 	
 	public function getPageAndSubPages($pageId)
 	{
-	    $melisPage = $this->serviceLocator->get('MelisEnginePage');
+	    $melisPage = $this->getServiceManager()->get('MelisEnginePage');
 	    $pageTree = $melisPage->getDatasPage($pageId);
 	    
 	    $pages = array();
@@ -84,7 +90,7 @@ class MelisFrontNavigation extends DefaultNavigationFactory
 	public function getChildrenRecursive($idPage)
 	{
 		$results = array();
-		$melisTree = $this->serviceLocator->get('MelisEngineTree');
+		$melisTree = $this->getServiceManager()->get('MelisEngineTree');
 		
 		$publishedOnly = 1;
 		$pages = $melisTree->getPageChildren($idPage,$publishedOnly);
@@ -111,7 +117,7 @@ class MelisFrontNavigation extends DefaultNavigationFactory
 	
 	public function formatPageInArray($page,$pageSearchType = null)
 	{
-		$melisTree = $this->serviceLocator->get('MelisEngineTree');
+		$melisTree = $this->getServiceManager()->get('MelisEngineTree');
 
 		if (empty($page) || empty($page['tree_page_id']))
 		    return null;
@@ -145,7 +151,7 @@ class MelisFrontNavigation extends DefaultNavigationFactory
 	
 	public function getSiteMainPageByPageId($idPage)
 	{
-	    $melisTree = $this->serviceLocator->get('MelisEngineTree');
+	    $melisTree = $this->getServiceManager()->get('MelisEngineTree');
 	    $datasSite = $melisTree->getSiteByPageId($idPage);
 	    
 	    if (!empty($datasSite))
@@ -168,7 +174,7 @@ class MelisFrontNavigation extends DefaultNavigationFactory
 		{
 			$siteMainId = 0;
 			
-			$melisPage = $this->serviceLocator->get('MelisEnginePage');
+			$melisPage = $this->getServiceManager()->get('MelisEnginePage');
 			$actualPage = $melisPage->getDatasPage($this->idpage);
 			if ($actualPage)
 			{
@@ -179,7 +185,7 @@ class MelisFrontNavigation extends DefaultNavigationFactory
 				
 				if (!empty($siteId) && $siteId > 0)
 				{
-					$melisTableSite = $this->serviceLocator->get('MelisEngineTableSite');
+					$melisTableSite = $this->getServiceManager()->get('MelisEngineTableSite');
 					$datasSite = $melisTableSite->getSiteById($siteId, getenv('MELIS_PLATFORM'));
 					if (!empty($datasSite))
 					{
@@ -211,14 +217,13 @@ class MelisFrontNavigation extends DefaultNavigationFactory
     {
         $results = array();
         //Services
-        $melisTree = $this->serviceLocator->get('MelisEngineTree');
-        $pagePub   = $this->getServiceLocator()->get('MelisEngineTablePagePublished');
-        $pageSave  = $this->getServiceLocator()->get('MelisEngineTablePageSaved');
+        $melisTree = $this->getServiceManager()->get('MelisEngineTree');
+        $pagePub   = $this->getServiceManager()->get('MelisEngineTablePagePublished');
+        $pageSave  = $this->getServiceManager()->get('MelisEngineTablePageSaved');
 
         $pageSearchType = null;
         $pages = $melisTree->getPageChildren($pageId,2);
-        
-        
+
         if($pages)
         {
             $rpages = $pages->toArray();

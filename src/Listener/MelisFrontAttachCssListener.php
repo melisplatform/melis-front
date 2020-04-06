@@ -20,7 +20,7 @@ use Laminas\Mvc\MvcEvent;
  */
 class MelisFrontAttachCssListener implements ListenerAggregateInterface
 {
-    public function attach(EventManagerInterface $events)
+    public function attach(EventManagerInterface $events, $priority = 1)
     {
         $callBackHandler = $events->attach(
         	MvcEvent::EVENT_FINISH, 

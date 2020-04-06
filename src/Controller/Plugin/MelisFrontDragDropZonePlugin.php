@@ -147,7 +147,7 @@ class MelisFrontDragDropZonePlugin extends MelisTemplatingPlugin
     {
         $viewModel = new ViewModel();
         $viewModel->setTemplate('MelisFront/dragdropzone/meliscontainer');
-        $translator = $this->getServiceLocator()->get('translator');
+        $translator = $this->getServiceManager()->get('translator');
 
         $viewModel->pluginFrontConfig = $this->pluginFrontConfig;
         $viewModel->dragdropzoneId = $this->pluginFrontConfig['id'];
@@ -159,7 +159,7 @@ class MelisFrontDragDropZonePlugin extends MelisTemplatingPlugin
         $pageId = (!empty($this->pluginFrontConfig['pageId'])) ? $this->pluginFrontConfig['pageId'] : 0;
 
         $siteModule = getenv('MELIS_MODULE');
-        $melisPage = $this->getServiceLocator()->get('MelisEnginePage');
+        $melisPage = $this->getServiceManager()->get('MelisEnginePage');
         $datasPage = $melisPage->getDatasPage($pageId, 'saved');
         if($datasPage)
         {
@@ -225,7 +225,7 @@ class MelisFrontDragDropZonePlugin extends MelisTemplatingPlugin
     private function isInBackOffice()
     {
         $request    = $this->getController()->getRequest();
-        $routeMatch = $this->getServiceLocator()->get('router')->match($request);
+        $routeMatch = $this->getServiceManager()->get('router')->match($request);
         $routeName  = $routeMatch->getMatchedRouteName();
         $module     = explode('/', $routeName);
 

@@ -22,7 +22,7 @@ use Laminas\Stdlib\ArrayUtils;
  */
 class MelisFrontMiniTemplateConfigListener
 {
-    public function onLoadModulesPost(ModuleEvent $e)
+    public function onLoadModulesPost(ModuleEvent $e, $priority = 1)
     {
         /** @var ServiceManager $serviceManager */
         $serviceManager = $e->getParam('ServiceManager');

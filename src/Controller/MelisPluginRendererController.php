@@ -9,7 +9,6 @@
 
 namespace MelisFront\Controller;
 
-use Laminas\Mvc\Controller\AbstractActionController;
 use Laminas\View\Model\JsonModel;
 use Assetic\Exception\Exception;
 use Laminas\View\Model\ViewModel;
@@ -35,11 +34,11 @@ class MelisPluginRendererController extends AbstractActionController
             $pluginHardcodedConfig = unserialize($pluginHardcodedConfig);
         }
         
-        $translator = $this->getServiceLocator()->get('translator');
+        $translator = $this->getServiceManager()->get('translator');
     
         $results = array();
         
-        $config = $this->getServiceLocator()->get('config');
+        $config = $this->getServiceManager()->get('config');
         if (empty($module) || empty($pluginName) || empty($pageId))
         {
             $results['success'] = false;
@@ -68,10 +67,10 @@ class MelisPluginRendererController extends AbstractActionController
                         //set the original plugin name
                         $pluginName = $plugin[0];
 
-                        $melisPlugin = $this->getServiceLocator()->get('ControllerPluginManager')->get($pluginName);
+                        $melisPlugin = $this->getServiceManager()->get('ControllerPluginManager')->get($pluginName);
                         $melisPlugin->setMiniTplPluginName($old);
                     }else{
-                        $melisPlugin = $this->getServiceLocator()->get('ControllerPluginManager')->get($pluginName);
+                        $melisPlugin = $this->getServiceManager()->get('ControllerPluginManager')->get($pluginName);
                     }
                     
                     // dragdrop, delete only if plugin is not hardcoded
@@ -99,7 +98,7 @@ class MelisPluginRendererController extends AbstractActionController
 
                     $melisPluginView = $melisPlugin->render($pluginParameters, $generatePluginId);
                         
-                    $viewRender = $this->getServiceLocator()->get('ViewRenderer');
+                    $viewRender = $this->getServiceManager()->get('ViewRenderer');
                     $html = $viewRender->render($melisPluginView);
                     
                     $pluginConfFOBO = array();

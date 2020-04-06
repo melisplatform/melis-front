@@ -9,6 +9,7 @@
 
 namespace MelisFront\View\Helper;
 
+use Laminas\ServiceManager\ServiceManager;
 use Laminas\View\Helper\AbstractHelper;
 use Laminas\Session\Container;
 use Laminas\View\Model\ViewModel;
@@ -20,14 +21,14 @@ use Laminas\View\Model\ViewModel;
 class MelisListFromFolderHelper extends AbstractHelper
 {
 	public $serviceManager;
-	public $renderMode;
-	public $preview;
+//	public $renderMode;
+//	public $preview;
 
-	public function __construct($sm, $renderMode, $preview)
+	public function __construct(ServiceManager $serviceManager)
 	{
-		$this->serviceManager = $sm;
-		$this->renderMode = $renderMode;
-		$this->preview = $preview;
+		$this->serviceManager = $serviceManager;
+//		$this->renderMode = $renderMode;
+//		$this->preview = $preview;
 	}
 	
 	

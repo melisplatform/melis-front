@@ -9,31 +9,17 @@
 
 namespace MelisFront\Service;
 
-use Laminas\ServiceManager\ServiceLocatorAwareInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
 use MelisEngine\Model\MelisPage;
 use Laminas\Filter\HtmlEntities;
+use MelisEngine\Service\MelisEngineServiceManager;
 
 /**
  * This class updates the Meta datas description and title
  * by replacing the one existing (or not) by the one define in Melis SEO Page system
  *
  */
-class MelisFrontHeadService implements MelisFrontHeadServiceInterface, ServiceLocatorAwareInterface
+class MelisFrontHeadService extends MelisEngineServiceManager implements MelisFrontHeadServiceInterface
 {
-	protected $serviceLocator;
-	
-	public function setServiceLocator(ServiceLocatorInterface $sl)
-	{
-		$this->serviceLocator = $sl;
-		return $this;
-	}
-	
-	public function getServiceLocator()
-	{
-		return $this->serviceLocator;
-	}	
-	
 	/**
 	 * Updates the title and description
 	 * 
@@ -46,7 +32,7 @@ class MelisFrontHeadService implements MelisFrontHeadServiceInterface, ServiceLo
 		$newContent = $contentGenerated;
 		
 		// Get the page title
-		$melisPage = $this->serviceLocator->get('MelisEnginePage');
+		$melisPage = $this->getServiceManager()->get('MelisEnginePage');
 		$datasPage = $melisPage->getDatasPage($idPage, 'published');
 		if (!empty($datasPage))
 		{
@@ -56,7 +42,7 @@ class MelisFrontHeadService implements MelisFrontHeadServiceInterface, ServiceLo
 				/**
 				 * Get SEO for this page
 				 */
-				$melisTablePageSeo = $this->serviceLocator->get('MelisEngineTablePageSeo');
+				$melisTablePageSeo = $this->getServiceManager()->get('MelisEngineTablePageSeo');
 				$datasPageSeo = $melisTablePageSeo->getEntryById($idPage);
 				/**
 				 * Description tag
@@ -121,7 +107,7 @@ class MelisFrontHeadService implements MelisFrontHeadServiceInterface, ServiceLo
                         /**
                          * @var MelisTreeService
                          */
-                        $pageService = $this->serviceLocator->get('MelisEngineTree');
+                        $pageService = $this->getServiceManager()->get('MelisEngineTree');
                         $pageUrl = $pageService->getPageLink($idPage);
                         $canonicalUrlTag = "\n\t<link rel=\"canonical\" href=\"$pageUrl\" />\n";
                         $canonicalRegex = '/(<link[^>]*rel=[\"\']canonical[\"\'][^>]*content=[\"\'](.*?)[\"\'][^>]*>)/i';
@@ -170,9 +156,9 @@ class MelisFrontHeadService implements MelisFrontHeadServiceInterface, ServiceLo
 	    $newContent = $content;
 	    
 	    // Auto adding plugins CSS and JS files to layout
-	    if ($this->serviceLocator->get('templating_plugins')->hasItem('plugins_front'))
+	    if ($this->getServiceManager()->get('templating_plugins')->hasItem('plugins_front'))
 	    {
-	        $files = $this->serviceLocator->get('templating_plugins')->getItem('plugins_front');
+	        $files = $this->getServiceManager()->get('templating_plugins')->getItem('plugins_front');
 	         
 	        $cssHtmlToAdd = "\n";
 	        foreach ($files['css'] as $css)

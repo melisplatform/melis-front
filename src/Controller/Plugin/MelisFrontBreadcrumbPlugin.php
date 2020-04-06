@@ -68,7 +68,7 @@ class MelisFrontBreadcrumbPlugin extends MelisTemplatingPlugin
         $pageId = (!empty($data['pageId'])) ? $data['pageId'] : null;
         $startingPage = $data['pageIdRootBreadcrumb'] ??  $data['pageIdRootBreadcrumb'];
 
-        $treeSrv = $this->getServiceLocator()->get('MelisEngineTree');
+        $treeSrv = $this->getServiceManager()->get('MelisEngineTree');
         $pageBreadcrumb = $treeSrv->getPageBreadcrumb($pageId, 0, true);
 
         $breadcrumb = array();
@@ -132,7 +132,7 @@ class MelisFrontBreadcrumbPlugin extends MelisTemplatingPlugin
     {
         // construct form
         $factory = new \Laminas\Form\Factory();
-        $formElements = $this->getServiceLocator()->get('FormElementManager');
+        $formElements = $this->getServiceManager()->get('FormElementManager');
         $factory->setFormElementManager($formElements);
         $formConfig = $this->pluginBackConfig['modal_form'];
 
@@ -141,7 +141,7 @@ class MelisFrontBreadcrumbPlugin extends MelisTemplatingPlugin
         if (!empty($formConfig)) {
             foreach ($formConfig as $formKey => $config) {
                 $form = $factory->createForm($config);
-                $request = $this->getServiceLocator()->get('request');
+                $request = $this->getServiceManager()->get('request');
                 $parameters = $request->getQuery()->toArray();
 
                 if (!isset($parameters['validate'])) {
@@ -151,7 +151,7 @@ class MelisFrontBreadcrumbPlugin extends MelisTemplatingPlugin
                     $viewModelTab->setTemplate($config['tab_form_layout']);
                     $viewModelTab->modalForm = $form;
                     $viewModelTab->formData   = $this->getFormData();
-                    $viewRender = $this->getServiceLocator()->get('ViewRenderer');
+                    $viewRender = $this->getServiceManager()->get('ViewRenderer');
                     $html = $viewRender->render($viewModelTab);
                     array_push($render, [
                             'name' => $config['tab_title'],

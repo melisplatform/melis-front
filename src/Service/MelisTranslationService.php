@@ -9,20 +9,11 @@
 
 namespace MelisFront\Service;
 
-use MelisAssetManager\Service\MelisModulesService;
 use MelisEngine\Service\MelisEngineGeneralService;
 use Laminas\Session\Container;
 
 class MelisTranslationService extends MelisEngineGeneralService
 {
-    /** @var MelisModulesService */
-    private $moduleSvc;
-
-    public function __construct(MelisModulesService $moduleService)
-    {
-        $this->moduleSvc = $moduleService;
-    }
-
     /**
      *
      *  get all module translations by locale
@@ -32,19 +23,21 @@ class MelisTranslationService extends MelisEngineGeneralService
      */
     public function getTranslationsByLocale($locale = "en_EN")
     {
+
+        $moduleSvc = $this->getServiceManager()->get('MelisAssetManagerModulesService');
         // Event parameters prepare
         $arrayParameters = $this->makeArrayFromParameters(__METHOD__, func_get_args());
         // Sending service start event
         $arrayParameters = $this->sendEvent('melis_translation_get_trans_by_locale_start', $arrayParameters);
         $transMessages   = [];
         $tmpTrans        = [];
-        $modules         =  $this->moduleSvc->getAllModules();
+        $modules         = $moduleSvc->getAllModules();
         $locale          = $arrayParameters['locale'];
         $moduleFolders   = [];
         // get modules path
         foreach ($modules as $module)
         {
-            array_push($moduleFolders, $this->moduleSvc->getModulePath($module));
+            array_push($moduleFolders, $moduleSvc->getModulePath($module));
         }
 
         $transFiles = array(

@@ -95,7 +95,7 @@ class MelisFrontBlockSectionPlugin extends MelisTemplatingPlugin
         $viewModel->pluginXmlDbKey = $this->pluginXmlDbKey;
 
         $siteModule = getenv('MELIS_MODULE');
-        $melisPage = $this->getServiceLocator()->get('MelisEnginePage');
+        $melisPage = $this->getServiceManager()->get('MelisEnginePage');
         $datasPage = $melisPage->getDatasPage($pageId, 'saved');
         if($datasPage)
         {

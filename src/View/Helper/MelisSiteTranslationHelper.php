@@ -9,6 +9,7 @@
 
 namespace MelisFront\View\Helper;
 
+use Laminas\ServiceManager\ServiceManager;
 use Laminas\View\Helper\AbstractHelper;
 
 
@@ -16,9 +17,9 @@ class MelisSiteTranslationHelper extends AbstractHelper
 {
     public $serviceManager;
     
-    public function __construct($sm)
+    public function __construct(ServiceManager $serviceManager)
     {
-        $this->serviceManager = $sm;
+        $this->serviceManager = $serviceManager;
     }
     
     /**

@@ -93,7 +93,7 @@ class MelisSiteConfigService extends MelisEngineGeneralService
             /**
              * get the language if the page
              */
-            $cmsPageLang = $this->getServiceLocator()->get('MelisEngineTablePageLang');
+            $cmsPageLang = $this->getServiceManager()->get('MelisEngineTablePageLang');
             $pageLang = $cmsPageLang->getEntryByField('plang_page_id', $arrayParameters['pageId'])->current();
             /**
              * get page lang locale
@@ -101,7 +101,7 @@ class MelisSiteConfigService extends MelisEngineGeneralService
             $langData = array();
             $langId = null;
             if (!empty($pageLang)) {
-                $langCmsTbl = $this->getServiceLocator()->get('MelisEngineTableCmsLang');
+                $langCmsTbl = $this->getServiceManager()->get('MelisEngineTableCmsLang');
                 $langData = $langCmsTbl->getEntryById($pageLang->plang_lang_id)->current();
 
             }
@@ -119,7 +119,7 @@ class MelisSiteConfigService extends MelisEngineGeneralService
                      * using the config service that has been updated
                      * through a listener
                      */
-                    $config = $this->serviceLocator->get('config');
+                    $config = $this->getServiceManager()->get('config');
 
                     if(!empty($config['site'])){
                         /**
@@ -269,7 +269,7 @@ class MelisSiteConfigService extends MelisEngineGeneralService
     public function getConfig($siteName)
     {
         /** @var MelisEngineComposerService $composerSrv */
-        $composerSrv  = $this->getServiceLocator()->get('MelisEngineComposer');
+        $composerSrv  = $this->getServiceManager()->get('MelisEngineComposer');
         $config = [];
 
         if (!empty($composerSrv->getComposerModulePath($siteName))) {
@@ -292,7 +292,7 @@ class MelisSiteConfigService extends MelisEngineGeneralService
      */
     private function getSiteConfigFromDb($siteId)
     {
-        $siteConfigTable = $this->getServiceLocator()->get('MelisEngineTableCmsSiteConfig');
+        $siteConfigTable = $this->getServiceManager()->get('MelisEngineTableCmsSiteConfig');
         return $siteConfigTable->getEntryByField('sconf_site_id', $siteId)->toArray();
     }
 
@@ -303,7 +303,7 @@ class MelisSiteConfigService extends MelisEngineGeneralService
      */
     private function getSiteActiveLanguages($siteId)
     {
-        $siteLangsTable = $this->getServiceLocator()->get('MelisEngineTableCmsSiteLangs');
+        $siteLangsTable = $this->getServiceManager()->get('MelisEngineTableCmsSiteLangs');
         return $siteLangsTable->getSiteLangs(null, $siteId, null, true)->toArray();
     }
 
@@ -314,7 +314,7 @@ class MelisSiteConfigService extends MelisEngineGeneralService
      */
     private function getSiteDataById($siteId)
     {
-        $siteTable = $this->getServiceLocator()->get('MelisEngineTableSite');
+        $siteTable = $this->getServiceManager()->get('MelisEngineTableSite');
         return $siteTable->getEntryById($siteId)->toArray()[0];
     }
 
@@ -330,9 +330,9 @@ class MelisSiteConfigService extends MelisEngineGeneralService
         $siteData = [];
         $siteId = 0;
 
-        $pageSaved = $this->getServiceLocator()->get('MelisEngineTablePageSaved');
-        $pagePublished = $this->getServiceLocator()->get('MelisEngineTablePagePublished');
-        $template = $this->getServiceLocator()->get('MelisEngineTableTemplate');
+        $pageSaved = $this->getServiceManager()->get('MelisEngineTablePageSaved');
+        $pagePublished = $this->getServiceManager()->get('MelisEngineTablePagePublished');
+        $template = $this->getServiceManager()->get('MelisEngineTableTemplate');
 
         if(!empty($pageId)){
             /**
@@ -356,7 +356,7 @@ class MelisSiteConfigService extends MelisEngineGeneralService
         }
 
         if(!empty($siteId)){
-            $siteTbl = $this->getServiceLocator()->get('MelisEngineTableSite');
+            $siteTbl = $this->getServiceManager()->get('MelisEngineTableSite');
             $siteData = $siteTbl->getEntryById($siteId)->current();
         }
 
