@@ -49,7 +49,7 @@ return [
                                     'method' => 'POST',
                                     'action' => '',
                                 ],
-                                'hydrator' => 'Laminas\Stdlib\Hydrator\ArraySerializable',
+                                'hydrator' => 'Laminas\Hydrator\ArraySerializable',
                                 'elements' => [
                                     [
                                         'spec' => [
