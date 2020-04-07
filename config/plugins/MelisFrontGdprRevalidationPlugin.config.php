@@ -37,6 +37,10 @@ return [
                                             'type' => 'checkbox',
                                             'options' => [
                                                 'label' => 'I want to revalidate my account'
+                                            ],
+                                            'attributes' => [
+                                                'class' => 'form-control text-center',
+                                                'style' => "cursor:pointer;width:50px;height:50px;margin:0 auto;"
                                             ]
                                         ]
                                     ]
@@ -119,7 +123,6 @@ return [
                                                 'disable_inarray_validator' => true,
                                             ],
                                             'attributes' => [
-                                                'id' => 'module_associated',
                                                 'class' => 'form-control',
                                                 'required' => 'required',
                                             ],
