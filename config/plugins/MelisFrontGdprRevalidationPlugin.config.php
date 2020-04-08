@@ -160,7 +160,7 @@ return [
 //                                        ],
 //                                        'filters' => [],
                                     ],
-                                    'module_associated' => [
+                                    'module' => [
                                         'name' => 'module',
                                         'required' => true,
 //                                        'validators' => [
