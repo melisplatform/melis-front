@@ -9,11 +9,11 @@
 
 namespace MelisFront\Service;
 
+use MelisCore\Service\MelisGeneralService;
 use MelisEngine\Service\MelisEngineComposerService;
-use MelisEngine\Service\MelisEngineGeneralService;
 use Laminas\Stdlib\ArrayUtils;
 
-class MelisSiteConfigService extends MelisEngineGeneralService
+class MelisSiteConfigService extends MelisGeneralService
 {
 
     /**

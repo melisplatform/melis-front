@@ -24,7 +24,7 @@ class MelisGdprBannerHelper extends AbstractHelper
 //	public $renderMode;
 //	public $preview;
 
-	public function __construct(ServiceManager $serviceManager)
+	public function setServiceManager(ServiceManager $serviceManager)
 	{
 		$this->serviceManager = $serviceManager;
 //		$this->renderMode = $renderMode;

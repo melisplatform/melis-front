@@ -28,13 +28,16 @@ use Laminas\Session\Container;
 class MelisFrontSEODispatchRouterRegularUrlListener 
     extends MelisFrontSEODispatchRouterAbstractListener
 {
+
+    public $serviceManager;
+
     public function attach(EventManagerInterface $events, $priority = 1)
     {
         $callBackHandler = $events->attach(
         	MvcEvent::EVENT_DISPATCH, 
         	function(MvcEvent $e){
                 
-        	    $sm = $e->getApplication()->getServiceManager();
+        	    $this->serviceManager = $e->getApplication()->getServiceManager();
         	    $eventManager = $e->getApplication()->getEventManager();
         	    
         	    $routeMatch = $e->getRouteMatch();
@@ -68,7 +71,7 @@ class MelisFrontSEODispatchRouterRegularUrlListener
     	               $getmode = 'published';
     	               
                    // Get page datas
-                   $melisPage = $sm->get('MelisEnginePage');
+                   $melisPage = $this->serviceManager->get('MelisEnginePage');
                    $datasPage = $melisPage->getDatasPage($idpage, $getmode);
                    $datasTemplate = $datasPage->getMelisTemplate();
                    $pageTree = $datasPage->getMelisPageTree();
@@ -231,8 +234,8 @@ class MelisFrontSEODispatchRouterRegularUrlListener
                                 echo "<p>Controller : [ <strong>" . $controller . "</strong> ] not found in Module : [ <strong>{$siteModule}</strong> ]</p>";
                                 die;// die because we dont want to show errors everywhere
                             }
-                            // checking of the layout / zend template
-                            $config = $sm->get('config');
+                            // checking of the layout / laminas template
+                            $config = $this->serviceManager->get('config');
                             // get all template_map so we could check if the given template is present on a module
                             $templateMap = $config['view_manager']['template_map'];
                             // template to search
@@ -264,7 +267,7 @@ class MelisFrontSEODispatchRouterRegularUrlListener
      */
     public function redirectPageSEO301($e, $idpage)
     {
-    	$sm = $e->getApplication()->getServiceManager();
+        $serviceManager = $e->getApplication()->getServiceManager();
         $router = $e->getRouter();
         $uri = $router->getRequestUri();
          
@@ -272,7 +275,7 @@ class MelisFrontSEODispatchRouterRegularUrlListener
         $uri = $uri->getPath();
         if (substr($uri, 0, 1) == '/')
             $uri = substr($uri, 1, strlen($uri));
-        $melisTablePageSeo = $sm->get('MelisEngineTablePageSeo');
+        $melisTablePageSeo = $this->serviceManager->get('MelisEngineTablePageSeo');
         $datasPageSeo = $melisTablePageSeo->getEntryById($idpage);
         if (!empty($datasPageSeo))
         {
@@ -304,8 +307,6 @@ class MelisFrontSEODispatchRouterRegularUrlListener
      */
     public function redirectPageSEORedirect($e, $idpage)
     {
-    	$sm = $e->getApplication()->getServiceManager();
-    	
     	$router = $e->getRouter();
     	$uri = $router->getRequestUri();
     	 
@@ -314,7 +315,7 @@ class MelisFrontSEODispatchRouterRegularUrlListener
     	if (substr($uri, 0, 1) == '/')
     		$uri = substr($uri, 1, strlen($uri));
     			
-    	$melisTablePageSeo = $sm->get('MelisEngineTablePageSeo');
+    	$melisTablePageSeo = $this->serviceManager->get('MelisEngineTablePageSeo');
     	$datasPageSeo = $melisTablePageSeo->getEntryById($idpage);
     	if (!empty($datasPageSeo))
     	{

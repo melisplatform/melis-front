@@ -10,6 +10,7 @@
 namespace MelisFront\Controller;
 
 use Laminas\Mvc\MvcEvent;
+use MelisCore\Controller\AbstractActionController;
 
 /**
  * This class extends the AbstractActionController and is to be used

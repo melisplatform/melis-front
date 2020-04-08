@@ -160,24 +160,24 @@ File: `/melis-front/src/Service/MelisSiteConfigService.php`
         
         To call the service. 
         ```
-        $siteConfigSvc = $this->getServiceLocator()->get('MelisSiteConfigService');
+        $siteConfigSvc = $this->getServiceManager()->get('MelisSiteConfigService');
         ```
         To get a specific `key` of the current site and the language of the page with id 1
         ```
-        $siteConfigSvc = $this->getServiceLocator()->get('MelisSiteConfigService');
+        $siteConfigSvc = $this->getServiceManager()->get('MelisSiteConfigService');
 
         $config = $siteConfigSvc->getSiteConfigByKey('key', 1);
         ```
         But what if we wanted to get the key from another language of the current site? We can achieve this by defining the language on where to get the config.
         ```
-        $siteConfigSvc = $this->getServiceLocator()->get('MelisSiteConfigService');
+        $siteConfigSvc = $this->getServiceManager()->get('MelisSiteConfigService');
                 
         $config = $siteConfigSvc->getSiteConfigByKey('key', 1,'sites', 'fr');
         // The language of the page is now overridden by the specified language.
         ```  
         We can also get a particular `key` from another site by using the `site Id`.  
         ```
-        $siteConfigSvc = $this->getServiceLocator()->get('MelisSiteConfigService');
+        $siteConfigSvc = $this->getServiceManager()->get('MelisSiteConfigService');
         
         $config = $siteConfigSvc->getSiteConfigByKey('key', 1, 1);
         // Return all the values of the specified key from all languages from the site with id 1.
@@ -188,7 +188,7 @@ File: `/melis-front/src/Service/MelisSiteConfigService.php`
         ```
         There is also a different section apart from sites. Currently, we have two sections which are sites and allSites.
         ```
-        $siteConfigSvc = $this->getServiceLocator()->get('MelisSiteConfigService');
+        $siteConfigSvc = $this->getServiceManager()->get('MelisSiteConfigService');
         
         $config = $siteConfigSvc->getSiteConfigByKey('key', 1, 'allSites');
         // Returns the key from the allSites section of the config
@@ -208,7 +208,7 @@ File: `/melis-front/src/Service/MelisSiteConfigService.php`
     
     To call the service.
     ```
-    $melisSiteTranslationSvc = $this->getServiceLocator()->get('MelisSiteTranslationService');
+    $melisSiteTranslationSvc = $this->getServiceManager()->get('MelisSiteTranslationService');
     ```
     To get a particular translation, You need to specify the translation key along with the lang id and site id.
     ```

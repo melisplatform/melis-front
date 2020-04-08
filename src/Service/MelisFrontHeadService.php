@@ -9,16 +9,16 @@
 
 namespace MelisFront\Service;
 
+use MelisCore\Service\MelisServiceManager;
 use MelisEngine\Model\MelisPage;
 use Laminas\Filter\HtmlEntities;
-use MelisEngine\Service\MelisEngineServiceManager;
 
 /**
  * This class updates the Meta datas description and title
  * by replacing the one existing (or not) by the one define in Melis SEO Page system
  *
  */
-class MelisFrontHeadService extends MelisEngineServiceManager implements MelisFrontHeadServiceInterface
+class MelisFrontHeadService extends MelisServiceManager implements MelisFrontHeadServiceInterface
 {
 	/**
 	 * Updates the title and description

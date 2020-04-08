@@ -9,10 +9,10 @@
 
 namespace MelisFront\Service;
 
-use MelisEngine\Service\MelisEngineGeneralService;
 use MatthiasMullie\Minify;
+use MelisCore\Service\MelisGeneralService;
 
-class MinifyAssetsService extends MelisEngineGeneralService
+class MinifyAssetsService extends MelisGeneralService
 {
     /**
      * @param null $siteId

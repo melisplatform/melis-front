@@ -9,10 +9,10 @@
 
 namespace MelisFront\Service;
 
-use MelisEngine\Service\MelisEngineGeneralService;
 use Laminas\Session\Container;
+use MelisCore\Service\MelisGeneralService;
 
-class MelisTranslationService extends MelisEngineGeneralService
+class MelisTranslationService extends MelisGeneralService
 {
     /**
      *

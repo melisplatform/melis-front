@@ -11,6 +11,7 @@ namespace MelisFront\Controller;
 
 use Laminas\View\Model\ViewModel;
 use Laminas\View\Model\FeedModel;
+use MelisCore\Controller\AbstractActionController;
 
 class SpecialUrlsController extends AbstractActionController
 {

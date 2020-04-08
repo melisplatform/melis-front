@@ -12,10 +12,10 @@ namespace MelisFront\Service;
 
 use Composer\Composer;
 use MelisCore\Service\MelisCoreModulesService;
+use MelisCore\Service\MelisGeneralService;
 use MelisEngine\Service\MelisEngineComposerService;
-use MelisEngine\Service\MelisEngineGeneralService;
 
-class MelisSiteTranslationService extends MelisEngineGeneralService
+class MelisSiteTranslationService extends MelisGeneralService
 {
 
     /**

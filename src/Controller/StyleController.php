@@ -10,6 +10,7 @@
 namespace MelisFront\Controller;
 
 use Laminas\View\Model\ViewModel;
+use MelisCore\Controller\AbstractActionController;
 
 class StyleController extends AbstractActionController
 {

@@ -6,9 +6,6 @@
  *
  */
 
-use MelisEngine\Service\Factory\AbstractFactory;
-use MelisFront\View\Helper\Factory\AbstractViewHelperFactory;
-
 return [
     'router' => [
         'routes' => [
@@ -166,12 +163,6 @@ return [
     ],
     'service_manager' => [
         'factories' => [
-            // Services
-            \MelisFront\Service\MelisFrontHeadService::class        => AbstractFactory::class,
-            \MelisFront\Service\MinifyAssetsService::class          => AbstractFactory::class,
-            \MelisFront\Service\MelisSiteTranslationService::class  => AbstractFactory::class,
-            \MelisFront\Service\MelisSiteConfigService::class       => AbstractFactory::class,
-            \MelisFront\Service\MelisTranslationService::class      => AbstractFactory::class,
             // Navigation
             'MelisFrontNavigation'  => \MelisFront\Navigation\Factory\MelisFrontNavigationFactory::class,
         ],
@@ -210,17 +201,18 @@ return [
     ],
     'view_helpers' => [
         'factories' => [
-            \MelisFront\View\Helper\MelisDragDropZoneHelper::class          => AbstractViewHelperFactory::class,
-            \MelisFront\View\Helper\MelisTagsHelper::class                  => AbstractViewHelperFactory::class,
-            \MelisFront\View\Helper\MelisMenuHelper::class                  => AbstractViewHelperFactory::class,
-            \MelisFront\View\Helper\MelisLinksHelper::class                 => AbstractViewHelperFactory::class,
-            \MelisFront\View\Helper\MelisPageLangVersionLinkHelper::class   => AbstractViewHelperFactory::class,
-            \MelisFront\View\Helper\MelisHomePageLinkHelper::class          => AbstractViewHelperFactory::class,
-            \MelisFront\View\Helper\MelisSiteTranslationHelper::class       => AbstractViewHelperFactory::class,
-            \MelisFront\View\Helper\MelisTranslationHelper::class           => AbstractViewHelperFactory::class,
-            \MelisFront\View\Helper\SiteConfigViewHelper::class             => AbstractViewHelperFactory::class,
-            \MelisFront\View\Helper\MelisGdprBannerHelper::class            => AbstractViewHelperFactory::class,
-            \MelisFront\View\Helper\MelisListFromFolderHelper::class        => AbstractViewHelperFactory::class,
+//            @TODO Need to virify when sites are migrated
+//            \MelisFront\View\Helper\MelisDragDropZoneHelper::class          => AbstractViewHelperFactory::class,
+//            \MelisFront\View\Helper\MelisTagsHelper::class                  => AbstractViewHelperFactory::class,
+//            \MelisFront\View\Helper\MelisMenuHelper::class                  => AbstractViewHelperFactory::class,
+//            \MelisFront\View\Helper\MelisLinksHelper::class                 => AbstractViewHelperFactory::class,
+//            \MelisFront\View\Helper\MelisPageLangVersionLinkHelper::class   => AbstractViewHelperFactory::class,
+//            \MelisFront\View\Helper\MelisHomePageLinkHelper::class          => AbstractViewHelperFactory::class,
+//            \MelisFront\View\Helper\MelisSiteTranslationHelper::class       => AbstractViewHelperFactory::class,
+//            \MelisFront\View\Helper\MelisTranslationHelper::class           => AbstractViewHelperFactory::class,
+//            \MelisFront\View\Helper\SiteConfigViewHelper::class             => AbstractViewHelperFactory::class,
+//            \MelisFront\View\Helper\MelisGdprBannerHelper::class            => AbstractViewHelperFactory::class,
+//            \MelisFront\View\Helper\MelisListFromFolderHelper::class        => AbstractViewHelperFactory::class,
         ],
         'aliases' => [
             'MelisDragDropZone'         => \MelisFront\View\Helper\MelisDragDropZoneHelper::class,

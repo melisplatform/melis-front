@@ -19,7 +19,7 @@ class SiteConfigViewHelper extends AbstractHelper
 {
     public $serviceManager;
 
-    public function __construct(ServiceManager $serviceManager)
+    public function setServiceManager(ServiceManager $serviceManager)
     {
         $this->serviceManager = $serviceManager;
     }

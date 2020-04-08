@@ -21,27 +21,10 @@ use Laminas\View\Model\ViewModel;
 class MelisDragDropZoneHelper extends AbstractHelper
 {
 	public $serviceManager;
-//	public $renderMode;
-//	public $preview;
 
-	public function __construct(ServiceManager $serviceManager)
+	public function setServiceManager(ServiceManager $serviceManager)
 	{
 		$this->serviceManager = $serviceManager;
-
-        /*$router = $serviceManager->get('router');
-        $request = $serviceManager->get('request');
-        $routeMatch = $router->match($request);
-
-        if (!empty($routeMatch)) {
-            $renderMode = $routeMatch->getParam('renderMode');
-            $preview = $routeMatch->getParam('preview');
-        } else {
-            $renderMode = 'front';
-            $preview = false;
-        }
-
-		$this->renderMode = $renderMode;
-		$this->preview = $preview;*/
 	}
 	
 	

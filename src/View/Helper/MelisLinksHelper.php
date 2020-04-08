@@ -20,7 +20,7 @@ class MelisLinksHelper extends AbstractHelper
 	public $serviceManager;
 	public $dataBreadcrumbs = [];
 
-	public function __construct(ServiceManager $serviceManager)
+	public function setServiceManager(ServiceManager $serviceManager)
 	{
 		$this->serviceManager = $serviceManager;
 	}

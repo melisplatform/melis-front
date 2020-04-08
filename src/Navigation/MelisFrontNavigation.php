@@ -16,7 +16,7 @@ use Laminas\EventManager\EventManager;
 use Laminas\EventManager\EventManagerInterface;
 
 /**
- * Generate zend navigation based on Melis Page System
+ * Generate laminas navigation based on Melis Page System
  *
  */
 class MelisFrontNavigation extends DefaultNavigationFactory

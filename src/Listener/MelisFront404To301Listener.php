@@ -26,8 +26,8 @@ class MelisFront404To301Listener extends MelisFrontSEODispatchRouterAbstractList
         	'*', 
             'melisfront_site_dispatch_ready',
         	function($e){
-        		
-        	    $sm = $this->getTarget()->getEvent()->getApplication()->getServiceManager();
+
+        	    $sm = $e->getTarget()->serviceManager;
         	    $params = $e->getParams();
 
                 if (!empty($params['404'])) {

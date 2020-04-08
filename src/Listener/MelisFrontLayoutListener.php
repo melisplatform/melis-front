@@ -92,7 +92,7 @@ class MelisFrontLayoutListener implements ListenerAggregateInterface
                          * - add Melis Version and time generation in front
                          * - add TinyMce files for edition when the page is looked in the back
                          */
-                        $renderer = $sm->get('viewrenderer');
+                        $renderer = $sm->get('ViewRenderer');
                         $finalView = new ViewModel();
                         $finalView->content = $content;
                         $finalView->idPage = $idpage;

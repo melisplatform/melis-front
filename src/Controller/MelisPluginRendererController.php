@@ -12,6 +12,7 @@ namespace MelisFront\Controller;
 use Laminas\View\Model\JsonModel;
 use Assetic\Exception\Exception;
 use Laminas\View\Model\ViewModel;
+use MelisCore\Controller\AbstractActionController;
 
 class MelisPluginRendererController extends AbstractActionController
 {
