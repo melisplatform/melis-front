@@ -42,16 +42,16 @@ class Module
         $events = $moduleManager->getEventManager();
         // Registering a listener at default priority, 1, which will trigger
         // after the ConfigListener merges config.
-        $events->attach(ModuleEvent::EVENT_LOAD_MODULES_POST, array(new MelisFrontMiniTemplateConfigListener, 'onLoadModulesPost'));
+        $events->attach(ModuleEvent::EVENT_LOAD_MODULES_POST, [new MelisFrontMiniTemplateConfigListener(), 'onLoadModulesPost']);
         /**
          * get the site config (merged with db)
          */
-        $events->attach(ModuleEvent::EVENT_LOAD_MODULES_POST, array(new MelisFrontSiteConfigListener, 'onLoadModulesPost'));
+        $events->attach(ModuleEvent::EVENT_LOAD_MODULES_POST, [new MelisFrontSiteConfigListener(), 'onLoadModulesPost']);
         /**
          *  - Catching PAGE SEO URLs to update Router
          *    > create SEO route first so the modules can have a route match in creating translations
          */
-        $events->attach(ModuleEvent::EVENT_LOAD_MODULES_POST, array(new MelisFrontSEORouteListener(), 'onLoadModulesPost'));
+        $events->attach(ModuleEvent::EVENT_LOAD_MODULES_POST, [new MelisFrontSEORouteListener(), 'onLoadModulesPost']);
     }
 
     public function onBootstrap(MvcEvent $e)
@@ -66,29 +66,23 @@ class Module
         $isBackOffice = false;
 
 
-        if (!empty($routeMatch))
-        {
+        if (!empty($routeMatch)) {
 
             $this->createTranslations($e, $routeMatch);
 
             $routeName = $routeMatch->getMatchedRouteName();
             $module = explode('/', $routeName);
 
-            if (!empty($module[0]))
-            {
-                if ($module[0] == 'melis-backoffice')
-                {
+            if (!empty($module[0])) {
+                if ($module[0] == 'melis-backoffice') {
                     $isBackOffice = true;
                 }
             }
-
-
         }
 
 
         // do not load listeners if working on back-office
-        if(!$isBackOffice)
-        {
+        if(!$isBackOffice) {
             // Catching PAGE SEO URLs to update Router
             //$eventManager->attach(new MelisFrontSEOReformatToRoutePageUrlListener()); -> refer init() Listener: MelisFrontSEORouteListener, issueL no translations of melis-modules
 
@@ -124,10 +118,9 @@ class Module
 
             $eventManager->attach(new MelisFrontHomePageIdOverrideListener());
 
-        }else{
+        } else {
             $eventManager->attach(new MelisFrontPluginLangSessionUpdateListener());
         }
-
     }
 
     public function createTranslations($e, $routeMatch)
@@ -135,18 +128,17 @@ class Module
         $container = new Container('melisplugins');
         $locale = $container['melis-plugins-lang-locale'];
 
-        $param = $routeMatch->getParams();
+        $container = new Container('meliscore');
+        if (empty($locale)) {
+            $locale = $container['melis-lang-locale'];
+        }
 
         // Checking if the Request is from Melis-BackOffice or Front
-        if (!empty($param['renderMode']))
-        {
-            if ($param['renderMode'] == 'melis')
-            {
-                $container = new Container('meliscore');
+        $param = $routeMatch->getParams();
+        if (!empty($param['renderMode'])) {
+            if ($param['renderMode'] == 'melis') {
                 $locale = $container['melis-lang-locale'];
-            }
-            else
-            {
+            } else {
                 // Session language for front
                 if (!empty($param['idpage']) || !empty($param['frontIdpage'])) {
                     $idpage = !empty($param['idpage']) ? $param['idpage'] : $param['frontIdpage'];
@@ -163,22 +155,17 @@ class Module
                     }
                 }
             }
-        }
-        else
-        {
-            if (!empty($param['action']))
-            {
+        } else {
+            if (!empty($param['action'])) {
                 // MelisCore locale will be use translations in plugin modals requests
-                if (in_array($param['action'], array('renderPluginModal', 'validatePluginModal')))
-                {
+                if (in_array($param['action'], ['renderPluginModal', 'validatePluginModal'])) {
                     $container = new Container('meliscore');
                     $locale = $container['melis-lang-locale'];
                 }
             }
         }
 
-        if (!empty($locale))
-        {
+        if (!empty($locale)) {
             // Inteface translations
             $interfaceTransPath = 'module/MelisModuleConfig/languages/MelisFront/' . $locale . '.interface.php';
             $default = __DIR__ . '/../language/' . $locale . '.interface.php';
@@ -187,17 +174,16 @@ class Module
 
             $sm = $e->getApplication()->getServiceManager();
             $translator = $sm->get('translator');
-            if (file_exists($transPath)){
+            if (file_exists($transPath)) {
                 $translator->addTranslationFile('phparray', $transPath);
             }
-
         }
     }
 
     public function getConfig()
     {
-        $config = array();
-        $configFiles = array(
+        $config = [];
+        $configFiles = [
             include __DIR__ . '/../config/module.config.php',
 
             // Tests
@@ -214,7 +200,8 @@ class Module
             include __DIR__ . '/../config/plugins/MelisFrontBlockSectionPlugin.config.php',
             include __DIR__ . '/../config/plugins/MelisFrontGdprBannerPlugin.config.php',
             include __DIR__ . '/../config/plugins/MelisFrontGdprRevalidationPlugin.config.php',
-        );
+        ];
+
 
         foreach ($configFiles as $file) {
             $config = ArrayUtils::merge($config, $file);
@@ -225,12 +212,12 @@ class Module
 
     public function getAutoloaderConfig()
     {
-        return array(
-            'Zend\Loader\StandardAutoloader' => array(
-                'namespaces' => array(
+        return [
+            'Zend\Loader\StandardAutoloader' => [
+                'namespaces' => [
                     __NAMESPACE__ => __DIR__ . '/src/' . __NAMESPACE__,
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
     }
 }
