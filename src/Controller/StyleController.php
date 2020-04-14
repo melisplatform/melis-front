@@ -24,7 +24,7 @@ class StyleController extends AbstractActionController
             ->addHeaderLine('Pragma'       , 'no-cache')
             ->addHeaderLine('Content-Type' , 'text/css;charset=UTF-8');
 
-        $css     = '[class^="plugin-width"] {float: left;margin: 0 0px 30px;}';
+        $css     = '[class^="plugin-width"] {float: left;margin: 0 5px 30px;}';
         $pageId  = (int) $this->params()->fromQuery('idpage');
 
         $pageSvc = $this->getServiceLocator()->get('MelisEnginePage');
