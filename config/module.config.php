@@ -161,12 +161,17 @@ return [
             ],
         ],
     ],
+    'translator' => [
+        'locale' => 'en_EN',
+    ],
     'service_manager' => [
         'factories' => [
             // Navigation
             'MelisFrontNavigation'  => \MelisFront\Navigation\Factory\MelisFrontNavigationFactory::class,
         ],
         'aliases' => [
+            // Laminas Mvc translator Service
+            'translator'                    => 'MvcTranslator',
             'MelisFrontHead'                => \MelisFront\Service\MelisFrontHeadService::class,
             'MinifyAssets'                  => \MelisFront\Service\MinifyAssetsService::class,
             'MelisSiteTranslationService'   => \MelisFront\Service\MelisSiteTranslationService::class,
