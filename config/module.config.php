@@ -10,7 +10,7 @@ return [
     'router' => [
         'routes' => [
             'melis-front' => [
-                'type'    => 'regex',
+                'type'    => 'Regex',
                 'options' => [
                     'regex' => '.*/id/(?<idpage>[0-9]+)',
                     'defaults' => [
@@ -25,7 +25,7 @@ return [
                 'may_terminate' => true,
                 'child_routes' => [
                     'melis_front_melisrender' => [
-                        'type'    => 'regex',
+                        'type'    => 'Regex',
                         'options' => [
                             'regex'    => '/renderMode/melis',
                             'defaults' => [
@@ -36,7 +36,7 @@ return [
                         ],
                     ],
                     'melis_front_previewender' => [
-                        'type'    => 'regex',
+                        'type'    => 'Regex',
                         'options' => [
                             'regex'    => '/preview',
                             'defaults' => [
@@ -59,7 +59,7 @@ return [
                 'may_terminate' => false,
                 'child_routes' => [
                     'front-sitemap' => [
-                        'type'    => 'regex',
+                        'type'    => 'Regex',
                         'options' => [
                             'regex' => 'sitemap.html|sitemap.xml|sitemap',
                             'defaults' => [
@@ -147,7 +147,7 @@ return [
                 ],
             ],
             'sites-minify-assets' => [
-                'type' => 'segment',
+                'type' => 'Segment',
                 'options' => [
                     'route' =>  '/minify-assets',
                     'constraints' => [
@@ -205,19 +205,12 @@ return [
         ]
     ],
     'view_helpers' => [
-        'factories' => [
-//            @TODO Need to virify when sites are migrated
-//            \MelisFront\View\Helper\MelisDragDropZoneHelper::class          => AbstractViewHelperFactory::class,
-//            \MelisFront\View\Helper\MelisTagsHelper::class                  => AbstractViewHelperFactory::class,
-//            \MelisFront\View\Helper\MelisMenuHelper::class                  => AbstractViewHelperFactory::class,
-//            \MelisFront\View\Helper\MelisLinksHelper::class                 => AbstractViewHelperFactory::class,
-//            \MelisFront\View\Helper\MelisPageLangVersionLinkHelper::class   => AbstractViewHelperFactory::class,
-//            \MelisFront\View\Helper\MelisHomePageLinkHelper::class          => AbstractViewHelperFactory::class,
-//            \MelisFront\View\Helper\MelisSiteTranslationHelper::class       => AbstractViewHelperFactory::class,
-//            \MelisFront\View\Helper\MelisTranslationHelper::class           => AbstractViewHelperFactory::class,
-//            \MelisFront\View\Helper\SiteConfigViewHelper::class             => AbstractViewHelperFactory::class,
-//            \MelisFront\View\Helper\MelisGdprBannerHelper::class            => AbstractViewHelperFactory::class,
-//            \MelisFront\View\Helper\MelisListFromFolderHelper::class        => AbstractViewHelperFactory::class,
+        'abstract_factories' => [
+            /**
+             * This Abstract factory will create requested service
+             * that match on the onCreate() condetions
+             */
+            \MelisCore\Factory\MelisAbstractFactory::class
         ],
         'aliases' => [
             'MelisDragDropZone'         => \MelisFront\View\Helper\MelisDragDropZoneHelper::class,

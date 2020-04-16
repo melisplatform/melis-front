@@ -22,13 +22,20 @@ class MelisDragDropZoneHelper extends AbstractHelper
 {
 	public $serviceManager;
 
-	public function setServiceManager(ServiceManager $serviceManager)
-	{
-		$this->serviceManager = $serviceManager;
-	}
-	
-	
-	public function __invoke($idPage, $dragDropZoneId)
+    /**
+     * @param ServiceManager $serviceManager
+     */
+    public function setServiceManager(ServiceManager $serviceManager)
+    {
+        $this->serviceManager = $serviceManager;
+    }
+
+    /**
+     * @param $idPage
+     * @param $dragDropZoneId
+     * @return mixed
+     */
+    public function __invoke($idPage, $dragDropZoneId)
 	{
 	    $melisFrontDragDropZonePlugin = $this->serviceManager->get('ControllerPluginManager')->get('MelisFrontDragDropZonePlugin');
 

@@ -88,7 +88,7 @@ class MelisFrontHomePageIdOverrideListener implements ListenerAggregateInterface
                         //override the page id
                         $params['idpage'] = !empty($pageId) ? $pageId : $params['idpage'];
 
-                        $route = Segment::factory(array(
+                        $route = \Laminas\Router\Http\Segment::factory(array(
                             'route' => '/',
                             'defaults' => $params,
                         ));
