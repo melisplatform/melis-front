@@ -12,13 +12,14 @@ namespace MelisFront\Listener;
 use Laminas\EventManager\EventManagerInterface;
 use Laminas\EventManager\ListenerAggregateInterface;
 use Laminas\Mvc\MvcEvent;
+use MelisCore\Listener\MelisGeneralListener;
 
 /**
  * This listener will activate the replacement of the title and meta description
  * on Melis Pages
  * 
  */
-class MelisFrontSEOMetaPageListener implements ListenerAggregateInterface
+class MelisFrontSEOMetaPageListener extends MelisGeneralListener implements ListenerAggregateInterface
 {
     public function attach(EventManagerInterface $events, $priority = 1)
     {
@@ -70,14 +71,5 @@ class MelisFrontSEOMetaPageListener implements ListenerAggregateInterface
         110);
         
         $this->listeners[] = $callBackHandler;
-    }
-    
-    public function detach(EventManagerInterface $events)
-    {
-        foreach ($this->listeners as $index => $listener) {
-            if ($events->detach($listener)) {
-                unset($this->listeners[$index]);
-            }
-        }
     }
 }

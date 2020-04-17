@@ -14,12 +14,14 @@ use Laminas\EventManager\ListenerAggregateInterface;
 use Laminas\Mvc\MvcEvent;
 use Laminas\View\Model\ViewModel;
 use Laminas\Json\Json;
+use MelisCore\Listener\MelisGeneralListener;
+
 /**
  * This listener choose to apply or not the Melis layout for the templates shown
  * resulting in adding JS scripts for TinyMCE.
  *
  */
-class MelisFrontLayoutListener implements ListenerAggregateInterface
+class MelisFrontLayoutListener extends MelisGeneralListener implements ListenerAggregateInterface
 {
     public function attach(EventManagerInterface $events, $priority = 1)
     {
@@ -180,14 +182,5 @@ class MelisFrontLayoutListener implements ListenerAggregateInterface
             80);
 
         $this->listeners[] = $callBackHandler;
-    }
-
-    public function detach(EventManagerInterface $events)
-    {
-        foreach ($this->listeners as $index => $listener) {
-            if ($events->detach($listener)) {
-                unset($this->listeners[$index]);
-            }
-        }
     }
 }

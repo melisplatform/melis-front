@@ -30,7 +30,6 @@ class MelisFrontPluginLangSessionUpdateListener extends MelisFrontSEODispatchRou
 {
     public function attach(EventManagerInterface $events, $priority = 1)
     {
-
         $callBackHandler = $events->attach(
         	MvcEvent::EVENT_DISPATCH, 
         	function(MvcEvent $e){
@@ -67,12 +66,4 @@ class MelisFrontPluginLangSessionUpdateListener extends MelisFrontSEODispatchRou
         
         $this->listeners[] = $callBackHandler;
     }
-//    public function detach(EventManagerInterface $events)
-//    {
-//        foreach ($this->listeners as $index => $listener) {
-//            if ($events->detach($listener)) {
-//                unset($this->listeners[$index]);
-//            }
-//        }
-//    }
 }

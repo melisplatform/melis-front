@@ -13,11 +13,12 @@ use Laminas\EventManager\EventManagerInterface;
 use Laminas\EventManager\ListenerAggregateInterface;
 use Laminas\Mvc\MvcEvent;
 use Laminas\Mvc\Router\Http\Segment;
+use MelisCore\Listener\MelisGeneralListener;
 
 /**
  * Site 404 catcher listener
  */
-class MelisFront404CatcherListener implements ListenerAggregateInterface
+class MelisFront404CatcherListener extends MelisGeneralListener implements ListenerAggregateInterface
 {
     public function attach(EventManagerInterface $events, $priority = 1)
     {
@@ -161,14 +162,5 @@ class MelisFront404CatcherListener implements ListenerAggregateInterface
         -1000);
         
         $this->listeners[] = $callBackHandler;
-    }
-    
-    public function detach(EventManagerInterface $events)
-    {
-        foreach ($this->listeners as $index => $listener) {
-            if ($events->detach($listener)) {
-                unset($this->listeners[$index]);
-            }
-        }
     }
 }

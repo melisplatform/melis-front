@@ -20,9 +20,8 @@ class MelisFront404To301Listener extends MelisFrontSEODispatchRouterAbstractList
 {
     public function attach(EventManagerInterface $events, $priority = 1)
     {
-        $sharedEvents      = $events->getSharedManager();
-        
-        $callBackHandler = $sharedEvents->attach(
+        $this->attachEventListener(
+            $events,
         	'*', 
             'melisfront_site_dispatch_ready',
         	function($e){
@@ -47,17 +46,7 @@ class MelisFront404To301Listener extends MelisFrontSEODispatchRouterAbstractList
         	        }
         	    }
         	},
-        120);
-        
-        $this->listeners[] = $callBackHandler;
-    }
-    
-    public function detach(EventManagerInterface $events)
-    {
-        foreach ($this->listeners as $index => $listener) {
-            if ($events->detach($listener)) {
-                unset($this->listeners[$index]);
-            }
-        }
+        120
+        );
     }
 }

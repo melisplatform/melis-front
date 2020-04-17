@@ -14,13 +14,14 @@ use Laminas\EventManager\ListenerAggregateInterface;
 use Laminas\Mvc\MvcEvent;
 use Laminas\Session\Container;
 use Laminas\Session\SessionManager;
+use MelisCore\Listener\MelisGeneralListener;
 
 /**
  * This abstract class is used by SEO listener
  * It contains the 404 redirection and Regular url rewriting for Melis Pages
  * 
  */
-abstract class MelisFrontSEODispatchRouterAbstractListener 
+abstract class MelisFrontSEODispatchRouterAbstractListener extends MelisGeneralListener
     implements ListenerAggregateInterface
 {
     abstract public function attach(EventManagerInterface $events, $priority = 1);
@@ -234,14 +235,5 @@ abstract class MelisFrontSEODispatchRouterAbstractListener
         $sessionManager->start();
         Container::setDefaultManager($sessionManager);
         $container = new Container($name);
-    }
-    
-    public function detach(EventManagerInterface $events)
-    {
-        foreach ($this->listeners as $index => $listener) {
-            if ($events->detach($listener)) {
-                unset($this->listeners[$index]);
-            }
-        }
     }
 }
