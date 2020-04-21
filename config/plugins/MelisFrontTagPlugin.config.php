@@ -42,6 +42,7 @@ return array(
                             'css' => array(
                             ),
                             'js' => array(
+                                'js_melistag_custom_js' => '/MelisFront/plugins/js/plugin.related.data.js',
                                 'js_melistag' => '/MelisFront/plugins/js/plugin.melistagHTML.init.js'
                             ),
                         ),
