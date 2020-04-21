@@ -98,4 +98,8 @@ return array(
 
     //DragDrop Zone
     'tr_front_drag_drop_zone_label' => 'Déposez le plugin ici',
+
+    // GDPR Revalidation plugin
+    'tr_melis_front_gdpr_revalidation_name' => 'GDPR Revalidation plugin',
+    'tr_melis_front_gdpr_revalidation_desc' => 'Through this plugin user can validate his account to become active again',
 );

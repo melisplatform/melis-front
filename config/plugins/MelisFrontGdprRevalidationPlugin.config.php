@@ -53,9 +53,8 @@ return [
                             'id' => 'BASICS',
                             'title' => 'tr_MelisFrontSubcategoryPageBasics_Title'
                         ],
-                        'name' => 'Revalidation plugin',
-//                        'thumbnail' => '/MelisFront/plugins/images/MelisFrontGdprBannerPlugin_thumb.jpg',
-                        'description' => 'Revalidation plugin',
+                        'name' => 'tr_melis_front_gdpr_revalidation_name',
+                        'description' => 'tr_melis_front_gdpr_revalidation_desc',
 //                        'files' => [
                             'css' => [
                                 '/MelisFront/plugins/css/plugin.gdprRevalidation.css',
