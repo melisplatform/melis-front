@@ -54,7 +54,7 @@ class MelisFrontSEORouteListener
                         // get router
                         $router = $sm->get('router');
                         // Creating dynamicaly the route and the params that are needed in the regular melis routing
-                        $route = Segment::factory(array(
+                        $route = \Laminas\Router\Http\Segment::factory(array(
                             'route' => '/' . $url,
                             'defaults' => array(
                                 'controller' => 'MelisFront\Controller\Index',
