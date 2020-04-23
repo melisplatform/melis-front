@@ -83,7 +83,7 @@ class MelisFrontSiteConfigListener
                  * Update the config inside the service
                  */
                 $serviceManager->setAllowOverride(true);
-                $serviceManager->setService('Config', $config);
+                $serviceManager->setService('config', $config);
                 $serviceManager->setAllowOverride(false);
             }
         }
