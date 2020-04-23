@@ -10,7 +10,7 @@
 namespace MelisFront\Navigation\Factory;
 
 use MelisFront\Navigation\MelisFrontNavigation;
-use Psr\Container\ContainerInterface;
+use Interop\Container\ContainerInterface;
 
 class MelisFrontNavigationFactory
 {
