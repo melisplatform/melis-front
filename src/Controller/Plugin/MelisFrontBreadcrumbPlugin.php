@@ -77,7 +77,10 @@ class MelisFrontBreadcrumbPlugin extends MelisTemplatingPlugin
         {
             foreach ($pageBreadcrumb As $key => $val)
             {
-                if (in_array($val->page_type, array('PAGE', 'SITE')))
+                if($val->page_menu == "NONE")
+                    continue;
+
+                if (in_array($val->page_type, array('PAGE', 'FOLDER', 'SITE')))
                 {
                     // Checking if the pageId is the current viewed
                     $flag = ($val->page_id == $pageId) ? 1 : 0;
@@ -87,7 +90,7 @@ class MelisFrontBreadcrumbPlugin extends MelisTemplatingPlugin
                     $tmp = array(
                         'label'        => $label,
                         'menu'         => $val->page_menu,
-                        'uri'          => $treeSrv->getPageLink($val->page_id, false),
+                        'uri'          => ($val->page_menu == "LINK") ? $treeSrv->getPageLink($val->page_id, false) : null,
                         'idPage'       => $val->page_id,
                         'lastEditDate' => $val->page_edit_date,
                         'pageStat'     => $val->page_status,
