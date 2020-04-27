@@ -14,11 +14,7 @@
      data-plugin-id="<?= $pluginId; ?>"
      data-melis-tag="<?= $this->pluginXmlDbKey; ?>"
      data-site-module="<?= $this->siteModule; ?>">
-    <div class="container-fluid">
-        <div class="row">
-            <?php
-                echo $this->viewFront;
-            ?>
-        </div>
-    </div>
+    <?php
+        echo $this->viewFront;
+    ?>
 </div>
