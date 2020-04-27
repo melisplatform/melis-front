@@ -93,7 +93,8 @@ class MelisFrontGdprRevalidationPlugin extends MelisTemplatingPlugin
         $userData = $this->verifyUser($request, $pluginData);
         if (! empty($userData)) {
             // check the gdpr_last date if it's already validated or days of inactivity is less than to the set auto delete alert email days
-            $userDaysOfInactive = $gdprAutoDeleteService->getDaysDiff(date('Y-m-d', strtotime($userData->config['last_date'])), date('Y-m-d'));
+            #$userDaysOfInactive = $gdprAutoDeleteService->getDaysDiff(date('Y-m-d', strtotime($userData->config['last_date'])), date('Y-m-d'));
+            $userDaysOfInactive = $gdprAutoDeleteService->getDaysDiff($userData->config['last_date'], date('Y-m-d'));
             if ($userDaysOfInactive < $this->queryNumberOfDaysInactive($pluginData)) {
                 $userStillActive = true;
             }
