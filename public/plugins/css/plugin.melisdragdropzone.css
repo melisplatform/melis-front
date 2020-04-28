@@ -45,18 +45,9 @@
 
 .melis-dragdropzone .melis-ui-outlined {
     float: left;
-    margin: 0 5px 30px;
+    margin: 0 5px 30px 0;
     /* margin: 0 5px 30px 0; .container overflow */
 }
-
-/* .melis-dragdropzone .melis-ui-outlined:not(.plugin-width-lg-99-40 ),
-.melis-dragdropzone .melis-ui-outlined:not(.plugin-width-lg-100-00) {
-    margin: 0 5px 30px;
-} */
-
-/* .plugin-width-md-100-00.melis-ui-outlined {
-    margin: 0 0 30px;
-} */
 
 .wrapper div.melis-dragdropzone:last-of-type {
     margin-bottom: 35px;
