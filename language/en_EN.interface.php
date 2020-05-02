@@ -98,6 +98,6 @@ return array(
 
     // GDPR Revalidation plugin
     'tr_melis_front_gdpr_revalidation_name' => 'GDPR Revalidation plugin',
-    'tr_melis_front_gdpr_revalidation_desc' => 'Through this plugin user can validate his account to become active again',
+    'tr_melis_front_gdpr_revalidation_desc' => 'This plugin allows the user to validate the retention of its data on the site',
 
 );
