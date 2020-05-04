@@ -198,7 +198,10 @@ return [
             'MelisFrontMenuPlugin'                  => \MelisFront\Controller\Plugin\MelisFrontMenuPlugin::class,
             'MelisFrontBreadcrumbPlugin'            => \MelisFront\Controller\Plugin\MelisFrontBreadcrumbPlugin::class,
             'MelisFrontShowListFromFolderPlugin'    => \MelisFront\Controller\Plugin\MelisFrontShowListFromFolderPlugin::class,
-            'MelisFrontSearchResultsPlugin'         => \MelisFront\Controller\Plugin\MelisFrontSearchResultsPlugin::class,
+            /**
+             * @TODO ZendSearch equivalent for Laminas
+             */
+//            'MelisFrontSearchResultsPlugin'         => \MelisFront\Controller\Plugin\MelisFrontSearchResultsPlugin::class,
             'MelisFrontBlockSectionPlugin'          => \MelisFront\Controller\Plugin\MelisFrontBlockSectionPlugin::class,
             'MiniTemplatePlugin'                    => \MelisFront\Controller\Plugin\MiniTemplatePlugin::class,
             'MelisFrontGdprBannerPlugin'            => \MelisFront\Controller\Plugin\MelisFrontGdprBannerPlugin::class,
