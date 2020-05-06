@@ -36,7 +36,7 @@ return [
                                             'name' => 'revalidate_account',
                                             'type' => 'checkbox',
                                             'options' => [
-                                                'label' => 'I want to revalidate my account'
+                                                'label' => 'tr_melis_front_gdpr_revalidation_label_checkbox'
                                             ],
                                             'attributes' => [
                                                 'class' => 'form-control text-center',

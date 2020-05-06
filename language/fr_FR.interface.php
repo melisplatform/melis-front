@@ -106,5 +106,7 @@ return array(
     'tr_melis_front_gdpr_revalidation_btn_confirm' => 'Confirmer',
     'tr_melis_front_gdpr_revalidation_info_text_warning' => 'Ce lien n\'a pas l\'air de fonctionner ou n\'est pas reconnu.',
     'tr_melis_front_gdpr_revalidation_info_success_heading' => 'Succès',
-    'tr_melis_front_gdpr_revalidation_info_success_sub_heading' => 'Votre compte a été validé'
+    'tr_melis_front_gdpr_revalidation_info_success_sub_heading' => 'Votre compte a été validé',
+    'tr_melis_front_gdpr_revalidation_label_checkbox' => 'Je souhaite revalider mon compte',
+    'tr_melis_front_gdpr_revalidation_not_checked' => 'Veuillez cocher la case pour valider',
 );

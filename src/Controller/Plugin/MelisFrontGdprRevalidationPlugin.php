@@ -110,7 +110,7 @@ class MelisFrontGdprRevalidationPlugin extends MelisTemplatingPlugin
                     $this->removeUserEntryOnDeleteSentEmail($request->getQuery('u'));
                 } else {
                     // return error
-                    $formError = "tr_melis_front_gdpr_revalidation_not_cheked";
+                    $formError = "tr_melis_front_gdpr_revalidation_not_checked";
                 }
             }
         }
