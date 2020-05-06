@@ -91,9 +91,10 @@ class MelisFrontGdprRevalidationPlugin extends MelisTemplatingPlugin
         $request = $this->getServiceLocator()->get('request');
         // get user data and check if user is valid
         $userData = $this->verifyUser($request, $pluginData);
+        $revalidationForm = $this->getRevalidationForm($this->pluginFrontConfig['forms']['gdpr_revalidation_form']);
+        $formError = [];
         if (! empty($userData)) {
             // check the gdpr_last date if it's already validated or days of inactivity is less than to the set auto delete alert email days
-            #$userDaysOfInactive = $gdprAutoDeleteService->getDaysDiff(date('Y-m-d', strtotime($userData->config['last_date'])), date('Y-m-d'));
             $userDaysOfInactive = $gdprAutoDeleteService->getDaysDiff($userData->config['last_date'], date('Y-m-d'));
             if ($userDaysOfInactive < $this->queryNumberOfDaysInactive($pluginData)) {
                 $userStillActive = true;
@@ -101,12 +102,15 @@ class MelisFrontGdprRevalidationPlugin extends MelisTemplatingPlugin
             // revalidate user
             if ($request->isPost() && !$userStillActive) {
                 $post = get_object_vars($request->getPost());
-                // check user if check the box
+                // set data
                 if ($post['revalidate_account']) {
                     // update user status by the services from modules
                     $revalidated = $this->service->updateGdprUserStatus($request->getQuery('u'));
                     // remove entry after revalidation
                     $this->removeUserEntryOnDeleteSentEmail($request->getQuery('u'));
+                } else {
+                    // return error
+                    $formError = "tr_melis_front_gdpr_revalidation_not_cheked";
                 }
             }
         }
@@ -114,11 +118,11 @@ class MelisFrontGdprRevalidationPlugin extends MelisTemplatingPlugin
 
         $viewVariables = [
             'formData'         => $pluginData,
-            'revalidationForm' => $this->getRevalidationForm($this->pluginFrontConfig['forms']['gdpr_revalidation_form']),
+            'revalidationForm' => $revalidationForm,
             'userData'         => $userData,
             'isRevalidated'    => $revalidated,
             'userStillActive'  => $userStillActive,
-            'errors'           => $this->errors
+            'error'           => $formError
         ];
 
         return $viewVariables;
