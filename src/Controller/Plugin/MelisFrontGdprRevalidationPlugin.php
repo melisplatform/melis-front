@@ -105,9 +105,12 @@ class MelisFrontGdprRevalidationPlugin extends MelisTemplatingPlugin
                 // set data
                 if ($post['revalidate_account']) {
                     // update user status by the services from modules
-                    $revalidated = $this->service->updateGdprUserStatus($request->getQuery('u'));
-                    // remove entry after revalidation
-                    $this->removeUserEntryOnDeleteSentEmail($request->getQuery('u'));
+                    $id = $this->service->updateGdprUserStatus($request->getQuery('u'));
+                    if ($id) {
+                        $revalidated = true;
+                        // remove entry after revalidation
+                        $this->removeUserEntryOnDeleteSentEmail($id);
+                    }
                 } else {
                     // return error
                     $formError = "tr_melis_front_gdpr_revalidation_not_checked";
@@ -154,7 +157,7 @@ class MelisFrontGdprRevalidationPlugin extends MelisTemplatingPlugin
      */
     private function removeUserEntryOnDeleteSentEmail($validationKey)
     {
-        return $this->getServiceLocator()->get('MelisGdprDeleteEmailsSentTable')->deleteByField('mgdprs_validation_key', $validationKey);
+        return $this->getServiceLocator()->get('MelisGdprDeleteEmailsSentTable')->deleteByField('mgdprs_account_id', $validationKey);
     }
 
     /**
