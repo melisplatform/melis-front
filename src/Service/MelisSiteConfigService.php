@@ -84,7 +84,7 @@ class MelisSiteConfigService extends MelisEngineGeneralService
         $arrayParameters = $this->sendEvent('meliscms_site_tool_get_site_config_by_page_id_start', $arrayParameters);
 
         //try to get config from cache
-        $cacheKey = 'getSiteConfigByPageId_' . $siteId.'_'.$langLocale;
+        $cacheKey = 'getSiteConfigByPageId_' . $pageId.'_'.$langLocale;
         $cacheConfig = 'engine_page_services';
         $melisEngineCacheSystem = $this->serviceLocator->get('MelisEngineCacheSystem');
         $results = $melisEngineCacheSystem->getCacheByKey($cacheKey, $cacheConfig);
