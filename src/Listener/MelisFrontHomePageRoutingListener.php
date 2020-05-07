@@ -49,8 +49,8 @@ class MelisFrontHomePageRoutingListener implements ListenerAggregateInterface
         		$uri = str_replace($getString, '', $uri);
 
     		    $domain = $_SERVER['SERVER_NAME'];
-    		    $melisTableDomain = $sm->get('MelisEngineTableSiteDomain');
-    		    $datasDomain = $melisTableDomain->getEntryByField('sdom_domain', $domain)->current();
+    		    $domainSrv = $sm->get('MelisEngineSiteDomainService');
+    		    $datasDomain = $domainSrv->getDomainByDomainName($domain);
 
     		    if (empty($datasDomain) || empty($uri))
     		    {
@@ -68,15 +68,15 @@ class MelisFrontHomePageRoutingListener implements ListenerAggregateInterface
                      */
                     $siteLangLocale = $uriArr[0] . '_' . strtoupper($uriArr[0]);
 
-                    $langCmsTbl = $sm->get('MelisEngineTableCmsLang');
-                    $langData = $langCmsTbl->getEntryByField('lang_cms_locale', $siteLangLocale)->current();
+                    $langSrv = $sm->get('MelisEngineLang');
+                    $langData = $langSrv->getLangDataByLangLocale($siteLangLocale);
                     /**
                      * Make sure that lang locale is exist
                      */
+                    $siteService = $sm->get('MelisEngineSiteService');
                     if(!empty($langData)) {
                         $langId = $langData->lang_cms_id;
-                        $siteHomeTable = $sm->get('MelisEngineTableCmsSiteHome');
-                        $siteHomeData = $siteHomeTable->getHomePageBySiteIdAndLangId($siteId, $langId)->current();
+                        $siteHomeData = $siteService->getHomePageBySiteIdAndLangId($siteId, $langId)->current();
                         /**
                          * Check if site home page id exit from site home table,
                          * else we used the default main page id
@@ -85,9 +85,7 @@ class MelisFrontHomePageRoutingListener implements ListenerAggregateInterface
                         if(!empty($siteHomeData)) {
                             $pageId = $siteHomeData->shome_page_id;
                         }else{
-                            $siteTbl = $sm->get('MelisEngineTableSite');
-                            $siteDatas = $siteTbl->getEntryById($siteId)->current();
-                            $pageId = $siteDatas->site_main_page_id;
+                            $pageId = $siteService->getSiteMainHomePageIdBySiteId($siteId);
                         }
                         /**
                          * Check if page is empty
