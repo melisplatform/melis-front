@@ -143,15 +143,22 @@ class Module
                 if (!empty($param['idpage']) || !empty($param['frontIdpage'])) {
                     $idpage = !empty($param['idpage']) ? $param['idpage'] : $param['frontIdpage'];
                     $sm = $e->getApplication()->getServiceManager();
+                    // var_dump($idpage);
                     $melisPagelangTbl = $sm->get('MelisEngine\Model\Tables\MelisPageLangTable');
                     $currentPage = $melisPagelangTbl->getEntryByField('plang_page_id', $idpage)->current();
+
+                    
                     $langSrv = $sm->get('MelisEngineLang');
                     $currentPageLang = $langSrv->getLangDataById($currentPage->plang_lang_id);
+
+                    // var_dump($currentPage);
+                    // var_dump($currentPageLang);
+                    // die;
                     if (!empty($currentPageLang)) {
                         $container = new Container('melisplugins');
-                        $container['melis-plugins-lang-id'] = $currentPageLang['lang_cms_id'];
-                        $container['melis-plugins-lang-locale'] = $currentPageLang['lang_cms_locale'];
-                        $locale = $currentPageLang['lang_cms_locale'];
+                        $container['melis-plugins-lang-id'] = $currentPageLang[0]['lang_cms_id'];
+                        $container['melis-plugins-lang-locale'] = $currentPageLang[0]['lang_cms_locale'];
+                        $locale = $currentPageLang[0]['lang_cms_locale'];
                     }
                 }
             }
