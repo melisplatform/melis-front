@@ -367,8 +367,7 @@ class MelisSiteTranslationService extends MelisEngineGeneralService
         $arrayParameters = $this->sendEvent('melis_site_translation_get_trans_db_start', $arrayParameters);
 
         $transFromDb = array();
-        $mstTable = $this->getServiceLocator()->get('MelisSiteTranslationTable');
-        $translationFromDb = $mstTable->getSiteTranslation($arrayParameters['translationKey'], $arrayParameters['langId'], $arrayParameters['siteId'])->toArray();
+        $translationFromDb = $this->getCachedSiteTranslationFromDb($arrayParameters['translationKey'], $arrayParameters['langId'], $arrayParameters['siteId']);
 
         foreach ($translationFromDb as $keyDb => $valueDb) {
             array_push($transFromDb, array('mst_id' => $valueDb['mst_id'], 'mstt_id' => $valueDb['mstt_id'], 'mst_site_id' => $valueDb['mst_site_id'], 'mstt_lang_id' => $valueDb['mstt_lang_id'], 'mst_key' => $valueDb['mst_key'], 'mstt_text' => $valueDb['mstt_text'], 'module' => null));
@@ -377,6 +376,29 @@ class MelisSiteTranslationService extends MelisEngineGeneralService
         $arrayParameters = $this->sendEvent('melis_site_translation_get_trans_list_from_db_end', $arrayParameters);
 
         return $arrayParameters['results'];
+    }
+
+    /**
+     * @param $key
+     * @param $langId
+     * @param $siteId
+     * @return mixed
+     */
+    public function getCachedSiteTranslationFromDb($key, $langId, $siteId)
+    {
+        //try to get data from cache
+        $cacheKey = 'getCachedSiteTranslationFromDb_' . $key.'_'.$langId.'_'.$siteId;
+        $cacheConfig = 'engine_page_services';
+        $melisEngineCacheSystem = $this->getServiceLocator()->get('MelisEngineCacheSystem');
+        $results = $melisEngineCacheSystem->getCacheByKey($cacheKey, $cacheConfig);
+        if(!is_null($results)) return $results;
+
+        $mstTable = $this->getServiceLocator()->get('MelisSiteTranslationTable');
+        $translationFromDb = $mstTable->getSiteTranslation($key, $langId, $siteId)->toArray();
+
+        $melisEngineCacheSystem->setCacheByKey($cacheKey, $cacheConfig, $translationFromDb);
+
+        return $translationFromDb;
     }
 
     /**
