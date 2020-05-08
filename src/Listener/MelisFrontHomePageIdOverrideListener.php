@@ -53,48 +53,46 @@ class MelisFrontHomePageIdOverrideListener implements ListenerAggregateInterface
                  */
                 if(empty($uri)) {
                     /**
-                     * Get domain data
+                     * get domain
                      */
                     $domain = $_SERVER['SERVER_NAME'];
-                    $melisTableDomain = $sm->get('MelisEngineTableSiteDomain');
-                    $datasDomain = $melisTableDomain->getEntryByField('sdom_domain', $domain)->current();
-                    $siteId = $datasDomain->sdom_site_id;
                     /**
-                     * Get site data
+                     * get site data
                      */
-                    $siteSrv = $sm->get('MelisEngineSiteService');
-                    $siteData = $siteSrv->getSiteById($siteId)->current();
-
-                    /**
-                     * We override only the page id
-                     * if the site lang option is set to
-                     * default (1), because there is already
-                     * a separate listener that handled
-                     * the home page routes if the site lang option
-                     * is set to 2.
-                     *
-                     * This Listener: MelisFrontHomePageRoutingListener
-                     */
-                    if($siteData->site_opt_lang_url == 1) {
-                        $pageId = !empty($siteData->site_main_page_id) ? $siteData->site_main_page_id : null;
+                    $siteService = $sm->get('MelisEngineSiteService');
+                    $siteData = $siteService->getSiteDataByDomain($domain);
+                    if(!empty($siteData)) {
+                        /**
+                         * We override only the page id
+                         * if the site lang option is set to
+                         * default (1), because there is already
+                         * a separate listener that handled
+                         * the home page routes if the site lang option
+                         * is set to 2.
+                         *
+                         * This Listener: MelisFrontHomePageRoutingListener
+                         */
+                        if ($siteData->site_opt_lang_url == 1) {
+                            $pageId = !empty($siteData->site_main_page_id) ? $siteData->site_main_page_id : null;
 //                        $routeMatch->setParam('idpage', $pageId);
 
-                        $router = $e->getRouter();
-                        $request = $e->getRequest();
-                        $routeM = $router->match($request);
-                        //get the default params of the route
-                        $params = $routeM->getParams();
+                            $router = $e->getRouter();
+                            $request = $e->getRequest();
+                            $routeM = $router->match($request);
+                            //get the default params of the route
+                            $params = $routeM->getParams();
 
-                        //override the page id
-                        $params['idpage'] = !empty($pageId) ? $pageId : $params['idpage'];
+                            //override the page id
+                            $params['idpage'] = !empty($pageId) ? $pageId : $params['idpage'];
 
-                        $route = Segment::factory(array(
-                            'route' => '/',
-                            'defaults' => $params,
-                        ));
+                            $route = Segment::factory(array(
+                                'route' => '/',
+                                'defaults' => $params,
+                            ));
 
-                        // add the route to the router
-                        $router->addRoute($routeM->getMatchedRouteName(), $route);
+                            // add the route to the router
+                            $router->addRoute($routeM->getMatchedRouteName(), $route);
+                        }
                     }
                 }
             }
