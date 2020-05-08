@@ -147,8 +147,10 @@ class MelisSiteConfigService extends MelisEngineGeneralService
                                         $langId = $siteLangData->lang_cms_id;
                                     }
                                 } else {
-                                    $siteConfig['siteConfig'] = $config['site'][$siteName][$siteId][$langData['lang_cms_locale']];
-                                    $langId = $langData['lang_cms_id'];
+                                    foreach($langData as $val) {
+                                        $siteConfig['siteConfig'] = $config['site'][$siteName][$siteId][$val['lang_cms_locale']];
+                                        $langId = $val['lang_cms_id'];
+                                    }
                                 }
                                 $siteConfig['siteConfig']['site_id'] = $siteId;
                                 $siteConfig['siteConfig']['default_lang_id'] = $langId;
@@ -158,6 +160,7 @@ class MelisSiteConfigService extends MelisEngineGeneralService
                     }
                 }
             }
+
             $arrayParameters['result'] = $siteConfig;
             // Save cache key
             $melisEngineCacheSystem->setCacheByKey($cacheKey, $cacheConfig, $arrayParameters['result']);
