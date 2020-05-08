@@ -62,8 +62,8 @@ class MelisFrontHomePageIdOverrideListener implements ListenerAggregateInterface
                     /**
                      * Get site data
                      */
-                    $siteTable = $sm->get('MelisEngineTableSite');
-                    $siteData = $siteTable->getEntryById($siteId)->current();
+                    $siteSrv = $sm->get('MelisEngineSiteService');
+                    $siteData = $siteSrv->getSiteById($siteId)->current();
 
                     /**
                      * We override only the page id

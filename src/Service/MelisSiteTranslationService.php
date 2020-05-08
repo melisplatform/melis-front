@@ -400,8 +400,10 @@ class MelisSiteTranslationService extends MelisEngineGeneralService
 
         $moduleFolders = array();
         if (!empty($arrayParameters['siteId'])) {
-            $siteTbl = $this->getServiceLocator()->get('MelisEngineTableSite');
-            $siteData = $siteTbl->getEntryById($arrayParameters['siteId'])->current();
+
+            $siteSrv = $this->getServiceLocator()->get('MelisEngineSiteService');
+            $siteData = $siteSrv->getSiteById($arrayParameters['siteId'])->current();
+
             if (!empty($siteData)) {
                 $siteName = $siteData->site_name;
 

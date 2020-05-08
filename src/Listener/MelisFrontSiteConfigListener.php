@@ -53,8 +53,8 @@ class MelisFrontSiteConfigListener
                     /**
                      * get site name
                      */
-                    $siteTable = $serviceManager->get('MelisEngineTableSite');
-                    $siteData = $siteTable->getEntryById($siteId)->current();
+                    $siteSrv = $serviceManager->get('MelisEngineSiteService');
+                    $siteData = $siteSrv->getSiteById($siteId)->current();
                     if(!empty($siteData)) {
                         /**
                          * get the site config
