@@ -360,7 +360,7 @@ class MelisSiteConfigService extends MelisEngineGeneralService
 
         $pageSaved = $this->getServiceLocator()->get('MelisEngineTablePageSaved');
         $pagePublished = $this->getServiceLocator()->get('MelisEngineTablePagePublished');
-        $template = $this->getServiceLocator()->get('MelisEngineTableTemplate');
+        $tplSrv = $this->getServiceLocator()->get('MelisEngineTemplateService');
 
         if(!empty($pageId)){
             /**
@@ -376,7 +376,7 @@ class MelisSiteConfigService extends MelisEngineGeneralService
             }
 
             if(!empty($tplId)){
-                $tplData = $template->getEntryById($tplId)->current();
+                $tplData = $tplSrv->getTemplate($tplId)->current();
                 if(!empty($tplData)){
                     $siteId = $tplData->tpl_site_id;
                 }
