@@ -145,13 +145,13 @@ class Module
                     $sm = $e->getApplication()->getServiceManager();
                     $melisPagelangTbl = $sm->get('MelisEngine\Model\Tables\MelisPageLangTable');
                     $currentPage = $melisPagelangTbl->getEntryByField('plang_page_id', $idpage)->current();
-                    $melisCmsLang = $sm->get('MelisEngine\Model\Tables\MelisCmsLangTable');
-                    $currentPageLang = $melisCmsLang->getEntryById($currentPage->plang_lang_id)->current();
+                    $langSrv = $sm->get('MelisEngineLang');
+                    $currentPageLang = $langSrv->getLangDataById($currentPage->plang_lang_id);
                     if (!empty($currentPageLang)) {
                         $container = new Container('melisplugins');
-                        $container['melis-plugins-lang-id'] = $currentPageLang->lang_cms_id;
-                        $container['melis-plugins-lang-locale'] = $currentPageLang->lang_cms_locale;
-                        $locale = $currentPageLang->lang_cms_locale;
+                        $container['melis-plugins-lang-id'] = $currentPageLang['lang_cms_id'];
+                        $container['melis-plugins-lang-locale'] = $currentPageLang['lang_cms_locale'];
+                        $locale = $currentPageLang['lang_cms_locale'];
                     }
                 }
             }
