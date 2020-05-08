@@ -56,8 +56,8 @@ class MelisFrontHeadService implements MelisFrontHeadServiceInterface, ServiceLo
 				/**
 				 * Get SEO for this page
 				 */
-				$melisTablePageSeo = $this->serviceLocator->get('MelisEngineTablePageSeo');
-				$datasPageSeo = $melisTablePageSeo->getEntryById($idPage);
+				$pageSeoSrv = $this->serviceLocator->get('MelisEngineSEOService');
+				$datasPageSeo = $pageSeoSrv->getSEOById($idPage);
 				/**
 				 * Description tag
 				 */
@@ -65,75 +65,75 @@ class MelisFrontHeadService implements MelisFrontHeadServiceInterface, ServiceLo
 				{
 					if (!empty($datasPageSeo)) {
 						$descriptionPage = addslashes($datasPageSeo->pseo_meta_description);
-                        $descriptionPage = str_replace("\'", "'", $descriptionPage);
+						$descriptionPage = str_replace("\'", "'", $descriptionPage);
 
-                        $titlePage = addslashes($datasPageSeo->pseo_meta_title);
-                        $titlePage = str_replace("\'", "'", $titlePage);
+						$titlePage = addslashes($datasPageSeo->pseo_meta_title);
+						$titlePage = str_replace("\'", "'", $titlePage);
 						if ($descriptionPage != '') {
-                            $descriptionTag = "\n\t<meta name=\"description\" content=\"$descriptionPage\" />\n";
-                            $titleTag = "<title>$titlePage</title>";
-                            $descriptionRegex = '/(<meta[^>]*name=[\"\']description[\"\'][^>]*content=[\"\'](.*?)[\"\'][^>]*>)/i';
-                            $titleReg = '/\<title\>+(.*?)+\<\/title>/';
+							$descriptionTag = "\n\t<meta name=\"description\" content=\"$descriptionPage\" />\n";
+							$titleTag = "<title>$titlePage</title>";
+							$descriptionRegex = '/(<meta[^>]*name=[\"\']description[\"\'][^>]*content=[\"\'](.*?)[\"\'][^>]*>)/i';
+							$titleReg = '/\<title\>+(.*?)+\<\/title>/';
 
-                            preg_match($descriptionRegex, $contentGenerated, $descriptions);
-                            preg_match($titleReg, $contentGenerated, $titles);
-                            if (!empty($descriptions)) {
-                                // Replace existing title in source with the page name
-                                $newContent = preg_replace($descriptionRegex, $descriptionTag, $contentGenerated,1);
-                            } else {
-                                // Title doesn't exist, look for head tag to add
-                                // if no head tag, then nothing will happen
-                                $headRegex = '/(<head[^>]*>)/im';
-                                $newContent = preg_replace($headRegex, "$1$descriptionTag", $contentGenerated,1);
-                            }
+							preg_match($descriptionRegex, $contentGenerated, $descriptions);
+							preg_match($titleReg, $contentGenerated, $titles);
+							if (!empty($descriptions)) {
+								// Replace existing title in source with the page name
+								$newContent = preg_replace($descriptionRegex, $descriptionTag, $contentGenerated,1);
+							} else {
+								// Title doesn't exist, look for head tag to add
+								// if no head tag, then nothing will happen
+								$headRegex = '/(<head[^>]*>)/im';
+								$newContent = preg_replace($headRegex, "$1$descriptionTag", $contentGenerated,1);
+							}
 
-                            if (!empty($titles)) {
-                                // Replace existing title in source with the page name
-                                $newContent = preg_replace($titleReg, $titleTag, $newContent);
-                            } else {
-                                // Title doesn't exist, look for head tag to add
-                                // if no head tag, then nothing will happen
-                                $headRegex = '/(<head[^>]*>)/im';
-                                $newContent = preg_replace($headRegex, "$1$titleTag", $newContent,1);
-                            }
+							if (!empty($titles)) {
+								// Replace existing title in source with the page name
+								$newContent = preg_replace($titleReg, $titleTag, $newContent);
+							} else {
+								// Title doesn't exist, look for head tag to add
+								// if no head tag, then nothing will happen
+								$headRegex = '/(<head[^>]*>)/im';
+								$newContent = preg_replace($headRegex, "$1$titleTag", $newContent,1);
+							}
 
-                            $contentGenerated = $newContent;
+							$contentGenerated = $newContent;
 
-                        }
+						}
 					}
-                    /**
-                     * Canonical Tag
-                     */
-                    $canonicalUrl = addslashes($datasPageSeo->pseo_canonical);
-                    $canonicalUrl = str_replace("\'", "'", $canonicalUrl);
-                    if ($canonicalUrl != '') {
-                        $canonicalUrlTag = "\n\t<link rel=\"canonical\" href=\"$canonicalUrl\" />\n";
-                        $canonicalRegex = '/(<link[^>]*rel=[\"\']canonical[\"\'][^>]*content=[\"\'](.*?)[\"\'][^>]*>)/i';
-                        preg_match($canonicalRegex, $contentGenerated, $canonicalFound);
-                        if(!empty($canonicalFound)){
-                            $newContent = preg_replace($canonicalRegex, $canonicalUrlTag, $contentGenerated,1);
-                        }else {
-                            $headRegex = '/(<head[^>]*>)/im';
-                            $newContent = preg_replace($headRegex, "$1$canonicalUrlTag", $contentGenerated,1);
-                        }
-                        $contentGenerated = $newContent;
-                    }else{
-                        /**
-                         * @var MelisTreeService
-                         */
-                        $pageService = $this->serviceLocator->get('MelisEngineTree');
-                        $pageUrl = $pageService->getPageLink($idPage);
-                        $canonicalUrlTag = "\n\t<link rel=\"canonical\" href=\"$pageUrl\" />\n";
-                        $canonicalRegex = '/(<link[^>]*rel=[\"\']canonical[\"\'][^>]*content=[\"\'](.*?)[\"\'][^>]*>)/i';
-                        preg_match($canonicalRegex, $contentGenerated, $canonicalFound);
-                        if(!empty($canonicalFound)){
-                            $newContent = preg_replace($canonicalRegex, $canonicalUrlTag, $contentGenerated ,1);
-                        }else {
-                            $headRegex = '/(<head[^>]*>)/im';
-                            $newContent = preg_replace($headRegex, "$1$canonicalUrlTag", $contentGenerated,1);
-                        }
-                        $contentGenerated = $newContent;
-                    }
+					/**
+					 * Canonical Tag
+					 */
+					$canonicalUrl = addslashes($datasPageSeo->pseo_canonical);
+					$canonicalUrl = str_replace("\'", "'", $canonicalUrl);
+					if ($canonicalUrl != '') {
+						$canonicalUrlTag = "\n\t<link rel=\"canonical\" href=\"$canonicalUrl\" />\n";
+						$canonicalRegex = '/(<link[^>]*rel=[\"\']canonical[\"\'][^>]*content=[\"\'](.*?)[\"\'][^>]*>)/i';
+						preg_match($canonicalRegex, $contentGenerated, $canonicalFound);
+						if(!empty($canonicalFound)){
+							$newContent = preg_replace($canonicalRegex, $canonicalUrlTag, $contentGenerated,1);
+						}else {
+							$headRegex = '/(<head[^>]*>)/im';
+							$newContent = preg_replace($headRegex, "$1$canonicalUrlTag", $contentGenerated,1);
+						}
+						$contentGenerated = $newContent;
+					}else{
+						/**
+						 * @var MelisTreeService
+						 */
+						$pageService = $this->serviceLocator->get('MelisEngineTree');
+						$pageUrl = $pageService->getPageLink($idPage);
+						$canonicalUrlTag = "\n\t<link rel=\"canonical\" href=\"$pageUrl\" />\n";
+						$canonicalRegex = '/(<link[^>]*rel=[\"\']canonical[\"\'][^>]*content=[\"\'](.*?)[\"\'][^>]*>)/i';
+						preg_match($canonicalRegex, $contentGenerated, $canonicalFound);
+						if(!empty($canonicalFound)){
+							$newContent = preg_replace($canonicalRegex, $canonicalUrlTag, $contentGenerated ,1);
+						}else {
+							$headRegex = '/(<head[^>]*>)/im';
+							$newContent = preg_replace($headRegex, "$1$canonicalUrlTag", $contentGenerated,1);
+						}
+						$contentGenerated = $newContent;
+					}
 				}
 
 				/**
@@ -167,28 +167,28 @@ class MelisFrontHeadService implements MelisFrontHeadServiceInterface, ServiceLo
 	
 	public function updatePluginsRessources($content)
 	{
-	    $newContent = $content;
-	    
-	    // Auto adding plugins CSS and JS files to layout
-	    if ($this->serviceLocator->get('templating_plugins')->hasItem('plugins_front'))
-	    {
-	        $files = $this->serviceLocator->get('templating_plugins')->getItem('plugins_front');
-	         
-	        $cssHtmlToAdd = "\n";
-	        foreach ($files['css'] as $css)
-	            $cssHtmlToAdd .= '<link href="' . $css . '" media="screen" rel="stylesheet" type="text/css">' . "\n";
+		$newContent = $content;
+		
+		// Auto adding plugins CSS and JS files to layout
+		if ($this->serviceLocator->get('templating_plugins')->hasItem('plugins_front'))
+		{
+			$files = $this->serviceLocator->get('templating_plugins')->getItem('plugins_front');
+			
+			$cssHtmlToAdd = "\n";
+			foreach ($files['css'] as $css)
+				$cssHtmlToAdd .= '<link href="' . $css . '" media="screen" rel="stylesheet" type="text/css">' . "\n";
 
-	        $headRegex = '/(<\/head[^>]*>)/im';
-	        $newContent = preg_replace($headRegex, "$cssHtmlToAdd$1", $newContent);
-	         
-	        $jsHtmlToAdd = "\n";
-	        foreach ($files['js'] as $js)
-	            $jsHtmlToAdd .= '<script type="text/javascript" src="' . $js . '"></script>' . "\n";
+			$headRegex = '/(<\/head[^>]*>)/im';
+			$newContent = preg_replace($headRegex, "$cssHtmlToAdd$1", $newContent);
+			
+			$jsHtmlToAdd = "\n";
+			foreach ($files['js'] as $js)
+				$jsHtmlToAdd .= '<script type="text/javascript" src="' . $js . '"></script>' . "\n";
 
-	        $bodyRegex = '/(<\/body[^>]*>)/im';
-	        $newContent = preg_replace($bodyRegex, "$jsHtmlToAdd$1", $newContent);
-	    }
-	    
-	    return $newContent;
+			$bodyRegex = '/(<\/body[^>]*>)/im';
+			$newContent = preg_replace($bodyRegex, "$jsHtmlToAdd$1", $newContent);
+		}
+		
+		return $newContent;
 	}
 }

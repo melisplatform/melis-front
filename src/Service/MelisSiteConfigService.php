@@ -78,80 +78,94 @@ class MelisSiteConfigService extends MelisEngineGeneralService
      */
     public function getSiteConfigByPageId($pageId, $langLocale = false)
     {
-
         // Event parameters prepare
         $arrayParameters = $this->makeArrayFromParameters(__METHOD__, func_get_args());
         // Sending service start event
         $arrayParameters = $this->sendEvent('meliscms_site_tool_get_site_config_by_page_id_start', $arrayParameters);
 
-        $siteConfig = array(
-            'siteConfig' => array(),
-            'allSites' => array(),
-        );
+        //try to get config from cache
+        $cacheKey = 'getSiteConfigByPageId_' . $pageId.'_'.$langLocale;
+        $cacheConfig = 'meliscms_page';
+        $melisEngineCacheSystem = $this->serviceLocator->get('MelisEngineCacheSystem');
+        $results = $melisEngineCacheSystem->getCacheByKey($cacheKey, $cacheConfig);
 
-        if(!empty($pageId)) {
-            /**
-             * get the language if the page
-             */
-            $cmsPageLang = $this->getServiceLocator()->get('MelisEngineTablePageLang');
-            $pageLang = $cmsPageLang->getEntryByField('plang_page_id', $arrayParameters['pageId'])->current();
-            /**
-             * get page lang locale
-             */
-            $langData = array();
-            $langId = null;
-            if (!empty($pageLang)) {
-                $langCmsTbl = $this->getServiceLocator()->get('MelisEngineTableCmsLang');
-                $langData = $langCmsTbl->getEntryById($pageLang->plang_lang_id)->current();
+        if(empty($results)) {
 
-            }
-            /**
-             * get the site config
-             */
-            if(!empty($langData)){
-                $siteData = $this->getSiteDataByPageId($arrayParameters['pageId']);
-                if(!empty($siteData)){
-                    $siteId = $siteData->site_id;
-                    $siteName = $siteData->site_name;
+            $siteConfig = array(
+                'siteConfig' => array(),
+                'allSites' => array(),
+            );
 
-                    /**
-                     * First, let's try fetch the site config
-                     * using the config service that has been updated
-                     * through a listener
-                     */
-                    $config = $this->serviceLocator->get('config');
+            if (!empty($pageId)) {
+                /**
+                 * get the language if the page
+                 */
+                $cmsPageLang = $this->getServiceLocator()->get('MelisEngineTablePageLang');
+                $pageLang = $cmsPageLang->getEntryByField('plang_page_id', $arrayParameters['pageId'])->current();
+                /**
+                 * get page lang locale
+                 */
+                $langData = array();
+                $langId = null;
+                if (!empty($pageLang)) {
+                    $langCmsSrv = $this->getServiceLocator()->get('MelisEngineLang');
+                    $langData = $langCmsSrv->getLangDataById($pageLang->plang_lang_id);
 
-                    if(!empty($config['site'])){
+                }
+                /**
+                 * get the site config
+                 */
+                if (!empty($langData)) {
+                    $siteData = $this->getSiteDataByPageId($arrayParameters['pageId']);
+                    if (!empty($siteData)) {
+                        $siteId = $siteData->site_id;
+                        $siteName = $siteData->site_name;
+
                         /**
-                         * If site config not in the list,
-                         * let's try again to get it directly from the
-                         * db and file
+                         * First, let's try fetch the site config
+                         * using the config service that has been updated
+                         * through a listener
                          */
-                        if(empty($config['site'][$siteName][$siteId])) {
-                            $config = $this->getSiteConfig($siteId, true);
-                        }
+                        $config = $this->serviceLocator->get('config');
 
-                        if(!empty($config['site'][$siteName][$siteId])) {
-
-                            if ($arrayParameters['langLocale']) {
-                                $siteConfig['siteConfig'] = $config['site'][$siteName][$siteId][$arrayParameters['langLocale']];
-                                $siteLangData = $langCmsTbl->getEntryByField('lang_cms_locale', $arrayParameters['langLocale'])->current();
-                                if(!empty($siteLangData)){
-                                    $langId = $siteLangData->lang_cms_id;
-                                }
-                            } else {
-                                $siteConfig['siteConfig'] = $config['site'][$siteName][$siteId][$langData->lang_cms_locale];
-                                $langId = $langData->lang_cms_id;
+                        if (!empty($config['site'])) {
+                            /**
+                             * If site config not in the list,
+                             * let's try again to get it directly from the
+                             * db and file
+                             */
+                            if (empty($config['site'][$siteName][$siteId])) {
+                                $config = $this->getSiteConfig($siteId, true);
                             }
-                            $siteConfig['siteConfig']['site_id'] = $siteId;
-                            $siteConfig['siteConfig']['default_lang_id'] = $langId;
-                            $siteConfig['allSites'] = $config['site'][$siteName]['allSites'];
+
+                            if (!empty($config['site'][$siteName][$siteId])) {
+
+                                if ($arrayParameters['langLocale']) {
+                                    $siteConfig['siteConfig'] = $config['site'][$siteName][$siteId][$arrayParameters['langLocale']];
+                                    $siteLangData = $langCmsTbl->getEntryByField('lang_cms_locale', $arrayParameters['langLocale'])->current();
+                                    if (!empty($siteLangData)) {
+                                        $langId = $siteLangData->lang_cms_id;
+                                    }
+                                } else {
+                                    $siteConfig['siteConfig'] = $config['site'][$siteName][$siteId][$langData['lang_cms_locale']];
+                                    $langId = $langData['lang_cms_id'];
+                                }
+                                $siteConfig['siteConfig']['site_id'] = $siteId;
+                                $siteConfig['siteConfig']['default_lang_id'] = $langId;
+                                $siteConfig['allSites'] = $config['site'][$siteName]['allSites'];
+                            }
                         }
                     }
                 }
             }
+            $arrayParameters['result'] = $siteConfig;
+            // Save cache key
+            $melisEngineCacheSystem->setCacheByKey($cacheKey, $cacheConfig, $arrayParameters['result']);
+        }else{
+            //return the config from cache
+            $arrayParameters['result'] = $results;
         }
-        $arrayParameters['result'] = $siteConfig;
+
         $arrayParameters = $this->sendEvent('meliscms_site_tool_get_site_config_by_page_id_end', $arrayParameters);
 
         return $arrayParameters['result'];
@@ -169,92 +183,106 @@ class MelisSiteConfigService extends MelisEngineGeneralService
         $arrayParameters = $this->makeArrayFromParameters(__METHOD__, func_get_args());
         // Sending service start event
         $arrayParameters = $this->sendEvent('meliscms_site_tool_get_site_config_start', $arrayParameters);
-
         $siteId = $arrayParameters['siteId'];
-        $site = $this->getSiteDataById($siteId);
-        $siteName = $site['site_name'];
-        $configFromFile = $this->getConfig($siteName);
-        $siteConfig = [];
 
-        if (array_key_exists('site', $configFromFile)) {
-            $dbConfigData = $this->getSiteConfigFromDb($siteId);
-            // merge config from file and from the db | the one on the db will be prioritized
-            $siteConfig = ArrayUtils::merge($siteConfig, $configFromFile, true);
-            /**
-             * Make sure that we are accessing the correct config
-             */
-            if(isset($siteConfig['site'][$siteName][$siteId])) {
-                $activeSiteLangs = $this->getSiteActiveLanguages($siteId);
+        //try to get config from cache
+        $cacheKey = 'getSiteConfig_' . $siteId.'_'.$returnAll;
+        $cacheConfig = 'meliscms_page';
+        $melisEngineCacheSystem = $this->serviceLocator->get('MelisEngineCacheSystem');
+        $results = $melisEngineCacheSystem->getCacheByKey($cacheKey, $cacheConfig);
 
-                // add langauges that are active but not on the config file
-                foreach ($activeSiteLangs as $lang) {
-                    if (!array_key_exists($lang['lang_cms_locale'], $siteConfig['site'][$siteName][$siteId])) {
-                        $siteConfig['site'][$siteName][$siteId][$lang['lang_cms_locale']] = [];
+        if(empty($results)) {
+
+            $site = $this->getSiteDataById($siteId);
+            $siteName = $site['site_name'];
+            $configFromFile = $this->getConfig($siteName);
+            $siteConfig = [];
+
+            if (array_key_exists('site', $configFromFile)) {
+                $dbConfigData = $this->getSiteConfigFromDb($siteId);
+                // merge config from file and from the db | the one on the db will be prioritized
+                $siteConfig = ArrayUtils::merge($siteConfig, $configFromFile, true);
+                /**
+                 * Make sure that we are accessing the correct config
+                 */
+                if (isset($siteConfig['site'][$siteName][$siteId])) {
+                    $activeSiteLangs = $this->getSiteActiveLanguages($siteId);
+
+                    // add langauges that are active but not on the config file
+                    foreach ($activeSiteLangs as $lang) {
+                        if (!array_key_exists($lang['lang_cms_locale'], $siteConfig['site'][$siteName][$siteId])) {
+                            $siteConfig['site'][$siteName][$siteId][$lang['lang_cms_locale']] = [];
+                        }
                     }
-                }
 
-                // also merge all language config (except the general one) because some variables could be defined in one
-                // one language but not on the other
-                if (!empty($siteConfig['site'][$siteName][$siteId])) {
-                    foreach ($siteConfig['site'][$siteName][$siteId] as $langConfigKey => $langConfigVal) {
-                        foreach ($siteConfig['site'][$siteName][$siteId] as $otherLangConfigKey => $otherLangConfigVal) {
-                            if ($langConfigKey !== $otherLangConfigKey) {
-                                foreach ($otherLangConfigVal as $configKey => $configValue) {
-                                    if (!array_key_exists($configKey, $siteConfig['site'][$siteName][$siteId][$langConfigKey])) {
-                                        if (is_array($configValue)) {
-                                            $arr = [];
+                    // also merge all language config (except the general one) because some variables could be defined in one
+                    // one language but not on the other
+                    if (!empty($siteConfig['site'][$siteName][$siteId])) {
+                        foreach ($siteConfig['site'][$siteName][$siteId] as $langConfigKey => $langConfigVal) {
+                            foreach ($siteConfig['site'][$siteName][$siteId] as $otherLangConfigKey => $otherLangConfigVal) {
+                                if ($langConfigKey !== $otherLangConfigKey) {
+                                    foreach ($otherLangConfigVal as $configKey => $configValue) {
+                                        if (!array_key_exists($configKey, $siteConfig['site'][$siteName][$siteId][$langConfigKey])) {
+                                            if (is_array($configValue)) {
+                                                $arr = [];
 
-                                            foreach ($configValue as $key => $val) {
-                                                if (!is_array($val)) {
-                                                    $arr[$key] = '';
+                                                foreach ($configValue as $key => $val) {
+                                                    if (!is_array($val)) {
+                                                        $arr[$key] = '';
+                                                    }
                                                 }
-                                            }
 
-                                            $siteConfig['site'][$siteName][$siteId][$langConfigKey] = ArrayUtils::merge($siteConfig['site'][$siteName][$siteId][$langConfigKey], [$configKey => $arr], true);
-                                        } else {
-                                            $siteConfig['site'][$siteName][$siteId][$langConfigKey] = ArrayUtils::merge($siteConfig['site'][$siteName][$siteId][$langConfigKey], [$configKey => ''], true);
+                                                $siteConfig['site'][$siteName][$siteId][$langConfigKey] = ArrayUtils::merge($siteConfig['site'][$siteName][$siteId][$langConfigKey], [$configKey => $arr], true);
+                                            } else {
+                                                $siteConfig['site'][$siteName][$siteId][$langConfigKey] = ArrayUtils::merge($siteConfig['site'][$siteName][$siteId][$langConfigKey], [$configKey => ''], true);
+                                            }
                                         }
                                     }
                                 }
                             }
                         }
                     }
-                }
 
-                if (!empty($dbConfigData)) {
-                    foreach ($dbConfigData as $dbConf) {
-                        if ($dbConf['sconf_lang_id'] === '-1') {
-                            $siteConfig = ArrayUtils::merge(
-                                $siteConfig,
-                                [
-                                    'site' => [
-                                        $siteName => unserialize($dbConf['sconf_datas'])
-                                    ],
-                                ],
-                                true
-                            );
-                        } else {
-                            $siteConfig = ArrayUtils::merge(
-                                $siteConfig,
-                                [
-                                    'site' => [
-                                        $siteName => [
-                                            $siteId => unserialize($dbConf['sconf_datas'])
+                    if (!empty($dbConfigData)) {
+                        foreach ($dbConfigData as $dbConf) {
+                            if ($dbConf['sconf_lang_id'] === '-1') {
+                                $siteConfig = ArrayUtils::merge(
+                                    $siteConfig,
+                                    [
+                                        'site' => [
+                                            $siteName => unserialize($dbConf['sconf_datas'])
                                         ],
-                                    ]
-                                ],
-                                true
-                            );
+                                    ],
+                                    true
+                                );
+                            } else {
+                                $siteConfig = ArrayUtils::merge(
+                                    $siteConfig,
+                                    [
+                                        'site' => [
+                                            $siteName => [
+                                                $siteId => unserialize($dbConf['sconf_datas'])
+                                            ],
+                                        ]
+                                    ],
+                                    true
+                                );
+                            }
                         }
                     }
-                }
 
-                $arrayParameters['config'] = ($arrayParameters['returnAll']) ? $siteConfig : $siteConfig['site'][$siteName][$siteId];
-            }else{
+                    $arrayParameters['config'] = ($arrayParameters['returnAll']) ? $siteConfig : $siteConfig['site'][$siteName][$siteId];
+                } else {
+                    $arrayParameters['config'] = [];
+                }
+            } else {
                 $arrayParameters['config'] = [];
             }
-        } else {
-            $arrayParameters['config'] = [];
+            // Save cache key
+            $melisEngineCacheSystem->setCacheByKey($cacheKey, $cacheConfig, $arrayParameters['config']);
+        }else{
+            //return the config from cache
+            $arrayParameters['config'] = $results;
         }
 
         $arrayParameters = $this->sendEvent('meliscms_site_tool_get_site_config_end', $arrayParameters);
@@ -332,7 +360,7 @@ class MelisSiteConfigService extends MelisEngineGeneralService
 
         $pageSaved = $this->getServiceLocator()->get('MelisEngineTablePageSaved');
         $pagePublished = $this->getServiceLocator()->get('MelisEngineTablePagePublished');
-        $template = $this->getServiceLocator()->get('MelisEngineTableTemplate');
+        $tplSrv = $this->getServiceLocator()->get('MelisEngineTemplateService');
 
         if(!empty($pageId)){
             /**
@@ -348,7 +376,7 @@ class MelisSiteConfigService extends MelisEngineGeneralService
             }
 
             if(!empty($tplId)){
-                $tplData = $template->getEntryById($tplId)->current();
+                $tplData = $tplSrv->getTemplate($tplId)->current();
                 if(!empty($tplData)){
                     $siteId = $tplData->tpl_site_id;
                 }
@@ -356,8 +384,8 @@ class MelisSiteConfigService extends MelisEngineGeneralService
         }
 
         if(!empty($siteId)){
-            $siteTbl = $this->getServiceLocator()->get('MelisEngineTableSite');
-            $siteData = $siteTbl->getEntryById($siteId)->current();
+            $siteSrv = $this->getServiceLocator()->get('MelisEngineSiteService');
+            $siteData = $siteSrv->getSiteById($siteId)->current();
         }
 
         return $siteData;

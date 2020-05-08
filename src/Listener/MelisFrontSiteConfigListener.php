@@ -43,34 +43,30 @@ class MelisFrontSiteConfigListener
                 $config         = $configListener->getMergedConfig(false);
 
                 /**
-                 * get the site id via domain
+                 * get domain
                  */
                 $domain = $_SERVER['SERVER_NAME'];
-                $melisTableDomain = $serviceManager->get('MelisEngineTableSiteDomain');
-                $datasDomain = $melisTableDomain->getEntryByField('sdom_domain', $domain)->current();
-                if(!empty($datasDomain)){
-                    $siteId = $datasDomain->sdom_site_id;
+                /**
+                 * get site data
+                 */
+                $siteService = $serviceManager->get('MelisEngineSiteService');
+                $siteData = $siteService->getSiteDataByDomain($domain);
+                if(!empty($siteData)) {
+                    $siteId = $siteData->site_id;
                     /**
-                     * get site name
+                     * get the site config
                      */
-                    $siteTable = $serviceManager->get('MelisEngineTableSite');
-                    $siteData = $siteTable->getEntryById($siteId)->current();
-                    if(!empty($siteData)) {
-                        /**
-                         * get the site config
-                         */
-                        $siteConfig = $serviceManager->get('MelisSiteConfigService');
-                        $siteConfig = $siteConfig->getSiteConfig($siteId, true);
-                        $config = ArrayUtils::merge($config, $siteConfig, true);
-                        /**
-                         * remove other site data from the config
-                         */
-                        if (!empty($config['site'][$siteData->site_name])) {
-                            foreach ($config['site'][$siteData->site_name] as $id => $site) {
-                                if ($id != $siteId && $id != 'allSites') {
-                                    if (is_int($id))
-                                        unset($config['site'][$siteData->site_name][$id]);
-                                }
+                    $siteConfig = $serviceManager->get('MelisSiteConfigService');
+                    $siteConfig = $siteConfig->getSiteConfig($siteId, true);
+                    $config = ArrayUtils::merge($config, $siteConfig, true);
+                    /**
+                     * remove other site data from the config
+                     */
+                    if (!empty($config['site'][$siteData->site_name])) {
+                        foreach ($config['site'][$siteData->site_name] as $id => $site) {
+                            if ($id != $siteId && $id != 'allSites') {
+                                if (is_int($id))
+                                    unset($config['site'][$siteData->site_name][$id]);
                             }
                         }
                     }

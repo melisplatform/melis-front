@@ -85,8 +85,9 @@ class MelisFrontMiniTemplateConfigListener
                 }
 
                 //get the config for mini template
-                if(!empty($this->prepareMiniTemplateConfig($sitePath))){
-                    $config = ArrayUtils::merge($config, $this->prepareMiniTemplateConfig($sitePath));
+                $miniTplConfig = $this->prepareMiniTemplateConfig($sitePath);
+                if(!empty($miniTplConfig)){
+                    $config = ArrayUtils::merge($config, $miniTplConfig);
                 }
 
                 // Pass the changed configuration back to the listener:
