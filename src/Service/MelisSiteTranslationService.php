@@ -436,6 +436,7 @@ class MelisSiteTranslationService extends MelisEngineGeneralService
         $tmpTrans = array();
 
         $langTable = $this->getServiceLocator()->get('MelisEngineTableCmsLang');
+        $langService = $this->getServiceLocator()->get('MelisEngineLang');
         /**
          * if langId is null or empty, get all the languages
          */
@@ -446,7 +447,7 @@ class MelisSiteTranslationService extends MelisEngineGeneralService
                 $siteLangs = $sitelangsTable->getSiteLanguagesBySiteId($arrayParameters['siteId'])->toArray();
                 $langList = [];
                 foreach ($siteLangs as $key => $data) {
-                    $cmsLang = $langTable->getEntryById($data['slang_lang_id'])->toArray();
+                    $cmsLang = $langService->getLangDataById($data['slang_lang_id']);
                     foreach ($cmsLang as $k => $lang) {
                         array_push($langList, $lang);
                     }
@@ -455,7 +456,7 @@ class MelisSiteTranslationService extends MelisEngineGeneralService
                 $langList = $langTable->fetchAll()->toArray();
             }
         } else {
-            $langList = $langTable->getEntryById($arrayParameters['langId'])->toArray();
+            $langList = $langService->getLangDataById($arrayParameters['langId']);
         }
 
         //get the language info
