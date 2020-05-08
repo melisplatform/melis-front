@@ -34,6 +34,7 @@ use MelisFront\Listener\MelisFront404CatcherListener;
 use MelisFront\Listener\MelisFrontXSSParameterListener;
 use Zend\Session\Container;
 use MelisFront\Listener\MelisFrontPageCacheListener;
+use MelisFront\Listener\MelisFrontDeletePluginCacheListener;
 
 class Module
 {
@@ -120,6 +121,7 @@ class Module
 
         } else {
             $eventManager->attach(new MelisFrontPluginLangSessionUpdateListener());
+            $eventManager->attach(new MelisFrontDeletePluginCacheListener());
         }
     }
 
