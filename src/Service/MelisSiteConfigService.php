@@ -108,8 +108,8 @@ class MelisSiteConfigService extends MelisEngineGeneralService
                 $langData = array();
                 $langId = null;
                 if (!empty($pageLang)) {
-                    $langCmsTbl = $this->getServiceLocator()->get('MelisEngineTableCmsLang');
-                    $langData = $langCmsTbl->getEntryById($pageLang->plang_lang_id)->current();
+                    $langCmsSrv = $this->getServiceLocator()->get('MelisEngineLang');
+                    $langData = $langCmsSrv->getLangDataById($pageLang->plang_lang_id);
 
                 }
                 /**
@@ -147,8 +147,8 @@ class MelisSiteConfigService extends MelisEngineGeneralService
                                         $langId = $siteLangData->lang_cms_id;
                                     }
                                 } else {
-                                    $siteConfig['siteConfig'] = $config['site'][$siteName][$siteId][$langData->lang_cms_locale];
-                                    $langId = $langData->lang_cms_id;
+                                    $siteConfig['siteConfig'] = $config['site'][$siteName][$siteId][$langData['lang_cms_locale']];
+                                    $langId = $langData['lang_cms_id'];
                                 }
                                 $siteConfig['siteConfig']['site_id'] = $siteId;
                                 $siteConfig['siteConfig']['default_lang_id'] = $langId;
@@ -360,7 +360,7 @@ class MelisSiteConfigService extends MelisEngineGeneralService
 
         $pageSaved = $this->getServiceLocator()->get('MelisEngineTablePageSaved');
         $pagePublished = $this->getServiceLocator()->get('MelisEngineTablePagePublished');
-        $template = $this->getServiceLocator()->get('MelisEngineTableTemplate');
+        $tplSrv = $this->getServiceLocator()->get('MelisEngineTemplateService');
 
         if(!empty($pageId)){
             /**
@@ -376,7 +376,7 @@ class MelisSiteConfigService extends MelisEngineGeneralService
             }
 
             if(!empty($tplId)){
-                $tplData = $template->getEntryById($tplId)->current();
+                $tplData = $tplSrv->getTemplate($tplId)->current();
                 if(!empty($tplData)){
                     $siteId = $tplData->tpl_site_id;
                 }
@@ -384,8 +384,8 @@ class MelisSiteConfigService extends MelisEngineGeneralService
         }
 
         if(!empty($siteId)){
-            $siteTbl = $this->getServiceLocator()->get('MelisEngineTableSite');
-            $siteData = $siteTbl->getEntryById($siteId)->current();
+            $siteSrv = $this->getServiceLocator()->get('MelisEngineSiteService');
+            $siteData = $siteSrv->getSiteById($siteId)->current();
         }
 
         return $siteData;
