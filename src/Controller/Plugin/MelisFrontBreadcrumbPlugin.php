@@ -64,6 +64,13 @@ class MelisFrontBreadcrumbPlugin extends MelisTemplatingPlugin
     {
         // Get the parameters and config from $this->pluginFrontConfig (default > hardcoded > get > post)
         $data = $this->getFormData();
+
+        // Retrieve cache version if front mode to avoid multiple calls
+		$cacheKey = 'MelisFrontBreadcrumbPlugin_' . $this->cleanString($data['id']). '_' .$this->cleanString($data['template_path']);
+		$cacheConfig = 'melisfront_pages_file_cache';
+		$melisEngineCacheSystem = $this->getServiceLocator()->get('MelisEngineCacheSystem');
+        $results = $melisEngineCacheSystem->getCacheByKey($cacheKey, $cacheConfig);
+
         // Retrieving the pageId from config
         $pageId = (!empty($data['pageId'])) ? $data['pageId'] : null;
         $startingPage = $data['pageIdRootBreadcrumb'] ??  $data['pageIdRootBreadcrumb'];
@@ -118,6 +125,9 @@ class MelisFrontBreadcrumbPlugin extends MelisTemplatingPlugin
             'pluginId' => $data['id'],
             'breadcrumb' => $breadcrumb,
         );
+
+        // Save cache key
+		$melisEngineCacheSystem->setCacheByKey($cacheKey, $cacheConfig, $viewVariables);
         
         // return the variable array and let the view be created
         return $viewVariables;
@@ -169,6 +179,13 @@ class MelisFrontBreadcrumbPlugin extends MelisTemplatingPlugin
 
                     $errors = array();
                     if ($form->isValid()) {
+                        
+                        // Deleting file cache
+                        $cacheKey = 'MelisFrontBreadcrumbPlugin_' . $this->getFormData()['id'];
+                        $cacheConfig = 'melisfront_pages_file_cache';
+                        $melisEngineCacheSystem = $this->getServiceLocator()->get('MelisEngineCacheSystem');
+                        $melisEngineCacheSystem->deleteCacheByPrefix($cacheKey, $cacheConfig);
+
                         $data = $form->getData();
                         $success = true;
                         array_push($response, [

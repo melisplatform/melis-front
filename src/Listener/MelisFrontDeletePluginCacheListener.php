@@ -56,6 +56,11 @@ class MelisFrontDeletePluginCacheListener implements ListenerAggregateInterface
                 $cacheKey = 'MelisFrontMenuPlugin';
                 $cacheConfig = 'melisfront_pages_file_cache';
                 $melisEngineCacheSystem->deleteCacheByPrefix($cacheKey, $cacheConfig);
+
+                // Delete Breadcrumb plugin cached
+                $cacheKey = 'MelisFrontBreadcrumbPlugin';
+                $cacheConfig = 'melisfront_pages_file_cache';
+                $melisEngineCacheSystem->deleteCacheByPrefix($cacheKey, $cacheConfig);
             }
         );
         
