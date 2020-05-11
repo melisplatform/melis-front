@@ -231,9 +231,24 @@ class MelisFrontGdprRevalidationPlugin extends MelisTemplatingPlugin
         $factory->setFormElementManager($formElements);
         $formConfig = $this->pluginBackConfig['modal_form'];
         $tool = $this->getServiceLocator()->get('translator');
-
+        $data = $this->getFormData();
         $response = [];
         $render = [];
+        if (empty($data['site_id'])){
+            $pageSvc = $this->getServiceLocator()->get('MelisEnginePage');
+            // get page data in published first
+            $pageData = $pageSvc->getDatasPage($data['pageId']);
+            // check page status if it is published
+            if ($pageData->getMelisPageTree()->page_status) {
+                // ste site id
+                $data['site_id'] = $pageData->getMelisTemplate()->tpl_site_id;
+            } else {
+                // get page data in saved table
+                $pageData = $pageSvc->getDatasPage($data['pageId'],'saved');
+                // set site id 
+                $data['site_id'] = $pageData->getMelisTemplate()->tpl_site_id;
+            } 
+        } 
         if (!empty($formConfig)) {
             foreach ($formConfig as $formKey => $config) {
                 $form = $factory->createForm($config);
@@ -241,7 +256,7 @@ class MelisFrontGdprRevalidationPlugin extends MelisTemplatingPlugin
                 $parameters = $request->getQuery()->toArray();
 
                 if (!isset($parameters['validate'])) {
-                    $form->setData($this->getFormData());
+                    $form->setData($data);
                     $viewModelTab = new ViewModel();
                     $viewModelTab->setTemplate($config['tab_form_layout']);
                     $viewModelTab->modalForm = $form;

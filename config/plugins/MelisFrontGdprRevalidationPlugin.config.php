@@ -6,6 +6,7 @@ return [
             'plugins' => [
                 'MelisFrontGdprRevalidationPlugin' => [
                     'front' => [
+                        'pageId' => null,
                         'template_path' => ['MelisFront/gdpr-revalidation'],
                         'id' => 'MelisFrontGdprRevalidation',
                         'site_id' => null,
