@@ -14,6 +14,7 @@ use Composer\Composer;
 use MelisCore\Service\MelisCoreModulesService;
 use MelisEngine\Service\MelisEngineComposerService;
 use MelisEngine\Service\MelisEngineGeneralService;
+use Zend\Config\Writer\PhpArray;
 
 class MelisSiteTranslationService extends MelisEngineGeneralService
 {
@@ -565,6 +566,62 @@ class MelisSiteTranslationService extends MelisEngineGeneralService
         }
         return $moduleFolders;
     }
+
+    /**
+     * Cache translations
+     * @param $siteId
+     */
+    public function cacheTranslations($siteId)
+    {
+        //make cache writable
+        $cacheDir = $_SERVER['DOCUMENT_ROOT'].'/../cache';
+        if(!is_writable($cacheDir))
+            chmod($cacheDir, 0777);
+        //check translation folder inside cache
+        $transCacheDir = $cacheDir.'/translations';
+        if(!file_exists($transCacheDir))
+            //create directory
+            mkdir($transCacheDir, 0777);
+
+        /**
+         * Create trans file per site and inside the site we separate
+         * the translation per language.
+         */
+        //get all translations
+        $transData = $this->getSiteTranslation(null, null, $siteId);
+        $transPerLang = [];
+        foreach($transData as $key => $val){
+            //check if lang id already exist in array
+            if(!array_key_exists($val['mstt_lang_id'], $transPerLang)){
+                $transPerLang[$val['mstt_lang_id']] = [];
+                $transPerLang[$val['mstt_lang_id']][$val['mst_key']] = $val['mstt_text'];
+            }else{
+                $transPerLang[$val['mstt_lang_id']][$val['mst_key']] = $val['mstt_text'];
+            }
+        }
+        //create directory for site
+        $siteTransDir = $transCacheDir.'/'.$siteId;
+        if(!file_exists($siteTransDir))
+            mkdir($siteTransDir, 0777);
+        //store the translations
+        $writer = new PhpArray();
+        file_put_contents($siteTransDir.'/translations.php', $writer->toString($transPerLang));
+    }
+
+    /**
+     * @param $siteId
+     * @return mixed
+     */
+    public function getCachedTranslations($siteId)
+    {
+        $transCacheData = [];
+        $transCacheDir = $_SERVER['DOCUMENT_ROOT'].'/../cache/translations/'.$siteId.'/translations.php';
+        if(file_exists($transCacheDir))
+            $transCacheData = include $transCacheDir;
+
+        return $transCacheData;
+    }
+
 
     /** ======================================================================================================================= **/
     /** ======================================================================================================================= **/
