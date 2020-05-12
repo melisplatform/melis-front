@@ -27,45 +27,41 @@ class MelisSiteConfigService extends MelisEngineGeneralService
      */
     public function getSiteConfigByKey($key, $pageId, $section = 'sites', $language = null)
     {
-        try {
-            if(empty($section))
-                $section = 'sites';
+        if(empty($section))
+            $section = 'sites';
 
-            /**
-             * check if we are getting it from the current site config
-             * or from the allSites
-             */
-            if ($section == 'sites' || $section == 'allSites') {
-                $siteConfigData = $this->getSiteConfigByPageId($pageId);
-                if ($section == 'sites') {
-                    if (empty($language)) {
-                        //return the value if the given key
-                        return (isset($siteConfigData['siteConfig'][$key])) ? $siteConfigData['siteConfig'][$key] : null;
-                    } else {
-                        //return the given key value from its specific language
-                        $langLocale = strtolower($language) . '_' . strtoupper($language);
-                        $siteConfigData = $this->getSiteConfigByPageId($pageId, $langLocale);
-                        return (isset($siteConfigData['siteConfig'][$key])) ? $siteConfigData['siteConfig'][$key] : null;
-                    }
+        /**
+         * check if we are getting it from the current site config
+         * or from the allSites
+         */
+        if ($section == 'sites' || $section == 'allSites') {
+            $siteConfigData = $this->getSiteConfigByPageId($pageId);
+            if ($section == 'sites') {
+                if (empty($language)) {
+                    //return the value if the given key
+                    return (isset($siteConfigData['siteConfig'][$key])) ? $siteConfigData['siteConfig'][$key] : null;
                 } else {
-                    //return given key value from allSites
-                    return (isset($siteConfigData['allSites'][$key])) ? $siteConfigData['allSites'][$key] : null;
+                    //return the given key value from its specific language
+                    $langLocale = strtolower($language) . '_' . strtoupper($language);
+                    $siteConfigData = $this->getSiteConfigByPageId($pageId, $langLocale);
+                    return (isset($siteConfigData['siteConfig'][$key])) ? $siteConfigData['siteConfig'][$key] : null;
                 }
             } else {
-                $siteConfigData = $this->getSiteConfig($section);
-                $data = [];
-                foreach ($siteConfigData as $locale => $value) {
-                    $data[$locale] = array($key => $value[$key]);
-                }
-                if (empty($language))
-                    return $data;
-                else {
-                    $langLocale = strtolower($language) . '_' . strtoupper($language);
-                    return $data[$langLocale][$key];
-                }
+                //return given key value from allSites
+                return (isset($siteConfigData['allSites'][$key])) ? $siteConfigData['allSites'][$key] : null;
             }
-        }catch (\Exception $ex) {
-            return null;
+        } else {
+            $siteConfigData = $this->getSiteConfig($section);
+            $data = [];
+            foreach ($siteConfigData as $locale => $value) {
+                $data[$locale] = array($key => $value[$key]);
+            }
+            if (empty($language))
+                return $data;
+            else {
+                $langLocale = strtolower($language) . '_' . strtoupper($language);
+                return $data[$langLocale][$key];
+            }
         }
     }
 
@@ -105,12 +101,11 @@ class MelisSiteConfigService extends MelisEngineGeneralService
                 /**
                  * get page lang locale
                  */
+                $langCmsSrv = $this->getServiceLocator()->get('MelisEngineLang');
                 $langData = array();
                 $langId = null;
                 if (!empty($pageLang)) {
-                    $langCmsSrv = $this->getServiceLocator()->get('MelisEngineLang');
                     $langData = $langCmsSrv->getLangDataById($pageLang->plang_lang_id);
-
                 }
                 /**
                  * get the site config
@@ -142,7 +137,7 @@ class MelisSiteConfigService extends MelisEngineGeneralService
 
                                 if ($arrayParameters['langLocale']) {
                                     $siteConfig['siteConfig'] = $config['site'][$siteName][$siteId][$arrayParameters['langLocale']];
-                                    $siteLangData = $langCmsTbl->getEntryByField('lang_cms_locale', $arrayParameters['langLocale'])->current();
+                                    $siteLangData = $langCmsSrv->getLangDataByLangLocale($arrayParameters['langLocale']);
                                     if (!empty($siteLangData)) {
                                         $langId = $siteLangData->lang_cms_id;
                                     }
