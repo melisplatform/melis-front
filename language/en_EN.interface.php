@@ -99,7 +99,7 @@ return array(
     // GDPR Revalidation plugin
     'tr_melis_front_gdpr_revalidation_name' => 'GDPR Revalidation plugin',
     'tr_melis_front_gdpr_revalidation_desc' => 'This plugin allows the user to validate the retention of its data on the site',
-    'tr_melis_front_gdpr_revalidation_info_text' => 'Your subscription to our services must be revalidated according to the GDPR requirements as you have not been active for a long time. Failure to revalidate will automatically activate the suppression of your account.',
+    'tr_melis_front_gdpr_revalidation_info_text' => 'Your subscription to our services must be revalidated according to the GDPR requirements as you have not been active for a long time. Failure to revalidate will automatically activate the anonymization of your account.',
     'tr_melis_front_gdpr_revalidation_label_checkbox' => 'I want to revalidate my account',
     'tr_melis_front_gdpr_revalidation_btn_confirm' => 'Confirm',
     'tr_melis_front_gdpr_revalidation_info_text_warning' => 'This link doesn’t seem to work or is not recognized.',

@@ -102,7 +102,7 @@ return array(
     // GDPR Revalidation plugin
     'tr_melis_front_gdpr_revalidation_name' => 'GDPR Revalidation plugin',
     'tr_melis_front_gdpr_revalidation_desc' => 'Ce plugin permet à l\'utilisateur de valider la rétention de ses données sur le site',
-    'tr_melis_front_gdpr_revalidation_info_text' => 'Votre abonnement à nos services doit être revalidé en accord avec les exigences du RGPD car vous n\'avez pas été actif pendant longtemps. Le fait de ne pas revalider activera automatiquement la suppression de votre compte.',
+    'tr_melis_front_gdpr_revalidation_info_text' => 'Votre abonnement à nos services doit être revalidé en accord avec les exigences du RGPD car vous n\'avez pas été actif pendant longtemps. Le fait de ne pas revalider activera automatiquement l\'anonymisation de votre compte.',
     'tr_melis_front_gdpr_revalidation_btn_confirm' => 'Confirmer',
     'tr_melis_front_gdpr_revalidation_info_text_warning' => 'Ce lien n\'a pas l\'air de fonctionner ou n\'est pas reconnu.',
     'tr_melis_front_gdpr_revalidation_info_success_heading' => 'Succès',
