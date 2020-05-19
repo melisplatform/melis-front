@@ -17,6 +17,7 @@ use MelisFront\Service\MelisSiteConfigService;
 use Zend\Db\Sql\Sql;
 use Zend\Form\Factory;
 use Zend\View\Model\ViewModel;
+use Zend\Session\Container;
 
 /**
  * This plugin implements the business logic of the
@@ -185,10 +186,16 @@ class MelisFrontGdprRevalidationPlugin extends MelisTemplatingPlugin
     private function verifyUser($request, $pluginData)
     {
         $userData = null;
+        $pluginData = $this->getFormData();
         /** @var MelisGdprAutoDeleteService $gdprAutoDeleteService */
         $gdprAutoDeleteService = $this->getServiceLocator()->get('MelisGdprAutoDeleteService');
+        // add config data in the session so modules can access on it
+        $container = new Container('melis_auto_delete_gdpr');
+        $container['config'] = (array) $gdprAutoDeleteService->getAutoDeleteConfig($pluginData['site_id'], $pluginData['module']);
         // get service class
         $service = $gdprAutoDeleteService->getServiceClassByModule($pluginData['module']);
+        // get the auto delete config
+        
         // if service class is set
         if (!empty($service)) {
             $service = $this->getServiceLocator()->get($service);
