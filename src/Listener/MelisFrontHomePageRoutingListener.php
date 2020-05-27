@@ -76,7 +76,7 @@ class MelisFrontHomePageRoutingListener implements ListenerAggregateInterface
                     $siteService = $sm->get('MelisEngineSiteService');
                     if(!empty($langData)) {
                         $langId = $langData->lang_cms_id;
-                        $siteHomeData = $siteService->getHomePageBySiteIdAndLangId($siteId, $langId)->current();
+                        $siteHomeData = $siteService->getHomePageBySiteIdAndLangId($siteId, $langId);
                         /**
                          * Check if site home page id exit from site home table,
                          * else we used the default main page id
