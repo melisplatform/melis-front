@@ -110,7 +110,7 @@ class MelisFrontMiniTemplateConfigListener
      */
     public function prepareMiniTemplateConfig($miniTplPath)
     {
-        $image_ext = ['PNG', 'png', 'JPG', 'jpg', 'JPEG', 'jpeg'];
+        $image_ext = ['PNG', 'png', 'JPG', 'jpg', 'JPEG', 'jpeg', 'gif', 'GIF'];
         $pluginsFormat = array();
         foreach($miniTplPath as $siteName => $path) {
             if (file_exists($path) && is_dir($path)) {
