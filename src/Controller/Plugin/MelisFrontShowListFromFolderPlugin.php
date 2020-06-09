@@ -71,6 +71,7 @@ class MelisFrontShowListFromFolderPlugin extends MelisTemplatingPlugin
 
             foreach ($pages as $key => $val)
             {
+                $val = (object) $val;
                 /**
                  * Page content has a values of XML type
                  * so need to parse to make the content of the page easy to manage

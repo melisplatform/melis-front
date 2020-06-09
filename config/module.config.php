@@ -268,4 +268,25 @@ return [
             ],
         ],
     ],
+    'caches' => [
+        'melisfront_pages_file_cache' => [
+            'active' => true, // activate or deactivate Melis Cache for this conf
+            'adapter' => [
+                'name'    => 'Filesystem',
+                'options' => [
+                    'ttl' => 0, // 24hrs
+                    'namespace' => 'melisfront_pages_file_cache',
+                    'cache_dir' => $_SERVER['DOCUMENT_ROOT'] . '/../cache'
+                ],
+            ],
+            'plugins' => [
+                'exception_handler' => ['throw_exceptions' => false],
+                'Serializer'
+            ],
+            'ttls' => [
+                // add a specific ttl for a specific cache key (found via regexp)
+                // 'my_cache_key' => 60,
+            ]
+        ],
+    ]
 ];

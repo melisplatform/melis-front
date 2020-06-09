@@ -42,8 +42,8 @@ class MelisFrontHeadService extends MelisServiceManager implements MelisFrontHea
 				/**
 				 * Get SEO for this page
 				 */
-				$melisTablePageSeo = $this->getServiceManager()->get('MelisEngineTablePageSeo');
-				$datasPageSeo = $melisTablePageSeo->getEntryById($idPage);
+				$pageSeoSrv = $this->getServiceManager()->get('MelisEngineSEOService');
+				$datasPageSeo = $pageSeoSrv->getSEOById($idPage);
 				/**
 				 * Description tag
 				 */
