@@ -231,6 +231,7 @@ return [
     ],
     'view_manager' => [
         'template_map' => [
+            'layout/layout'                              => __DIR__ . '/../view/layout/layoutBlank.phtml',
             'layout/layoutFront'                         => __DIR__ . '/../view/layout/layoutFront.phtml',
             'layout/layoutMelis'                         => __DIR__ . '/../view/layout/layoutMelis.phtml',
             'melis-front/index/index'                    => __DIR__ . '/../view/melis-front/index/index.phtml',
