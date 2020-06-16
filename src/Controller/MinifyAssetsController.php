@@ -10,9 +10,9 @@
 namespace MelisFront\Controller;
 
 use Laminas\View\Model\JsonModel;
-use MelisCore\Controller\AbstractActionController;
+use MelisCore\Controller\MelisAbstractActionController;
 
-class MinifyAssetsController extends AbstractActionController
+class MinifyAssetsController extends MelisAbstractActionController
 {
 
     /**
