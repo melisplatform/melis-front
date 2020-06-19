@@ -178,6 +178,13 @@ return [
             'MelisSiteConfigService'        => \MelisFront\Service\MelisSiteConfigService::class,
             'MelisTranslationService'       => \MelisFront\Service\MelisTranslationService::class,
         ],
+        'abstract_factories' => [
+            /**
+             * This Abstract factory will create requested service
+             * that match on the onCreate() conditions
+             */
+            \MelisCore\Factory\MelisAbstractFactory::class
+        ]
     ],
     'controllers' => [
         'invokables' => [
@@ -208,13 +215,6 @@ return [
         ]
     ],
     'view_helpers' => [
-        'abstract_factories' => [
-            /**
-             * This Abstract factory will create requested service
-             * that match on the onCreate() condetions
-             */
-            \MelisCore\Factory\MelisAbstractFactory::class
-        ],
         'aliases' => [
             'MelisDragDropZone'         => \MelisFront\View\Helper\MelisDragDropZoneHelper::class,
             'MelisTag'                  => \MelisFront\View\Helper\MelisTagsHelper::class,
@@ -227,7 +227,14 @@ return [
             'SiteConfig'                => \MelisFront\View\Helper\SiteConfigViewHelper::class,
             'MelisGdprBannerPlugin'     => \MelisFront\View\Helper\MelisGdprBannerHelper::class,
             'MelisListFromFolderPlugin' => \MelisFront\View\Helper\MelisListFromFolderHelper::class,
-        ]
+        ],
+        'abstract_factories' => [
+            /**
+             * This Abstract factory will create requested service
+             * that match on the onCreate() conditions
+             */
+            \MelisCore\Factory\MelisAbstractFactory::class
+        ],
     ],
     'view_manager' => [
         'template_map' => [
