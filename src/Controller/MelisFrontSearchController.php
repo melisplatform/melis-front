@@ -10,9 +10,9 @@
 namespace MelisFront\Controller;
 
 use Laminas\View\Model\ViewModel;
-use MelisCore\Controller\AbstractActionController;
+use MelisCore\Controller\MelisAbstractActionController;
 
-class MelisFrontSearchController extends AbstractActionController
+class MelisFrontSearchController extends MelisAbstractActionController
 {
     const MELIS_SITES = '/../module/MelisSites/';
     const VENDOR = '/../vendor/melisplatform/';

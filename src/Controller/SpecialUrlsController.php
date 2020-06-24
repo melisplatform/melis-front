@@ -11,9 +11,9 @@ namespace MelisFront\Controller;
 
 use Laminas\View\Model\ViewModel;
 use Laminas\View\Model\FeedModel;
-use MelisCore\Controller\AbstractActionController;
+use MelisCore\Controller\MelisAbstractActionController;
 
-class SpecialUrlsController extends AbstractActionController
+class SpecialUrlsController extends MelisAbstractActionController
 {
     public function sitemapAction()
     {

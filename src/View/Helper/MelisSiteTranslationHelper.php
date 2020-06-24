@@ -33,8 +33,18 @@ class MelisSiteTranslationHelper extends AbstractHelper
     public function __invoke($key, $langId, $siteId)
     {
         $siteTransSrv = $this->serviceManager->get('MelisSiteTranslationService');
-        
-        $str = $siteTransSrv->getText($key, $langId, $siteId);
+
+        /**
+         * Try to get the translation from the cache
+         */
+        $cacheData = $siteTransSrv->getCachedTranslations($siteId);
+        if(empty($cacheData)){
+            //generate cache for translation
+            $siteTransSrv->cacheTranslations($siteId);
+            //get the data again from cache
+            $cacheData = $siteTransSrv->getCachedTranslations($siteId);
+        }
+        $str = $cacheData[$langId][$key] ?? $key;
         
         return $str;
     }

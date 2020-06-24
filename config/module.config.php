@@ -178,6 +178,13 @@ return [
             'MelisSiteConfigService'        => \MelisFront\Service\MelisSiteConfigService::class,
             'MelisTranslationService'       => \MelisFront\Service\MelisTranslationService::class,
         ],
+        'abstract_factories' => [
+            /**
+             * This Abstract factory will create requested service
+             * that match on the onCreate() conditions
+             */
+            \MelisCore\Factory\MelisAbstractFactory::class
+        ]
     ],
     'controllers' => [
         'invokables' => [
@@ -208,13 +215,6 @@ return [
         ]
     ],
     'view_helpers' => [
-        'abstract_factories' => [
-            /**
-             * This Abstract factory will create requested service
-             * that match on the onCreate() condetions
-             */
-            \MelisCore\Factory\MelisAbstractFactory::class
-        ],
         'aliases' => [
             'MelisDragDropZone'         => \MelisFront\View\Helper\MelisDragDropZoneHelper::class,
             'MelisTag'                  => \MelisFront\View\Helper\MelisTagsHelper::class,
@@ -227,10 +227,18 @@ return [
             'SiteConfig'                => \MelisFront\View\Helper\SiteConfigViewHelper::class,
             'MelisGdprBannerPlugin'     => \MelisFront\View\Helper\MelisGdprBannerHelper::class,
             'MelisListFromFolderPlugin' => \MelisFront\View\Helper\MelisListFromFolderHelper::class,
-        ]
+        ],
+        'abstract_factories' => [
+            /**
+             * This Abstract factory will create requested service
+             * that match on the onCreate() conditions
+             */
+            \MelisCore\Factory\MelisAbstractFactory::class
+        ],
     ],
     'view_manager' => [
         'template_map' => [
+            'layout/layout'                              => __DIR__ . '/../view/layout/layoutBlank.phtml',
             'layout/layoutFront'                         => __DIR__ . '/../view/layout/layoutFront.phtml',
             'layout/layoutMelis'                         => __DIR__ . '/../view/layout/layoutMelis.phtml',
             'melis-front/index/index'                    => __DIR__ . '/../view/melis-front/index/index.phtml',
@@ -268,4 +276,25 @@ return [
             ],
         ],
     ],
+    'caches' => [
+        'melisfront_pages_file_cache' => [
+            'active' => true, // activate or deactivate Melis Cache for this conf
+            'adapter' => [
+                'name'    => 'Filesystem',
+                'options' => [
+                    'ttl' => 0, // 24hrs
+                    'namespace' => 'melisfront_pages_file_cache',
+                    'cache_dir' => $_SERVER['DOCUMENT_ROOT'] . '/../cache'
+                ],
+            ],
+            'plugins' => [
+                'exception_handler' => ['throw_exceptions' => false],
+                'Serializer'
+            ],
+            'ttls' => [
+                // add a specific ttl for a specific cache key (found via regexp)
+                // 'my_cache_key' => 60,
+            ]
+        ],
+    ]
 ];

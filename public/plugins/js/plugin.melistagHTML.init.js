@@ -21,8 +21,7 @@ function melistagHTML_savePlugin(editor){
 }
 
 // run this function when you click out of the tinymce
-$("body").on("blur", "div.html-editable", function(){
-		
+$("body").on("blur", "div.html-editable", function() {
 	// get all data-attributes from the clicked
 	var currentdata = $(this).data();
 	
@@ -36,9 +35,9 @@ $("body").on("blur", "div.html-editable", function(){
 		tagType: currentdata.tagType,
 		tagId : currentdata.tagId,
 		tagValue : content,
-    };
+	};
     melisPluginEdition.calcFrameHeight();
-    melisPluginEdition.savePluginUpdate(data, currentdata.siteModule);
+	melisPluginEdition.savePluginUpdate(data, currentdata.siteModule);
 });
 
 melistagHTML_init();

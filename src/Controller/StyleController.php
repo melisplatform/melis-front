@@ -10,9 +10,9 @@
 namespace MelisFront\Controller;
 
 use Laminas\View\Model\ViewModel;
-use MelisCore\Controller\AbstractActionController;
+use MelisCore\Controller\MelisAbstractActionController;
 
-class StyleController extends AbstractActionController
+class StyleController extends MelisAbstractActionController
 {
     /**
      * @return ViewModel
@@ -26,7 +26,7 @@ class StyleController extends AbstractActionController
             ->addHeaderLine('Pragma'       , 'no-cache')
             ->addHeaderLine('Content-Type' , 'text/css;charset=UTF-8');
 
-        $css     = '[class^="plugin-width"] {float: left;margin: 0 0px 30px;}';
+        $css     = '[class^="plugin-width"] {float: left;margin: 0;}';
         $pageId  = (int) $this->params()->fromQuery('idpage');
 
         $pageSvc = $this->getServiceManager()->get('MelisEnginePage');
