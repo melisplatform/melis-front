@@ -43,7 +43,7 @@ class MelisFrontDeletePluginCacheListener extends MelisGeneralListener implement
             ],
             function($e){
 
-                $sm = $e->getApplication()->getServiceManager();
+                $sm = $e->getTarget()->getServiceManager();
 
                 $params = $e->getParams();
 
