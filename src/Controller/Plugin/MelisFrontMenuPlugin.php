@@ -65,6 +65,15 @@ class MelisFrontMenuPlugin extends MelisTemplatingPlugin
         
         $pageId = !empty($data['pageIdRootMenu']) ? $data['pageIdRootMenu'] : 1;
 
+        // Retrieve cache version if front mode to avoid multiple calls
+		$cacheKey = 'MelisFrontMenuPlugin_'.$data['pageId'].'_'.$this->cleanString($data['id']). '_' .$this->cleanString($data['template_path']);
+		$cacheConfig = 'melisfront_pages_file_cache';
+		$melisEngineCacheSystem = $this->getServiceLocator()->get('MelisEngineCacheSystem');
+        $results = $melisEngineCacheSystem->getCacheByKey($cacheKey, $cacheConfig);
+
+        if (!is_null($results))
+            return $results;
+        
         // Getting the Site Menu from MelisFrontNavigator
         $site = new MelisFrontNavigation($this->getServiceLocator(), $pageId, $this->renderMode);
 
@@ -76,6 +85,9 @@ class MelisFrontMenuPlugin extends MelisTemplatingPlugin
             'pluginId' => $data['id'],
             'menu' => $siteMenu
         );
+
+        // Save cache key
+		$melisEngineCacheSystem->setCacheByKey($cacheKey, $cacheConfig, $viewVariables);
 
         // return the variable array and let the view be created
         return $viewVariables;
@@ -126,6 +138,12 @@ class MelisFrontMenuPlugin extends MelisTemplatingPlugin
 
                     $errors = array();
                     if ($form->isValid()) {
+
+                        $cacheKey = 'MelisFrontMenuPlugin_' . $this->getFormData()['id'];
+                        $cacheConfig = 'melisfront_pages_file_cache';
+                        $melisEngineCacheSystem = $this->getServiceLocator()->get('MelisEngineCacheSystem');
+                        $melisEngineCacheSystem->deleteCacheByPrefix($cacheKey, $cacheConfig);
+
                         $data = $form->getData();
                         $success = true;
                         array_push($response, [

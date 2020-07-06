@@ -270,4 +270,25 @@ return array(
             ),
         ),
     ),
+    'caches' => [
+        'melisfront_pages_file_cache' => array(
+            'active' => true, // activate or deactivate Melis Cache for this conf
+            'adapter' => array(
+                'name'    => 'Filesystem',
+                'options' => array(
+                    'ttl' => 0, // 24hrs
+                    'namespace' => 'melisfront_pages_file_cache',
+                    'cache_dir' => $_SERVER['DOCUMENT_ROOT'] . '/../cache'
+                ),
+            ),
+            'plugins' => array(
+                'exception_handler' => array('throw_exceptions' => false),
+                'Serializer'
+            ),
+            'ttls' => array(
+                // add a specific ttl for a specific cache key (found via regexp)
+                // 'my_cache_key' => 60,
+            )
+        ),
+    ]
 );
