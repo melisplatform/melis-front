@@ -66,7 +66,7 @@ class MelisFrontMenuPlugin extends MelisTemplatingPlugin
         $pageId = !empty($data['pageIdRootMenu']) ? $data['pageIdRootMenu'] : 1;
 
         // Retrieve cache version if front mode to avoid multiple calls
-		$cacheKey = 'MelisFrontMenuPlugin_' . $this->cleanString($data['id']). '_' .$this->cleanString($data['template_path']);
+		$cacheKey = 'MelisFrontMenuPlugin_'.$data['pageId'].'_'.$this->cleanString($data['id']). '_' .$this->cleanString($data['template_path']);
 		$cacheConfig = 'melisfront_pages_file_cache';
 		$melisEngineCacheSystem = $this->getServiceLocator()->get('MelisEngineCacheSystem');
         $results = $melisEngineCacheSystem->getCacheByKey($cacheKey, $cacheConfig);

@@ -1,0 +1,44 @@
+<?php
+$infoText = "tr_melis_front_gdpr_revalidation_info_text";
+$btnText = "tr_melis_front_gdpr_revalidation_btn_confirm";
+$warningText = "tr_melis_front_gdpr_revalidation_info_text_warning";
+$success = "tr_melis_front_gdpr_revalidation_info_success_heading";
+$succesSubHeading = "tr_melis_front_gdpr_revalidation_info_success_sub_heading";
+?>
+<div class="revalidation-plugin text-center" style="float:none;">
+    <?php
+    /**
+     * we show the form only for those user's inactive days were already passed
+     */
+    ?>
+    <?php if (!$this->userStillActive) { ?>
+        <?php if (!$this->isRevalidated) { ?>
+            <?php if (!empty($this->userData)) { ?>
+                <p class="revalidation-info"><?= $this->translate($infoText)?></p>
+                <?php
+                $this->revalidationForm->prepare();
+                echo $this->form()->openTag($this->revalidationForm);
+                echo $this->formCollection($this->revalidationForm);
+                ?>
+                <?php  if ($this->error) {?>
+                    <p class="text-danger text-center"><?= $this->translate($this->error)?></p>
+                <?php }?>
+                <button class="btn btn-success btn-lg" type="submit"><?= $this->translate($btnText)?></button>
+                <?= $this->form()->closeTag(); ?>
+            <?php } else { ?>
+                <div class="alert alert-warning">
+                    <p><?= $this->translate($warningText)?></p>
+                </div>
+            <?php } ?>
+        <?php } else { ?>
+            <div class="alert alert-success">
+                <h4><?= $this->translate($success)?></h4>
+                <p><?= $this->translate($succesSubHeading)?></p>
+            </div>
+        <?php } ?>
+    <?php } else {?>
+        <div class="alert alert-warning">
+            <p><?= $this->translate($warningText)?></p>
+        </div>
+    <?php }?>
+</div>
