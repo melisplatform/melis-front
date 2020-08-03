@@ -14,10 +14,10 @@ use MelisCore\Service\MelisCoreGdprAutoDeleteService;
 use MelisEngine\Controller\Plugin\MelisTemplatingPlugin;
 use MelisEngine\Service\MelisGdprAutoDeleteService;
 use MelisFront\Service\MelisSiteConfigService;
-use Zend\Db\Sql\Sql;
-use Zend\Form\Factory;
-use Zend\View\Model\ViewModel;
-use Zend\Session\Container;
+use Laminas\Db\Sql\Sql;
+use Laminas\Form\Factory;
+use Laminas\View\Model\ViewModel;
+use Laminas\Session\Container;
 
 /**
  * This plugin implements the business logic of the
@@ -162,16 +162,16 @@ class MelisFrontGdprRevalidationPlugin extends MelisTemplatingPlugin
     }
 
     /**
-     * create zend form
+     * create form
      * @param $formConfig
-     * @return \Zend\Form\ElementInterface
+     * @return \Laminas\Form\ElementInterface
      */
     private function getRevalidationForm($formConfig)
     {
         // get form element manager
         $formElement = $this->getServiceManager()->get('FormElementManager');
         // get form factory class
-        $factory      = new \Zend\Form\Factory();
+        $factory      = new \Laminas\Form\Factory();
         // set form element manager
         $factory->setFormElementManager($formElement);
 
