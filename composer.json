@@ -1,48 +1,45 @@
 {
-    "name": "melisplatform/melis-front",
-    "description": "Melis Platform front module",
-    "type": "melisplatform-module",
-    "license": "OSL-3.0",
-    "homepage": "https://github.com/melisplatform/melis-front",
-    "support": {
-        "email": "contact@melistechnology.com",
-        "source": "https://github.com/melisplatform/melis-front",
-        "issues": "https://github.com/melisplatform/melis-front/issues",
-        "docs": "https://www.melistechnology.com/melistechnology/resources/download-documentation/id/17#documentation"
-    },
-    "authors": [
-        {
-            "name": "Melis Technology",
-            "email": "contact@melistechnology.com",
-            "homepage": "https://www.melistechnology.com",
-            "role": "Developer"
-        }
-    ],
-    "keywords": [
-        "cms",
-        "melis",
-        "zf2",
-        "module"
-    ],
-    "extra": {
-        "module-name": "MelisFront",
-        "melis-site": false,
-        "melis-module-category": "cms"
-    },
-    "require": {
-        "laminas/laminas-navigation": "^2.9",
-        "laminas/laminas-serializer": "^2.9",
-        "laminas/laminas-file": "^2.8",
-        "matthiasmullie/minify": "^1.3",
-        "melisplatform/melis-core": "*",
-        "melisplatform/melis-engine": "*"
-    },
-    "require-dev": {
-        "phpunit/phpunit": "~4.8"
-    },
-    "autoload": {
-        "psr-4": {
-            "MelisFront\\": "src/"
-        }
-    }
+	"name": "melisplatform/melis-front",
+	"description": "Melis Platform front module",
+	"type": "melisplatform-module",
+	"license": "OSL-3.0",
+	"homepage": "https://github.com/melisplatform/melis-front",
+	"support": {
+		"email": "contact@melistechnology.com",
+		"source": "https://github.com/melisplatform/melis-front",
+		"issues": "https://github.com/melisplatform/melis-front/issues",
+		"docs": "https://www.melistechnology.com/melistechnology/resources/download-documentation/id/17#documentation"
+	},
+	"authors": [
+		{
+			"name": "Melis Technology",
+			"email": "contact@melistechnology.com",
+			"homepage": "https://www.melistechnology.com",
+			"role": "Developer"
+		}
+	],
+	"keywords": [
+		"cms",
+		"melis",
+		"zf2",
+		"module"
+	],
+	"extra": {
+		"module-name": "MelisFront",
+		"melis-site": false,
+		"melis-module-category": "cms"
+	},
+	"require": {
+		"laminas/laminas-navigation": "^2.9",
+		"laminas/laminas-serializer": "^2.9",
+		"laminas/laminas-file": "^2.8",
+		"matthiasmullie/minify": "^1.3",
+		"melisplatform/melis-core": "*",
+		"melisplatform/melis-engine": "*"
+	},
+	"autoload": {
+		"psr-4": {
+			"MelisFront\\": "src/"
+		}
+	}
 }
