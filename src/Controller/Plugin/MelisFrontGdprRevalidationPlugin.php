@@ -14,10 +14,10 @@ use MelisCore\Service\MelisCoreGdprAutoDeleteService;
 use MelisEngine\Controller\Plugin\MelisTemplatingPlugin;
 use MelisEngine\Service\MelisGdprAutoDeleteService;
 use MelisFront\Service\MelisSiteConfigService;
-use Zend\Db\Sql\Sql;
-use Zend\Form\Factory;
-use Zend\View\Model\ViewModel;
-use Zend\Session\Container;
+use Laminas\Db\Sql\Sql;
+use Laminas\Form\Factory;
+use Laminas\View\Model\ViewModel;
+use Laminas\Session\Container;
 
 /**
  * This plugin implements the business logic of the
@@ -86,10 +86,10 @@ class MelisFrontGdprRevalidationPlugin extends MelisTemplatingPlugin
         $revalidated = false;
         $userStillActive = false;
         /** @var MelisGdprAutoDeleteService $gdprAutoDeleteService */
-        $gdprAutoDeleteService = $this->getServiceLocator()->get('MelisGdprAutoDeleteService');
+        $gdprAutoDeleteService = $this->getServiceManager()->get('MelisGdprAutoDeleteService');
         $pluginData = $this->getFormData();
         // request
-        $request = $this->getServiceLocator()->get('request');
+        $request = $this->getServiceManager()->get('request');
         // get user data and check if user is valid
         $userData = $this->verifyUser($request, $pluginData);
         $revalidationForm = $this->getRevalidationForm($this->pluginFrontConfig['forms']['gdpr_revalidation_form']);
@@ -139,7 +139,7 @@ class MelisFrontGdprRevalidationPlugin extends MelisTemplatingPlugin
     private function queryNumberOfDaysInactive($pluginData)
     {
         // get a table
-        $table = $this->getServiceLocator()->get('MelisEngineTablePlatformIds');
+        $table = $this->getServiceManager()->get('MelisEngineTablePlatformIds');
         // get table gateway
         $tableGateway = $table->getTableGateway();
         // set table
@@ -158,20 +158,20 @@ class MelisFrontGdprRevalidationPlugin extends MelisTemplatingPlugin
      */
     private function removeUserEntryOnDeleteSentEmail($validationKey)
     {
-        return $this->getServiceLocator()->get('MelisGdprDeleteEmailsSentTable')->deleteByField('mgdprs_account_id', $validationKey);
+        return $this->getServiceManager()->get('MelisGdprDeleteEmailsSentTable')->deleteByField('mgdprs_account_id', $validationKey);
     }
 
     /**
-     * create zend form
+     * create form
      * @param $formConfig
-     * @return \Zend\Form\ElementInterface
+     * @return \Laminas\Form\ElementInterface
      */
     private function getRevalidationForm($formConfig)
     {
         // get form element manager
-        $formElement = $this->getServiceLocator()->get('FormElementManager');
+        $formElement = $this->getServiceManager()->get('FormElementManager');
         // get form factory class
-        $factory      = new \Zend\Form\Factory();
+        $factory      = new \Laminas\Form\Factory();
         // set form element manager
         $factory->setFormElementManager($formElement);
 
@@ -188,7 +188,7 @@ class MelisFrontGdprRevalidationPlugin extends MelisTemplatingPlugin
         $userData = null;
         $pluginData = $this->getFormData();
         /** @var MelisGdprAutoDeleteService $gdprAutoDeleteService */
-        $gdprAutoDeleteService = $this->getServiceLocator()->get('MelisGdprAutoDeleteService');
+        $gdprAutoDeleteService = $this->getServiceManager()->get('MelisGdprAutoDeleteService');
         // add config data in the session so modules can access on it
         $container = new Container('melis_auto_delete_gdpr');
         $container['config'] = (array) $gdprAutoDeleteService->getAutoDeleteConfig($pluginData['site_id'], $pluginData['module']);
@@ -198,7 +198,7 @@ class MelisFrontGdprRevalidationPlugin extends MelisTemplatingPlugin
         
         // if service class is set
         if (!empty($service)) {
-            $service = $this->getServiceLocator()->get($service);
+            $service = $this->getServiceManager()->get($service);
             // check if method exists
             if (in_array('getUserPerValidationKey', get_class_methods($service))) {
                 // return user data
@@ -234,15 +234,15 @@ class MelisFrontGdprRevalidationPlugin extends MelisTemplatingPlugin
     {
         // construct form
         $factory = new Factory();
-        $formElements = $this->getServiceLocator()->get('FormElementManager');
+        $formElements = $this->getServiceManager()->get('FormElementManager');
         $factory->setFormElementManager($formElements);
         $formConfig = $this->pluginBackConfig['modal_form'];
-        $tool = $this->getServiceLocator()->get('translator');
+        $tool = $this->getServiceManager()->get('translator');
         $data = $this->getFormData();
         $response = [];
         $render = [];
         if (empty($data['site_id'])){
-            $pageSvc = $this->getServiceLocator()->get('MelisEnginePage');
+            $pageSvc = $this->getServiceManager()->get('MelisEnginePage');
             // get page data in published first
             $pageData = $pageSvc->getDatasPage($data['pageId']);
             // check page status if it is published
@@ -259,7 +259,7 @@ class MelisFrontGdprRevalidationPlugin extends MelisTemplatingPlugin
         if (!empty($formConfig)) {
             foreach ($formConfig as $formKey => $config) {
                 $form = $factory->createForm($config);
-                $request = $this->getServiceLocator()->get('request');
+                $request = $this->getServiceManager()->get('request');
                 $parameters = $request->getQuery()->toArray();
 
                 if (!isset($parameters['validate'])) {
@@ -273,7 +273,7 @@ class MelisFrontGdprRevalidationPlugin extends MelisTemplatingPlugin
                         'noPropsMsg' => $tool->translate('tr_melis_cms_gdpr_banner_plugin_empty_props'),
                     ];
 
-                    $viewRender = $this->getServiceLocator()->get('ViewRenderer');
+                    $viewRender = $this->getServiceManager()->get('ViewRenderer');
                     $html = $viewRender->render($viewModelTab);
                     array_push($render, [
                             'name' => $config['tab_title'],

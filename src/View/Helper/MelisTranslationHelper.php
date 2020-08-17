@@ -2,18 +2,19 @@
 
 namespace MelisFront\View\Helper;
 
+use Laminas\ServiceManager\ServiceManager;
 use MelisEngine\Service\MelisPageService;
 use MelisFront\Service\MelisTranslationService;
-use Zend\Session\Container;
-use Zend\View\Helper\AbstractHelper;
+use Laminas\Session\Container;
+use Laminas\View\Helper\AbstractHelper;
 
 class MelisTranslationHelper extends AbstractHelper
 {
 	public $serviceManager;
 
-	public function __construct($sm)
+	public function setServiceManager(ServiceManager $serviceManager)
 	{
-		$this->serviceManager = $sm;
+		$this->serviceManager = $serviceManager;
 	}
 	
 	public function __invoke($translationKey , $locale = null)

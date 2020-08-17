@@ -10,8 +10,8 @@
 namespace MelisFront\Controller\Plugin;
 use MelisEngine\Controller\Plugin\MelisTemplatingPlugin;
 use MelisFront\Navigation\MelisFrontNavigation;
-use Zend\View\Model\ViewModel;
-use Zend\Session\Container;
+use Laminas\View\Model\ViewModel;
+use Laminas\Session\Container;
 /**
  * This plugin implements the business logic of the
  * "Menu" plugin.
@@ -68,14 +68,14 @@ class MelisFrontMenuPlugin extends MelisTemplatingPlugin
         // Retrieve cache version if front mode to avoid multiple calls
 		$cacheKey = 'MelisFrontMenuPlugin_'.$data['pageId'].'_'.$this->cleanString($data['id']). '_' .$this->cleanString($data['template_path']);
 		$cacheConfig = 'melisfront_pages_file_cache';
-		$melisEngineCacheSystem = $this->getServiceLocator()->get('MelisEngineCacheSystem');
+		$melisEngineCacheSystem = $this->getServiceManager()->get('MelisEngineCacheSystem');
         $results = $melisEngineCacheSystem->getCacheByKey($cacheKey, $cacheConfig);
 
         if (!is_null($results))
             return $results;
         
         // Getting the Site Menu from MelisFrontNavigator
-        $site = new MelisFrontNavigation($this->getServiceLocator(), $pageId, $this->renderMode);
+        $site = new MelisFrontNavigation($this->getServiceManager(), $pageId, $this->renderMode);
 
         $siteMenu = $site->getPageAndSubPages($pageId);
         $siteMenu = $this->checkValidPagesRecursive($siteMenu);
@@ -100,8 +100,8 @@ class MelisFrontMenuPlugin extends MelisTemplatingPlugin
     public function createOptionsForms()
     {
         // construct form
-        $factory = new \Zend\Form\Factory();
-        $formElements = $this->getServiceLocator()->get('FormElementManager');
+        $factory = new \Laminas\Form\Factory();
+        $formElements = $this->getServiceManager()->get('FormElementManager');
         $factory->setFormElementManager($formElements);
         $formConfig = $this->pluginBackConfig['modal_form'];
 
@@ -110,7 +110,7 @@ class MelisFrontMenuPlugin extends MelisTemplatingPlugin
         if (!empty($formConfig)) {
             foreach ($formConfig as $formKey => $config) {
                 $form = $factory->createForm($config);
-                $request = $this->getServiceLocator()->get('request');
+                $request = $this->getServiceManager()->get('request');
                 $parameters = $request->getQuery()->toArray();
 
                 if (!isset($parameters['validate'])) {
@@ -120,7 +120,7 @@ class MelisFrontMenuPlugin extends MelisTemplatingPlugin
                     $viewModelTab->setTemplate($config['tab_form_layout']);
                     $viewModelTab->modalForm = $form;
                     $viewModelTab->formData   = $this->getFormData();
-                    $viewRender = $this->getServiceLocator()->get('ViewRenderer');
+                    $viewRender = $this->getServiceManager()->get('ViewRenderer');
                     $html = $viewRender->render($viewModelTab);
                     array_push($render, [
                             'name' => $config['tab_title'],
@@ -141,7 +141,7 @@ class MelisFrontMenuPlugin extends MelisTemplatingPlugin
 
                         $cacheKey = 'MelisFrontMenuPlugin_' . $this->getFormData()['id'];
                         $cacheConfig = 'melisfront_pages_file_cache';
-                        $melisEngineCacheSystem = $this->getServiceLocator()->get('MelisEngineCacheSystem');
+                        $melisEngineCacheSystem = $this->getServiceManager()->get('MelisEngineCacheSystem');
                         $melisEngineCacheSystem->deleteCacheByPrefix($cacheKey, $cacheConfig);
 
                         $data = $form->getData();

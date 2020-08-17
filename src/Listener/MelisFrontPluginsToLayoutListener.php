@@ -9,18 +9,19 @@
 
 namespace MelisFront\Listener;
 
-use Zend\EventManager\EventManagerInterface;
-use Zend\EventManager\ListenerAggregateInterface;
-use Zend\Mvc\MvcEvent;
+use Laminas\EventManager\EventManagerInterface;
+use Laminas\EventManager\ListenerAggregateInterface;
+use Laminas\Mvc\MvcEvent;
+use MelisCore\Listener\MelisGeneralListener;
 
 /**
  * This listener will activate the replacement of the title and meta description
  * on Melis Pages
  * 
  */
-class MelisFrontPluginsToLayoutListener implements ListenerAggregateInterface
+class MelisFrontPluginsToLayoutListener extends MelisGeneralListener implements ListenerAggregateInterface
 {
-    public function attach(EventManagerInterface $events)
+    public function attach(EventManagerInterface $events, $priority = 1)
     {
         $callBackHandler = $events->attach(
         	MvcEvent::EVENT_FINISH, 
@@ -71,14 +72,5 @@ class MelisFrontPluginsToLayoutListener implements ListenerAggregateInterface
         115);
         
         $this->listeners[] = $callBackHandler;
-    }
-    
-    public function detach(EventManagerInterface $events)
-    {
-        foreach ($this->listeners as $index => $listener) {
-            if ($events->detach($listener)) {
-                unset($this->listeners[$index]);
-            }
-        }
     }
 }

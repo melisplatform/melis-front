@@ -9,10 +9,11 @@
 
 namespace MelisFront\Listener;
 
-use Zend\EventManager\EventManagerInterface;
-use Zend\EventManager\ListenerAggregateInterface;
-use Zend\Mvc\MvcEvent;
-use Zend\Mvc\Router\Http\Segment;
+use Laminas\EventManager\EventManagerInterface;
+use Laminas\EventManager\ListenerAggregateInterface;
+use Laminas\Mvc\MvcEvent;
+use Laminas\Mvc\Router\Http\Segment;
+use MelisCore\Listener\MelisGeneralListener;
 
 /**
  * This listener will check if a URL that does not respect the regular routing of 
@@ -22,9 +23,9 @@ use Zend\Mvc\Router\Http\Segment;
  * as long as a special dynamic route to be able to differentiate the origin.
  * 
  */
-class MelisFrontSEOReformatToRoutePageUrlListener implements ListenerAggregateInterface
+class MelisFrontSEOReformatToRoutePageUrlListener extends MelisGeneralListener implements ListenerAggregateInterface
 {
-    public function attach(EventManagerInterface $events)
+    public function attach(EventManagerInterface $events, $priority = 1)
     {
         $callBackHandler = $events->attach(
         	MvcEvent::EVENT_ROUTE, 
@@ -106,14 +107,5 @@ class MelisFrontSEOReformatToRoutePageUrlListener implements ListenerAggregateIn
         80);
         
         $this->listeners[] = $callBackHandler;
-    }
-    
-    public function detach(EventManagerInterface $events)
-    {
-        foreach ($this->listeners as $index => $listener) {
-            if ($events->detach($listener)) {
-                unset($this->listeners[$index]);
-            }
-        }
     }
 }

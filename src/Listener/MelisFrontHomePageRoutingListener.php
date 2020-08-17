@@ -9,10 +9,11 @@
 
 namespace MelisFront\Listener;
 
-use Zend\EventManager\EventManagerInterface;
-use Zend\EventManager\ListenerAggregateInterface;
-use Zend\Mvc\MvcEvent;
-use Zend\Mvc\Router\Http\Segment;
+use Laminas\EventManager\EventManagerInterface;
+use Laminas\EventManager\ListenerAggregateInterface;
+use Laminas\Mvc\MvcEvent;
+use Laminas\Mvc\Router\Http\Segment;
+use MelisCore\Listener\MelisGeneralListener;
 
 /**
  * This listener will check if we are in a home page
@@ -21,9 +22,9 @@ use Zend\Mvc\Router\Http\Segment;
  * Class MelisFrontHomePageRoutingListener
  * @package MelisFront\Listener
  */
-class MelisFrontHomePageRoutingListener implements ListenerAggregateInterface
+class MelisFrontHomePageRoutingListener extends MelisGeneralListener implements ListenerAggregateInterface
 {
-    public function attach(EventManagerInterface $events)
+    public function attach(EventManagerInterface $events, $priority = 1)
     {
         $callBackHandler = $events->attach(
             MvcEvent::EVENT_ROUTE, 
@@ -124,14 +125,5 @@ class MelisFrontHomePageRoutingListener implements ListenerAggregateInterface
         79);
         
         $this->listeners[] = $callBackHandler;
-    }
-    
-    public function detach(EventManagerInterface $events)
-    {
-        foreach ($this->listeners as $index => $listener) {
-            if ($events->detach($listener)) {
-                unset($this->listeners[$index]);
-            }
-        }
     }
 }

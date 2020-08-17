@@ -9,10 +9,10 @@
 
 namespace MelisFront\Listener;
 
-use Zend\ModuleManager\ModuleEvent;
-use Zend\Mvc\Router\Http\Segment;
-use Zend\ServiceManager\ServiceManager;
-use Zend\Stdlib\ArrayUtils;
+use Laminas\ModuleManager\ModuleEvent;
+use Laminas\Mvc\Router\Http\Segment;
+use Laminas\ServiceManager\ServiceManager;
+use Laminas\Stdlib\ArrayUtils;
 
 
 class MelisFrontSEORouteListener
@@ -54,7 +54,7 @@ class MelisFrontSEORouteListener
                         // get router
                         $router = $sm->get('router');
                         // Creating dynamicaly the route and the params that are needed in the regular melis routing
-                        $route = Segment::factory(array(
+                        $route = \Laminas\Router\Http\Segment::factory(array(
                             'route' => '/' . $url,
                             'defaults' => array(
                                 'controller' => 'MelisFront\Controller\Index',

@@ -9,9 +9,10 @@
 
 namespace MelisFront\View\Helper;
 
-use Zend\View\Helper\AbstractHelper;
-use Zend\Session\Container;
-use Zend\View\Model\ViewModel;
+use Laminas\ServiceManager\ServiceManager;
+use Laminas\View\Helper\AbstractHelper;
+use Laminas\Session\Container;
+use Laminas\View\Model\ViewModel;
 
 /**
  * This helper creates a dragdropzone inside the template to be used with the plugins
@@ -20,25 +21,28 @@ use Zend\View\Model\ViewModel;
 class MelisDragDropZoneHelper extends AbstractHelper
 {
 	public $serviceManager;
-	public $renderMode;
-	public $preview;
 
-	public function __construct($sm, $renderMode, $preview)
-	{
-		$this->serviceManager = $sm;
-		$this->renderMode = $renderMode;
-		$this->preview = $preview;
-	}
-	
-	
-	public function __invoke($idPage, $dragDropZoneId)
+    /**
+     * @param ServiceManager $serviceManager
+     */
+    public function setServiceManager(ServiceManager $serviceManager)
+    {
+        $this->serviceManager = $serviceManager;
+    }
+
+    /**
+     * @param $idPage
+     * @param $dragDropZoneId
+     * @return mixed
+     */
+    public function __invoke($idPage, $dragDropZoneId)
 	{
 	    $melisFrontDragDropZonePlugin = $this->serviceManager->get('ControllerPluginManager')->get('MelisFrontDragDropZonePlugin');
 
-	    $melisFrontDragDropZonePluginView = $melisFrontDragDropZonePlugin->render(array(
+	    $melisFrontDragDropZonePluginView = $melisFrontDragDropZonePlugin->render([
 	        'pageId' => $idPage,
 	        'id' => $dragDropZoneId,
-	    ));
+	    ]);
 	    
 	    $viewRender = $this->serviceManager->get('ViewRenderer');
 	    $tagHtml = $viewRender->render($melisFrontDragDropZonePluginView);

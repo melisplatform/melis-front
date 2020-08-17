@@ -9,34 +9,29 @@
 
 namespace MelisFront\Navigation\Factory;
 
-use Zend\ServiceManager\ServiceLocatorInterface;
-use Zend\ServiceManager\FactoryInterface;
 use MelisFront\Navigation\MelisFrontNavigation;
+use Interop\Container\ContainerInterface;
 
-class MelisFrontNavigationFactory implements FactoryInterface
+class MelisFrontNavigationFactory
 {
-	public function createService(ServiceLocatorInterface $sl)
-	{
-		$router = $sl->get('router');
-		$request = $sl->get('request');
+    public function __invoke(ContainerInterface $container, $requestedName)
+    {
+		$router = $container->get('router');
+		$request = $container->get('request');
 		$routeMatch = $router->match($request);
 		
-		if ($routeMatch)
-		{
+		if ($routeMatch) {
 			$params = $routeMatch->getParams();
 			$idpage = $params['idpage'];
 			$renderMode = $params['renderMode'];
 			
-			$navigation = new MelisFrontNavigation($sl, $idpage, $renderMode);
-			$navigationService =  $navigation->createService($sl);
-		}
-		else
-		{
-			$navigation = new MelisFrontNavigation($sl, 0, 'front');
-			$navigationService =  $navigation->createService($sl);
+			$navigation = new MelisFrontNavigation($container, $idpage, $renderMode);
+			$navigationService =  $navigation->createService($container);
+		} else {
+			$navigation = new MelisFrontNavigation($container, 0, 'front');
+			$navigationService =  $navigation->createService($container);
 		}
 		
 		return $navigationService;
 	}
-
 }

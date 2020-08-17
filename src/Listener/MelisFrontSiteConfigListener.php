@@ -9,9 +9,9 @@
 
 namespace MelisFront\Listener;
 
-use Zend\ModuleManager\ModuleEvent;
-use Zend\ServiceManager\ServiceManager;
-use Zend\Stdlib\ArrayUtils;
+use Laminas\ModuleManager\ModuleEvent;
+use Laminas\ServiceManager\ServiceManager;
+use Laminas\Stdlib\ArrayUtils;
 
 
 class MelisFrontSiteConfigListener
@@ -79,7 +79,7 @@ class MelisFrontSiteConfigListener
                  * Update the config inside the service
                  */
                 $serviceManager->setAllowOverride(true);
-                $serviceManager->setService('Config', $config);
+                $serviceManager->setService('config', $config);
                 $serviceManager->setAllowOverride(false);
             }
         }

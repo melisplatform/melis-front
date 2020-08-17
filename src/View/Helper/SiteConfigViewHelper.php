@@ -9,19 +9,19 @@
 
 namespace MelisFront\View\Helper;
 
+use Laminas\ServiceManager\ServiceManager;
 use MelisFront\Service\MelisSiteConfigService;
-use Zend\Http\Request;
-use Zend\View\Helper\AbstractHelper;
+use Laminas\Http\Request;
+use Laminas\View\Helper\AbstractHelper;
 
 
 class SiteConfigViewHelper extends AbstractHelper
 {
     public $serviceManager;
-    public $request;
-    
-    public function __construct($sm)
+
+    public function setServiceManager(ServiceManager $serviceManager)
     {
-        $this->serviceManager = $sm;
+        $this->serviceManager = $serviceManager;
     }
     
     /**

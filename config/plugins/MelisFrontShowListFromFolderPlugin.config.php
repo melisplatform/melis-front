@@ -61,7 +61,7 @@ return array(
                                     'method' => '',
                                     'action' => '',
                                 ),
-                                'hydrator'  => 'Zend\Stdlib\Hydrator\ArraySerializable',
+                                'hydrator'  => 'Laminas\Hydrator\ArraySerializable',
                                 'elements' => array(
                                     array(
                                         'spec' => array(
@@ -108,7 +108,7 @@ return array(
                                                 'name' => 'NotEmpty',
                                                 'options' => array(
                                                     'messages' => array(
-                                                        \Zend\Validator\NotEmpty::IS_EMPTY => 'tr_front_template_path_empty',
+                                                        \Laminas\Validator\NotEmpty::IS_EMPTY => 'tr_front_template_path_empty',
                                                     ),
                                                 ),
                                             ),
@@ -125,7 +125,7 @@ return array(
                                                 'name' => 'NotEmpty',
                                                 'options' => array(
                                                     'messages' => array(
-                                                        \Zend\Validator\NotEmpty::IS_EMPTY => 'tr_melis_plugins_page_id_empty',
+                                                        \Laminas\Validator\NotEmpty::IS_EMPTY => 'tr_melis_plugins_page_id_empty',
                                                     ),
                                                 ),
                                             ),
@@ -133,7 +133,7 @@ return array(
                                                 'name' => 'IsInt',
                                                 'options' => array(
                                                     'messages' => array(
-                                                        \Zend\I18n\Validator\IsInt::NOT_INT => 'tr_melis_plugins_page_id_not_num'
+                                                        \Laminas\I18n\Validator\IsInt::NOT_INT => 'tr_melis_plugins_page_id_not_num'
                                                     ),
                                                 ),
                                             ),

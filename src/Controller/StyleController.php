@@ -9,14 +9,16 @@
 
 namespace MelisFront\Controller;
 
-use Zend\Mvc\Controller\AbstractActionController;
-use Zend\View\Model\ViewModel;
-class StyleController extends AbstractActionController
-{
+use Laminas\View\Model\ViewModel;
+use MelisCore\Controller\MelisAbstractActionController;
 
+class StyleController extends MelisAbstractActionController
+{
+    /**
+     * @return ViewModel
+     */
     public function getPagePluginWidthCssAction()
     {
-
         $response = $this->getResponse();
 
         $response->getHeaders()
@@ -27,10 +29,8 @@ class StyleController extends AbstractActionController
         $css     = '[class^="plugin-width"] {float: left;margin: 0;}';
         $pageId  = (int) $this->params()->fromQuery('idpage');
 
-        $pageSvc = $this->getServiceLocator()->get('MelisEnginePage');
+        $pageSvc = $this->getServiceManager()->get('MelisEnginePage');
         $data    = $pageSvc->getDatasPage($pageId);
-
-
 
         if($data) {
 

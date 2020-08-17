@@ -9,21 +9,20 @@
 
 namespace MelisFront\View\Helper;
 
-use Zend\View\Helper\AbstractHelper;
+use Laminas\ServiceManager\ServiceManager;
+use Laminas\View\Helper\AbstractHelper;
 
 /**
  * This helper will generate links for a melis page
- *
  */
 class MelisLinksHelper extends AbstractHelper
 {
 	public $serviceManager;
-	public $dataBreadcrumbs;
+	public $dataBreadcrumbs = [];
 
-	public function __construct($sm)
+	public function setServiceManager(ServiceManager $serviceManager)
 	{
-		$this->serviceManager = $sm;
-		$this->dataBreadcrumbs = array();
+		$this->serviceManager = $serviceManager;
 	}
 	
 	/**
@@ -33,14 +32,11 @@ class MelisLinksHelper extends AbstractHelper
 	 */
 	public function __invoke($idPage, $absolute)
 	{
-		if (empty($this->dataBreadcrumbs[$idPage]))
-		{
+		if (empty($this->dataBreadcrumbs[$idPage])) {
 			$melisTree = $this->serviceManager->get('MelisEngineTree');
             $link = $melisTree->getPageLink($idPage, $absolute);
 			$this->dataBreadcrumbs[$idPage] = $link;
-		}
-		else
-		{
+		} else {
 			$link = $this->dataBreadcrumbs[$idPage];
 		}
 		

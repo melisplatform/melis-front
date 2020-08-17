@@ -9,9 +9,10 @@
 
 namespace MelisFront\View\Helper;
 
-use Zend\View\Helper\AbstractHelper;
-use Zend\Session\Container;
-use Zend\View\Model\ViewModel;
+use Laminas\ServiceManager\ServiceManager;
+use Laminas\View\Helper\AbstractHelper;
+use Laminas\Session\Container;
+use Laminas\View\Model\ViewModel;
 
 /**
  * This helper gets the content for a page and show it for front mode, or adds the 
@@ -21,14 +22,14 @@ use Zend\View\Model\ViewModel;
 class MelisTagsHelper extends AbstractHelper
 {
 	public $serviceManager;
-	public $renderMode;
-	public $preview;
-	public $datasPages;
-	public $datasPagesSaved;
+//	public $renderMode;
+//	public $preview;
+//	public $datasPages;
+//	public $datasPagesSaved;
 
-	public function __construct($sm, $renderMode, $preview)
+	public function setServiceManager(ServiceManager $serviceManager)
 	{
-		$this->serviceManager = $sm;
+		$this->serviceManager = $serviceManager;
 	}
 	
 	/**

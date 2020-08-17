@@ -1,5 +1,12 @@
 <?php
-return array(
+/**
+ * Melis Technology (http://www.melistechnology.com)
+ *
+ * @copyright Copyright (c) 2015 Melis Technology (http://www.melistechnology.com)
+ *
+ */
+
+return [
     
     // Plugins
     'tr_meliscms_Plugins' => 'Plugins',
@@ -106,4 +113,4 @@ return array(
     'tr_melis_front_gdpr_revalidation_info_success_heading' => 'Success',
     'tr_melis_front_gdpr_revalidation_info_success_sub_heading' => 'Your account is now up to date!',
     'tr_melis_front_gdpr_revalidation_not_checked' => 'Please check the box to validate'
-);
+];

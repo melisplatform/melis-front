@@ -11,8 +11,8 @@ namespace MelisFront\Controller\Plugin;
 
 use MelisEngine\Controller\Plugin\MelisTemplatingPlugin;
 use MelisFront\Navigation\MelisFrontNavigation;
-use Zend\View\Model\ViewModel;
-use Zend\Session\Container;
+use Laminas\View\Model\ViewModel;
+use Laminas\Session\Container;
 /**
  * This plugin implements the business logic of the
  * "Breadcrumb" plugin.
@@ -95,7 +95,7 @@ class MelisFrontBlockSectionPlugin extends MelisTemplatingPlugin
         $viewModel->pluginXmlDbKey = $this->pluginXmlDbKey;
 
         $siteModule = getenv('MELIS_MODULE');
-        $melisPage = $this->getServiceLocator()->get('MelisEnginePage');
+        $melisPage = $this->getServiceManager()->get('MelisEnginePage');
         $datasPage = $melisPage->getDatasPage($pageId, 'saved');
         if($datasPage)
         {

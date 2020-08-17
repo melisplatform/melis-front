@@ -13,6 +13,7 @@ use Zend\EventManager\EventManagerInterface;
 use Zend\EventManager\ListenerAggregateInterface;
 use Zend\Mvc\MvcEvent;
 use Zend\Session\Container;
+use MelisCore\Listener\MelisGeneralListener;
 
 /**
  * This listener check if the Melis Page URL is correct.
@@ -26,13 +27,12 @@ use Zend\Session\Container;
  * Using this event is the correct way to interact with SEO.
  * 
  */
-class MelisFrontDeletePluginCacheListener implements ListenerAggregateInterface
+class MelisFrontDeletePluginCacheListener extends MelisGeneralListener implements ListenerAggregateInterface
 {
-    public function attach(EventManagerInterface $events)
+    public function attach(EventManagerInterface $events, $priority = 1)
     {
-        $sharedEvents      = $events->getSharedManager();
-        
-        $callBackHandler = $sharedEvents->attach(
+        $this->attachEventListener(
+            $events,
             '*', 
             [
                 'meliscms_page_save_end',
@@ -43,7 +43,7 @@ class MelisFrontDeletePluginCacheListener implements ListenerAggregateInterface
             ],
             function($e){
 
-                $sm = $e->getTarget()->getServiceLocator(); 
+                $sm = $e->getTarget()->getServiceManager();
 
                 $params = $e->getParams();
 
@@ -63,16 +63,5 @@ class MelisFrontDeletePluginCacheListener implements ListenerAggregateInterface
                 $melisEngineCacheSystem->deleteCacheByPrefix($cacheKey, $cacheConfig);
             }
         );
-        
-        $this->listeners[] = $callBackHandler;
-    }
-
-    public function detach(EventManagerInterface $events)
-    {
-        foreach ($this->listeners as $index => $listener) {
-            if ($events->detach($listener)) {
-                unset($this->listeners[$index]);
-            }
-        }
     }
 }

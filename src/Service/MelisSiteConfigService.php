@@ -9,11 +9,11 @@
 
 namespace MelisFront\Service;
 
+use MelisCore\Service\MelisGeneralService;
 use MelisEngine\Service\MelisEngineComposerService;
-use MelisEngine\Service\MelisEngineGeneralService;
-use Zend\Stdlib\ArrayUtils;
+use Laminas\Stdlib\ArrayUtils;
 
-class MelisSiteConfigService extends MelisEngineGeneralService
+class MelisSiteConfigService extends MelisGeneralService
 {
 
     /**
@@ -82,7 +82,7 @@ class MelisSiteConfigService extends MelisEngineGeneralService
         //try to get config from cache
         $cacheKey = 'getSiteConfigByPageId_' . $pageId.'_'.$langLocale;
         $cacheConfig = 'meliscms_page';
-        $melisEngineCacheSystem = $this->serviceLocator->get('MelisEngineCacheSystem');
+        $melisEngineCacheSystem = $this->getServiceManager()->get('MelisEngineCacheSystem');
         $results = $melisEngineCacheSystem->getCacheByKey($cacheKey, $cacheConfig);
 
         if(empty($results)) {
@@ -96,12 +96,12 @@ class MelisSiteConfigService extends MelisEngineGeneralService
                 /**
                  * get the language if the page
                  */
-                $cmsPageLang = $this->getServiceLocator()->get('MelisEngineTablePageLang');
+                $cmsPageLang = $this->getServiceManager()->get('MelisEngineTablePageLang');
                 $pageLang = $cmsPageLang->getEntryByField('plang_page_id', $arrayParameters['pageId'])->current();
                 /**
                  * get page lang locale
                  */
-                $langCmsSrv = $this->getServiceLocator()->get('MelisEngineLang');
+                $langCmsSrv = $this->getServiceManager()->get('MelisEngineLang');
                 $langData = array();
                 $langId = null;
                 if (!empty($pageLang)) {
@@ -121,7 +121,7 @@ class MelisSiteConfigService extends MelisEngineGeneralService
                          * using the config service that has been updated
                          * through a listener
                          */
-                        $config = $this->serviceLocator->get('config');
+                        $config = $this->getServiceManager()->get('config');
 
                         if (!empty($config['site'])) {
                             /**
@@ -186,7 +186,7 @@ class MelisSiteConfigService extends MelisEngineGeneralService
         //try to get config from cache
         $cacheKey = 'getSiteConfig_' . $siteId.'_'.$returnAll;
         $cacheConfig = 'meliscms_page';
-        $melisEngineCacheSystem = $this->serviceLocator->get('MelisEngineCacheSystem');
+        $melisEngineCacheSystem = $this->getServiceManager()->get('MelisEngineCacheSystem');
         $results = $melisEngineCacheSystem->getCacheByKey($cacheKey, $cacheConfig);
 
         if(empty($results)) {
@@ -295,7 +295,7 @@ class MelisSiteConfigService extends MelisEngineGeneralService
     public function getConfig($siteName)
     {
         /** @var MelisEngineComposerService $composerSrv */
-        $composerSrv  = $this->getServiceLocator()->get('MelisEngineComposer');
+        $composerSrv  = $this->getServiceManager()->get('MelisEngineComposer');
         $config = [];
 
         if (!empty($composerSrv->getComposerModulePath($siteName))) {
@@ -318,7 +318,7 @@ class MelisSiteConfigService extends MelisEngineGeneralService
      */
     private function getSiteConfigFromDb($siteId)
     {
-        $siteConfigTable = $this->getServiceLocator()->get('MelisEngineTableCmsSiteConfig');
+        $siteConfigTable = $this->getServiceManager()->get('MelisEngineTableCmsSiteConfig');
         return $siteConfigTable->getEntryByField('sconf_site_id', $siteId)->toArray();
     }
 
@@ -329,7 +329,7 @@ class MelisSiteConfigService extends MelisEngineGeneralService
      */
     private function getSiteActiveLanguages($siteId)
     {
-        $siteLangsTable = $this->getServiceLocator()->get('MelisEngineTableCmsSiteLangs');
+        $siteLangsTable = $this->getServiceManager()->get('MelisEngineTableCmsSiteLangs');
         return $siteLangsTable->getSiteLangs(null, $siteId, null, true)->toArray();
     }
 
@@ -340,7 +340,7 @@ class MelisSiteConfigService extends MelisEngineGeneralService
      */
     private function getSiteDataById($siteId)
     {
-        $siteTable = $this->getServiceLocator()->get('MelisEngineTableSite');
+        $siteTable = $this->getServiceManager()->get('MelisEngineTableSite');
         return $siteTable->getEntryById($siteId)->toArray()[0];
     }
 
@@ -356,9 +356,9 @@ class MelisSiteConfigService extends MelisEngineGeneralService
         $siteData = [];
         $siteId = 0;
 
-        $pageSaved = $this->getServiceLocator()->get('MelisEngineTablePageSaved');
-        $pagePublished = $this->getServiceLocator()->get('MelisEngineTablePagePublished');
-        $tplSrv = $this->getServiceLocator()->get('MelisEngineTemplateService');
+        $pageSaved = $this->getServiceManager()->get('MelisEngineTablePageSaved');
+        $pagePublished = $this->getServiceManager()->get('MelisEngineTablePagePublished');
+        $tplSrv = $this->getServiceManager()->get('MelisEngineTemplateService');
 
         if(!empty($pageId)){
             /**
@@ -382,7 +382,7 @@ class MelisSiteConfigService extends MelisEngineGeneralService
         }
 
         if(!empty($siteId)){
-            $siteSrv = $this->getServiceLocator()->get('MelisEngineSiteService');
+            $siteSrv = $this->getServiceManager()->get('MelisEngineSiteService');
             $siteData = $siteSrv->getSiteById($siteId)->current();
         }
 

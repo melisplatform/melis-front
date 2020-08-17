@@ -16,13 +16,12 @@ use MelisFront\Listener\MelisFrontMiniTemplateConfigListener;
 use MelisFront\Listener\MelisFrontPluginLangSessionUpdateListener;
 use MelisFront\Listener\MelisFrontSEORouteListener;
 use MelisFront\Listener\MelisFrontSiteConfigListener;
-use Zend\ModuleManager\ModuleEvent;
-use Zend\Mvc\ModuleRouteListener;
-use Zend\Mvc\MvcEvent;
-use Zend\ModuleManager\ModuleManager;
-use Zend\ServiceManager\ServiceManager;
-use Zend\Stdlib\ArrayUtils;
-
+use Laminas\ModuleManager\ModuleEvent;
+use Laminas\Mvc\ModuleRouteListener;
+use Laminas\Mvc\MvcEvent;
+use Laminas\ModuleManager\ModuleManager;
+use Laminas\ServiceManager\ServiceManager;
+use Laminas\Stdlib\ArrayUtils;
 use MelisFront\Listener\MelisFrontLayoutListener;
 use MelisFront\Listener\MelisFrontAttachCssListener;
 use MelisFront\Listener\MelisFrontSEOMetaPageListener;
@@ -32,7 +31,7 @@ use MelisFront\Listener\MelisFrontSEODispatchRouterRegularUrlListener;
 use MelisFront\Listener\MelisFront404To301Listener;
 use MelisFront\Listener\MelisFront404CatcherListener;
 use MelisFront\Listener\MelisFrontXSSParameterListener;
-use Zend\Session\Container;
+use Laminas\Session\Container;
 use MelisFront\Listener\MelisFrontPageCacheListener;
 use MelisFront\Listener\MelisFrontDeletePluginCacheListener;
 
@@ -81,47 +80,46 @@ class Module
             }
         }
 
-
         // do not load listeners if working on back-office
         if(!$isBackOffice) {
             // Catching PAGE SEO URLs to update Router
-            //$eventManager->attach(new MelisFrontSEOReformatToRoutePageUrlListener()); -> refer init() Listener: MelisFrontSEORouteListener, issueL no translations of melis-modules
+            //(new MelisFrontSEOReformatToRoutePageUrlListener())->attach($eventManager); -> refer init() Listener: MelisFrontSEORouteListener, issueL no translations of melis-modules
 
             // Adding css linked to the page
-            $eventManager->attach(new MelisFrontAttachCssListener());
+            (new MelisFrontAttachCssListener())->attach($eventManager);
 
             // Adding different layout if displayed in front or front for melis back office
-            $eventManager->attach(new MelisFrontLayoutListener());
+            (new MelisFrontLayoutListener())->attach($eventManager);
 
             // Adding SEO meta datas to page
-            $eventManager->attach(new MelisFrontSEOMetaPageListener());
+            (new MelisFrontSEOMetaPageListener())->attach($eventManager);
 
             // Adding Plugins Ressources to page
-            $eventManager->attach(new MelisFrontPluginsToLayoutListener());
+            (new MelisFrontPluginsToLayoutListener())->attach($eventManager);
 
             // Checking if Url is correct and redirect if not
-            $eventManager->attach(new MelisFrontSEODispatchRouterRegularUrlListener());
+            (new MelisFrontSEODispatchRouterRegularUrlListener())->attach($eventManager);
 
             // Checking if Url is 404 and try to check if url has new Url
-            $eventManager->attach($sm->get('MelisFront\Listener\MelisFront404To301Listener'));
+            (new MelisFront404To301Listener())->attach($eventManager);
 
             // This will try to look another url if 404 occured
-            $eventManager->attach(new MelisFront404CatcherListener());
+            (new MelisFront404CatcherListener())->attach($eventManager);
 
             // This will automatically prevent XSS attacks
-            $eventManager->attach(new MelisFrontXSSParameterListener());
+            (new MelisFrontXSSParameterListener())->attach($eventManager);
 
-            $eventManager->attach(new MelisFrontPageCacheListener());
+            (new MelisFrontPageCacheListener())->attach($eventManager);
 
-            $eventManager->attach(new MelisFrontMinifiedAssetsCheckerListener());
+            (new MelisFrontMinifiedAssetsCheckerListener())->attach($eventManager);
 
-            $eventManager->attach(new MelisFrontHomePageRoutingListener());
+            (new MelisFrontHomePageRoutingListener())->attach($eventManager);
 
-            $eventManager->attach(new MelisFrontHomePageIdOverrideListener());
+            (new MelisFrontHomePageIdOverrideListener())->attach($eventManager);
 
         } else {
-            $eventManager->attach(new MelisFrontPluginLangSessionUpdateListener());
-            $eventManager->attach(new MelisFrontDeletePluginCacheListener());
+            (new MelisFrontPluginLangSessionUpdateListener())->attach($eventManager);
+            (new MelisFrontDeletePluginCacheListener())->attach($eventManager);
         }
     }
 
@@ -205,7 +203,10 @@ class Module
             include __DIR__ . '/../config/plugins/MelisFrontBreadcrumbPlugin.config.php',
             include __DIR__ . '/../config/plugins/MelisFrontMenuPlugin.config.php',
             include __DIR__ . '/../config/plugins/MelisFrontShowListFromFolderPlugin.config.php',
-            include __DIR__ . '/../config/plugins/MelisFrontSearchResultsPlugin.config.php',
+            /**
+             * @TODO ZendSearch equivalent for Laminas
+             */
+//            include __DIR__ . '/../config/plugins/MelisFrontSearchResultsPlugin.config.php',
             include __DIR__ . '/../config/plugins/MelisFrontBlockSectionPlugin.config.php',
             include __DIR__ . '/../config/plugins/MelisFrontGdprBannerPlugin.config.php',
             include __DIR__ . '/../config/plugins/MelisFrontGdprRevalidationPlugin.config.php',
@@ -222,7 +223,7 @@ class Module
     public function getAutoloaderConfig()
     {
         return [
-            'Zend\Loader\StandardAutoloader' => [
+            'Laminas\Loader\StandardAutoloader' => [
                 'namespaces' => [
                     __NAMESPACE__ => __DIR__ . '/src/' . __NAMESPACE__,
                 ],

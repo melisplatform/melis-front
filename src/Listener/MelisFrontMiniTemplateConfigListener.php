@@ -9,9 +9,9 @@
 
 namespace MelisFront\Listener;
 
-use Zend\ModuleManager\ModuleEvent;
-use Zend\ServiceManager\ServiceManager;
-use Zend\Stdlib\ArrayUtils;
+use Laminas\ModuleManager\ModuleEvent;
+use Laminas\ServiceManager\ServiceManager;
+use Laminas\Stdlib\ArrayUtils;
 
 /**
  * Prepare the mini template config
@@ -22,7 +22,7 @@ use Zend\Stdlib\ArrayUtils;
  */
 class MelisFrontMiniTemplateConfigListener
 {
-    public function onLoadModulesPost(ModuleEvent $e)
+    public function onLoadModulesPost(ModuleEvent $e, $priority = 1)
     {
         /** @var ServiceManager $serviceManager */
         $serviceManager = $e->getParam('ServiceManager');
@@ -97,7 +97,7 @@ class MelisFrontMiniTemplateConfigListener
                  * Update the config inside the service
                  */
                 $serviceManager->setAllowOverride(true);
-                $serviceManager->setService('Config', $config);
+                $serviceManager->setService('config', $config);
                 $serviceManager->setAllowOverride(false);
             }
         }

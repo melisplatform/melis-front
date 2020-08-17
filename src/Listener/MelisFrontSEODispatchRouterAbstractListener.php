@@ -9,21 +9,22 @@
 
 namespace MelisFront\Listener;
 
-use Zend\EventManager\EventManagerInterface;
-use Zend\EventManager\ListenerAggregateInterface;
-use Zend\Mvc\MvcEvent;
-use Zend\Session\Container;
-use Zend\Session\SessionManager;
+use Laminas\EventManager\EventManagerInterface;
+use Laminas\EventManager\ListenerAggregateInterface;
+use Laminas\Mvc\MvcEvent;
+use Laminas\Session\Container;
+use Laminas\Session\SessionManager;
+use MelisCore\Listener\MelisGeneralListener;
 
 /**
  * This abstract class is used by SEO listener
  * It contains the 404 redirection and Regular url rewriting for Melis Pages
  * 
  */
-abstract class MelisFrontSEODispatchRouterAbstractListener 
+abstract class MelisFrontSEODispatchRouterAbstractListener extends MelisGeneralListener
     implements ListenerAggregateInterface
 {
-    abstract public function attach(EventManagerInterface $events);
+    abstract public function attach(EventManagerInterface $events, $priority = 1);
 
     /**
      * 
@@ -60,7 +61,7 @@ abstract class MelisFrontSEODispatchRouterAbstractListener
         $params = $routeMatch->getParams();
         if (!empty($params['urlparams']))
             $fullUrl = str_replace('/'.$params['urlparams'], '', $fullUrl);
-             
+            
         if ($fullUrl != $link)
         {
             // Adding optional parameters if there are
@@ -89,83 +90,83 @@ abstract class MelisFrontSEODispatchRouterAbstractListener
      */
     public function redirect404(MvcEvent $e, $idpage = null)
     {
-    	$sm = $e->getApplication()->getServiceManager();
+        $sm = $e->getApplication()->getServiceManager();
         $eventManager = $e->getApplication()->getEventManager();
-		
-    	$melisTree = $sm->get('MelisEngineTree');
-		$melisSiteDomain = $sm->get('MelisEngineTableSiteDomain');
-		$melisSite404 = $sm->get('MelisEngineTableSite404');
-    	
-    	if ($idpage == null)
-    	{
-    		// idPage is not working, we get the site through the domain
-    		// used to redirect to the right 404
-    		$router = $e->getRouter();
-			$uri = $router->getRequestUri();
-			$domainTxt = $uri->getHost();
-    	}
-    	else
-    	{
-    		// We get the site using the idPage and redirect to the site's 404
-    		$domainTxt = $melisTree->getDomainByPageId($idpage, true);
-    		if (empty($domainTxt))
-    		{
-    		    $router = $e->getRouter();
-    		    $uri = $router->getRequestUri();
-    		    $domainTxt = $uri->getHost();
-    		}
-    		
-    		$domainTxt = str_replace('http://', '', $domainTxt);
-    		$domainTxt = str_replace('https://', '', $domainTxt);
-    	}
+        
+        $melisTree = $sm->get('MelisEngineTree');
+        $melisSiteDomain = $sm->get('MelisEngineTableSiteDomain');
+        $melisSite404 = $sm->get('MelisEngineTableSite404');
+        
+        if ($idpage == null)
+        {
+            // idPage is not working, we get the site through the domain
+            // used to redirect to the right 404
+            $router = $e->getRouter();
+            $uri = $router->getRequestUri();
+            $domainTxt = $uri->getHost();
+        }
+        else
+        {
+            // We get the site using the idPage and redirect to the site's 404
+            $domainTxt = $melisTree->getDomainByPageId($idpage, true);
+            if (empty($domainTxt))
+            {
+                $router = $e->getRouter();
+                $uri = $router->getRequestUri();
+                $domainTxt = $uri->getHost();
+            }
+            
+            $domainTxt = str_replace('http://', '', $domainTxt);
+            $domainTxt = str_replace('https://', '', $domainTxt);
+        }
 
-    	// Get the siteId from the domain
-    	if ($domainTxt)
-    	{
-			$domain = $melisSiteDomain->getEntryByField('sdom_domain', $domainTxt);
-			
-			$domain = $domain->current();
-			if ($domain)
-    			$siteId = $domain->sdom_site_id;
-			else
-			    return '';
-    	}
-    	else
-    	    return '';
+        // Get the siteId from the domain
+        if ($domainTxt)
+        {
+            $domain = $melisSiteDomain->getEntryByField('sdom_domain', $domainTxt);
+            
+            $domain = $domain->current();
+            if ($domain)
+                $siteId = $domain->sdom_site_id;
+            else
+                return '';
+        }
+        else
+            return '';
 
-    	// Get the 404 of the siteId
-    	$site404 = $melisSite404->getEntryByField('s404_site_id', $siteId);
-    	if ($site404)
-    	{
-    		$site404 = $site404->current();
-    		if (empty($site404))
-    		{
-    			// No entry in DB for this siteId, let's get the general one (siteId -1)
-    			$site404 = $melisSite404->getEntryByField('s404_site_id', -1);
-    			$site404 = $site404->current();
-    		}
-    	}
-    	
-    	if (empty($site404))
-    	{
-    		// No 404 found
-    		return '';
-    	}
-    	else
-    	{
-    		// Check if the 404 defined exist also!
-		    $melisPage = $sm->get('MelisEnginePage');
-		    $datasPage = $melisPage->getDatasPage($site404->s404_page_id, 'published');
-		    $pageTree = $datasPage->getMelisPageTree();
-		    
-		    if (empty($pageTree))
-		        return ''; // The 404 page defined doesn't exist or is not published
-    		
-    		// Redirect to the 404 of the site
-    		$link = $melisTree->getPageLink($site404->s404_page_id, true);
-    		
-    		return $link;
-    	}
+        // Get the 404 of the siteId
+        $site404 = $melisSite404->getEntryByField('s404_site_id', $siteId);
+        if ($site404)
+        {
+            $site404 = $site404->current();
+            if (empty($site404))
+            {
+                // No entry in DB for this siteId, let's get the general one (siteId -1)
+                $site404 = $melisSite404->getEntryByField('s404_site_id', -1);
+                $site404 = $site404->current();
+            }
+        }
+        
+        if (empty($site404))
+        {
+            // No 404 found
+            return '';
+        }
+        else
+        {
+            // Check if the 404 defined exist also!
+            $melisPage = $sm->get('MelisEnginePage');
+            $datasPage = $melisPage->getDatasPage($site404->s404_page_id, 'published');
+            $pageTree = $datasPage->getMelisPageTree();
+            
+            if (empty($pageTree))
+                return ''; // The 404 page defined doesn't exist or is not published
+            
+            // Redirect to the 404 of the site
+            $link = $melisTree->getPageLink($site404->s404_page_id, true);
+            
+            return $link;
+        }
     }
     
     /**
@@ -195,32 +196,32 @@ abstract class MelisFrontSEODispatchRouterAbstractListener
      */
     public function createTranslations($e, $siteFolder, $locale)
     { 
-    	$sm = $e->getApplication()->getServiceManager();
-    	$translator = $sm->get('translator');
-    	
-    	$langFileTarget = $_SERVER['DOCUMENT_ROOT'] . '/../module/MelisSites/' .$siteFolder . '/language/' . $locale . '.php';
-    	
-    	if (!file_exists($langFileTarget))
-    	{
-    	    $langFileTarget = $_SERVER['DOCUMENT_ROOT'] . '/../module/MelisSites/' .$siteFolder . '/language/en_EN.php';
-    	    
-    	    if (!file_exists($langFileTarget))
-    	    {
-    	        $langFileTarget = null;
-    	    }
-    	}
-    	else 
-    	{
-    	    $langFileTarget = null;
-    	}
-    	
-    	if (!is_null($langFileTarget) && !empty($siteFolder) && !empty($locale))
-    	{
-    	    $translator->addTranslationFile(
-    	        'phparray',
-    	        $langFileTarget
-	        );
-    	}
+        $sm = $e->getApplication()->getServiceManager();
+        $translator = $sm->get('translator');
+        
+        $langFileTarget = $_SERVER['DOCUMENT_ROOT'] . '/../module/MelisSites/' .$siteFolder . '/language/' . $locale . '.php';
+        
+        if (!file_exists($langFileTarget))
+        {
+            $langFileTarget = $_SERVER['DOCUMENT_ROOT'] . '/../module/MelisSites/' .$siteFolder . '/language/en_EN.php';
+            
+            if (!file_exists($langFileTarget))
+            {
+                $langFileTarget = null;
+            }
+        }
+        else 
+        {
+            $langFileTarget = null;
+        }
+        
+        if (!is_null($langFileTarget) && !empty($siteFolder) && !empty($locale))
+        {
+            $translator->addTranslationFile(
+                'phparray',
+                $langFileTarget
+            );
+        }
     }
     
     /**
@@ -234,14 +235,5 @@ abstract class MelisFrontSEODispatchRouterAbstractListener
         $sessionManager->start();
         Container::setDefaultManager($sessionManager);
         $container = new Container($name);
-    }
-    
-    public function detach(EventManagerInterface $events)
-    {
-        foreach ($this->listeners as $index => $listener) {
-            if ($events->detach($listener)) {
-                unset($this->listeners[$index]);
-            }
-        }
     }
 }
