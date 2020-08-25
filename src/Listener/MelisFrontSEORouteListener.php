@@ -10,7 +10,7 @@
 namespace MelisFront\Listener;
 
 use Laminas\ModuleManager\ModuleEvent;
-use Laminas\Mvc\Router\Http\Segment;
+use Laminas\Router\Http\Segment;
 use Laminas\ServiceManager\ServiceManager;
 use Laminas\Stdlib\ArrayUtils;
 
