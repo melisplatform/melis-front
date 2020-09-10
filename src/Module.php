@@ -22,7 +22,6 @@ use Laminas\Mvc\MvcEvent;
 use Laminas\ModuleManager\ModuleManager;
 use Laminas\ServiceManager\ServiceManager;
 use Laminas\Stdlib\ArrayUtils;
-
 use MelisFront\Listener\MelisFrontLayoutListener;
 use MelisFront\Listener\MelisFrontAttachCssListener;
 use MelisFront\Listener\MelisFrontSEOMetaPageListener;
@@ -210,7 +209,9 @@ class Module
 //            include __DIR__ . '/../config/plugins/MelisFrontSearchResultsPlugin.config.php',
             include __DIR__ . '/../config/plugins/MelisFrontBlockSectionPlugin.config.php',
             include __DIR__ . '/../config/plugins/MelisFrontGdprBannerPlugin.config.php',
+            include __DIR__ . '/../config/plugins/MelisFrontGdprRevalidationPlugin.config.php',
         ];
+
 
         foreach ($configFiles as $file) {
             $config = ArrayUtils::merge($config, $file);

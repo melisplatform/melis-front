@@ -23,6 +23,13 @@ use MelisCore\Listener\MelisGeneralListener;
  */
 class MelisFrontLayoutListener extends MelisGeneralListener implements ListenerAggregateInterface
 {
+    public $serviceManager;
+
+    public function getServiceManager()
+    {
+        return $this->serviceManager;
+    }
+
     public function attach(EventManagerInterface $events, $priority = 1)
     {
         $callBackHandler = $events->attach(
@@ -49,7 +56,7 @@ class MelisFrontLayoutListener extends MelisGeneralListener implements ListenerA
                 // Only for Melis Front or Back routes
                 if ($renderMode == 'melis' || $renderMode == 'front')
                 {
-                    $sm = $e->getApplication()->getServiceManager();
+                    $this->serviceManager = $e->getApplication()->getServiceManager();
 
                     // Get the response generated
                     $response = $e->getResponse();
@@ -61,13 +68,13 @@ class MelisFrontLayoutListener extends MelisGeneralListener implements ListenerA
                     if($request->isPost()) {
                         $regexJsonChecker  = '/
                             (?(DEFINE)
-                             (?<number>   -? (?= [1-9]|0(?!\d) ) \d+ (\.\d+)? ([eE] [+-]? \d+)? )
-                             (?<boolean>   true | false | null )
-                             (?<string>    " ([^"\\\\]* | \\\\ ["\\\\bfnrt\/] | \\\\ u [0-9a-f]{4} )* " )
-                             (?<array>     \[  (?:  (?&json)  (?: , (?&json)  )*  )?  \s* \] )
-                             (?<pair>      \s* (?&string) \s* : (?&json)  )
-                             (?<object>    \{  (?:  (?&pair)  (?: , (?&pair)  )*  )?  \s* \} )
-                             (?<json>   \s* (?: (?&number) | (?&boolean) | (?&string) | (?&array) | (?&object) ) \s* )
+                            (?<number>   -? (?= [1-9]|0(?!\d) ) \d+ (\.\d+)? ([eE] [+-]? \d+)? )
+                            (?<boolean>   true | false | null )
+                            (?<string>    " ([^"\\\\]* | \\\\ ["\\\\bfnrt\/] | \\\\ u [0-9a-f]{4} )* " )
+                            (?<array>     \[  (?:  (?&json)  (?: , (?&json)  )*  )?  \s* \] )
+                            (?<pair>      \s* (?&string) \s* : (?&json)  )
+                            (?<object>    \{  (?:  (?&pair)  (?: , (?&pair)  )*  )?  \s* \} )
+                            (?<json>   \s* (?: (?&number) | (?&boolean) | (?&string) | (?&array) | (?&object) ) \s* )
                             )\A (?&json) \Z/six';
                         // check whether the content is json or an html content
                         if(preg_match($regexJsonChecker, $content)) {
@@ -94,7 +101,7 @@ class MelisFrontLayoutListener extends MelisGeneralListener implements ListenerA
                          * - add Melis Version and time generation in front
                          * - add TinyMce files for edition when the page is looked in the back
                          */
-                        $renderer = $sm->get('ViewRenderer');
+                        $renderer = $this->getServiceManager()->get('ViewRenderer');
                         $finalView = new ViewModel();
                         $finalView->content = $content;
                         $finalView->idPage = $idpage;
@@ -102,7 +109,7 @@ class MelisFrontLayoutListener extends MelisGeneralListener implements ListenerA
                         if ($renderMode == 'melis')
                         {
                             $siteModule = getenv('MELIS_MODULE');
-                            $melisPage = $sm->get('MelisEnginePage');
+                            $melisPage = $this->getServiceManager()->get('MelisEnginePage');
                             $datasPage = $melisPage->getDatasPage($idpage, 'saved');
 
                             if($datasPage)
@@ -117,13 +124,13 @@ class MelisFrontLayoutListener extends MelisGeneralListener implements ListenerA
 
                             // Setting special layout
                             $finalView->setTemplate('layout/layoutMelis');
-                            $forwardPlugin = $sm->get('ControllerPluginManager')->get('Forward');
+                            $forwardPlugin = $this->getServiceManager()->get('ControllerPluginManager')->get('Forward');
 
                             // Including the plugins menu by getting the view
                             $pluginsMenuView = $forwardPlugin->dispatch('MelisCms\Controller\FrontPlugins',
                                 array('action' => 'renderPluginsMenu', 'siteModule' => $siteModule));
 
-                            $viewRender = $sm->get('ViewRenderer');
+                            $viewRender = $this->getServiceManager()->get('ViewRenderer');
 
                             if (!$previewMode)
                                 $finalView->pluginsMenu = $viewRender->render($pluginsMenuView);
@@ -133,8 +140,8 @@ class MelisFrontLayoutListener extends MelisGeneralListener implements ListenerA
                             $finalView->setTemplate('layout/layoutFront');
 
                         // Auto adding plugins Melis CSS and JS files to layout
-                        if ($sm->get('templating_plugins')->hasItem('plugins_melis'))
-                            $files = $sm->get('templating_plugins')->getItem('plugins_melis');
+                        if ($this->getServiceManager()->get('templating_plugins')->hasItem('plugins_melis'))
+                            $files = $this->getServiceManager()->get('templating_plugins')->getItem('plugins_melis');
                         else
                             $files = array();
 
@@ -145,7 +152,7 @@ class MelisFrontLayoutListener extends MelisGeneralListener implements ListenerA
                         );
 
                         // add dynamic assets
-                        $config = $sm->get('config');
+                        $config = $this->getServiceManager()->get('config');
                         $assets = array_merge($assets, $config['plugins']['melisfront']['resources']);
 
                         if (!empty($files['css'])){
