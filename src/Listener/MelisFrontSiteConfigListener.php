@@ -30,9 +30,12 @@ class MelisFrontSiteConfigListener
                 return;
 
             $uri1 = '';
+            $pageId = null;
             $tabUri = explode('/', $uri);
             if (!empty($tabUri[1]))
                 $uri1 = $tabUri[1];
+            if (! empty($tabUri[2]))
+                $pageId = $tabUri[2];
 
             //check if we are in front
             if ($uri1 != 'melis')
@@ -49,8 +52,9 @@ class MelisFrontSiteConfigListener
                 /**
                  * get site data
                  */
-                $siteService = $serviceManager->get('MelisEngineSiteService');
-                $siteData = $siteService->getSiteDataByDomain($domain);
+                $siteService = $serviceManager->get('MelisTreeService');
+                $siteData = $siteService->getSiteByPageId($pageId);
+
                 if(!empty($siteData)) {
                     $siteId = $siteData->site_id;
                     /**
