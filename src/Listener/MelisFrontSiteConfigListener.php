@@ -30,16 +30,19 @@ class MelisFrontSiteConfigListener
                 return;
 
             $uri1 = '';
-            $pageId = null;
             $tabUri = explode('/', $uri);
             if (!empty($tabUri[1]))
                 $uri1 = $tabUri[1];
-            if (! empty($tabUri[2]))
-                $pageId = $tabUri[2];
 
             //check if we are in front
             if ($uri1 != 'melis')
             {
+                $pageId = null;
+                // get page id
+                if ($tabUri[1] == 'id')
+                    $pageId == $tabUri[2];
+                else if ($tabUri[2] == 'id')
+                    $pageId == $tabUri[3];
                 //get the config listener
                 $configListener = $e->getConfigListener();
                 //get the merged config
