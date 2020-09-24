@@ -55,8 +55,8 @@ class MelisFrontSiteConfigListener
                 /**
                  * get site data
                  */
-                $siteService = $serviceManager->get('MelisTreeService');
-                $siteData = $siteService->getSiteByPageId($pageId);
+                $treeService = $serviceManager->get('MelisTreeService');
+                $siteData = $treeService->getSiteByPageId($pageId);
 
                 if(!empty($siteData)) {
                     $siteId = $siteData->site_id;
