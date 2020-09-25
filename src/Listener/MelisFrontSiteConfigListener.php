@@ -40,9 +40,10 @@ class MelisFrontSiteConfigListener
                 $pageId = null;
                 // get page id
                 if ($tabUri[1] == 'id')
-                    $pageId == $tabUri[2];
-                else if ($tabUri[2] == 'id')
-                    $pageId == $tabUri[3];
+                    $pageId = $tabUri[2];
+                else if ($tabUri[3] == 'id')
+                    $pageId = $tabUri[4];
+
                 //get the config listener
                 $configListener = $e->getConfigListener();
                 //get the merged config
