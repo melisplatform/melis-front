@@ -41,7 +41,7 @@ class MelisFrontSiteConfigListener
                 // get page id
                 if ($tabUri[1] == 'id')
                     $pageId = $tabUri[2];
-                else if ($tabUri[3] == 'id')
+                else if (isset($tabUri[3]) && $tabUri[3] == 'id')
                     $pageId = $tabUri[4];
 
                 //get the config listener
