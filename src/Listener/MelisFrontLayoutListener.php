@@ -128,7 +128,7 @@ class MelisFrontLayoutListener extends MelisGeneralListener implements ListenerA
 
                             // Including the plugins menu by getting the view
                             $pluginsMenuView = $forwardPlugin->dispatch('MelisCms\Controller\FrontPlugins',
-                                array('action' => 'renderPluginsMenu', 'siteModule' => $siteModule));
+                                array('action' => 'renderPluginsMenu', 'siteModule' => $siteModule, 'pageId' => $idpage));
 
                             $viewRender = $this->getServiceManager()->get('ViewRenderer');
 
