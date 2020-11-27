@@ -55,6 +55,7 @@ class MelisFrontHeadService extends MelisServiceManager implements MelisFrontHea
 
 						$titlePage = addslashes($datasPageSeo->pseo_meta_title);
 						$titlePage = str_replace("\'", "'", $titlePage);
+
 						if ($descriptionPage != '') {
 							$descriptionTag = "\n\t<meta name=\"description\" content=\"$descriptionPage\" />\n";
 							$titleTag = "<title>$titlePage</title>";
@@ -149,7 +150,12 @@ class MelisFrontHeadService extends MelisServiceManager implements MelisFrontHea
 				
 			}
 		}
-		
+
+		//add generator meta tag
+        $generatorTag = "\n\t<meta name=\"generator\" content=\"Melis Platform\">\n";
+        $headRegex = '/(<\/title>)/im';
+        $newContent = preg_replace($headRegex, "$1$generatorTag", $newContent);
+
 		return $newContent;
 	}
 	

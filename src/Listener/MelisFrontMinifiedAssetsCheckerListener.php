@@ -67,7 +67,7 @@ class MelisFrontMinifiedAssetsCheckerListener extends MelisGeneralListener imple
                              */
                             $cssName = '/'.$params['module'].'/bundle.css';
                             $cssToAdd = "\n";
-                            $cssToAdd .= '<link href="' . $cssName . '" media="screen" rel="stylesheet" type="text/css">' . "\n";
+                            $cssToAdd .= '<link href="' . $cssName . '?v='.date('YmdHis').'" media="screen" rel="stylesheet" type="text/css">' . "\n";
                             $newContent = $this->createCssLink($newContent, $cssToAdd);
                             $cssBundleLoaded = true;
                         }
@@ -79,7 +79,7 @@ class MelisFrontMinifiedAssetsCheckerListener extends MelisGeneralListener imple
                             //load the bundle
                             $jsName = '/'.$params['module'].'/bundle.js';
                             $jsToLoad = "\n";
-                            $jsToLoad .= '<script type="text/javascript" src="' . $jsName . '"></script>' . "\n";
+                            $jsToLoad .= '<script type="text/javascript" src="' . $jsName . '?v='.date('YmdHis').'"></script>' . "\n";
                             $newContent = $this->createJsLink($newContent, $jsToLoad);
                             $jsBundleLoaded = true;
                         }
@@ -146,7 +146,7 @@ class MelisFrontMinifiedAssetsCheckerListener extends MelisGeneralListener imple
      */
     private function createJsLink($content, $jsToAdd)
     {
-//        $bodyRegex = '/(<\/body>)/im';
+        $bodyRegex = '/(<\/body>)/im';
         /**
          * This will load just under the last
          * </div> of the page instead of before
@@ -154,8 +154,8 @@ class MelisFrontMinifiedAssetsCheckerListener extends MelisGeneralListener imple
          * scripts are directly attached to the view
          * from the controller
          */
-        $bodyRegex = '/(<\/div>(?![\s\S]*<\/div>[\s\S]*$))/im';
-        $newContent = preg_replace($bodyRegex, "$1$jsToAdd", $content);
+//        $bodyRegex = '/(<\/div>(?![\s\S]*<\/div>[\s\S]*$))/im';
+        $newContent = preg_replace($bodyRegex, "$jsToAdd$1", $content);
         return $newContent;
     }
 
