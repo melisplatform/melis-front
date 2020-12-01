@@ -153,7 +153,7 @@ class MelisFrontHeadService extends MelisServiceManager implements MelisFrontHea
 
 		//add generator meta tag
         $generatorTag = "\n\t<meta name=\"generator\" content=\"Melis Platform\">\n";
-        $headRegex = '/(<\/title>)/im';
+        $headRegex = '/(<head>)/im';
         $newContent = preg_replace($headRegex, "$1$generatorTag", $newContent);
 
 		return $newContent;
