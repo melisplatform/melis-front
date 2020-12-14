@@ -37,6 +37,13 @@ class MelisFrontSiteConfigListener
             //check if we are in front
             if ($uri1 != 'melis')
             {
+                $pageId = null;
+                // get page id
+                if ($tabUri[1] == 'id')
+                    $pageId = $tabUri[2];
+                else if (isset($tabUri[3]) && $tabUri[3] == 'id')
+                    $pageId = $tabUri[4];
+
                 //get the config listener
                 $configListener = $e->getConfigListener();
                 //get the merged config
@@ -49,8 +56,12 @@ class MelisFrontSiteConfigListener
                 /**
                  * get site data
                  */
-                $siteService = $serviceManager->get('MelisEngineSiteService');
-                $siteData = $siteService->getSiteDataByDomain($domain);
+                $treeService = $serviceManager->get('MelisTreeService');
+                $siteData = $treeService->getSiteByPageId($pageId);
+
+                if (empty($siteData))
+                    $siteData = $treeService->getSiteByPageId($pageId, 'saved');
+
                 if(!empty($siteData)) {
                     $siteId = $siteData->site_id;
                     /**
