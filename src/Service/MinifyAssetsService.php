@@ -56,7 +56,7 @@ class MinifyAssetsService extends MelisGeneralService
                             $files = include($siteConfigDir);
                             //process the assets to make a bundle
                             $results = $this->generateAllAssets($files, $sitePath, $site['site_name'], $fromVendor);
-
+                            $this->saveBundleDateTimeToDb($arrayParameters['siteId']);
                         }else{
                             $results = array('error' => array('message' => $siteConfigDir.' not found.', 'success' => false));
                         }
@@ -228,7 +228,7 @@ class MinifyAssetsService extends MelisGeneralService
                  * this will occur only if the bundle.css or bundle.js
                  * is not writable or no permission or other errors
                  */
-                  $message = wordwrap($ex->getMessage(), 20, "\n", true);
+                $message = wordwrap($ex->getMessage(), 20, "\n", true);
             }
         }else{
             $success = true;
@@ -340,5 +340,26 @@ class MinifyAssetsService extends MelisGeneralService
         }
 
         return $directories;
+    }
+
+    public function saveBundleDateTimeToDb($siteId)
+    {
+        $bundleId = null;
+        $table = $this->getServiceManager()->get('MelisEngineTableCmsSiteBundle');
+        $bundleData = $this->getSiteBundleData($siteId);
+
+        if (! empty($bundleData)) {
+            $bundleId = $bundleData->bun_id;
+        }
+
+        $table->save([
+            'bun_site_id' => $siteId,
+            'bun_version_datetime' => date('YmdHis')
+        ], $bundleId);
+    }
+    public function getSiteBundleData($siteId)
+    {
+        $table = $this->getServiceManager()->get('MelisEngineTableCmsSiteBundle');
+        return $table->getEntryByField('bun_site_id', $siteId)->current();
     }
 }
