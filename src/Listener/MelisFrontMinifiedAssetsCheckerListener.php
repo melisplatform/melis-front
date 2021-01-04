@@ -32,6 +32,14 @@ class MelisFrontMinifiedAssetsCheckerListener extends MelisGeneralListener imple
                 if($routeMatch) {
 
                     $params = $routeMatch->getParams();
+                    $assetsService = $sm->get('MinifyAssets');
+                    $siteId = $params['datasPage']->getMelisTemplate()->tpl_site_id;
+                    $bundleData = $assetsService->getSiteBundleData($siteId);
+                    $bundleVersion = date('YmdHis');
+
+                    if (! empty($bundleData)) {
+                        $bundleVersion = $bundleData->bun_version_datetime;
+                    }
 
                     if (!empty($params['module']))
                     {
@@ -67,7 +75,7 @@ class MelisFrontMinifiedAssetsCheckerListener extends MelisGeneralListener imple
                              */
                             $cssName = '/'.$params['module'].'/bundle.css';
                             $cssToAdd = "\n";
-                            $cssToAdd .= '<link href="' . $cssName . '?v='.date('YmdHis').'" media="screen" rel="stylesheet" type="text/css">' . "\n";
+                            $cssToAdd .= '<link href="' . $cssName . '?v='.$bundleVersion.'" media="screen" rel="stylesheet" type="text/css">' . "\n";
                             $newContent = $this->createCssLink($newContent, $cssToAdd);
                             $cssBundleLoaded = true;
                         }
@@ -79,7 +87,7 @@ class MelisFrontMinifiedAssetsCheckerListener extends MelisGeneralListener imple
                             //load the bundle
                             $jsName = '/'.$params['module'].'/bundle.js';
                             $jsToLoad = "\n";
-                            $jsToLoad .= '<script type="text/javascript" src="' . $jsName . '?v='.date('YmdHis').'"></script>' . "\n";
+                            $jsToLoad .= '<script type="text/javascript" src="' . $jsName . '?v='.$bundleVersion.'"></script>' . "\n";
                             $newContent = $this->createJsLink($newContent, $jsToLoad);
                             $jsBundleLoaded = true;
                         }
