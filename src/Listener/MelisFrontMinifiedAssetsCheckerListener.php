@@ -32,14 +32,6 @@ class MelisFrontMinifiedAssetsCheckerListener extends MelisGeneralListener imple
                 if($routeMatch) {
 
                     $params = $routeMatch->getParams();
-                    $assetsService = $sm->get('MinifyAssets');
-                    $siteId = $params['datasPage']->getMelisTemplate()->tpl_site_id;
-                    $bundleData = $assetsService->getSiteBundleData($siteId);
-                    $bundleVersion = date('YmdHis');
-
-                    if (! empty($bundleData)) {
-                        $bundleVersion = $bundleData->bun_version_datetime;
-                    }
 
                     if (!empty($params['module']))
                     {
@@ -62,6 +54,19 @@ class MelisFrontMinifiedAssetsCheckerListener extends MelisGeneralListener imple
                         }else{
                             $siteDir = $_SERVER['DOCUMENT_ROOT'] . '/../module/MelisSites/'.$params['module'].'/';
                             $isFromVendor = false;
+                        }
+
+                        // Retrieves the bundle version
+                        $bundleVersion = date('YmdHis');
+
+                        if (! empty($params['datasPage']->getMelisTemplate())) {
+                            $assetsService = $sm->get('MinifyAssets');
+                            $siteId = $params['datasPage']->getMelisTemplate()->tpl_site_id;
+                            $bundleData = $assetsService->getSiteBundleData($siteId);
+
+                            if (!empty($bundleData)) {
+                                $bundleVersion = $bundleData->bun_version_datetime;
+                            }
                         }
 
                         $publicDir = $siteDir.'public/';
