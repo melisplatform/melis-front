@@ -38,11 +38,14 @@ class MelisFrontSiteConfigListener
             if ($uri1 != 'melis')
             {
                 $pageId = null;
-                // get page id
-                if ($tabUri[1] == 'id')
-                    $pageId = $tabUri[2];
-                else if (isset($tabUri[3]) && $tabUri[3] == 'id')
-                    $pageId = $tabUri[4];
+                //get page id
+                preg_match('/(\/id\/)(\D*)(\d+)/i', $uri, $matches);
+                if(empty($matches[3])){
+                    $pageIdInfo = explode('/', $matches[0]);
+                    $pageId = $pageIdInfo[2];
+                }else {
+                    $pageId = $matches[3];
+                }
 
                 //get the config listener
                 $configListener = $e->getConfigListener();
@@ -50,7 +53,7 @@ class MelisFrontSiteConfigListener
                 $config         = $configListener->getMergedConfig(false);
 
                 /**
-                 * get domain
+                 * get domainA
                  */
                 $domain = $_SERVER['SERVER_NAME'];
                 /**
