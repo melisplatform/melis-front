@@ -40,6 +40,10 @@ class MelisFrontSiteConfigListener
                 $pageId = null;
                 //get page id
                 preg_match('/(\/id\/)(\D*)(\d+)/i', $uri, $matches);
+
+                if (empty($matches))
+                    return;
+
                 if(empty($matches[3])){
                     $pageIdInfo = explode('/', $matches[0]);
                     $pageId = $pageIdInfo[2];
