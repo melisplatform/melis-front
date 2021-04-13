@@ -23,6 +23,13 @@ class MelisTranslationService extends MelisGeneralService
      */
     public function getTranslationsByLocale($locale = "en_EN")
     {
+        // Retrieve cache version if front mode to avoid multiple calls
+        $cacheKey = 'getTranslationsByLocale_' . $locale;
+        $cacheConfig = 'melisfront_memory_cache';
+        $melisEngineCacheSystem = $this->getServiceManager()->get('MelisEngineCacheSystem');
+        $results = $melisEngineCacheSystem->getCacheByKey($cacheKey, $cacheConfig, true);
+        if (!is_null($results))
+            return $results;
 
         $moduleSvc = $this->getServiceManager()->get('MelisAssetManagerModulesService');
         // Event parameters prepare
@@ -78,10 +85,15 @@ class MelisTranslationService extends MelisGeneralService
                 }
             }
         }
+        
         // results
         $arrayParameters['results'] = $transMessages;
+        
         // send event
         $arrayParameters = $this->sendEvent('melis_translation_get_trans_by_locale_end', $arrayParameters);
+
+        // Save cache key
+        $melisEngineCacheSystem->setCacheByKey($cacheKey, $cacheConfig, $arrayParameters['results'], true);
 
         return $arrayParameters['results'];
 

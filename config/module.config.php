@@ -298,5 +298,19 @@ return [
                 // 'my_cache_key' => 60,
             ]
         ],
+        'melisfront_memory_cache' => [ 
+            'active' => true, // activate or deactivate Melis Cache for this conf
+            'adapter' => [
+                'name'    => 'Memory',
+                'options' => ['ttl' => 0, 'namespace' => 'melisfront'],
+            ],
+            'plugins' => [
+                'exception_handler' => ['throw_exceptions' => false],
+            ],
+            'ttls' => [
+                // add a specific ttl for a specific cache key (found via regexp]
+                // 'my_cache_key' => 60,
+            ]
+        ],
     ]
 ];
