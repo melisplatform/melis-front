@@ -13,7 +13,12 @@ foreach ($this->assets['css']as $css)
 ?>
 
     <script type="text/javascript" src="/MelisCore/js/library/tinymce/tinymce.min.js"></script>
-    <script type="text/javascript" src="/melis/MelisCore/Language/getTranslations"></script>
+    <!-- <script type="text/javascript" src="/melis/MelisCore/Language/getTranslations"></script> -->
+    <script>
+        var melisLangId = window.parent.melisLangId;
+        var melisDateFormat = window.parent.melisDateFormat;
+        var translations = window.parent.translations;
+    </script>
     <script type="text/javascript">
         var jQueryChecker = null;
         var melisActivePageId = <?php echo $this->idPage ?>;
@@ -27,7 +32,7 @@ foreach ($this->assets['css']as $css)
         ?>
         // default js
         var scriptMap =[
-            "/MelisCore/js/tinyMCE/tinymce_cleaner.js",
+            // "/MelisCore/js/tinyMCE/tinymce_cleaner.js",
             "/MelisCore/js/tinyMCE/melis_tinymce.js",
             "/MelisCms/js/tools/findpage.tool.js",
             "/MelisCms/js/plugins/plugins.edition.js",
