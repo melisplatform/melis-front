@@ -30,7 +30,7 @@ window.MelisGdprBanner = (function () {
          * src: https://zellwk.com/blog/looping-through-js-objects/
          */
         options = Object.entries({defaultOptions,options});
-        var updatedCookie = encodeURIComponent(name) + "=" + encodeURIComponent(value);
+        var updatedCookie = encodeURIComponent(name) + "=" + encodeURIComponent(value) + "; SameSite=Lax";
         for (const [key, value] of options) {
             updatedCookie += "; " + key + "=" + value;
         }
