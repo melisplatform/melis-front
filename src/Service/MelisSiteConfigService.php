@@ -243,7 +243,7 @@ class MelisSiteConfigService extends MelisGeneralService
 
                     if (!empty($dbConfigData)) {
                         foreach ($dbConfigData as $dbConf) {
-                            if ($dbConf['sconf_lang_id'] === '-1') {
+                            if ($dbConf['sconf_lang_id'] == '-1') {
                                 $siteConfig = ArrayUtils::merge(
                                     $siteConfig,
                                     [
