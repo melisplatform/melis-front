@@ -46,6 +46,7 @@
 .melis-dragdropzone .melis-ui-outlined {
     float: left;
     margin: 0;
+    width: 100%;
 }
 
 .wrapper div.melis-dragdropzone:last-of-type {
