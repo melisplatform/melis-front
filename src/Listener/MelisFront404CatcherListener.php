@@ -23,48 +23,57 @@ class MelisFront404CatcherListener extends MelisGeneralListener implements Liste
     {
         $callBackHandler = $events->attach(
         	MvcEvent::EVENT_FINISH, 
-        	function(MvcEvent $e){
-        	    
-        	    // AssetManager, we don't want listener to be executed if it's not a php code
-        	    $uri = $_SERVER['REQUEST_URI'];
-        	    preg_match('/.*\.((?!php).)+(?:\?.*|)$/i', $uri, $matches, PREG_OFFSET_CAPTURE);
-        	    if (count($matches) > 1)
-        	        return;
-        	    
-        		$sm = $e->getApplication()->getServiceManager();
-        		$router = $e->getRouter();
+        	function(MvcEvent $e){        	  
+                $sm = $e->getApplication()->getServiceManager();  
+        		$router = $e->getRouter();         		
         		
-        		$sm = $e->getApplication()->getServiceManager();
-        		$routeMatch = $router->match($sm->get('request'));
-        		$siteDomainTable = $sm->get('MelisEngineTableSiteDomain');
-        		
-        		if (empty($routeMatch))
-        		{
-        		    // Retrieving the router Details, This will return URL details in Object
-        		    $uri = $router->getRequestUri();
-        		    
-        		    // Retrieving Site 301 if the 404 data is exist as Old Url
-        		    $site301 = $sm->get('MelisEngineTableSite301');
-        		    $site301Datas = $site301->getEntryByField('s301_old_url', $uri->getPath());
-        		    $url = null;
-        		    if (!empty($site301Datas->count()))
-        		    {
-        		        
-        		        $newUrlHost = array();
-        		        
-        		        foreach($site301Datas as $site301Data){
-        		            
-        		                if(!empty( $site301Data->s301_site_id)){
-        		                    $siteDomain  = $siteDomainTable->getEntryByField('sdom_site_id', $site301Data->s301_site_id)->current();
-        		                     
-        		                    if($siteDomain->sdom_domain == $uri->getHost() && $site301Data->s301_site_id == $siteDomain->sdom_site_id){
-        		                        $url = $site301Data->s301_new_url;
-        		                    }
-        		                }else{
-        		                    $url = $site301Data->s301_new_url;
-        		                }
-        		        }
-        		    }else{
+                //get site data
+                $requestUri = $router->getRequestUri();    
+                $siteService = $sm->get('MelisEngineSiteService');
+                $siteData = $siteService->getSiteDataByDomain($requestUri->getHost());
+                $page_ext ='php';//default to php
+
+                //get the the page_ext config values if there are any from the site config for the filtering of the page to be processed
+                if(!empty($siteData)){
+                    $homePageId = $siteData->site_main_page_id;                 
+                    $siteConfigSrv = $sm->get('MelisSiteConfigService');
+                    $page_ext_config = $siteConfigSrv->getSiteConfigByKey('page_ext', $homePageId, 'allSites');                   
+              
+                    if($page_ext_config){
+                        $page_ext = !in_array('php', $page_ext_config)?('php|'.implode('|', $page_ext_config)):implode('|', $page_ext_config);                     
+                    }
+                }                
+      
+                //filter here the page to be processed 
+                $uri = $_SERVER['REQUEST_URI'];
+                preg_match('/.*\.((?!'.$page_ext.').)+(?:\?.*|)$/i', $uri, $matches, PREG_OFFSET_CAPTURE);
+                if (count($matches) > 1)
+                    return;
+
+                $routeMatch = $router->match($sm->get('request'));
+                $siteDomainTable = $sm->get('MelisEngineTableSiteDomain');
+
+                //get params
+                $params = $e->getParams();
+
+                //if no route match or there is an error in the route, get the 301 url set in the Site Redirect Tool or if none, get the page 404 of the site
+        		if(empty($routeMatch) || !empty($params['error']))
+        		{           
+        		   // Retrieving the router Details, This will return URL details in Object
+                    $uri = $router->getRequestUri();
+                    $path = $uri->getPath();
+                    $queryString = $uri->getQuery();
+                    $uriPath = !empty($queryString) ? ($path."?".$queryString) : $path;
+                    
+                    // Retrieving Site 301 if the 404 data exists as Old Url
+                    $site301 = $sm->get('MelisEngineTableSite301');
+                    $site301Datas = $site301->getEntryByField('s301_old_url', $uriPath)->current();
+                    $url = null;
+        		  
+                    if(!empty($site301Datas))
+                    {     
+                        $url = $site301Datas->s301_new_url;                
+                    }else{
         		        // check for site 404
         		        $siteDomain  = $siteDomainTable->getEntryByField('sdom_domain', $uri->getHost())->current();
         		        

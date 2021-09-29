@@ -33,11 +33,15 @@ class MelisFront404To301Listener extends MelisFrontSEODispatchRouterAbstractList
         	        // Retrieving the router Details, This will return URL details in Object
         	        $router = $sm->get('router');
         	        $uri = $router->getRequestUri();
+                    $path = $uri->getPath();
+                    $queryString = $uri->getQuery();
+                    $uriPath = !empty($queryString) ? ($path."?".$queryString) : $path;
         	        
         	        // Retrieving Site 301 if the 404 data is exist as Old Url
         	        $site301 = $sm->get('MelisEngineTableSite301');
-        	        $site301Data = $site301->getEntryByField('s301_old_url', $uri->getPath())->current();
-        	        if (!empty($site301Data)) {
+        	        $site301Data = $site301->getEntryByField('s301_old_url', $uriPath)->current();
+        	        if (!empty($site301Data))
+        	        {
         	            // If the 404 url exist on Database, the new Url will set to 301 to make a  redirect to new url
         	            $params['301_type'] = 'oldUrl301';
         	            $params['301'] = $site301Data->s301_new_url;

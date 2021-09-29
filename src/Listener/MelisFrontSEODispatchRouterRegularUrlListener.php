@@ -112,8 +112,13 @@ class MelisFrontSEODispatchRouterRegularUrlListener
                     $routingResult['301'] = $this->redirectPageSEORedirect($e, $idpage);
                     if ($routingResult['301'] != null)
                         $routingResult['301_type'] = 'seoURL';
-                
-                    // No SEO, then try regular Page Url
+
+                    //Get the redirect url from the Site Redirect Tool if no defined SEO URL
+                    if($routingResult['301'] == null){
+                       $routingResult['301'] = $this->redirectPageSiteToolRedirect($e);
+                    }
+
+                    // No SEO/Site Redirect Entry, then try regular Page Url
                     if ($routingResult['301'] == null &&
                         (empty($routingResult['norewrite']) || !$routingResult['norewrite']))
                     {
@@ -336,5 +341,36 @@ class MelisFrontSEODispatchRouterRegularUrlListener
         }
     
         return null;
+    }
+
+    /**
+     * This function will retrieve the redirect urls set in Site Redirect Tool
+     * It will happen no matter the page is online or offline.
+     *
+     * @param MvcEvent $e
+     * @return string|NULL The URL of the page to be redirected to
+     */
+    public function redirectPageSiteToolRedirect($e)
+    {
+        $serviceManager = $e->getApplication()->getServiceManager();
+        $router = $e->getRouter();
+        $uri = $router->getRequestUri();
+        $path = $uri->getPath();
+        $queryString = $uri->getQuery();
+        $uriPath = !empty($queryString)?($path."?".$queryString):$path;
+
+        // Retrieving Site 301 if the 404 data is exist as Old Url
+        $site301 = $serviceManager->get('MelisEngineTableSite301');
+        $site301Datas = $site301->getEntryByField('s301_old_url', $uriPath);
+
+        $url = null;
+        if(!empty($site301Datas))
+        {
+            foreach($site301Datas as $site301Data){
+                $url = $site301Data->s301_new_url;
+            }
+        }
+        
+        return $url;
     }
 }
