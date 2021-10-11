@@ -35,8 +35,6 @@ $("body").on("blur", "div.html-editable", function() {
 	// get the content of the active tinyMCE editor.
 	// var content = tinyMCE.activeEditor.getContent({ format: "html" });
 
-	console.log("plugin.melistagHTML.init.js currentdata: ", currentdata);
-
 	var data = {
 		melisPluginName: currentdata.plugin,
 		melisPluginTag: currentdata.melisTag,
