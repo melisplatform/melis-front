@@ -28,9 +28,14 @@ function melistagTEXTAREA_savePlugin(editor) {
 $("body").on("blur", "div.textarea-editable", function() {
 	// get all data-attributes from the clicked
 	var currentdata = $(this).data();
+	// var currentdata = $(this).closest(".html-editable").data();
+
+	var pluginDivId = $(this).closest('.html-editable').attr('id');
+	
+	var content = tinyMCE.get(pluginDivId).getContent({ format: "html" });
 
 	// get the content of the active tinyMCE editor.
-	var content = tinyMCE.activeEditor.getContent({ format: "html" });
+	// var content = tinyMCE.activeEditor.getContent({ format: "html" });
 
 	var data = {
 		melisPluginName: currentdata.plugin,
