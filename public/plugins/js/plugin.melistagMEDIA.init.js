@@ -30,7 +30,7 @@ $("body").on("blur", "div.media-editable", function() {
 	var currentdata = $(this).data();
 	// var currentdata = $(this).closest(".html-editable").data();
 
-	var pluginDivId = $(this).closest('.html-editable').attr('id');
+	var pluginDivId = $(this).closest('.media-editable').attr('id');
 	
 	var content = tinyMCE.get(pluginDivId).getContent({ format: "html" });
 
