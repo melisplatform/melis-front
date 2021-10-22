@@ -3,12 +3,10 @@ function melistagHTML_init(idPlugin) {
 	if (typeof idPlugin === "undefined") idPlugin = null;
 
 	var tinyMceOption = {
-		templates:
-			"/melis/MelisCms/PageEdition/getTinyTemplates?idPage=" +
-			melisActivePageId,
+		templates: "/melis/MelisCms/PageEdition/getTinyTemplates?idPage=" + melisActivePageId
 	};
 
-	if (idPlugin != null) {
+	if ( idPlugin != null ) {
 		tinyMceOption.setup = "melistagHTML_savePlugin";
 	}
 
@@ -28,9 +26,14 @@ function melistagHTML_savePlugin(editor) {
 $("body").on("blur", "div.html-editable", function() {
 	// get all data-attributes from the clicked
 	var currentdata = $(this).data();
+	// var currentdata = $(this).closest(".html-editable").data();
+
+	var pluginDivId = $(this).closest('.html-editable').attr('id');
+	
+	var content = tinyMCE.get(pluginDivId).getContent({ format: "html" });
 
 	// get the content of the active tinyMCE editor.
-	var content = tinyMCE.activeEditor.getContent({ format: "html" });
+	// var content = tinyMCE.activeEditor.getContent({ format: "html" });
 
 	var data = {
 		melisPluginName: currentdata.plugin,
@@ -38,8 +41,9 @@ $("body").on("blur", "div.html-editable", function() {
 		melisPluginId: currentdata.tagId,
 		tagType: currentdata.tagType,
 		tagId: currentdata.tagId,
-		tagValue: content,
+		tagValue: content
 	};
+
 	melisPluginEdition.calcFrameHeight();
 	melisPluginEdition.savePluginUpdate(data, currentdata.siteModule);
 });

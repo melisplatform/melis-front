@@ -132,9 +132,11 @@ class MelisFrontTagPlugin extends MelisTemplatingPlugin
 
     public function loadDbXmlToPluginConfig()
     {
+
         $configValues = array();
 
         $xml = simplexml_load_string($this->pluginXmlDbValue);
+
         if ($xml)
         {
             $type = isset($this->pluginFrontConfig['type']) ? $this->pluginFrontConfig['type'] : 'html';
@@ -179,11 +181,11 @@ class MelisFrontTagPlugin extends MelisTemplatingPlugin
     }
 
     private function getWidths()
-    {
+    {       
         // Create an array with the variables that will be available in the view
-        $this->pluginFrontConfig['widthDesktop'] = isset($this->widthDesktop[0]) ? $this->widthDesktop[0] : 100;
-        $this->pluginFrontConfig['widthTablet']  = isset($this->widthTablet[0])  ? $this->widthTablet[0]  : 100;
-        $this->pluginFrontConfig['widthMobile']  = isset($this->widthMobile[0])  ? $this->widthMobile[0]  : 100;
+        $this->pluginFrontConfig['widthDesktop'] = (is_array($this->widthDesktop) && isset($this->widthDesktop[0])) ? $this->widthDesktop[0] : 100;
+        $this->pluginFrontConfig['widthTablet']  = (is_array($this->widthTablet) && isset($this->widthTablet[0]))  ? $this->widthTablet[0]  : 100;
+        $this->pluginFrontConfig['widthMobile']  = (is_array($this->widthMobile) && isset($this->widthMobile[0]))  ? $this->widthMobile[0]  : 100;
         $this->pluginFrontConfig['pluginContainerId']  = isset($this->pluginContainerId[0])  ? $this->pluginContainerId[0] : null;
     }
 
