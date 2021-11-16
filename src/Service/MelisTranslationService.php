@@ -75,17 +75,28 @@ class MelisTranslationService extends MelisGeneralService
                     }
                 }
 
+
+            } elseif ($module == $moduleSvc->getModulePath('MelisSites')) {
+
+                //get site module translations
+                $siteTranslation = $this->getMelisSiteTranslationByLocale($locale);
+
+                if ($siteTranslation) {
+                    foreach ($siteTranslation as $siteTrans) {
+                        $tmpTrans[] = $siteTrans;
+                    }
+                }
             }
         }
 
         if($tmpTrans) {
             foreach($tmpTrans as $tmpIdx => $transKey) {
-                foreach($transKey as $key => $value) {
+                foreach($transKey as $key => $value) {                   
                     $transMessages[$key] = $value;
                 }
             }
         }
-        
+
         // results
         $arrayParameters['results'] = $transMessages;
         
@@ -96,7 +107,64 @@ class MelisTranslationService extends MelisGeneralService
         $melisEngineCacheSystem->setCacheByKey($cacheKey, $cacheConfig, $arrayParameters['results'], true);
 
         return $arrayParameters['results'];
+    }
 
+
+    /**
+     *  Retrieves the site modules' translation given the current locale used
+     * @param $locale
+     * @return array
+     */
+    public function getMelisSiteTranslationByLocale($locale){     
+        // Event parameters prepare
+        $arrayParameters = $this->makeArrayFromParameters(__METHOD__, func_get_args());
+        // Sending service start event
+        $arrayParameters = $this->sendEvent('get_melis_site_translation_by_locale_start', $arrayParameters);   
+        
+        $moduleService = $this->getServiceManager()->get('ModulesService');
+        $melisSiteModules = $moduleService->getSitesModules();
+        $transFiles = array(
+            $arrayParameters['locale'].'.interface.php',
+            $arrayParameters['locale'].'.forms.php',
+        );
+        $siteTrans = [];
+
+        if ($melisSiteModules) {
+            foreach ($melisSiteModules as $module) {   
+                $moduleSvc = $this->getServiceManager()->get('MelisAssetManagerModulesService'); 
+                $siteModulePath = $moduleSvc->getModulePath('MelisSites').'/'.$module;
+                
+                if (file_exists($siteModulePath.'/language')) {
+                    foreach ($transFiles as $file) {
+                        if (file_exists($siteModulePath.'/language/'.$file)) {
+                            $siteTrans[] = include($siteModulePath.'/language/'.$file);
+                        }
+                    }
+
+                    // get the directory
+                    $iterator = new \RecursiveDirectoryIterator($siteModulePath . "/language", \RecursiveDirectoryIterator::SKIP_DOTS);
+                    $files = new \RecursiveIteratorIterator($iterator,\RecursiveIteratorIterator::CHILD_FIRST);
+                    /** @var \SplFileInfo $file */
+                    // get the files under the directory
+                    foreach ($files as $file) {
+                        if (stristr($file->getBasename(),$arrayParameters['locale'])) {
+                            // get the translation based on locale
+                            $siteTrans[]= include $file->getFileInfo()->getPathname();
+                        } elseif (stristr($file->getBasename(),"en_EN")) {
+                            // fall back locale
+                            $siteTrans[] = include $file->getFileInfo()->getPathname();
+                        }
+                    }
+                }               
+            }
+        }
+
+        // results
+        $arrayParameters['results'] = $siteTrans;
+        // send event
+        $arrayParameters = $this->sendEvent('get_melis_site_translation_by_locale_end', $arrayParameters);
+
+        return $arrayParameters['results'];
     }
 
     /**+

@@ -32,6 +32,11 @@ class MelisTranslationHelper extends AbstractHelper
             $text = $melisTrans->translateByLocale($translationKey,$melisCoreLang['melis-lang-locale']);
         }
 
+        //use English as a fallback locale
+        if (empty($text)) {        	
+        	$text = $melisTrans->translateByLocale($translationKey,'en_EN');        	
+        }
+
         return $text;
 	}
 
