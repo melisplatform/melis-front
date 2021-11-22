@@ -33,8 +33,8 @@ class MelisTranslationHelper extends AbstractHelper
         }
 
         //use English as a fallback locale
-        if (empty($text)) {        	
-        	$text = $melisTrans->translateByLocale($translationKey,'en_EN');        	
+        if (empty($text) || substr(trim($text), 0, 3) == 'tr_') {    
+        	$text = $melisTrans->translateByLocale($translationKey,'en_EN');                        	
         }
 
         return $text;

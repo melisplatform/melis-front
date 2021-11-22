@@ -150,9 +150,6 @@ class MelisTranslationService extends MelisGeneralService
                         if (stristr($file->getBasename(),$arrayParameters['locale'])) {
                             // get the translation based on locale
                             $siteTrans[]= include $file->getFileInfo()->getPathname();
-                        } elseif (stristr($file->getBasename(),"en_EN")) {
-                            // fall back locale
-                            $siteTrans[] = include $file->getFileInfo()->getPathname();
                         }
                     }
                 }               
