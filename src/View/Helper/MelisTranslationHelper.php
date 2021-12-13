@@ -32,9 +32,28 @@ class MelisTranslationHelper extends AbstractHelper
             $text = $melisTrans->translateByLocale($translationKey,$melisCoreLang['melis-lang-locale']);
         }
 
-        //use English as a fallback locale
-        if (empty($text) || substr(trim($text), 0, 3) == 'tr_') {    
-        	$text = $melisTrans->translateByLocale($translationKey,'en_EN');                        	
+        //use other locale if translation of current locale is not given and if still no translation available in the other locale, return the tr_key
+        if (empty($text) || substr(trim($text), 0, 3) == 'tr_') {             
+            //get all languages available in the plaftform
+            $coreLang = $this->serviceManager->get('MelisCoreTableLang');
+            $languages = $coreLang->fetchAll()->toArray();
+            $translatedLocale = !empty($locale) ? $locale : $melisCoreLang['melis-lang-locale'];
+
+            foreach ($languages as $key => $langData) {
+                if (trim($langData["lang_locale"]) != trim($translatedLocale)) {
+                    $text = $melisTrans->translateByLocale($translationKey, $langData["lang_locale"]);   
+
+                    //if found a non-empty translation, exit loop
+                    if (!empty($text) && substr(trim($text), 0, 3) != 'tr_') {    
+                        break;
+                    } 
+                }
+            }
+
+            //use the tr keys if no translation found
+            if (empty($text) || substr(trim($text), 0, 3) == 'tr_') { 
+                $text = $translationKey;
+            }        	                    	
         }
 
         return $text;
