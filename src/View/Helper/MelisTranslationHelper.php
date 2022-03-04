@@ -37,6 +37,7 @@ class MelisTranslationHelper extends AbstractHelper
             //get all languages available in the plaftform
             $coreLang = $this->serviceManager->get('MelisCoreTableLang');
             $languages = $coreLang->fetchAll()->toArray();
+            $melisCoreLang = new Container('meliscore');
             $translatedLocale = !empty($locale) ? $locale : $melisCoreLang['melis-lang-locale'];
 
             foreach ($languages as $key => $langData) {
