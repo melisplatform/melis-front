@@ -213,6 +213,7 @@ return [
             'MiniTemplatePlugin'                    => \MelisFront\Controller\Plugin\MiniTemplatePlugin::class,
             'MelisFrontGdprBannerPlugin'            => \MelisFront\Controller\Plugin\MelisFrontGdprBannerPlugin::class,
             'MelisFrontGdprRevalidationPlugin'      => \MelisFront\Controller\Plugin\MelisFrontGdprRevalidationPlugin::class,
+            'MelisFrontGenericContentPlugin'        => \MelisFront\Controller\Plugin\MelisFrontGenericContentPlugin::class,
         ]
     ],
     'view_helpers' => [
@@ -263,6 +264,7 @@ return [
             'MelisFront/gdpr-revalidation'                  => __DIR__ . '/../view/melis-front/plugins/gdpr-revalidation.phtml',
             //Mini Template plugins
             'MiniTemplate/Content'                          =>  __DIR__ . '/../view/melis-front/plugins/mini-template-default.phtml',
+            'MelisFront/generic-content'                    => __DIR__ . '/../view/melis-front/plugins/generic-content.phtml',
         ],
         'template_path_stack' => [
             __DIR__ . '/../view',

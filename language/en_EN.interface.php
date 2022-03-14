@@ -112,5 +112,8 @@ return [
     'tr_melis_front_gdpr_revalidation_info_text_warning' => 'This link doesn’t seem to work or is not recognized.',
     'tr_melis_front_gdpr_revalidation_info_success_heading' => 'Success',
     'tr_melis_front_gdpr_revalidation_info_success_sub_heading' => 'Your account is now up to date!',
-    'tr_melis_front_gdpr_revalidation_not_checked' => 'Please check the box to validate'
+    'tr_melis_front_gdpr_revalidation_not_checked' => 'Please check the box to validate',
+
+    'tr_melis_front_generic_plugin_name' => 'Generic Content Plugin',
+    'tr_melis_front_generic_plugin_description' => 'Generic Content Plugin Description',
 ];
