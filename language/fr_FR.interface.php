@@ -116,4 +116,7 @@ return [
     'tr_melis_front_gdpr_revalidation_info_success_sub_heading' => 'Votre compte a été validé',
     'tr_melis_front_gdpr_revalidation_label_checkbox' => 'Je souhaite revalider mon compte',
     'tr_melis_front_gdpr_revalidation_not_checked' => 'Veuillez cocher la case pour valider',
+
+    'tr_melis_front_generic_plugin_name' => 'Remontée de contenu générique',
+    'tr_melis_front_generic_plugin_description' => 'Generic Content Plugin Description',
 ];
