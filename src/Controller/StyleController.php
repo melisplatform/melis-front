@@ -103,7 +103,7 @@ class StyleController extends MelisAbstractActionController
         return $view;
     }
 
-    private function getMediaQuery($minWidth = null, $maxWidth, $classes = null, $type = 'max')
+    private function getMediaQuery($minWidth, $maxWidth, $classes = null, $type = 'max')
     {
         $query  = null;
         if(!is_null($minWidth)) {
