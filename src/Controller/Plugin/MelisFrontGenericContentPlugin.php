@@ -10,9 +10,7 @@
 namespace MelisFront\Controller\Plugin;
 
 use MelisEngine\Controller\Plugin\MelisTemplatingPlugin;
-use MelisFront\Navigation\MelisFrontNavigation;
 use Laminas\View\Model\ViewModel;
-use Zend\Session\Container;
 use Laminas\Form\Factory;
 
 /**
