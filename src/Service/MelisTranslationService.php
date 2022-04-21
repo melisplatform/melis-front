@@ -121,8 +121,8 @@ class MelisTranslationService extends MelisGeneralService
         // Sending service start event
         $arrayParameters = $this->sendEvent('get_melis_site_translation_by_locale_start', $arrayParameters);   
         
-        $moduleService = $this->getServiceManager()->get('ModulesService');
-        $melisSiteModules = $moduleService->getSitesModules();
+        $moduleSvc = $this->getServiceManager()->get('MelisAssetManagerModulesService'); 
+        $melisSiteModules = $moduleSvc->getSitesModules();
         $transFiles = array(
             $arrayParameters['locale'].'.interface.php',
             $arrayParameters['locale'].'.forms.php',
@@ -131,7 +131,6 @@ class MelisTranslationService extends MelisGeneralService
 
         if ($melisSiteModules) {
             foreach ($melisSiteModules as $module) {   
-                $moduleSvc = $this->getServiceManager()->get('MelisAssetManagerModulesService'); 
                 $siteModulePath = $moduleSvc->getModulePath('MelisSites').'/'.$module;
                 
                 if (file_exists($siteModulePath.'/language')) {
