@@ -45,29 +45,31 @@ class MelisFrontSEORouteListener
                     $urlParams = '?' . $urlParams;
                 }
                 // Trying to find an URL in Melis SEO
-                $melisTablePageSeo = $sm->get('MelisEngineTablePageSeo');
-                $datasPageSeo = $melisTablePageSeo->getEntryByField('pseo_url', $url);
-                if (!empty($datasPageSeo)) {
-                    // get page seo data
-                    $datasPageSeo = $datasPageSeo->current();
+                if(!empty($url)) {
+                    $melisTablePageSeo = $sm->get('MelisEngineTablePageSeo');
+                    $datasPageSeo = $melisTablePageSeo->getEntryByField('pseo_url', $url);
                     if (!empty($datasPageSeo)) {
-                        // get router
-                        $router = $sm->get('router');
-                        // Creating dynamicaly the route and the params that are needed in the regular melis routing
-                        $route = \Laminas\Router\Http\Segment::factory(array(
-                            'route' => '/' . $url,
-                            'defaults' => array(
-                                'controller' => 'MelisFront\Controller\Index',
-                                'action' => 'index',
-                                'idpage' => $datasPageSeo->pseo_id,
-                                'renderType' => 'melis_zf2_mvc',
-                                'renderMode' => 'front',
-                                'preview' => false,
-                                'urlparams' => $urlParams,
-                            )
-                        ));
-                        // add the route to the router
-                        $router->addRoute('melis-front-page-seo', $route);
+                        // get page seo data
+                        $datasPageSeo = $datasPageSeo->current();
+                        if (!empty($datasPageSeo)) {
+                            // get router
+                            $router = $sm->get('router');
+                            // Creating dynamicaly the route and the params that are needed in the regular melis routing
+                            $route = \Laminas\Router\Http\Segment::factory(array(
+                                'route' => '/' . $url,
+                                'defaults' => array(
+                                    'controller' => 'MelisFront\Controller\Index',
+                                    'action' => 'index',
+                                    'idpage' => $datasPageSeo->pseo_id,
+                                    'renderType' => 'melis_zf2_mvc',
+                                    'renderMode' => 'front',
+                                    'preview' => false,
+                                    'urlparams' => $urlParams,
+                                )
+                            ));
+                            // add the route to the router
+                            $router->addRoute('melis-front-page-seo', $route);
+                        }
                     }
                 }
             }
