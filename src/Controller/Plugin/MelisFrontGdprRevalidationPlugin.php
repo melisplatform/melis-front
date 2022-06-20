@@ -102,7 +102,7 @@ class MelisFrontGdprRevalidationPlugin extends MelisTemplatingPlugin
             }
             // revalidate user
             if ($request->isPost() && !$userStillActive) {
-                $post = get_object_vars($request->getPost());
+                $post = $request->getPost()->toArray();
                 // set data
                 if ($post['revalidate_account']) {
                     // update user status by the services from modules
@@ -283,7 +283,7 @@ class MelisFrontGdprRevalidationPlugin extends MelisTemplatingPlugin
                     );
                 } else {
                     // validate the forms and send back an array with errors by tabs
-                    $post = get_object_vars($request->getPost());
+                    $post = $request->getPost()->toArray();
                     $success = false;
                     $form->setData($post);
 

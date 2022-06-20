@@ -196,7 +196,7 @@ class MelisFrontGdprBannerPlugin extends MelisTemplatingPlugin
                     );
                 } else {
                     // validate the forms and send back an array with errors by tabs
-                    $post = get_object_vars($request->getPost());
+                    $post = $request->getPost()->toArray();
                     $success = false;
                     $form->setData($post);
 

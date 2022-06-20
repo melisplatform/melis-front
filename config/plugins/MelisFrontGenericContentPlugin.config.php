@@ -62,7 +62,7 @@ return array(
                                     'method' => '',
                                     'action' => '',
                                 ),
-                                'hydrator'  => 'Laminas\Hydrator\ArraySerializable',
+                                'hydrator'  => 'Laminas\Hydrator\ArraySerializableHydrator',
                                 'elements' => array(
                                     array(
                                         'spec' => array(
