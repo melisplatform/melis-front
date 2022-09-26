@@ -248,7 +248,7 @@ class MelisSiteConfigService extends MelisGeneralService
                                     $siteConfig,
                                     [
                                         'site' => [
-                                            $siteName => unserialize($dbConf['sconf_datas'])
+                                            $siteName => unserialize($dbConf['sconf_datas'], ['allowed_classes' => false])
                                         ],
                                     ],
                                     true
@@ -259,7 +259,7 @@ class MelisSiteConfigService extends MelisGeneralService
                                     [
                                         'site' => [
                                             $siteName => [
-                                                $siteId => unserialize($dbConf['sconf_datas'])
+                                                $siteId => unserialize($dbConf['sconf_datas'], ['allowed_classes' => false])
                                             ],
                                         ]
                                     ],

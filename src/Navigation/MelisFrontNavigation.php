@@ -10,7 +10,7 @@
 namespace MelisFront\Navigation;
 
 use Laminas\Navigation\Service\DefaultNavigationFactory;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Laminas\ServiceManager\ServiceManager;
 use Laminas\EventManager\EventManager;
 use Laminas\EventManager\EventManagerInterface;
