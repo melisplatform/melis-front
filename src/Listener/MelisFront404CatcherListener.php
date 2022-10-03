@@ -55,7 +55,7 @@ class MelisFront404CatcherListener extends MelisGeneralListener implements Liste
         		        foreach($site301Datas as $site301Data){
         		            
         		                if(!empty( $site301Data->s301_site_id)){
-        		                    $siteDomain  = $siteDomainTable->getEntryByField('sdom_site_id', $site301Data->s301_site_id)->current();
+        		                    $siteDomain  = $siteDomainTable->getEntryByField('sdom_env', getenv('MELIS_PLATFORM'))->current();
         		                     
         		                    if($siteDomain->sdom_domain == $uri->getHost() && $site301Data->s301_site_id == $siteDomain->sdom_site_id){
         		                        $url = $site301Data->s301_new_url;
