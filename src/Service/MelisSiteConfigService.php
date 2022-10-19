@@ -129,9 +129,10 @@ class MelisSiteConfigService extends MelisGeneralService
                              * let's try again to get it directly from the
                              * db and file
                              */
-                            if (empty($config['site'][$siteName][$siteId])) {
+                            //Fixed problem not getting the config from the db
+//                            if (empty($config['site'][$siteName][$siteId])) {
                                 $config = $this->getSiteConfig($siteId, true);
-                            }
+//                            }
 
                             if (!empty($config['site'][$siteName][$siteId])) {
 
