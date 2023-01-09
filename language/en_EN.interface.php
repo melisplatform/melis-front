@@ -37,7 +37,7 @@ return [
     'tr_MelisFrontShowListFromFolderPlugin_Name' => 'Folder listing',
     'tr_MelisFrontShowListFromFolderPlugin_Description' => 'The folder listing plugin provides a list of subpages from the treeview, that allows to create lists of elements suchs as news or page details of an item.',
     'tr_MelisFrontSearchResultsPlugin_Name' => 'Search results',
-    'tr_MelisFrontSearchResultsPlugin_Description' => 'The search results plugin provides the results from Melis Platform based on Zend Search and displays them on the page.',
+    'tr_MelisFrontSearchResultsPlugin_Description' => 'The search results plugin provides the results from Melis Platform based on Laminas Search and displays them on the page.',
     'tr_melis_plugins_page_id_empty' => 'Please enter the page ID',
     'tr_melis_plugins_page_id_not_num' => 'Invalid page ID, it must be numeric',
     

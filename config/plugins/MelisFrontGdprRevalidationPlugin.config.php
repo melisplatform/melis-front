@@ -138,7 +138,7 @@ return [
                                                 'name' => 'NotEmpty',
                                                 'options' => [
                                                     'messages' => [
-                                                        \Zend\Validator\NotEmpty::IS_EMPTY => 'tr_front_template_path_empty',
+                                                        \Laminas\Validator\NotEmpty::IS_EMPTY => 'tr_front_template_path_empty',
                                                     ],
                                                 ],
                                             ],
