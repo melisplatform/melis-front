@@ -76,10 +76,16 @@ class Module
             if (!empty($module[0])) {
                 if ($module[0] == 'melis-backoffice') {
                     $isBackOffice = true;
+                     // attach listeners for Melis
+                    (new \MelisCore\Listener\SystemMaintenanceSaveListener())->attach($eventManager);
+                    (new \MelisCore\Listener\SystemMaintenanceDeleteListener())->attach($eventManager);
                 }
             }
         }
 
+        if(!$isBackOffice) {
+            (new \MelisCore\Listener\MelisCoreMaintenanceListener())->attach($eventManager);
+        }
         // do not load listeners if working on back-office
         if(!$isBackOffice) {
             // Catching PAGE SEO URLs to update Router
