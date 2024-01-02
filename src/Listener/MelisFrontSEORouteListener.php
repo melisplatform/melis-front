@@ -38,7 +38,7 @@ class MelisFrontSEORouteListener
                 $uri = $request->getUri();
                 $url = $uri->getPath();
                 // remove slash on first
-                $url = preg_replace('/\//i',null,$url,1);
+                $url = preg_replace('/\//i','',$url,1);
                 // get the url parameters
                 $urlParams = $request->getQuery()->toString();
                 if (! empty($urlParams)) {
