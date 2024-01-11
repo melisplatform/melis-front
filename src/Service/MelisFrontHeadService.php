@@ -50,8 +50,11 @@ class MelisFrontHeadService extends MelisServiceManager implements MelisFrontHea
 				if (!empty($datasPageSeo = $datasPageSeo->current()))
 				{
 					if (!empty($datasPageSeo)) {
-						$descriptionPage = addslashes($datasPageSeo->pseo_meta_description);
-						$descriptionPage = str_replace("\'", "'", $descriptionPage);
+						$descriptionPage = '';
+						if(!empty($datasPageSeo->pseo_meta_description)) {
+						    $descriptionPage = addslashes($datasPageSeo->pseo_meta_description);
+                            $descriptionPage = str_replace("\'", "'", $descriptionPage);
+                        }
 
 						$titlePage = addslashes($datasPageSeo->pseo_meta_title);
 						$titlePage = str_replace("\'", "'", $titlePage);
@@ -91,7 +94,10 @@ class MelisFrontHeadService extends MelisServiceManager implements MelisFrontHea
 					/**
 					 * Canonical Tag
 					 */
-					$canonicalUrl = addslashes($datasPageSeo->pseo_canonical);
+					$canonicalUrl = '';
+					if(!empty($datasPageSeo->pseo_canonical))
+					    $canonicalUrl = addslashes($datasPageSeo->pseo_canonical);
+
 					$canonicalUrl = str_replace("\'", "'", $canonicalUrl);
 					if ($canonicalUrl != '') {
 						$canonicalUrlTag = "\n\t<link rel=\"canonical\" href=\"$canonicalUrl\" />\n";

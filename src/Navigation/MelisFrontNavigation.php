@@ -10,10 +10,10 @@
 namespace MelisFront\Navigation;
 
 use Laminas\Navigation\Service\DefaultNavigationFactory;
-use Interop\Container\ContainerInterface;
 use Laminas\ServiceManager\ServiceManager;
 use Laminas\EventManager\EventManager;
 use Laminas\EventManager\EventManagerInterface;
+use Psr\Container\ContainerInterface;
 
 /**
  * Generate laminas navigation based on Melis Page System
