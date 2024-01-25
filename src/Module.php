@@ -56,6 +56,8 @@ class Module
 
     public function onBootstrap(MvcEvent $e)
     {
+        $this->initShowErrorsByconfig($e);
+
         $eventManager        = $e->getApplication()->getEventManager();
         $moduleRouteListener = new ModuleRouteListener();
         $moduleRouteListener->attach($eventManager);
@@ -120,6 +122,22 @@ class Module
         } else {
             (new MelisFrontPluginLangSessionUpdateListener())->attach($eventManager);
             (new MelisFrontDeletePluginCacheListener())->attach($eventManager);
+        }
+    }
+
+    /**
+     * @param MvcEvent $e
+     */
+    public function initShowErrorsByconfig(MvcEvent $e)
+    {
+        $sm = $e->getApplication()->getServiceManager();
+        $melisAppConfig = $sm->get('config');
+        $config = $melisAppConfig['plugins']['melisfront']['datas']['default'];
+        if (!empty($config['errors']) &&
+            isset($config['errors']['error_reporting']) &&
+            isset($config['errors']['display_errors'])) {
+            error_reporting($config['errors']['error_reporting']);
+            ini_set('display_errors', $config['errors']['display_errors']);
         }
     }
 
