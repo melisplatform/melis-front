@@ -167,7 +167,7 @@ class Module
 
                     
                     $langSrv = $sm->get('MelisEngineLang');
-                    $currentPageLang = $langSrv->getLangDataById($currentPage->plang_lang_id);
+                    $currentPageLang = isset($currentPage->plang_lang_id) ? $langSrv->getLangDataById($currentPage->plang_lang_id) : null;
 
                     // var_dump($currentPage);
                     // var_dump($currentPageLang);
