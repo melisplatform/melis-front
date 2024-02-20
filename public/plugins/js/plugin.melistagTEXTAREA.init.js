@@ -3,7 +3,7 @@ function melistagTEXTAREA_init(idPlugin) {
 	if (typeof idPlugin === "undefined") idPlugin = null;
 
 	var tinyMceOption = {
-		templates:
+		mini_templates_url:
 			"/melis/MelisCms/PageEdition/getTinyTemplates?idPage=" +
 			melisActivePageId,
 	};
