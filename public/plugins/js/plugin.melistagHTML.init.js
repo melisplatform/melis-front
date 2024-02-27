@@ -19,7 +19,6 @@ function melistagHTML_init(idPlugin) {
 function melistagHTML_savePlugin(editor) {
 	editor.on("init", function(ed) {
 		$("#" + editor.id).trigger("blur");
-		console.log("melis-front plugin.melistagHTML.init.js #+editor.id: ", "#"+editor.id);
 	});
 }
 
