@@ -1,4 +1,4 @@
-window.MelisGdprBanner = (function () {
+var MelisGdprBanner = (function () {
     /**
      * To make a "persistent cookie" (a cookie that "never expires"),
      * we need to set a date/time in a distant future (one that possibly exceeds the user's

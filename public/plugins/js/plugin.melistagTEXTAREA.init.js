@@ -8,8 +8,9 @@ function melistagTEXTAREA_init(idPlugin) {
 			melisActivePageId,
 	};
 
+	// added melisTinyMCE.tinyMceActionEvent as tinymce don't work after dragging a plugin into dragndropzone
 	if (idPlugin != null) {
-		tinyMceOption.setup = "melistagTEXTAREA_savePlugin";
+		tinyMceOption.setup = "melistagTEXTAREA_savePlugin, melisTinyMCE.tinyMceActionEvent";
 	}
 
 	var idPlugin = idPlugin !== null ? "#" + idPlugin : "div.textarea-editable";
@@ -27,15 +28,17 @@ function melistagTEXTAREA_savePlugin(editor) {
 // run this function when you click out of the tinymce
 $("body").on("blur", "div.textarea-editable", function() {
 	// get all data-attributes from the clicked
+	// var currentdata = $(this).closest(".textarea-editable").data();
 	var currentdata = $(this).data();
-	// var currentdata = $(this).closest(".html-editable").data();
 
-	var pluginDivId = $(this).closest('.textarea-editable').attr('id');
+	//var pluginDivId = $(this).closest('.textarea-editable').attr('id');
+	var pluginDivId = $(this).attr('id');
 	
-	var content = tinyMCE.get(pluginDivId).getContent({ format: "html" });
-
 	// get the content of the active tinyMCE editor.
 	// var content = tinyMCE.activeEditor.getContent({ format: "html" });
+
+	// good for multiple editor on the page
+	var content = tinyMCE.get(pluginDivId).getContent({ format: "html" });
 
 	var data = {
 		melisPluginName: currentdata.plugin,

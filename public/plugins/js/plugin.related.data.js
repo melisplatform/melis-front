@@ -12,13 +12,8 @@ var pluginRelatedData = (function($, window) {
                 melisUIWidth        = $melisUI.outerWidth(), // totalWidth
                 dragDropZoneWidth   = $(melisDndZone).outerWidth(); // parentWidth
 
-                percentTotalWidth = ( 100 * dragDropZoneWidth / melisUIWidth );
+            var percentTotalWidth = ( 100 * dragDropZoneWidth / melisUIWidth );
                 percentTotalWidth = percentTotalWidth.toFixed(2);
-
-                /* console.log("melisDndZone: ", melisDndZone);
-                console.log("melisDndZone length: ", melisDndZone.length);
-                console.log("setPercentTotalWidth $toolBox: ", $toolBox);
-                console.log("setPercentTotalWidth $toolBox length: ", $toolBox.length); */
                 
                 //if ( $toolBox.length > 0 ) {
                     processPluginData( $toolBox, percentTotalWidth );
@@ -33,12 +28,6 @@ var pluginRelatedData = (function($, window) {
             parentOutlined  = $(toolBox).closest(".melis-ui-outlined"),
             classes         = parentOutlined.attr("class").split(" "),
             editable        = parentOutlined.find(".melis-editable");
-
-            /* console.log("processPluginData toolBox: ", toolBox);
-            console.log("processPluginData parentOutlined: ", parentOutlined);
-            console.log("parentOutlined: ", parentOutlined + " classes: ", + classes); */
-
-            //console.log("toolBox length: ", toolBox.length);
 
             if ( toolBox.length ) {
                 var pluginList = new Object();
@@ -56,7 +45,7 @@ var pluginRelatedData = (function($, window) {
                             desktopWidth                    = $this.attr("data-plugin-width-desktop");
                     });
 
-                    // custom action check if plugin tags
+                    // custom action check if plugin tags, uncommented for checking, 03262024
                     /* if( $(editable).length ) {
                         // trigger focus to saveSession
                         var data = $(editable).data();
@@ -75,8 +64,6 @@ var pluginRelatedData = (function($, window) {
                                     pluginList['tagValue']  =   tinyMCE.activeEditor.getContent({format : 'html'});
                             });
                     } */
-
-                    console.log("mobileWidth: ", + mobileWidth + " tabletWidth: ", + tabletWidth + " desktopWidth: ", desktopWidth);
 
                     // check if resize in mobile
                     if(iframe.width() <= 480) {

@@ -5,9 +5,11 @@ function melistagHTML_init(idPlugin) {
 	var tinyMceOption = {
 		mini_templates_url: "/melis/MelisCms/PageEdition/getTinyTemplates?idPage=" + melisActivePageId
 	};
-
+	
+	// added melisTinyMCE.tinyMceActionEvent as tinymce don't work after dragging a plugin into dragndropzone
 	if ( idPlugin != null ) {
-		tinyMceOption.setup = "melistagHTML_savePlugin";
+		tinyMceOption.setup = "melistagHTML_savePlugin, melisTinyMCE.tinyMceActionEvent";
+		//tinyMceOption.setup = "melistagHTML_savePlugin";
 	}
 
 	var idPlugin = idPlugin !== null ? "#" + idPlugin : "div.html-editable";
@@ -26,14 +28,16 @@ function melistagHTML_savePlugin(editor) {
 $("body").on("blur", "div.html-editable", function() {
 	// get all data-attributes from the clicked
 	var currentdata = $(this).data();
-	// var currentdata = $(this).closest(".html-editable").data();
+	//var currentdata = $(this).closest(".html-editable").data();
 
-	var pluginDivId = $(this).closest('.html-editable').attr('id');
+	//var pluginDivId = $(this).closest('.html-editable').attr('id');
+	var pluginDivId = $(this).attr('id');
 	
-	var content = tinyMCE.get(pluginDivId).getContent({ format: "html" });
+	// get the content of the active tinyMCE editor. good for only one editor on the page.
+	//var content = tinyMCE.activeEditor.getContent({ format: "html" });
 
-	// get the content of the active tinyMCE editor.
-	// var content = tinyMCE.activeEditor.getContent({ format: "html" });
+	// good for multiple editor on the page
+	var content = tinyMCE.get(pluginDivId).getContent({ format: "html" });
 
 	var data = {
 		melisPluginName: currentdata.plugin,
