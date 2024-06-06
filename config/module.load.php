@@ -15,6 +15,5 @@ return [
     'Laminas\Form',
     'Laminas\Validator',
     'Laminas\Db',
-    'Laminas\InputFilter',
-//    'Laminas\Serializer',
+    'Laminas\InputFilter'
 ];
