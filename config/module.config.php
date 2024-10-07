@@ -203,6 +203,7 @@ return [
             'MelisFrontTagTextareaPlugin'           => \MelisFront\Controller\Plugin\MelisFrontTagTextareaPlugin::class,
             'MelisFrontTagMediaPlugin'              => \MelisFront\Controller\Plugin\MelisFrontTagMediaPlugin::class,
             'MelisFrontMenuPlugin'                  => \MelisFront\Controller\Plugin\MelisFrontMenuPlugin::class,
+            'MelisFrontMenuBasedOnTagPlugin'        => \MelisFront\Controller\Plugin\MelisFrontMenuBasedOnTagPlugin::class,
             'MelisFrontBreadcrumbPlugin'            => \MelisFront\Controller\Plugin\MelisFrontBreadcrumbPlugin::class,
             'MelisFrontShowListFromFolderPlugin'    => \MelisFront\Controller\Plugin\MelisFrontShowListFromFolderPlugin::class,
             /**
@@ -214,6 +215,7 @@ return [
             'MelisFrontGdprBannerPlugin'            => \MelisFront\Controller\Plugin\MelisFrontGdprBannerPlugin::class,
             'MelisFrontGdprRevalidationPlugin'      => \MelisFront\Controller\Plugin\MelisFrontGdprRevalidationPlugin::class,
             'MelisFrontGenericContentPlugin'        => \MelisFront\Controller\Plugin\MelisFrontGenericContentPlugin::class,
+            
         ]
     ],
     'view_helpers' => [
@@ -221,6 +223,7 @@ return [
             'MelisDragDropZone'         => \MelisFront\View\Helper\MelisDragDropZoneHelper::class,
             'MelisTag'                  => \MelisFront\View\Helper\MelisTagsHelper::class,
             'MelisMenu'                 => \MelisFront\View\Helper\MelisMenuHelper::class,
+            'MelisMenuBasedOnTag'       => \MelisFront\View\Helper\MelisMenuBasedOnTagHelper::class,
             'MelisLink'                 => \MelisFront\View\Helper\MelisLinksHelper::class,
             'MelisPageLangLink'         => \MelisFront\View\Helper\MelisPageLangVersionLinkHelper::class,
             'MelisHomePageLink'         => \MelisFront\View\Helper\MelisHomePageLinkHelper::class,
@@ -265,6 +268,8 @@ return [
             //Mini Template plugins
             'MiniTemplate/Content'                          =>  __DIR__ . '/../view/melis-front/plugins/mini-template-default.phtml',
             'MelisFront/generic-content'                    => __DIR__ . '/../view/melis-front/plugins/generic-content.phtml',
+            'MelisFront/menu-based-on-tag'                  => __DIR__ . '/../view/melis-front/plugins/menu-based-on-tag.phtml', 
+            'MelisFront/menu-based-on-tag-form'             => __DIR__ . '/../view/melis-front/plugins/menu-based-on-tag-form.phtml', 
         ],
         'template_path_stack' => [
             __DIR__ . '/../view',

@@ -221,6 +221,7 @@ class Module
             include __DIR__ . '/../config/plugins/MelisFrontBreadcrumbPlugin.config.php',
             include __DIR__ . '/../config/plugins/MelisFrontMenuPlugin.config.php',
             include __DIR__ . '/../config/plugins/MelisFrontShowListFromFolderPlugin.config.php',
+            include __DIR__ . '/../config/plugins/MelisFrontMenuBasedOnTagPlugin.config.php',
             /**
              * @TODO ZendSearch equivalent for Laminas
              */

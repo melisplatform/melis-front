@@ -1,0 +1,23 @@
+<ul class="topic-list">
+    <li><a class="topic active" href="#gx_instructions">Introduction</a></li>
+    <li><a class="topic" href="#gx_features">Core Features</a></li>
+    <li><a class="topic" href="#gx_structure">File Structure</a></li>
+    <li><a class="topic" href="#gx_starter">Starter Page</a></li>
+    <li><a class="topic" href="#gx_custom">Customization</a></li>
+</ul>
+
+<?php if ($this->breadcrumb) {?>
+<ol class="breadcrumb">
+    <?php foreach ($this->breadcrumb As $key => $val){?>
+    	<?php if ($val['isActive']){?>
+    		<li class="active"><?php echo $val['label']?></li>
+    	<?php }else{?>
+    		<li><a title="<?php echo $val['label']  ?>" href="<?php echo $val['uri']?>"><?php echo $val['label'] ?></a></li>
+    	<?php }?>
+    <?php }?>
+</ol>
+<?php }else{?>
+	<div class="alert alert-warning" role="alert">
+		No result
+	</div>
+<?php }?>
