@@ -84,8 +84,21 @@ class MelisFrontMiniTemplateConfigListener
                     }
                 }
 
+                /**
+                 * get all minitemplates from public root
+                 */
+                $rootMinitemplates = $_SERVER['DOCUMENT_ROOT'] . '/../public/miniTemplatesTinyMce';
+                if (file_exists($rootMinitemplates) && is_dir($rootMinitemplates)) {
+                    $publicSites = $this->getDir($rootMinitemplates);
+                    if (!empty($publicSites)) {
+                        foreach ($publicSites as $rootSite) {                          
+                            $sitePath[$rootSite.'_root'] = $rootMinitemplates . '/' . $rootSite;
+                        }
+                    }
+                }
+
                 //get the config for mini template
-                $miniTplConfig = $this->prepareMiniTemplateConfig($sitePath);
+                $miniTplConfig = $this->prepareMiniTemplateConfig($sitePath, $serviceManager);
                 if(!empty($miniTplConfig)){
                     $config = ArrayUtils::merge($config, $miniTplConfig);
                 }
@@ -107,13 +120,25 @@ class MelisFrontMiniTemplateConfigListener
      * Function to prepare the Mini Template config
      *
      * @param $miniTplPath
+     * @param $serviceManager
      * @return array
      */
-    public function prepareMiniTemplateConfig($miniTplPath)
+    public function prepareMiniTemplateConfig($miniTplPath, $serviceManager)
     {
+        $flaggedTable = $serviceManager->get('MelisEngineTableFlaggedTemplate');      
         $image_ext = ['PNG', 'png', 'JPG', 'jpg', 'JPEG', 'jpeg', 'gif', 'GIF'];
         $pluginsFormat = array();
+
         foreach($miniTplPath as $siteName => $path) {
+            $isRoot = false;
+            //get all flagged templates of the site, these are the templates that were edited and its updated data are now inside root minitemplate directory
+            $allFlaggedTemplates = $flaggedTable->getFlaggedTemplate($siteName)->toArray();
+
+            if (strpos($siteName, '_root') !== false) {
+                $isRoot = true;
+                $siteName = str_replace('_root', '', $siteName);
+            }                 
+
             if (file_exists($path) && is_dir($path)) {
                 $tplImgList = [];
                 //get the plugin config format
@@ -129,7 +154,18 @@ class MelisFrontMiniTemplateConfigListener
                             //if image found, store the image path with the template name as the key
                             if(strpos($tpl, $ext) !== false) {
                                 $fName = pathinfo($tpl, PATHINFO_FILENAME);
-                                $tplImgList[$fName] = '/'.$siteName.'/miniTemplatesTinyMce/'.$fName.'.'.$ext;
+
+                                //exclude flagged template 
+                                if (!$isRoot && in_array($fName, array_column($allFlaggedTemplates, 'mtpft_template_name'))) {
+                                    continue;
+                                }
+
+                                if ($isRoot) {
+                                    $tplImgList[$fName] = '/miniTemplatesTinyMce/' . $siteName . '/' . $fName . '.' . $ext;
+                                } else {
+                                    $tplImgList[$fName] = '/'.$siteName.'/miniTemplatesTinyMce/'.$fName.'.'.$ext;
+                                }      
+
                                 //remove the image
                                 unset($tpls[$key]);
                             }
@@ -145,6 +181,12 @@ class MelisFrontMiniTemplateConfigListener
                         foreach ($tpls as $k => $v) {
                             //remove the file extension from the filename
                             $name = pathinfo($v, PATHINFO_FILENAME);
+
+                            //exclude flagged template
+                            if (!$isRoot && in_array($name, array_column($allFlaggedTemplates, 'mtpft_template_name'))) {
+                                continue;
+                            }
+                            
                             //create a plugin post name
                             $postName = strtolower($name).'_'. strtolower($siteName);
                             //prepare the content of the mini template
