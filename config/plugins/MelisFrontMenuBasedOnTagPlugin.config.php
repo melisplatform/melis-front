@@ -11,8 +11,9 @@ return array(
                 'MelisFrontMenuBasedOnTagPlugin' => array(
                     'front' => array(
                         'template_path' => array('MelisFront/menu-based-on-tag'),
-                        'id' => 'menu',
-                        'pageIdRootMenu' => 1,
+                        'id' => 'tagBasedMenu',
+                        'tagToUse' => '',
+                        'menuTitle' => '',
                         
                         // List the files to be automatically included for the correct display of the plugin
                         // To overide a key, just add it again in your site module
@@ -21,6 +22,7 @@ return array(
                             'css' => array(
                             ),
                             'js' => array(
+                                '/MelisFront/plugins/js/plugin.menuBasedOnTag.js'
                             ),
                         ),
                     ),
@@ -39,6 +41,10 @@ return array(
                             ),
                         ),
                         'js_initialization' => array(),
+                        'tags_list' => [
+                            'h1', 'h2', 'h3',
+                            'h4', 'h5'
+                        ],
                         /*
                          * if set this plugin will belong to a specific marketplace section,
                          * if not it will go directly to ( Others ) section
@@ -83,7 +89,7 @@ return array(
                                     array(
                                         'spec' => array(
                                             'name' => 'tagToUse',
-                                            'type' => 'Select',
+                                            'type' => 'MelisEngineMenuBasedOnTagTagSelect',
                                             'options' => array(
                                                 'label' => 'tr_melis_Plugins_tag_to_use',
                                                 'tooltip' => 'tr_melis_Plugins_tag_to_use tooltip',
@@ -93,7 +99,7 @@ return array(
                                             'attributes' => array(
                                                 'id' => 'id_page_tpl_id',
                                                 'class' => 'form-control',
-                                                'required' => 'required',
+//                                                'required' => 'required',
                                             ),
                                         ),
                                     ),
@@ -110,24 +116,7 @@ return array(
                                                 'required' => 'required',
                                             ),
                                         ),
-                                    ),
-                                    array(
-                                        'spec' => array(
-                                            'name' => 'pageIdRootMenu',
-                                            'type' => 'MelisText',
-                                            'options' => array(
-                                                'label' => 'tr_front_plugin_menu_root_page',
-                                                'tooltip' => 'tr_front_plugin_menu_root_page tooltip',
-                                            ),
-                                            'attributes' => array(
-                                                'id' => 'pageIdRootMenu',
-                                                'class' => 'melis-input-group-button',
-                                                'data-button-icon' => 'fa fa-sitemap',
-                                                'data-button-id' => 'meliscms-site-selector',
-                                                'required' => 'required',
-                                            ),
-                                        ),
-                                    ),
+                                    )
                                 ),
                                 'input_filter' => array(
                                     'template_path' => array(
@@ -148,58 +137,24 @@ return array(
                                     ),
                                     'tagToUse' => array(
                                         'name'     => 'tagToUse',
-                                        'required' => true,
-                                        'validators' => array(
-                                            array(
-                                                'name' => 'NotEmpty',
-                                                'options' => array(
-                                                    'messages' => array(
-                                                        \Laminas\Validator\NotEmpty::IS_EMPTY => 'tr_front_tagToUse_empty',
-                                                    ),
-                                                ),
-                                            ),
-                                        ),
-                                        'filters'  => array(
-                                        ),
+                                        'required' => false,
+//                                        'validators' => array(
+//                                            array(
+//                                                'name' => 'NotEmpty',
+//                                                'options' => array(
+//                                                    'messages' => array(
+//                                                        \Laminas\Validator\NotEmpty::IS_EMPTY => 'tr_front_tagToUse_empty',
+//                                                    ),
+//                                                ),
+//                                            ),
+//                                        ),
+//                                        'filters'  => array(
+//                                        ),
                                     ),
                                     'menuTitle' => array(
                                         'name'     => 'menuTitle',
                                         'required' => true,
                                         'validators' => array(
-                                            array(
-                                                'name'    => 'Digits',
-                                                'options' => array(
-                                                    'messages' => array(
-                                                        \Laminas\Validator\Digits::NOT_DIGITS => 'tr_front_common_input_not_digit',
-                                                        \Laminas\Validator\Digits::STRING_EMPTY => '',
-                                                    ),
-                                                ),
-                                            ),
-                                            array(
-                                                'name' => 'NotEmpty',
-                                                'options' => array(
-                                                    'messages' => array(
-                                                        \Laminas\Validator\NotEmpty::IS_EMPTY => 'tr_front_common_input_empty',
-                                                    ),
-                                                ),
-                                            ),
-                                        ),
-                                        'filters'  => array(
-                                        ),
-                                    ),
-                                    'pageIdRootMenu' => array(
-                                        'name'     => 'pageIdRootMenu',
-                                        'required' => true,
-                                        'validators' => array(
-                                            array(
-                                                'name'    => 'Digits',
-                                                'options' => array(
-                                                    'messages' => array(
-                                                        \Laminas\Validator\Digits::NOT_DIGITS => 'tr_front_common_input_not_digit',
-                                                        \Laminas\Validator\Digits::STRING_EMPTY => '',
-                                                    ),
-                                                ),
-                                            ),
                                             array(
                                                 'name' => 'NotEmpty',
                                                 'options' => array(

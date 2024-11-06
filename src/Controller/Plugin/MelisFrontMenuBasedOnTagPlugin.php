@@ -67,10 +67,10 @@ class MelisFrontMenuBasedOnTagPlugin extends MelisTemplatingPlugin
         $pageId = !empty($data['pageIdRootMenu']) ? $data['pageIdRootMenu'] : 1;
 
         // Retrieve cache version if front mode to avoid multiple calls
-		$cacheKey = 'MelisFrontMenuPlugin_'.$data['pageId'].'_'.$this->cleanString($data['id']). '_' .$this->cleanString($data['template_path']);
-		$cacheConfig = 'melisfront_pages_file_cache';
-		$melisEngineCacheSystem = $this->getServiceManager()->get('MelisEngineCacheSystem');
-        $results = $melisEngineCacheSystem->getCacheByKey($cacheKey, $cacheConfig);
+//		$cacheKey = 'MelisFrontMenuPlugin_'.$data['pageId'].'_'.$this->cleanString($data['id']). '_' .$this->cleanString($data['template_path']);
+//		$cacheConfig = 'melisfront_pages_file_cache';
+//		$melisEngineCacheSystem = $this->getServiceManager()->get('MelisEngineCacheSystem');
+//        $results = $melisEngineCacheSystem->getCacheByKey($cacheKey, $cacheConfig);
 
         // var_dump($data);
         // if (!is_null($results))
@@ -81,12 +81,18 @@ class MelisFrontMenuBasedOnTagPlugin extends MelisTemplatingPlugin
 
         // $siteMenu = $site->getPageAndSubPages($pageId);
         // $siteMenu = $this->checkValidPagesRecursive($siteMenu);
-        
+
+//        $melisEngineTree = $this->getServiceManager()->get('MelisEnginePage');
+//        $test = $melisEngineTree->getPageById($data['pageId']);
+//        print_r($test);exit;
+
         // // Create an array with the variables that will be available in the view
         $viewVariables = array(
-            'tagToUse' => $data['h1'],
+            'tagToUse' => 'h4',//$data['h1'],
             'menuTitle' => $data['menuTitle']
         );
+
+//        print_r($data);exit;
 
         // echo "<pre>";
         // var_dump($data);
@@ -94,7 +100,7 @@ class MelisFrontMenuBasedOnTagPlugin extends MelisTemplatingPlugin
         // die();
 
         // Save cache key
-		$melisEngineCacheSystem->setCacheByKey($cacheKey, $cacheConfig, $viewVariables);
+//		$melisEngineCacheSystem->setCacheByKey($cacheKey, $cacheConfig, $viewVariables);
 
         // return the variable array and let the view be created
         return $viewVariables;
@@ -218,8 +224,11 @@ class MelisFrontMenuBasedOnTagPlugin extends MelisTemplatingPlugin
             if (!empty($xml->template_path))
                 $configValues['template_path'] = (string)$xml->template_path;
 
-            if (!empty($xml->pageIdRootMenu))
-                $configValues['pageIdRootMenu'] = (string)$xml->pageIdRootMenu;
+            if (!empty($xml->tagToUse))
+                $configValues['tagToUse'] = (string)$xml->tagToUse;
+
+            if (!empty($xml->menuTitle))
+                $configValues['menuTitle'] = (string)$xml->menuTitle;
         }
 
         return $configValues;
@@ -237,8 +246,11 @@ class MelisFrontMenuBasedOnTagPlugin extends MelisTemplatingPlugin
         if (!empty($parameters['template_path']))
             $xmlValueFormatted .= "\t\t" . '<template_path><![CDATA[' . $parameters['template_path'] . ']]></template_path>';
 
-        if(!empty($parameters['pageIdRootMenu']))
-            $xmlValueFormatted .= "\t\t" . '<pageIdRootMenu><![CDATA[' . $parameters['pageIdRootMenu'] . ']]></pageIdRootMenu>';
+        if(!empty($parameters['tagToUse']))
+            $xmlValueFormatted .= "\t\t" . '<tagToUse><![CDATA[' . $parameters['tagToUse'] . ']]></tagToUse>';
+
+        if(!empty($parameters['menuTitle']))
+            $xmlValueFormatted .= "\t\t" . '<menuTitle><![CDATA[' . $parameters['menuTitle'] . ']]></menuTitle>';
 
         // Something has been saved, let's generate an XML for DB
         $xmlValueFormatted = "\t" . '<' . $this->pluginXmlDbKey . ' id="' . $parameters['melisPluginId'] . '">' .
