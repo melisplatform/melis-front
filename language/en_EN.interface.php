@@ -116,4 +116,9 @@ return [
 
     'tr_melis_front_generic_plugin_name' => 'Generic Content Plugin',
     'tr_melis_front_generic_plugin_description' => 'Generic Content Plugin Description',
+
+    'tr_MelisFrontMenuBasedOnTagPlugin_Name' => 'Menu based on tag',
+    'tr_MelisFrontMenuBasedOnTagPlugin_Description' => 'Menu based on tag',
+    'tr_melis_Plugins_tag_to_use' => 'Tag to use',
+    'tr_front_plugin_menu_title' => 'Title',
 ];

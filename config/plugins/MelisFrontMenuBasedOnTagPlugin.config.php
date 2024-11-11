@@ -14,10 +14,7 @@ return array(
                         'id' => 'tagBasedMenu',
                         'tagToUse' => '',
                         'menuTitle' => '',
-                        
-                        // List the files to be automatically included for the correct display of the plugin
-                        // To overide a key, just add it again in your site module
-                        // To delete an entry, use the keyword "disable" instead of the file path for the same key
+
                         'files' => array(
                             'css' => array(
                             ),
@@ -32,7 +29,7 @@ return array(
                             'title' => 'tr_MelisFrontSubcategoryPageBasics_Title'
                         ),
                         'name' => 'tr_MelisFrontMenuBasedOnTagPlugin_Name',
-                        'thumbnail' => '/MelisFront/plugins/images/MelisFrontMenuBasedOnTagPlugin_thumb.jpg',
+                        'thumbnail' => '/MelisFront/plugins/images/MelisFrontMenuBasedOnTagPlugin_thumb.png',
                         'description' => 'tr_MelisFrontMenuBasedOnTagPlugin_Description',
                         'files' => array(
                             'css' => array(
@@ -99,7 +96,7 @@ return array(
                                             'attributes' => array(
                                                 'id' => 'id_page_tpl_id',
                                                 'class' => 'form-control',
-//                                                'required' => 'required',
+                                                'required' => 'required',
                                             ),
                                         ),
                                     ),
@@ -137,19 +134,19 @@ return array(
                                     ),
                                     'tagToUse' => array(
                                         'name'     => 'tagToUse',
-                                        'required' => false,
-//                                        'validators' => array(
-//                                            array(
-//                                                'name' => 'NotEmpty',
-//                                                'options' => array(
-//                                                    'messages' => array(
-//                                                        \Laminas\Validator\NotEmpty::IS_EMPTY => 'tr_front_tagToUse_empty',
-//                                                    ),
-//                                                ),
-//                                            ),
-//                                        ),
-//                                        'filters'  => array(
-//                                        ),
+                                        'required' => true,
+                                        'validators' => array(
+                                            array(
+                                                'name' => 'NotEmpty',
+                                                'options' => array(
+                                                    'messages' => array(
+                                                        \Laminas\Validator\NotEmpty::IS_EMPTY => 'tr_front_tagToUse_empty',
+                                                    ),
+                                                ),
+                                            ),
+                                        ),
+                                        'filters'  => array(
+                                        ),
                                     ),
                                     'menuTitle' => array(
                                         'name'     => 'menuTitle',
