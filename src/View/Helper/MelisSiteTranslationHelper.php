@@ -45,7 +45,20 @@ class MelisSiteTranslationHelper extends AbstractHelper
             $cacheData = $siteTransSrv->getCachedTranslations($siteId);
         }
         $str = $cacheData[$langId][$key] ?? $key;
-        
+
+
+        if(!empty($this->getView()->renderMode)){
+            if($this->getView()->renderMode != 'front'){
+                $str = '<span title="'.$key.'">'.$str.'</span>';
+            }
+        }else{//try to check uri if we are in BO
+            $uri = $_SERVER['REQUEST_URI'];
+            $uri = explode('/', $uri);
+            if(in_array('renderMode', $uri)){
+                $str = '<span title="'.$key.'">'.$str.'</span>';
+            }
+        }
+
         return $str;
     }
 }
