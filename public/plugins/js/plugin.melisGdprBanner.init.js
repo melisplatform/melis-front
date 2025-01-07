@@ -90,7 +90,7 @@ function melisGdprBanner_init(pluginId) {
     }
 }
 
-$(document).ready(function () {
+$(function () {
     var $body = $("body");
 
     /** Agree to the site's cookie policy */

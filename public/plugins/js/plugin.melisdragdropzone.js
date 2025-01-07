@@ -2,14 +2,12 @@
  * JS for MelisDragDropZone
  */
 
- var melisDragDropZone = (function($, window) {
+/* var melisDragDropZone = (function($, window) {
+	var $body = $("body");
 
- 	var $body = $("body");
-
- })(jQuery, window);
+})(jQuery, window); */
  
-function saveSessionDragDropZone()
-{
+function saveSessionDragDropZone() {
 	var data = {
         	plugin: 'MelisFrontDragDropZonePlugin',
         	tag: 'melisDragDropZone',
@@ -29,8 +27,6 @@ function saveSessionDragDropZone()
     		]
 	
         };
-		
    savePluginUpdate(data);
-
 }
 
