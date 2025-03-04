@@ -83,7 +83,7 @@ function melisGdprBanner_init(pluginId) {
             bannerCookie = "true";
         }
 
-        if (isBackOffice === true || bannerCookie === "true") {
+        if (isBackOffice === false || bannerCookie === "true") {
             /** Show banner if bannerCookie is true || during back office page edition */
             banner.show();
         }
