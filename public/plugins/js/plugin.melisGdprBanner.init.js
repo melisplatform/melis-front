@@ -76,17 +76,17 @@ function melisGdprBanner_init(pluginId) {
         var banner = $("#" + pluginId);
         var isBackOffice = banner.data("isBo");
 
-        var bannerCookie = MelisGdprBanner.getCookie(MelisGdprBanner.cookieName);
-        if (isBackOffice === false && bannerCookie === undefined) {
-            /** User's first visit: Declare banner cookie for this site */
-            MelisGdprBanner.setCookie(MelisGdprBanner.cookieName, "true");
-            bannerCookie = "true";
-        }
+        if (isBackOffice) return;
 
-        if (isBackOffice === false || bannerCookie === "true") {
-            /** Show banner if bannerCookie is true || during back office page edition */
-            banner.show();
-        }
+		var bannerCookie = MelisGdprBanner.getCookie(MelisGdprBanner.cookieName);
+		if (bannerCookie === undefined) {
+			/** User's first visit: Declare banner cookie for this site */
+			MelisGdprBanner.setCookie(MelisGdprBanner.cookieName, "true", {
+				path: "/",
+			});
+
+			banner.show();
+		}
     }
 }
 
