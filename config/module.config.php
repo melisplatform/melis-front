@@ -246,6 +246,7 @@ return [
             'melis-front/index/index'                       => __DIR__ . '/../view/melis-front/index/index.phtml',
             'MelisFront/dragdropzone'                       => __DIR__ . '/../view/melis-front/plugins/dragdropzone.phtml',
             'MelisFront/dragdropzone/meliscontainer'        => __DIR__ . '/../view/melis-front/plugins/dragdropzone-melis-container.phtml',
+            'MelisFront/dragdropzone/meliscontainer-buttons'=> __DIR__ . '/../view/melis-front/plugins/dragdropzone-melis-container-buttons.phtml',
             'MelisFront/tag'                                => __DIR__ . '/../view/melis-front/plugins/tag.phtml',
             'MelisFront/tag/meliscontainer'                 => __DIR__ . '/../view/melis-front/plugins/tag-melis-container.phtml',
             'MelisFront/menu'                               => __DIR__ . '/../view/melis-front/plugins/menu.phtml',

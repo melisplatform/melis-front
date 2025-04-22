@@ -157,6 +157,7 @@ class MelisFrontDragDropZonePlugin extends MelisTemplatingPlugin
         $viewModel->dragDropLabel = $translator->translate('tr_front_drag_drop_zone_label');
 
         $pageId = (!empty($this->pluginFrontConfig['pageId'])) ? $this->pluginFrontConfig['pageId'] : 0;
+        $columns = (!empty($this->pluginFrontConfig['columns'])) ? $this->pluginFrontConfig['columns'] : 1;
 
         $siteModule = getenv('MELIS_MODULE');
         $melisPage = $this->getServiceManager()->get('MelisEnginePage');
@@ -172,6 +173,7 @@ class MelisFrontDragDropZonePlugin extends MelisTemplatingPlugin
         }
 
         $viewModel->siteModule = $siteModule;
+        $viewModel->columns = $columns;
 
         return $viewModel;
     }
@@ -206,12 +208,28 @@ class MelisFrontDragDropZonePlugin extends MelisTemplatingPlugin
     public function savePluginConfigToXml($parameters)
     {
         $xmlValueFormatted = '';
+//
+//        if (!empty($parameters['melisDragDropZoneListPlugin']) && count($parameters['melisDragDropZoneListPlugin']) > 0)
+//        {
+//            foreach ($parameters['melisDragDropZoneListPlugin'] as $plugin)
+//                $xmlValueFormatted .= "\t\t" . '<plugin module="' . $plugin['melisModule'] . '" name="' .
+//                    $plugin['melisPluginName'] . '" id="' . $plugin['melisPluginId'] . '"></plugin>' . "\n";
+//        }
+//
 
-        if (!empty($parameters['melisDragDropZoneListPlugin']) && count($parameters['melisDragDropZoneListPlugin']) > 0)
-        {
-            foreach ($parameters['melisDragDropZoneListPlugin'] as $plugin)
-                $xmlValueFormatted .= "\t\t" . '<plugin module="' . $plugin['melisModule'] . '" name="' .
-                    $plugin['melisPluginName'] . '" id="' . $plugin['melisPluginId'] . '"></plugin>' . "\n";
+
+        if(!empty($parameters['children'])){
+            foreach($parameters['children'] as $key => $val){
+                $xmlValueFormatted .= "\t\t" . '<'.$this->pluginXmlDbKey. ' id="' . $val['melisPluginId'] . '">';
+
+                if(!empty($val['melisDragDropZoneListPlugin'])){
+                    foreach($val['melisDragDropZoneListPlugin'] as $plugin) {
+                        $xmlValueFormatted .= "\t\t" . '<plugin module="' . $plugin['melisModule'] . '" name="' .
+                            $plugin['melisPluginName'] . '" id="' . $plugin['melisPluginId'] . '"></plugin>' . "\n";
+                    }
+                }
+                $xmlValueFormatted .= '</'.$this->pluginXmlDbKey.'>' . "\n";
+            }
         }
 
         // Something has been saved, let's generate an XML for DB

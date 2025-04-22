@@ -14,6 +14,7 @@ return array(
                         'id' => 'dragdropzone',
                         'pageId' => 1,
                         'plugins' => array(),
+                        'columns' => 2,
                         
                         // List the files to be automatically included for the correct display of the plugin
                         // To overide a key, just add it again in your site module
