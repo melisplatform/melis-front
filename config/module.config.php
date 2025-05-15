@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Melis Technology (http://www.melistechnology.com)
  *
@@ -142,7 +143,7 @@ return [
                         'controller' => 'MelisFront\Controller\MelisPluginRenderer',
                         'action'     => 'getPlugin',
                         'renderMode'     => 'melis',
-                        'preview'		=> false,
+                        'preview'        => false,
                     ],
                 ],
             ],
@@ -208,7 +209,7 @@ return [
             /**
              * @TODO ZendSearch equivalent for Laminas
              */
-//            'MelisFrontSearchResultsPlugin'         => \MelisFront\Controller\Plugin\MelisFrontSearchResultsPlugin::class,
+            //            'MelisFrontSearchResultsPlugin'         => \MelisFront\Controller\Plugin\MelisFrontSearchResultsPlugin::class,
             'MelisFrontBlockSectionPlugin'          => \MelisFront\Controller\Plugin\MelisFrontBlockSectionPlugin::class,
             'MiniTemplatePlugin'                    => \MelisFront\Controller\Plugin\MiniTemplatePlugin::class,
             'MelisFrontGdprBannerPlugin'            => \MelisFront\Controller\Plugin\MelisFrontGdprBannerPlugin::class,
@@ -246,7 +247,7 @@ return [
             'melis-front/index/index'                       => __DIR__ . '/../view/melis-front/index/index.phtml',
             'MelisFront/dragdropzone'                       => __DIR__ . '/../view/melis-front/plugins/dragdropzone.phtml',
             'MelisFront/dragdropzone/meliscontainer'        => __DIR__ . '/../view/melis-front/plugins/dragdropzone-melis-container.phtml',
-            'MelisFront/dragdropzone/meliscontainer-buttons'=> __DIR__ . '/../view/melis-front/plugins/dragdropzone-melis-container-buttons.phtml',
+            'MelisFront/dragdropzone/meliscontainer-buttons' => __DIR__ . '/../view/melis-front/plugins/dragdropzone-melis-container-buttons.phtml',
             'MelisFront/tag'                                => __DIR__ . '/../view/melis-front/plugins/tag.phtml',
             'MelisFront/tag/meliscontainer'                 => __DIR__ . '/../view/melis-front/plugins/tag-melis-container.phtml',
             'MelisFront/menu'                               => __DIR__ . '/../view/melis-front/plugins/menu.phtml',
@@ -266,6 +267,9 @@ return [
             //Mini Template plugins
             'MiniTemplate/Content'                          =>  __DIR__ . '/../view/melis-front/plugins/mini-template-default.phtml',
             'MelisFront/generic-content'                    => __DIR__ . '/../view/melis-front/plugins/generic-content.phtml',
+            // Drag in drop layouts
+            'MelisFront/dnd-default-tpl'                    => __DIR__ . '/../view/melis-front/plugins/dnd-default-tpl.phtml',
+            'MelisFront/dnd-2-cols-tpl'                     => __DIR__ . '/../view/melis-front/plugins/dnd-2-cols-tpl.phtml',
         ],
         'template_path_stack' => [
             __DIR__ . '/../view',
@@ -306,9 +310,9 @@ return [
                 // 'my_cache_key' => 60,
             ]
         ],
-        'melisfront_memory_cache' => [ 
+        'melisfront_memory_cache' => [
             'active' => true, // activate or deactivate Melis Cache for this conf
-            'adapter' =>'Memory',
+            'adapter' => 'Memory',
             'options' => ['ttl' => 0, 'namespace' => 'melisfront'],
             'plugins' => [
                 [

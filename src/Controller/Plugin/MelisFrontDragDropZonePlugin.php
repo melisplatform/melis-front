@@ -70,18 +70,29 @@ class MelisFrontDragDropZonePlugin extends MelisTemplatingPlugin
         $plugins     = array();
         $containerId = null;
 
+        $parentPluginId = $this->pluginFrontConfig['id'];
 
+        $layout = $this->pluginFrontConfig['layout'];
 
-        // dump($this->pluginFrontConfig['id']);
-        // if (FALSE)
+        $dndCtr = 1;
+        $hasDnd = false;
         foreach ($this->pluginFrontConfig['plugins'] as $plugin) {
 
+            $pluginId = $plugin['pluginId'];
+            if ($plugin['pluginName'] == 'MelisFrontDragDropZonePlugin') {
+                // adding counter for drag and drop plugins dynamically
+                // by just adding "_" + counter concatenated to the parent plugin id
+                $pluginId = $parentPluginId . '_' . $dndCtr;
+                // flag this result as a drag and drop plugin
+                $hasDnd = true;
+            }
+
             $tmpHtml = null;
-            $datas = array(
+            $data = array(
                 'action' => 'getPlugin',
                 'module' => $plugin['pluginModule'],
                 'pluginName' => $plugin['pluginName'],
-                'pluginId' => $plugin['pluginId'],
+                'pluginId' => $pluginId,
                 'pageId' => $this->pluginFrontConfig['pageId'],
                 'fromDragDropZone' => true,
             );
@@ -89,21 +100,19 @@ class MelisFrontDragDropZonePlugin extends MelisTemplatingPlugin
             try {
                 $forwardPlugin = $this->getController()->forward();
 
-                $jsonResults = $forwardPlugin->dispatch('MelisFront\\Controller\\MelisPluginRenderer', $datas);
+                $jsonResults = $forwardPlugin->dispatch('MelisFront\\Controller\\MelisPluginRenderer', $data);
 
 
                 if (!empty($jsonResults)) {
                     $variables = $jsonResults->getVariables();
-                    $containerId = isset($variables['datas']['dom']['pluginContainerId']) ?
-                        $variables['datas']['dom']['pluginContainerId'] : count($plugins);
+                    // $containerId = isset($variables['datas']['dom']['pluginContainerId']) ?
+                    //     $variables['datas']['dom']['pluginContainerId'] : count($plugins);
 
                     if (!empty($variables['success'])) {
-                        //$html .= $variables['datas']['html'];
                         $tmpHtml = $variables['datas']['html'];
                     } else {
                         // problem with the plugins, we show the error only BO side
                         if ($this->renderMode == 'melis') {
-                            //$html .= $variables['errors'] . ' : ' . $plugin['pluginModule'] . ' / ' . $plugin['pluginName'];
                             $tmpHtml = $variables['errors'] . ' : ' . $plugin['pluginModule'] . ' / ' . $plugin['pluginName'];
                         }
                     }
@@ -112,18 +121,35 @@ class MelisFrontDragDropZonePlugin extends MelisTemplatingPlugin
                 return array('pluginId' => $this->pluginFrontConfig['id']);
             }
 
-            $plugins[$containerId][] = $tmpHtml;
+            $plugins[$dndCtr++][] = $tmpHtml;
         }
 
-
-        // add container to dragdropzone
+        if ($hasDnd) {
+            // dragndrop layout
+            $dndLayoutView = new ViewModel();
+            $dndLayoutView->setTemplate(trim($layout));
+            $renderer = $this->getServiceManager()->get('ViewRenderer');
+            // layout rendered / html
+            $dndLayout = $renderer->render($dndLayoutView);
+        }
 
         $newHtml = !$this->isInBackOffice() ? '<div class="clearfix">' : '';
-        foreach ($plugins as $containerId => $contents) {
-            foreach ($contents as $idx => $content) {
-                $newHtml .= "\t" . $content;
+        foreach ($plugins as $id => $contents) {
+
+            foreach ($contents as $content) {
+
+                if ($hasDnd) {
+                    if (str_contains($dndLayout, '_' . $id . '_')) {
+                        // adding content to layout
+                        $dndLayout = str_replace('_' . $id . '_', $content, $dndLayout);
+                    }
+                } else
+                    $newHtml .= "\t" . $content;
             }
         }
+
+        // apply content with layout to html result
+        if ($hasDnd) $newHtml = $dndLayout;
 
         $newHtml .= !$this->isInBackOffice() ? '</div>' : '';
 
@@ -190,10 +216,20 @@ class MelisFrontDragDropZonePlugin extends MelisTemplatingPlugin
 
         $xml = simplexml_load_string($this->pluginXmlDbValue);
 
+        $layout = 'MelisFront/dnd-default-tpl';
+
         if ($xml) {
             $cpt = 0;
 
+            // plugin layout
+            if (!empty($xml->layout))
+                $layout = (string)$xml->layout;
+
             foreach ($xml as $k => $plugin) {
+
+                // skipping layout attr from plugins config
+                if ($k == 'layout')
+                    continue;
 
                 $configValues[$cpt] = [];
 
@@ -215,7 +251,10 @@ class MelisFrontDragDropZonePlugin extends MelisTemplatingPlugin
             }
         }
 
-        return array("plugins" => $configValues);
+        return [
+            "layout" => $layout,
+            "plugins" => $configValues
+        ];
     }
 
     public function savePluginConfigToXml($parameters)
@@ -230,31 +269,31 @@ class MelisFrontDragDropZonePlugin extends MelisTemplatingPlugin
         //        }
         //
 
-//        $this->processXMlChildren($parameters, $xmlValueFormatted);
-//print_r($parameters);exit;
-//        if (!empty($parameters['children'])) {
-//            foreach ($parameters['children'] as $key => $val) {
-//                $xmlValueFormatted .= "\t\t" . '<' . $this->pluginXmlDbKey . ' id="' . $val['melisPluginId'] . '">';
-//
-//                if (!empty($val['melisDragDropZoneListPlugin'])) {
-//                    foreach ($val['melisDragDropZoneListPlugin'] as $plugin) {
-//                        $xmlValueFormatted .= "\t\t" . '<plugin module="' . $plugin['melisModule'] . '" name="' .
-//                            $plugin['melisPluginName'] . '" id="' . $plugin['melisPluginId'] . '"></plugin>' . "\n";
-//                    }
-//                }
-//                $xmlValueFormatted .= '</' . $this->pluginXmlDbKey . '>' . "\n";
-//            }
-//        }
+        //        $this->processXMlChildren($parameters, $xmlValueFormatted);
+        //print_r($parameters);exit;
+        //        if (!empty($parameters['children'])) {
+        //            foreach ($parameters['children'] as $key => $val) {
+        //                $xmlValueFormatted .= "\t\t" . '<' . $this->pluginXmlDbKey . ' id="' . $val['melisPluginId'] . '">';
+        //
+        //                if (!empty($val['melisDragDropZoneListPlugin'])) {
+        //                    foreach ($val['melisDragDropZoneListPlugin'] as $plugin) {
+        //                        $xmlValueFormatted .= "\t\t" . '<plugin module="' . $plugin['melisModule'] . '" name="' .
+        //                            $plugin['melisPluginName'] . '" id="' . $plugin['melisPluginId'] . '"></plugin>' . "\n";
+        //                    }
+        //                }
+        //                $xmlValueFormatted .= '</' . $this->pluginXmlDbKey . '>' . "\n";
+        //            }
+        //        }
 
         // Something has been saved, let's generate an XML for DB
-//        $xmlValueFormatted = "\t" . '<' . $this->pluginXmlDbKey . ' id="' . $parameters['melisPluginId'] . '">' .
-//            $xmlValueFormatted .
-//            "\t" . '</' . $this->pluginXmlDbKey . '>' . "\n";
-//
-//        dump($xmlValueFormatted);
+        //        $xmlValueFormatted = "\t" . '<' . $this->pluginXmlDbKey . ' id="' . $parameters['melisPluginId'] . '">' .
+        //            $xmlValueFormatted .
+        //            "\t" . '</' . $this->pluginXmlDbKey . '>' . "\n";
+        //
+        //        dump($xmlValueFormatted);
 
-//        $xml = $this->buildXmlFromArray($parameters, $xml = null);
-//        dd($xml->asXML());
+        //        $xml = $this->buildXmlFromArray($parameters, $xml = null);
+        //        dd($xml->asXML());
 
         // Output XML without the version line
         $xml = $this->buildXmlFromArray($parameters);
@@ -270,7 +309,8 @@ class MelisFrontDragDropZonePlugin extends MelisTemplatingPlugin
      * @param null $xml
      * @return null|\SimpleXMLElement
      */
-    function buildXmlFromArray($data, $xml = null) {
+    function buildXmlFromArray($data, $xml = null)
+    {
         if ($xml === null) {
             $xml = new \SimpleXMLElement('<melisDragDropZone/>');
             $xml->addAttribute('id', $data['melisPluginId']);

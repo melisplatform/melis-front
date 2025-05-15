@@ -14,16 +14,14 @@ return array(
                         'id' => 'dragdropzone',
                         'pageId' => 1,
                         'plugins' => array(),
-                        'columns' => 2,
-                        
+                        'layout' => 'MelisFront/dnd-default-tpl',
+
                         // List the files to be automatically included for the correct display of the plugin
                         // To overide a key, just add it again in your site module
                         // To delete an entry, use the keyword "disable" instead of the file path for the same key
                         'files' => array(
-                            'css' => array(
-                            ),
-                            'js' => array(
-                            ),
+                            'css' => array(),
+                            'js' => array(),
                         ),
                     ),
                     'melis' => array(
@@ -39,7 +37,7 @@ return array(
                         'js_initialization' => array(),
                     ),
                 ),
-             ),
+            ),
         ),
-     ),
+    ),
 );
