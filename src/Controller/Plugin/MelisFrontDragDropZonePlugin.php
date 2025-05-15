@@ -254,27 +254,81 @@ class MelisFrontDragDropZonePlugin extends MelisTemplatingPlugin
         //        }
         //
 
+//        $this->processXMlChildren($parameters, $xmlValueFormatted);
+//print_r($parameters);exit;
+//        if (!empty($parameters['children'])) {
+//            foreach ($parameters['children'] as $key => $val) {
+//                $xmlValueFormatted .= "\t\t" . '<' . $this->pluginXmlDbKey . ' id="' . $val['melisPluginId'] . '">';
+//
+//                if (!empty($val['melisDragDropZoneListPlugin'])) {
+//                    foreach ($val['melisDragDropZoneListPlugin'] as $plugin) {
+//                        $xmlValueFormatted .= "\t\t" . '<plugin module="' . $plugin['melisModule'] . '" name="' .
+//                            $plugin['melisPluginName'] . '" id="' . $plugin['melisPluginId'] . '"></plugin>' . "\n";
+//                    }
+//                }
+//                $xmlValueFormatted .= '</' . $this->pluginXmlDbKey . '>' . "\n";
+//            }
+//        }
 
-        if (!empty($parameters['children'])) {
-            foreach ($parameters['children'] as $key => $val) {
-                $xmlValueFormatted .= "\t\t" . '<' . $this->pluginXmlDbKey . ' id="' . $val['melisPluginId'] . '">';
+        // Something has been saved, let's generate an XML for DB
+//        $xmlValueFormatted = "\t" . '<' . $this->pluginXmlDbKey . ' id="' . $parameters['melisPluginId'] . '">' .
+//            $xmlValueFormatted .
+//            "\t" . '</' . $this->pluginXmlDbKey . '>' . "\n";
+//
+//        dump($xmlValueFormatted);
 
-                if (!empty($val['melisDragDropZoneListPlugin'])) {
-                    foreach ($val['melisDragDropZoneListPlugin'] as $plugin) {
-                        $xmlValueFormatted .= "\t\t" . '<plugin module="' . $plugin['melisModule'] . '" name="' .
-                            $plugin['melisPluginName'] . '" id="' . $plugin['melisPluginId'] . '"></plugin>' . "\n";
-                    }
-                }
-                $xmlValueFormatted .= '</' . $this->pluginXmlDbKey . '>' . "\n";
+//        $xml = $this->buildXmlFromArray($parameters, $xml = null);
+//        dd($xml->asXML());
+
+        // Output XML without the version line
+        $xml = $this->buildXmlFromArray($parameters);
+        $dom = dom_import_simplexml($xml)->ownerDocument;
+        $dom->formatOutput = true;
+        $xmlValueFormatted = $dom->saveXML($dom->documentElement);
+
+        return $xmlValueFormatted;
+    }
+
+    /**
+     * @param $data
+     * @param null $xml
+     * @return null|\SimpleXMLElement
+     */
+    function buildXmlFromArray($data, $xml = null) {
+        if ($xml === null) {
+            $xml = new \SimpleXMLElement('<melisDragDropZone/>');
+            $xml->addAttribute('id', $data['melisPluginId']);
+            $xml->addAttribute('plugin_container_id', '');
+            $xml->addAttribute('width_desktop', '100');
+            $xml->addAttribute('width_tablet', '100');
+            $xml->addAttribute('width_mobile', '100');
+        }
+
+        if (!empty($data['children'])) {
+            foreach ($data['children'] as $child) {
+                $childNode = $xml->addChild('melisDragDropZone');
+                $childNode->addAttribute('id', $child['melisPluginId']);
+                $childNode->addAttribute('plugin_container_id', '');
+
+                // Optional width attributes if needed
+                $childNode->addAttribute('width_desktop', '100');
+                $childNode->addAttribute('width_tablet', '100');
+                $childNode->addAttribute('width_mobile', '100');
+
+                $this->buildXmlFromArray($child, $childNode);
             }
         }
 
-        // Something has been saved, let's generate an XML for DB
-        $xmlValueFormatted = "\t" . '<' . $this->pluginXmlDbKey . ' id="' . $parameters['melisPluginId'] . '">' .
-            $xmlValueFormatted .
-            "\t" . '</' . $this->pluginXmlDbKey . '>' . "\n";
+        if (!empty($data['melisDragDropZoneListPlugin'])) {
+            foreach ($data['melisDragDropZoneListPlugin'] as $plugin) {
+                $pluginNode = $xml->addChild('plugin');
+                $pluginNode->addAttribute('module', $plugin['melisModule']);
+                $pluginNode->addAttribute('name', $plugin['melisPluginName']);
+                $pluginNode->addAttribute('id', $plugin['melisPluginId']);
+            }
+        }
 
-        return $xmlValueFormatted;
+        return $xml;
     }
 
     private function isInBackOffice()
