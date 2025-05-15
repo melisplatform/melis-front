@@ -296,6 +296,8 @@ class MelisFrontDragDropZonePlugin extends MelisTemplatingPlugin
         //        dd($xml->asXML());
 
         // Output XML without the version line
+//        print_r($parameters);
+
         $xml = $this->buildXmlFromArray($parameters);
         $dom = dom_import_simplexml($xml)->ownerDocument;
         $dom->formatOutput = true;
@@ -309,42 +311,43 @@ class MelisFrontDragDropZonePlugin extends MelisTemplatingPlugin
      * @param null $xml
      * @return null|\SimpleXMLElement
      */
-    function buildXmlFromArray($data, $xml = null)
+    function buildXmlFromArray($data, $parent = null)
     {
-        if ($xml === null) {
-            $xml = new \SimpleXMLElement('<melisDragDropZone/>');
-            $xml->addAttribute('id', $data['melisPluginId']);
-            $xml->addAttribute('plugin_container_id', '');
-            $xml->addAttribute('width_desktop', '100');
-            $xml->addAttribute('width_tablet', '100');
-            $xml->addAttribute('width_mobile', '100');
+        if (!$parent) {
+            $parent = new \SimpleXMLElement('<'.$this->pluginXmlDbKey.'/>');
+            $parent->addAttribute('id', $data['melisPluginId']);
+            $parent->addAttribute('plugin_container_id', '');
+            $parent->addAttribute('width_desktop', '100');
+            $parent->addAttribute('width_tablet', '100');
+            $parent->addAttribute('width_mobile', '100');
+            $parent->addAttribute('template', 'MelisFront/dnd-2-cols-tpl');
         }
 
-        if (!empty($data['children'])) {
+        if (isset($data['children']) && is_array($data['children'])) {
             foreach ($data['children'] as $child) {
-                $childNode = $xml->addChild('melisDragDropZone');
+                $childNode = $parent->addChild($this->pluginXmlDbKey);
                 $childNode->addAttribute('id', $child['melisPluginId']);
                 $childNode->addAttribute('plugin_container_id', '');
-
-                // Optional width attributes if needed
                 $childNode->addAttribute('width_desktop', '100');
                 $childNode->addAttribute('width_tablet', '100');
                 $childNode->addAttribute('width_mobile', '100');
 
+                // Handle plugins inside this zone
+                if (isset($child['melisDragDropZoneListPlugin']) && is_array($child['melisDragDropZoneListPlugin'])) {
+                    foreach ($child['melisDragDropZoneListPlugin'] as $plugin) {
+                        $pluginNode = $childNode->addChild('plugin');
+                        $pluginNode->addAttribute('module', $plugin['melisModule']);
+                        $pluginNode->addAttribute('name', $plugin['melisPluginName']);
+                        $pluginNode->addAttribute('id', $plugin['melisPluginId']);
+                    }
+                }
+
+                // Recursive call for nested children
                 $this->buildXmlFromArray($child, $childNode);
             }
         }
 
-        if (!empty($data['melisDragDropZoneListPlugin'])) {
-            foreach ($data['melisDragDropZoneListPlugin'] as $plugin) {
-                $pluginNode = $xml->addChild('plugin');
-                $pluginNode->addAttribute('module', $plugin['melisModule']);
-                $pluginNode->addAttribute('name', $plugin['melisPluginName']);
-                $pluginNode->addAttribute('id', $plugin['melisPluginId']);
-            }
-        }
-
-        return $xml;
+        return $parent;
     }
 
     private function isInBackOffice()
