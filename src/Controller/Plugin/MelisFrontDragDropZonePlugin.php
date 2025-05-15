@@ -297,7 +297,7 @@ class MelisFrontDragDropZonePlugin extends MelisTemplatingPlugin
 
         // Output XML without the version line
 //        print_r($parameters);
-
+//exit;
         $xml = $this->buildXmlFromArray($parameters);
         $dom = dom_import_simplexml($xml)->ownerDocument;
         $dom->formatOutput = true;
@@ -321,6 +321,11 @@ class MelisFrontDragDropZonePlugin extends MelisTemplatingPlugin
             $parent->addAttribute('width_tablet', '100');
             $parent->addAttribute('width_mobile', '100');
             $parent->addAttribute('template', 'MelisFront/dnd-2-cols-tpl');
+
+            $layout = $parent->addChild("layout");
+            $dom = dom_import_simplexml($layout);
+            $domOwner = $dom->ownerDocument;
+            $dom->appendChild($domOwner->createCDATASection("MelisFront/dnd-2-cols-tpl"));
         }
 
         if (isset($data['children']) && is_array($data['children'])) {
