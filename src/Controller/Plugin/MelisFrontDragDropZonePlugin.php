@@ -193,16 +193,7 @@ class MelisFrontDragDropZonePlugin extends MelisTemplatingPlugin
         if ($xml) {
             $cpt = 0;
 
-            // dump('xml', $xml);
-
             foreach ($xml as $k => $plugin) {
-                // dump($k);
-                // dump($plugin->attributes()->id);
-                // dump('test', $x->melisDragDropZone);
-                // if (isset($x->melisDragDropZone))
-                //     dump('melisDragDropZone', $x);
-                // else
-                //     dump('plugin', $x);
 
                 $configValues[$cpt] = [];
 
@@ -222,22 +213,7 @@ class MelisFrontDragDropZonePlugin extends MelisTemplatingPlugin
 
                 $cpt++;
             }
-
-
-            // foreach ($xml->plugin as $key => $plugin) {
-            //     $configValues[$cpt] = array();
-            //     if (!empty($plugin->attributes()->module))
-            //         $configValues[$cpt]['pluginModule'] = (string)$plugin->attributes()->module;
-            //     if (!empty($plugin->attributes()->name))
-            //         $configValues[$cpt]['pluginName'] = (string)$plugin->attributes()->name;
-            //     if (!empty($plugin->attributes()->id))
-            //         $configValues[$cpt]['pluginId'] = (string)$plugin->attributes()->id;
-
-            //     $cpt++;
-            // }
         }
-
-        // dump($configValues);
 
         return array("plugins" => $configValues);
     }
