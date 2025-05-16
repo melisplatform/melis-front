@@ -316,10 +316,12 @@ class MelisFrontDragDropZonePlugin extends MelisTemplatingPlugin
         if (!$parent) {
             $parent = new \SimpleXMLElement('<'.$this->pluginXmlDbKey.'/>');
             $parent->addAttribute('id', $data['melisPluginId']);
-            $parent->addAttribute('plugin_container_id', '');
-            $parent->addAttribute('width_desktop', '100');
-            $parent->addAttribute('width_tablet', '100');
-            $parent->addAttribute('width_mobile', '100');
+            $parent->addAttribute('plugin_referer', '');
+            $parent->addAttribute('plugin_position', '1');
+//            $parent->addAttribute('plugin_container_id', '');
+//            $parent->addAttribute('width_desktop', '100');
+//            $parent->addAttribute('width_tablet', '100');
+//            $parent->addAttribute('width_mobile', '100');
             $parent->addAttribute('template', 'MelisFront/dnd-2-cols-tpl');
 
             $layout = $parent->addChild("layout");
