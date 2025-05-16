@@ -302,7 +302,7 @@ class MelisFrontDragDropZonePlugin extends MelisTemplatingPlugin
         $dom = dom_import_simplexml($xml)->ownerDocument;
         $dom->formatOutput = true;
         $xmlValueFormatted = $dom->saveXML($dom->documentElement);
-
+//dump($xmlValueFormatted);exit;
         return $xmlValueFormatted;
     }
 
@@ -326,6 +326,15 @@ class MelisFrontDragDropZonePlugin extends MelisTemplatingPlugin
             $dom = dom_import_simplexml($layout);
             $domOwner = $dom->ownerDocument;
             $dom->appendChild($domOwner->createCDATASection("MelisFront/dnd-2-cols-tpl"));
+
+            if (isset($data['melisDragDropZoneListPlugin']) && is_array($data['melisDragDropZoneListPlugin'])) {
+                foreach ($data['melisDragDropZoneListPlugin'] as $plugin) {
+                    $pluginNode = $parent->addChild('plugin');
+                    $pluginNode->addAttribute('module', $plugin['melisModule']);
+                    $pluginNode->addAttribute('name', $plugin['melisPluginName']);
+                    $pluginNode->addAttribute('id', $plugin['melisPluginId']);
+                }
+            }
         }
 
         if (isset($data['children']) && is_array($data['children'])) {
