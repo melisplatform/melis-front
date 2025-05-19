@@ -22,7 +22,7 @@ if (!empty($this->pluginFrontConfig) && !empty($this->pluginFrontConfig['id']))
         <div class="dnd-layout-buttons">
             <?= $this->partial('MelisFront/dragdropzone/meliscontainer-buttons'); ?>
         </div>
-        <div class='<?= $this->hasDragDropZone ? '' : 'melis-dragdropzone no-content' ?>'
+        <div class="<?= $this->hasDragDropZone ? '' : 'melis-dragdropzone' ?> <?= $this->hasContent ? '' : 'no-content' ?>"
             data-dragdropzone-id="<?= $this->dragdropzoneId; ?>"
             data-after="<?= $this->dragDropLabel; ?>"
             data-module="<?= $this->configPluginKey; ?>"
