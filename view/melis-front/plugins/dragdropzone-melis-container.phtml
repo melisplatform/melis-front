@@ -33,8 +33,13 @@ if (!empty($this->pluginFrontConfig) && !empty($this->pluginFrontConfig['id']))
                     echo $this->viewFront;
                 ?>
             </div>
-            <button class="dnd-plus-button">
-                <i class="fa fa-plus"></i>
-            </button>
+            <div class="dnd-bottom-buttons d-flex flex-row justify-content-between">
+                <button class="dnd-arrow-button down">
+                    <i class="fa fa-caret-down"></i>
+                </button>
+                <button class="dnd-plus-button">
+                    <i class="fa fa-plus"></i>
+                </button>
+            </div>
         </div>
 </div>
