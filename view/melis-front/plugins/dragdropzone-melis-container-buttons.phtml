@@ -214,11 +214,14 @@
                 let dndId = $(this).data("dndId");
                 let dndTpl = $(this).data("dndTpl");
                 let pageId = <?= $this->pageId ?>;
+                let melisSite = "<?= $_GET['melisSite'] ?>";
 
-                $.get("/melis/dnd-layout", {
+
+                $.get("/dnd-layout", {
                     pageId,
                     dndId,
                     dndTpl,
+                    melisSite
                 }).done((res) => {
                     if (res.success) {
 

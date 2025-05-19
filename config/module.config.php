@@ -160,23 +160,18 @@ return [
                     ],
                 ],
             ],
-            'melis-backoffice' => [
-                'child_routes' => [
-                    'dnd-layout' => [
-                        'type' => 'Literal',
-                        'options' => [
-                            'route' =>  'dnd-layout',
-                            'constraints' => [
-                                'action' => '',
-                            ],
-                            'defaults' => [
-                                '__NAMESPACE__' => 'MelisFront\Controller',
-                                'controller' => 'MelisPluginRenderer',
-                                'action' => 'dndLayout',
-                                'renderMode' => 'melis',
-
-                            ],
-                        ],
+            'dnd-layout' => [
+                'type' => 'Literal',
+                'options' => [
+                    'route' =>  '/dnd-layout',
+                    'constraints' => [
+                        'action' => '',
+                    ],
+                    'defaults' => [
+                        '__NAMESPACE__' => 'MelisFront\Controller',
+                        'controller' => 'MelisPluginRenderer',
+                        'action' => 'dndLayout',
+                        'renderMode' => 'melis',
                     ],
                 ],
             ],
