@@ -329,8 +329,8 @@ class MelisFrontDragDropZonePlugin extends MelisTemplatingPlugin
         //        dd($xml->asXML());
 
         // Output XML without the version line
-        //        print_r($parameters);
-        //exit;
+//                print_r($parameters);
+//        exit;
         $xml = $this->buildXmlFromArray($parameters);
         $dom = dom_import_simplexml($xml)->ownerDocument;
         $dom->formatOutput = true;
@@ -357,10 +357,10 @@ class MelisFrontDragDropZonePlugin extends MelisTemplatingPlugin
             //            $parent->addAttribute('width_mobile', '100');
             $parent->addAttribute('template', $data['dndLayout']);
 
-            $layout = $parent->addChild("layout");
-            $dom = dom_import_simplexml($layout);
-            $domOwner = $dom->ownerDocument;
-            $dom->appendChild($domOwner->createCDATASection($data['dndLayout']));
+//            $layout = $parent->addChild("layout");
+//            $dom = dom_import_simplexml($layout);
+//            $domOwner = $dom->ownerDocument;
+//            $dom->appendChild($domOwner->createCDATASection($data['dndLayout']));
 
             if (isset($data['melisDragDropZoneListPlugin']) && is_array($data['melisDragDropZoneListPlugin'])) {
                 foreach ($data['melisDragDropZoneListPlugin'] as $plugin) {
@@ -380,6 +380,7 @@ class MelisFrontDragDropZonePlugin extends MelisTemplatingPlugin
                 $childNode->addAttribute('width_desktop', '100');
                 $childNode->addAttribute('width_tablet', '100');
                 $childNode->addAttribute('width_mobile', '100');
+                $childNode->addAttribute('template', $child['dndLayout'] ?? '');
 
                 // Handle plugins inside this zone
                 if (isset($child['melisDragDropZoneListPlugin']) && is_array($child['melisDragDropZoneListPlugin'])) {
