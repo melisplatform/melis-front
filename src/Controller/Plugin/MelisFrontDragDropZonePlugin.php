@@ -238,6 +238,7 @@ class MelisFrontDragDropZonePlugin extends MelisTemplatingPlugin
 
         $viewModel->siteModule = $siteModule;
         $viewModel->columns = $columns;
+        $viewModel->dndLayoutTemplate = $this->pluginFrontConfig['template_path'];
 
         return $viewModel;
     }
@@ -354,12 +355,12 @@ class MelisFrontDragDropZonePlugin extends MelisTemplatingPlugin
             //            $parent->addAttribute('width_desktop', '100');
             //            $parent->addAttribute('width_tablet', '100');
             //            $parent->addAttribute('width_mobile', '100');
-            $parent->addAttribute('template', 'MelisFront/dnd-2-cols-tpl');
+            $parent->addAttribute('template', $data['dndLayout']);
 
             $layout = $parent->addChild("layout");
             $dom = dom_import_simplexml($layout);
             $domOwner = $dom->ownerDocument;
-            $dom->appendChild($domOwner->createCDATASection("MelisFront/dnd-2-cols-tpl"));
+            $dom->appendChild($domOwner->createCDATASection($data['dndLayout']));
 
             if (isset($data['melisDragDropZoneListPlugin']) && is_array($data['melisDragDropZoneListPlugin'])) {
                 foreach ($data['melisDragDropZoneListPlugin'] as $plugin) {
