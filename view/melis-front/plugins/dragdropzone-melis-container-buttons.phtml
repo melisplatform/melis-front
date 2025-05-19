@@ -206,7 +206,7 @@
     </button> -->
 </div>
 
-<script>
+<script type="application/javascript">
     setTimeout(() => {
         $(function() {
             $(".dnd-layout-buttons div[data-dnd-tpl]").off().on("click", function() {
@@ -221,7 +221,10 @@
                     dndTpl,
                 }).done((res) => {
                     if (res.success) {
+
                         $(".melis-dragdropzone-container[data-plugin-id='" + dndId + "']").replaceWith(res.html);
+
+                        melisPluginEdition.sendDragnDropList(dndId, pageId);
                     }
                 })
             })
