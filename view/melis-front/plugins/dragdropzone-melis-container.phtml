@@ -15,10 +15,10 @@ if (!empty($this->pluginFrontConfig) && !empty($this->pluginFrontConfig['id']))
      data-melis-tag="<?= $this->pluginXmlDbKey; ?>"
      data-site-module="<?= $this->siteModule; ?>">
         <div class="dnd-layout-wrapper">
-            <div class="dnd-layout-indicator melis-plugin-indicator">
+            <div class="dnd-layout-indicator melis-plugin-indicator" style="display: none;">
                 <i class="fa fa-plug"></i>
             </div>
-            <div class="dnd-layout-buttons">
+            <div class="dnd-layout-buttons" style="display: none;">
                 <?= $this->partial('MelisFront/dragdropzone/meliscontainer-buttons');?>
             </div>
             <div class='<?= $this->hasDragDropZone ? '' : 'melis-dragdropzone no-content' ?>'
@@ -33,7 +33,7 @@ if (!empty($this->pluginFrontConfig) && !empty($this->pluginFrontConfig['id']))
                     echo $this->viewFront;
                 ?>
             </div>
-            <div class="dnd-bottom-buttons d-flex flex-row justify-content-between">
+            <div class="dnd-bottom-buttons d-flex flex-row justify-content-between" style="display: none;">
                 <button class="dnd-arrow-button down">
                     <i class="fa fa-caret-down"></i>
                 </button>
