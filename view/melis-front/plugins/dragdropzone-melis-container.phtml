@@ -7,39 +7,39 @@ if (!empty($this->pluginFrontConfig) && !empty($this->pluginFrontConfig['id']))
 ?>
 
 <div class="melis-dragdropzone-container" title="<?= $this->dragdropzoneId; ?>"
-     data-dragdropzone-id="<?= $this->dragdropzoneId; ?>"
-     data-after="<?= $this->dragDropLabel; ?>"
-     data-module="<?= $this->configPluginKey; ?>"
-     data-plugin="<?= $this->pluginName; ?>"
-     data-plugin-id="<?= $pluginId; ?>"
-     data-melis-tag="<?= $this->pluginXmlDbKey; ?>"
-     data-site-module="<?= $this->siteModule; ?>">
-        <div class="dnd-layout-wrapper">
-            <div class="dnd-layout-indicator melis-plugin-indicator">
-                <i class="fa fa-plug"></i>
-            </div>
-            <div class="dnd-layout-buttons">
-                <?= $this->partial('MelisFront/dragdropzone/meliscontainer-buttons');?>
-            </div>
-            <div class='<?= $this->hasDragDropZone ? '' : 'melis-dragdropzone no-content' ?>'
-                data-dragdropzone-id="<?= $this->dragdropzoneId; ?>"
-                data-after="<?= $this->dragDropLabel; ?>"
-                data-module="<?= $this->configPluginKey; ?>"
-                data-plugin="<?= $this->pluginName; ?>"
-                data-plugin-id="<?= $pluginId ?>"
-                data-melis-tag="<?= $this->pluginXmlDbKey; ?>"
-                data-site-module="<?= $this->siteModule; ?>">
-                <?php
-                    echo $this->viewFront;
-                ?>
-            </div>
-            <div class="dnd-bottom-buttons d-flex flex-row justify-content-between">
-                <button class="dnd-arrow-button down">
-                    <i class="fa fa-caret-down"></i>
-                </button>
-                <button class="dnd-plus-button">
-                    <i class="fa fa-plus"></i>
-                </button>
-            </div>
+    data-dragdropzone-id="<?= $this->dragdropzoneId; ?>"
+    data-after="<?= $this->dragDropLabel; ?>"
+    data-module="<?= $this->configPluginKey; ?>"
+    data-plugin="<?= $this->pluginName; ?>"
+    data-plugin-id="<?= $pluginId; ?>"
+    data-melis-tag="<?= $this->pluginXmlDbKey; ?>"
+    data-site-module="<?= $this->siteModule; ?>">
+    <div class="dnd-layout-wrapper">
+        <div class="dnd-layout-indicator melis-plugin-indicator">
+            <i class="fa fa-plug"></i>
         </div>
+        <div class="dnd-layout-buttons">
+            <?= $this->partial('MelisFront/dragdropzone/meliscontainer-buttons'); ?>
+        </div>
+        <div class='<?= $this->hasDragDropZone ? '' : 'melis-dragdropzone no-content' ?>'
+            data-dragdropzone-id="<?= $this->dragdropzoneId; ?>"
+            data-after="<?= $this->dragDropLabel; ?>"
+            data-module="<?= $this->configPluginKey; ?>"
+            data-plugin="<?= $this->pluginName; ?>"
+            data-plugin-id="<?= $pluginId ?>"
+            data-melis-tag="<?= $this->pluginXmlDbKey; ?>"
+            data-site-module="<?= $this->siteModule; ?>">
+            <?php
+            echo $this->viewFront;
+            ?>
+        </div>
+        <div class="dnd-bottom-buttons d-flex flex-row justify-content-between">
+            <button class="dnd-arrow-button down">
+                <i class="fa fa-caret-down"></i>
+            </button>
+            <button class="dnd-plus-button">
+                <i class="fa fa-plus"></i>
+            </button>
+        </div>
+    </div>
 </div>

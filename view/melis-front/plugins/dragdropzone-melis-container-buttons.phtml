@@ -1,5 +1,15 @@
 <div class="column-icons">
-    <button class="column-icon top-1-col-w-bottom-1-3-center">
+
+    <?php
+    foreach ($this->dndLayouts as $k => $layout) {
+
+        // dump($layout);
+        if (!empty($layout['template']) && (!empty($layout['html-button-icon'])))
+            echo '<div data-dnd-id="' . $this->dndId . '" data-dnd-tpl="' . $k . '">' . $layout['html-button-icon'] . '</div>';
+    }
+
+    ?>
+    <!-- <button class="column-icon top-1-col-w-bottom-1-3-center">
         <div class="icon-container">
             <div class="icon-row">
                 <div class="icon-col-bg icon-col-12 bg-white"></div>
@@ -21,7 +31,7 @@
                 <div class="icon-col-bg icon-col-12 bg-white"></div>
             </div>
         </div>
-    </buttton>
+    </button>
     <button class="column-icon whole-1-col">
         <div class="icon-container">
             <div class="icon-row">
@@ -193,5 +203,28 @@
                 <div class="icon-col-bg icon-col-12 bg-white"></div>
             </div>
         </div>
-    </button>
+    </button> -->
 </div>
+
+<script>
+    setTimeout(() => {
+        $(function() {
+            $(".dnd-layout-buttons div[data-dnd-tpl]").off().on("click", function() {
+
+                let dndId = $(this).data("dndId");
+                let dndTpl = $(this).data("dndTpl");
+                let pageId = <?= $this->pageId ?>;
+
+                $.get("/melis/dnd-layout", {
+                    pageId,
+                    dndId,
+                    dndTpl,
+                }).done((res) => {
+                    if (res.success) {
+                        $(".melis-dragdropzone-container[data-plugin-id='" + dndId + "']").replaceWith(res.html);
+                    }
+                })
+            })
+        })
+    }, 1000)
+</script>

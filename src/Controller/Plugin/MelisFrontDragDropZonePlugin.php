@@ -72,20 +72,36 @@ class MelisFrontDragDropZonePlugin extends MelisTemplatingPlugin
 
         $parentPluginId = $this->pluginFrontConfig['id'];
 
-        $layout = $this->pluginFrontConfig['layout'];
-
         $dndCtr = 1;
         $hasDnd = false;
+
+
+        if (isset($_GET['dndTpl']) && isset($_GET['dndId'])) {
+
+            if ($_GET['dndId'] == $this->pluginFrontConfig['id']) {
+                $config = $this->getServiceManager()->get('config');
+                $dndLayouts = $config['plugins']['drag-and-drop-layouts'];
+
+                $this->pluginFrontConfig['template_path'] = $dndLayouts[$_GET['dndTpl']]['template'];
+            }
+        }
+
+        // dump($this->pluginFrontConfig);
+
         foreach ($this->pluginFrontConfig['plugins'] as $plugin) {
 
             $pluginId = $plugin['pluginId'];
             if ($plugin['pluginName'] == 'MelisFrontDragDropZonePlugin') {
-                // adding counter for drag and drop plugins dynamically
-                // by just adding "_" + counter concatenated to the parent plugin id
-                $pluginId = $parentPluginId . '_' . $dndCtr;
-                // flag this result as a drag and drop plugin
-                $hasDnd = true;
+                continue;
             }
+
+            // if ($plugin['pluginName'] == 'MelisFrontDragDropZonePlugin') {
+            //     // adding counter for drag and drop plugins dynamically
+            //     // by just adding "_" + counter concatenated to the parent plugin id
+            //     $pluginId = $parentPluginId . '_' . $dndCtr;
+            //     // flag this result as a drag and drop plugin
+            //     $hasDnd = true;
+            // }
 
             $tmpHtml = null;
             $data = array(
@@ -124,32 +140,40 @@ class MelisFrontDragDropZonePlugin extends MelisTemplatingPlugin
             $plugins[$dndCtr++][] = $tmpHtml;
         }
 
-        if ($hasDnd) {
-            // dragndrop layout
-            $dndLayoutView = new ViewModel();
-            $dndLayoutView->setTemplate(trim($layout));
-            $renderer = $this->getServiceManager()->get('ViewRenderer');
-            // layout rendered / html
-            $dndLayout = $renderer->render($dndLayoutView);
-        }
+        // dump($this->pluginFrontConfig);
 
+
+        // if ($hasDnd) {
+        //     // dragndrop layout
+        //     $dndLayoutView = new ViewModel();
+        //     $dndLayoutView->setTemplate(trim($layout));
+        //     $dndLayoutView->dndId = $parentPluginId;
+        //     $dndLayoutView->pageId = $this->pluginFrontConfig['pageId'];
+        //     $renderer = $this->getServiceManager()->get('ViewRenderer');
+        //     // layout rendered / html
+        //     $dndLayout = $renderer->render($dndLayoutView);
+
+        //     // dump($dndLayout);
+        // }
+
+        // dump($this->isInBackOffice());
         $newHtml = !$this->isInBackOffice() ? '<div class="clearfix">' : '';
         foreach ($plugins as $id => $contents) {
 
             foreach ($contents as $content) {
 
-                if ($hasDnd) {
-                    if (str_contains($dndLayout, '_' . $id . '_')) {
-                        // adding content to layout
-                        $dndLayout = str_replace('_' . $id . '_', $content, $dndLayout);
-                    }
-                } else
-                    $newHtml .= "\t" . $content;
+                // if ($hasDnd) {
+                //     if (str_contains($dndLayout, '_' . $id . '_')) {
+                //         // adding content to layout
+                //         $dndLayout = str_replace('_' . $id . '_', $content, $dndLayout);
+                //     }
+                // } else
+                $newHtml .= "\t" . $content;
             }
         }
 
         // apply content with layout to html result
-        if ($hasDnd) $newHtml = $dndLayout;
+        // if ($hasDnd) $newHtml = $dndLayout;
 
         $newHtml .= !$this->isInBackOffice() ? '</div>' : '';
 
@@ -194,13 +218,21 @@ class MelisFrontDragDropZonePlugin extends MelisTemplatingPlugin
             }
         }
 
+        $config = $this->getServiceManager()->get('config');
+        $dndLayouts = $config['plugins']['drag-and-drop-layouts'];
+        $viewModel->dndLayouts =  $dndLayouts;
+        $viewModel->pageId = $pageId;
+
         $viewModel->hasDragDropZone = false;
-        if ($this->pluginFrontConfig['plugins'])
-            foreach ($this->pluginFrontConfig['plugins'] as $plugins)
-                if ($plugins['pluginName'] == 'MelisFrontDragDropZonePlugin') {
-                    $viewModel->hasDragDropZone = true;
-                    break;
-                }
+        if ($this->pluginFrontConfig['template_path'] != 'MelisFront/dnd-default-tpl')
+            $viewModel->hasDragDropZone = true;
+
+        // if ($this->pluginFrontConfig['plugins'])
+        //     foreach ($this->pluginFrontConfig['plugins'] as $plugins)
+        //         if ($plugins['pluginName'] == 'MelisFrontDragDropZonePlugin') {
+        //             $viewModel->hasDragDropZone = true;
+        //             break;
+        //         }
 
         // dump($viewModel->hasDragDropZone);
 
@@ -216,14 +248,14 @@ class MelisFrontDragDropZonePlugin extends MelisTemplatingPlugin
 
         $xml = simplexml_load_string($this->pluginXmlDbValue);
 
-        $layout = 'MelisFront/dnd-default-tpl';
+        $template = 'MelisFront/dnd-default-tpl';
 
         if ($xml) {
             $cpt = 0;
 
             // plugin layout
-            if (!empty($xml->layout))
-                $layout = (string)$xml->layout;
+            if (!empty($xml->attributes()->template))
+                $template = (string)$xml->attributes()->template;
 
             foreach ($xml as $k => $plugin) {
 
@@ -252,7 +284,7 @@ class MelisFrontDragDropZonePlugin extends MelisTemplatingPlugin
         }
 
         return [
-            "layout" => $layout,
+            'template_path' => $template,
             "plugins" => $configValues
         ];
     }
@@ -296,13 +328,13 @@ class MelisFrontDragDropZonePlugin extends MelisTemplatingPlugin
         //        dd($xml->asXML());
 
         // Output XML without the version line
-//        print_r($parameters);
-//exit;
+        //        print_r($parameters);
+        //exit;
         $xml = $this->buildXmlFromArray($parameters);
         $dom = dom_import_simplexml($xml)->ownerDocument;
         $dom->formatOutput = true;
         $xmlValueFormatted = $dom->saveXML($dom->documentElement);
-//dump($xmlValueFormatted);exit;
+        //dump($xmlValueFormatted);exit;
         return $xmlValueFormatted;
     }
 
@@ -314,14 +346,14 @@ class MelisFrontDragDropZonePlugin extends MelisTemplatingPlugin
     function buildXmlFromArray($data, $parent = null)
     {
         if (!$parent) {
-            $parent = new \SimpleXMLElement('<'.$this->pluginXmlDbKey.'/>');
+            $parent = new \SimpleXMLElement('<' . $this->pluginXmlDbKey . '/>');
             $parent->addAttribute('id', $data['melisPluginId']);
             $parent->addAttribute('plugin_referer', '');
             $parent->addAttribute('plugin_position', '1');
-//            $parent->addAttribute('plugin_container_id', '');
-//            $parent->addAttribute('width_desktop', '100');
-//            $parent->addAttribute('width_tablet', '100');
-//            $parent->addAttribute('width_mobile', '100');
+            //            $parent->addAttribute('plugin_container_id', '');
+            //            $parent->addAttribute('width_desktop', '100');
+            //            $parent->addAttribute('width_tablet', '100');
+            //            $parent->addAttribute('width_mobile', '100');
             $parent->addAttribute('template', 'MelisFront/dnd-2-cols-tpl');
 
             $layout = $parent->addChild("layout");
@@ -378,6 +410,10 @@ class MelisFrontDragDropZonePlugin extends MelisTemplatingPlugin
         }
 
         if (isset($module[1]) && ($module[1] == 'melis_front_melisrender')) {
+            return true;
+        }
+
+        if (isset($module[1]) && ($module[1] == 'dnd-layout')) {
             return true;
         }
 

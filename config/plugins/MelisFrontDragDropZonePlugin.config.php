@@ -14,7 +14,6 @@ return array(
                         'id' => 'dragdropzone',
                         'pageId' => 1,
                         'plugins' => array(),
-                        'layout' => 'MelisFront/dnd-default-tpl',
 
                         // List the files to be automatically included for the correct display of the plugin
                         // To overide a key, just add it again in your site module
