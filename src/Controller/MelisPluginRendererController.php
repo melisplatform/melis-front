@@ -150,6 +150,51 @@ class MelisPluginRendererController extends MelisAbstractActionController
             'id' => $dndId,
         ]);
 
+        $config = $this->getServiceManager()->get('config');
+        $vars = $melisFrontDragDropZonePluginView->getVariables();
+        // dump($vars['pluginConfig']);
+
+        $plugins = $vars['pluginConfig']['plugins'];
+
+        $pluginsInitFiles = [];
+
+        foreach ($plugins as $plugin) {
+
+            $pluginInitFiles = [
+                'front' => [
+                    'ressources' => [],
+                    'js_initialization' => [],
+                ],
+                'melis' => [
+                    'ressources' => [],
+                    'js_initialization' => [],
+                ]
+            ];
+
+            $pluginModule = $plugin['pluginModule'];
+            $pluginName = $plugin['pluginName'];
+
+            // dump($pluginModule, $pluginName);
+            // dump($config['plugins'][$pluginModule]['plugins'][$pluginName]);
+            if (!empty($config['plugins'][$pluginModule]['plugins'][$pluginName])) {
+
+                // dump('test');
+
+                $pluginConf = $config['plugins'][$pluginModule]['plugins'][$pluginName];
+
+                $boFiles = (!empty($pluginConf['melis']['files'])) ? $pluginConf['melis']['files'] : array();
+                $boInit = (!empty($pluginConf['melis']['js_initialization'])) ? $pluginConf['melis']['js_initialization'] : array();
+
+                if (!empty($boFiles['css']) || !empty($boFiles['js'])) {
+                    // 'melis' => array('ressources' => $BoFiles, 'js_initialization' => $BoInit),
+                    $pluginInitFiles['melis']['ressources'] = array_merge($boFiles, $pluginInitFiles['melis']['ressources']);
+                    $pluginInitFiles['melis']['js_initialization'] = array_merge($boInit, $pluginInitFiles['melis']['js_initialization']);
+
+                    $pluginsInitFiles[$plugin['pluginId']] = $pluginInitFiles;
+                }
+            }
+        }
+
         $viewRender = $this->getServiceManager()->get('ViewRenderer');
         $dndHtml = $viewRender->render($melisFrontDragDropZonePluginView);
 
@@ -157,7 +202,8 @@ class MelisPluginRendererController extends MelisAbstractActionController
 
         return new JsonModel([
             'success' => $success,
-            'html' => $dndHtml
+            'html' => $dndHtml,
+            'pluginsInitFiles' => $pluginsInitFiles
         ]);
     }
 }

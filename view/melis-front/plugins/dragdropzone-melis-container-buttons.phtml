@@ -227,6 +227,13 @@
 
                         $(".melis-dragdropzone-container[data-plugin-id='" + dndId + "']").replaceWith(res.html);
 
+                        if (res.pluginsInitFiles) {
+                            $.each(res.pluginsInitFiles, (i, v) => {
+                                // reinitialize plugins
+                                melisPluginEdition.processPluginResources(v, i);
+                            });
+                        }
+
                         melisPluginEdition.sendDragnDropList(dndId, pageId);
                     }
                 })
