@@ -210,12 +210,13 @@
     setTimeout(() => {
         $(function() {
             $(".dnd-layout-buttons div[data-dnd-tpl]").off().on("click", function() {
+                // initialize dynamic dragndrop
+                melisDynamicDragnDrop.init();
 
                 let dndId = $(this).data("dndId");
                 let dndTpl = $(this).data("dndTpl");
                 let pageId = <?= $this->pageId ?>;
                 let melisSite = "<?= $_GET['melisSite'] ?>";
-
 
                 $.get("/dnd-layout", {
                     pageId,
