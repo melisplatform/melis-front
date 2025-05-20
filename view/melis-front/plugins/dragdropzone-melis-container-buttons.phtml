@@ -229,13 +229,25 @@
                         $(".melis-dragdropzone-container[data-plugin-id='" + dndId + "']").replaceWith(res.html);
 
                         if (res.pluginsInitFiles) {
-                            $.each(res.pluginsInitFiles, (i, v) => {
-                                // reinitialize plugins
-                                melisPluginEdition.processPluginResources(v, i);
-                            });
+
+                            setTimeout(() => {
+                                $.each(res.pluginsInitFiles, (i, v) => {
+                                    // reinitialize plugins
+                                    // melisPluginEdition.processPluginResources(v, i);
+                                });
+
+                                melisPluginEdition.moveResponsiveClass();
+                                melisPluginEdition.pluginDetector();
+                                melisPluginEdition.initResizable();
+
+                                melisPluginEdition.sendDragnDropList(dndId, pageId);
+
+                                // TODO 
+                                melistagHTML_init();
+
+                            }, 1000)
                         }
 
-                        melisPluginEdition.sendDragnDropList(dndId, pageId);
                     }
                 })
             })
