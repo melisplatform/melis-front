@@ -157,13 +157,9 @@ class MelisPluginRendererController extends MelisAbstractActionController
 
         $config = $this->getServiceManager()->get('config');
         $vars = $melisFrontDragDropZonePluginView->getVariables();
-
+        $xml = $vars['pluginConfig']['xmldbvalues'];
 
         // dump($vars['pluginConfig']);
-
-
-        // Load XML
-        $xml = new SimpleXMLElement($vars['pluginConfig']['xmldbvalues']);
 
         // Recursive function to find all <plugin> nodes
         $getAllPlugins = function (SimpleXMLElement $node, array &$plugins = []) use (&$getAllPlugins) {
@@ -181,15 +177,17 @@ class MelisPluginRendererController extends MelisAbstractActionController
             return $plugins;
         };
 
-        // Collect all plugin nodes
-        $pluginNodes = $getAllPlugins($xml);
+        $pluginNodes = [];
+        if (!empty($xml)) {
 
-        // dd($pluginNodes);
+            // Load XML
+            $xml = new SimpleXMLElement($xml);
 
-        $plugins = $vars['pluginConfig']['plugins'];
+            // Collect all plugin nodes
+            $pluginNodes = $getAllPlugins($xml);
+        }
 
         $pluginsInitFiles = [];
-
         foreach ($pluginNodes as $plugin) {
 
             $pluginInitFiles = [
