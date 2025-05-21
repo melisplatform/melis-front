@@ -280,13 +280,13 @@ class MelisFrontDragDropZonePlugin extends MelisTemplatingPlugin
         //        dd($xml->asXML());
 
         // Output XML without the version line
-        //                print_r($parameters);
-        //        exit;
+//                        print_r($parameters);
+//                exit;
         $xml = $this->buildXmlFromArray($parameters);
         $dom = dom_import_simplexml($xml)->ownerDocument;
         $dom->formatOutput = true;
         $xmlValueFormatted = $dom->saveXML($dom->documentElement);
-        //dump($xmlValueFormatted);exit;
+//        dump($xmlValueFormatted);exit;
         return $xmlValueFormatted;
     }
 
@@ -300,7 +300,7 @@ class MelisFrontDragDropZonePlugin extends MelisTemplatingPlugin
         if (!$parent) {
             $parent = new \SimpleXMLElement('<' . $this->pluginXmlDbKey . '/>');
             $parent->addAttribute('id', $data['melisPluginId']);
-            $parent->addAttribute('plugin_referer', '');
+            $parent->addAttribute('plugin_referer', $data['reference'] ?? '');
             $parent->addAttribute('plugin_position', '1');
             //            $parent->addAttribute('plugin_container_id', '');
             //            $parent->addAttribute('width_desktop', '100');
@@ -328,6 +328,8 @@ class MelisFrontDragDropZonePlugin extends MelisTemplatingPlugin
                 $childNode = $parent->addChild($this->pluginXmlDbKey);
                 $childNode->addAttribute('id', $child['melisPluginId']);
                 $childNode->addAttribute('plugin_container_id', '');
+                $childNode->addAttribute('plugin_referer', $child['reference'] ?? '');
+                $childNode->addAttribute('plugin_position', '1');
                 $childNode->addAttribute('width_desktop', '100');
                 $childNode->addAttribute('width_tablet', '100');
                 $childNode->addAttribute('width_mobile', '100');
