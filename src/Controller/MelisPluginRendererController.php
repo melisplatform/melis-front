@@ -11,8 +11,10 @@ namespace MelisFront\Controller;
 
 use Laminas\View\Model\JsonModel;
 use Assetic\Exception\Exception;
+use Laminas\Session\Container;
 use Laminas\View\Model\ViewModel;
 use MelisCore\Controller\MelisAbstractActionController;
+use SimpleXMLElement;
 
 class MelisPluginRendererController extends MelisAbstractActionController
 {
@@ -144,6 +146,9 @@ class MelisPluginRendererController extends MelisAbstractActionController
         $pageId = $this->params()->fromQuery('pageId');
         $dndId = $this->params()->fromQuery('dndId');
 
+        // $container = new Container('meliscms');
+        // dd($container['content-pages'][$pageId]);
+
         $melisFrontDragDropZonePlugin = $this->MelisFrontDragDropZonePlugin();
         $melisFrontDragDropZonePluginView = $melisFrontDragDropZonePlugin->render([
             'pageId' => $pageId,
@@ -152,13 +157,38 @@ class MelisPluginRendererController extends MelisAbstractActionController
 
         $config = $this->getServiceManager()->get('config');
         $vars = $melisFrontDragDropZonePluginView->getVariables();
+        $xml = $vars['pluginConfig']['xmldbvalues'];
+
         // dump($vars['pluginConfig']);
 
-        $plugins = $vars['pluginConfig']['plugins'];
+        // Recursive function to find all <plugin> nodes
+        $getAllPlugins = function (SimpleXMLElement $node, array &$plugins = []) use (&$getAllPlugins) {
+            foreach ($node->children() as $child) {
+                if ($child->getName() === 'plugin') {
+                    $plugins[] = [
+                        'module' => (string)$child->attributes()->module,
+                        'name' => (string)$child->attributes()->name,
+                        'id' => (string)$child->attributes()->id,
+                    ];
+                } else {
+                    $getAllPlugins($child, $plugins);
+                }
+            }
+            return $plugins;
+        };
+
+        $pluginNodes = [];
+        if (!empty($xml)) {
+
+            // Load XML
+            $xml = new SimpleXMLElement($xml);
+
+            // Collect all plugin nodes
+            $pluginNodes = $getAllPlugins($xml);
+        }
 
         $pluginsInitFiles = [];
-
-        foreach ($plugins as $plugin) {
+        foreach ($pluginNodes as $plugin) {
 
             $pluginInitFiles = [
                 'front' => [
@@ -171,8 +201,8 @@ class MelisPluginRendererController extends MelisAbstractActionController
                 ]
             ];
 
-            $pluginModule = $plugin['pluginModule'];
-            $pluginName = $plugin['pluginName'];
+            $pluginModule = $plugin['module'];
+            $pluginName = $plugin['name'];
 
             // dump($pluginModule, $pluginName);
             // dump($config['plugins'][$pluginModule]['plugins'][$pluginName]);
@@ -190,10 +220,12 @@ class MelisPluginRendererController extends MelisAbstractActionController
                     $pluginInitFiles['melis']['ressources'] = array_merge($boFiles, $pluginInitFiles['melis']['ressources']);
                     $pluginInitFiles['melis']['js_initialization'] = array_merge($boInit, $pluginInitFiles['melis']['js_initialization']);
 
-                    $pluginsInitFiles[$plugin['pluginId']] = $pluginInitFiles;
+                    $pluginsInitFiles[$plugin['id']] = $pluginInitFiles;
                 }
             }
         }
+
+        // dump($pluginsInitFiles);
 
         $viewRender = $this->getServiceManager()->get('ViewRenderer');
         $dndHtml = $viewRender->render($melisFrontDragDropZonePluginView);

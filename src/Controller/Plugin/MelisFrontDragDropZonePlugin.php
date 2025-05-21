@@ -69,7 +69,6 @@ class MelisFrontDragDropZonePlugin extends MelisTemplatingPlugin
 
         $dndCtr = 1;
 
-        $fromDragDropZone = true;
         if (isset($_GET['dndTpl']) && isset($_GET['dndId'])) {
 
             if ($_GET['dndId'] == $this->pluginFrontConfig['id']) {
@@ -77,9 +76,6 @@ class MelisFrontDragDropZonePlugin extends MelisTemplatingPlugin
                 $dndLayouts = $config['plugins']['drag-and-drop-layouts'];
 
                 $this->pluginFrontConfig['template_path'] = $dndLayouts[$_GET['dndTpl']]['template'];
-
-                // to render plugins for page edition
-                $fromDragDropZone = false;
             }
         }
 
@@ -97,7 +93,7 @@ class MelisFrontDragDropZonePlugin extends MelisTemplatingPlugin
                 'pluginName' => $plugin['pluginName'],
                 'pluginId' => $pluginId,
                 'pageId' => $this->pluginFrontConfig['pageId'],
-                'fromDragDropZone' => $fromDragDropZone,
+                'fromDragDropZone' => true,
             );
 
             try {
@@ -179,8 +175,6 @@ class MelisFrontDragDropZonePlugin extends MelisTemplatingPlugin
         $dndLayouts = $config['plugins']['drag-and-drop-layouts'];
         $viewModel->dndLayouts =  $dndLayouts;
         $viewModel->pageId = $pageId;
-
-        $viewModel->hasContent = !empty($this->pluginFrontConfig['plugins']) ? true : false;
 
         $viewModel->hasDragDropZone = false;
         if ($this->pluginFrontConfig['template_path'] != 'MelisFront/dnd-default-tpl')

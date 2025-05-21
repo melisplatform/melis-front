@@ -5,7 +5,7 @@
 
         // dump($layout);
         if (!empty($layout['template']) && (!empty($layout['html-button-icon'])))
-            echo '<div data-dnd-id="' . $this->dndId . '" data-dnd-tpl="' . $k . '">' . $layout['html-button-icon'] . '</div>';
+            echo '<div data-dnd-id="' . $this->dndId . '" data-dnd-tpl="' . $k . '" data-page-id="' . $this->pageId . '" data-melis-site="' . $_GET['melisSite'] . '">' . $layout['html-button-icon'] . '</div>';
     }
 
     ?>
@@ -205,40 +205,3 @@
         </div>
     </button> -->
 </div>
-
-<script type="application/javascript">
-    setTimeout(() => {
-        $(function() {
-            $(".dnd-layout-buttons div[data-dnd-tpl]").off().on("click", function() {
-                // initialize dynamic dragndrop
-                melisDynamicDragnDrop.init();
-
-                let dndId = $(this).data("dndId");
-                let dndTpl = $(this).data("dndTpl");
-                let pageId = <?= $this->pageId ?>;
-                let melisSite = "<?= $_GET['melisSite'] ?>";
-
-                $.get("/dnd-layout", {
-                    pageId,
-                    dndId,
-                    dndTpl,
-                    melisSite
-                }).done((res) => {
-                    if (res.success) {
-
-                        $(".melis-dragdropzone-container[data-plugin-id='" + dndId + "']").replaceWith(res.html);
-
-                        if (res.pluginsInitFiles) {
-                            $.each(res.pluginsInitFiles, (i, v) => {
-                                // reinitialize plugins
-                                melisPluginEdition.processPluginResources(v, i);
-                            });
-                        }
-
-                        melisPluginEdition.sendDragnDropList(dndId, pageId);
-                    }
-                })
-            })
-        })
-    }, 1000)
-</script>
