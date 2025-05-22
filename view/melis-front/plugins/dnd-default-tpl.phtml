@@ -1,5 +1,5 @@
 <div class="row">
-    <div class="col-md-12">
-        <?= $this->pluginsHtml ?>
+    <div class="col-12">
+        <?= !isset($_GET['dndId']) ? $this->pluginsHtml : '' ?>
     </div>
 </div>

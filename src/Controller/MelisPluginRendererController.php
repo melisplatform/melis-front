@@ -122,7 +122,7 @@ class MelisPluginRendererController extends MelisAbstractActionController
                             'init' => $pluginConfFOBO
                         )
                     );
-                } catch (Exception $e) {
+                } catch (\Exception $e) {
                     $results['success'] = false;
                     $results['errors'] = $translator->translate('tr_melisfront_generate_error_Plugin cant be created');
                 }
@@ -146,86 +146,12 @@ class MelisPluginRendererController extends MelisAbstractActionController
         $pageId = $this->params()->fromQuery('pageId');
         $dndId = $this->params()->fromQuery('dndId');
 
-        // $container = new Container('meliscms');
-        // dd($container['content-pages'][$pageId]);
-
         $melisFrontDragDropZonePlugin = $this->MelisFrontDragDropZonePlugin();
         $melisFrontDragDropZonePluginView = $melisFrontDragDropZonePlugin->render([
             'pageId' => $pageId,
             'id' => $dndId,
         ]);
 
-        $config = $this->getServiceManager()->get('config');
-        $vars = $melisFrontDragDropZonePluginView->getVariables();
-        $xml = $vars['pluginConfig']['xmldbvalues'];
-
-        // dump($vars['pluginConfig']);
-
-        // Recursive function to find all <plugin> nodes
-        $getAllPlugins = function (SimpleXMLElement $node, array &$plugins = []) use (&$getAllPlugins) {
-            foreach ($node->children() as $child) {
-                if ($child->getName() === 'plugin') {
-                    $plugins[] = [
-                        'module' => (string)$child->attributes()->module,
-                        'name' => (string)$child->attributes()->name,
-                        'id' => (string)$child->attributes()->id,
-                    ];
-                } else {
-                    $getAllPlugins($child, $plugins);
-                }
-            }
-            return $plugins;
-        };
-
-        $pluginNodes = [];
-        if (!empty($xml)) {
-
-            // Load XML
-            $xml = new SimpleXMLElement($xml);
-
-            // Collect all plugin nodes
-            $pluginNodes = $getAllPlugins($xml);
-        }
-
-        $pluginsInitFiles = [];
-        foreach ($pluginNodes as $plugin) {
-
-            $pluginInitFiles = [
-                'front' => [
-                    'ressources' => [],
-                    'js_initialization' => [],
-                ],
-                'melis' => [
-                    'ressources' => [],
-                    'js_initialization' => [],
-                ]
-            ];
-
-            $pluginModule = $plugin['module'];
-            $pluginName = $plugin['name'];
-
-            // dump($pluginModule, $pluginName);
-            // dump($config['plugins'][$pluginModule]['plugins'][$pluginName]);
-            if (!empty($config['plugins'][$pluginModule]['plugins'][$pluginName])) {
-
-                // dump('test');
-
-                $pluginConf = $config['plugins'][$pluginModule]['plugins'][$pluginName];
-
-                $boFiles = (!empty($pluginConf['melis']['files'])) ? $pluginConf['melis']['files'] : array();
-                $boInit = (!empty($pluginConf['melis']['js_initialization'])) ? $pluginConf['melis']['js_initialization'] : array();
-
-                if (!empty($boFiles['css']) || !empty($boFiles['js'])) {
-                    // 'melis' => array('ressources' => $BoFiles, 'js_initialization' => $BoInit),
-                    $pluginInitFiles['melis']['ressources'] = array_merge($boFiles, $pluginInitFiles['melis']['ressources']);
-                    $pluginInitFiles['melis']['js_initialization'] = array_merge($boInit, $pluginInitFiles['melis']['js_initialization']);
-
-                    $pluginsInitFiles[$plugin['id']] = $pluginInitFiles;
-                }
-            }
-        }
-
-        // dump($pluginsInitFiles);
 
         $viewRender = $this->getServiceManager()->get('ViewRenderer');
         $dndHtml = $viewRender->render($melisFrontDragDropZonePluginView);
@@ -235,7 +161,7 @@ class MelisPluginRendererController extends MelisAbstractActionController
         return new JsonModel([
             'success' => $success,
             'html' => $dndHtml,
-            'pluginsInitFiles' => $pluginsInitFiles
+            // 'pluginsInitFiles' => $pluginsInitFiles
         ]);
     }
 }

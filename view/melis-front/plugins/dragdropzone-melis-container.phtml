@@ -16,10 +16,17 @@ if (!empty($this->pluginFrontConfig) && !empty($this->pluginFrontConfig['id']))
     data-layout-template="<?= $this->dndLayoutTemplate; ?>"
     data-site-module="<?= $this->siteModule; ?>">
     <div class="dnd-layout-wrapper">
-        <div class="dnd-layout-indicator melis-plugin-indicator">
+        <!-- <div class="dnd-layout-indicator melis-plugin-indicator">
             <i class="fa fa-plug"></i>
-        </div>
+        </div> -->
         <div class="dnd-layout-buttons">
+            <!-- data-bs-trigger="click" data-bs-close-button="true" -->
+            <button type="button" class="btn btn-layout-popover" data-bs-toggle="popover" data-bs-placement="bottom" data-bs-html="true" data-bs-content-id="layout_popover_<?= $pluginId; ?>">
+                <i class="fa fa-columns"></i>
+            </button>
+            <button type="button" class="btn btn-delete-row" title="Delete">
+                <i class="fa fa-trash"></i>
+            </button>
             <?= $this->partial('MelisFront/dragdropzone/meliscontainer-buttons'); ?>
         </div>
         <div class="<?= $this->hasDragDropZone ? '' : 'melis-dragdropzone' ?> no-content"
@@ -31,10 +38,10 @@ if (!empty($this->pluginFrontConfig) && !empty($this->pluginFrontConfig['id']))
             data-melis-tag="<?= $this->pluginXmlDbKey; ?>"
             data-site-module="<?= $this->siteModule; ?>">
             <?php
-            echo $this->viewFront;
+                echo $this->viewFront;
             ?>
         </div>
-        <div class="dnd-bottom-buttons d-flex flex-row justify-content-between">
+        <div class="dnd-bottom-buttons clearfix">
             <button class="dnd-arrow-button down">
                 <i class="fa fa-caret-down"></i>
             </button>

@@ -283,10 +283,11 @@ return [
             'MiniTemplate/Content'                          =>  __DIR__ . '/../view/melis-front/plugins/mini-template-default.phtml',
             'MelisFront/generic-content'                    => __DIR__ . '/../view/melis-front/plugins/generic-content.phtml',
             // Drag in drop layouts
-            'MelisFront/dnd-default-tpl'                    => __DIR__ . '/../view/melis-front/plugins/dnd-default-tpl.phtml',
-            'MelisFront/dnd-2-cols-tpl'                     => __DIR__ . '/../view/melis-front/plugins/dnd-2-cols-tpl.phtml',
+            'MelisFront/dnd-default-tpl'                                        => __DIR__ . '/../view/melis-front/plugins/dnd-default-tpl.phtml',
+            'MelisFront/dnd-2-cols-tpl'                                         => __DIR__ . '/../view/melis-front/plugins/dnd-2-cols-tpl.phtml',
+            'MelisFront/dnd-2-rows-1-3-col-center-w-bottom-1-col-tpl'           => __DIR__ . '/../view/melis-front/plugins/dnd-2-rows-1-3-col-center-w-bottom-1-col-tpl.phtml',
+            'MelisFront/dnd-2-rows-top1-col-w-bottom-1-3-col-center-tpl'        => __DIR__ . '/../view/melis-front/plugins/dnd-2-rows-top1-col-w-bottom-1-3-col-center-tpl.phtml',
             'MelisFront/dnd-2-cols-down-tpl'                     => __DIR__ . '/../view/melis-front/plugins/dnd-2-cols-down-tpl.phtml',
-            'MelisFront/dnd-2-rows-3-cols-1-col-tpl'        => __DIR__ . '/../view/melis-front/plugins/dnd-2-rows-3-cols-1-col-tpl.phtml',
         ],
         'template_path_stack' => [
             __DIR__ . '/../view',
