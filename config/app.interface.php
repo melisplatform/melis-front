@@ -63,6 +63,22 @@ return [
                                             </div>
                                         </div>
                                     </button>',
+            ],
+            '3-rows-top-1-col-w-1-3-col-center-w-bottom-1-col' => [
+                'template' => 'MelisFront/dnd-3-rows-top-1-col-w-1-3-col-center-w-bottom-1-col-tpl',
+                'html-button-icon' => '<button class="column-icon top-1-col-w-center-1-3-center-w-bottom-1-col">
+                                        <div class="icon-container">
+                                            <div class="icon-row">
+                                                <div class="icon-col-bg icon-col-12 bg-white"></div>
+                                            </div>
+                                            <div class="icon-row justify-content-center">
+                                                <div class="icon-col-bg icon-col-4 bg-white"></div>
+                                            </div>
+                                            <div class="icon-row">
+                                                <div class="icon-col-bg icon-col-12 bg-white"></div>
+                                            </div>
+                                        </div>
+                                    </button>',
             ]
         ]
     ]
