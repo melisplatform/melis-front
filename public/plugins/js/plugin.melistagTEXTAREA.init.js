@@ -29,7 +29,7 @@ function melistagTEXTAREA_savePlugin(editor) {
 $("body").on("blur", "div.textarea-editable", function() {
 	// get all data-attributes from the clicked
 	// var currentdata = $(this).closest(".textarea-editable").data();
-	var currentdata = $(this).data();
+	var currentdata = $(this)[0].dataset;
 
 	//var pluginDivId = $(this).closest('.textarea-editable').attr('id');
 	var pluginDivId = $(this).attr('id');

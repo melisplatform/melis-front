@@ -285,6 +285,7 @@ return [
             // Drag in drop layouts
             'MelisFront/dnd-default-tpl'                    => __DIR__ . '/../view/melis-front/plugins/dnd-default-tpl.phtml',
             'MelisFront/dnd-2-cols-tpl'                     => __DIR__ . '/../view/melis-front/plugins/dnd-2-cols-tpl.phtml',
+            'MelisFront/dnd-2-cols-down-tpl'                     => __DIR__ . '/../view/melis-front/plugins/dnd-2-cols-down-tpl.phtml',
             'MelisFront/dnd-2-rows-3-cols-1-col-tpl'        => __DIR__ . '/../view/melis-front/plugins/dnd-2-rows-3-cols-1-col-tpl.phtml',
         ],
         'template_path_stack' => [

@@ -28,7 +28,7 @@ function melistagMEDIA_savePlugin(editor) {
 // run this function when you click out of the tinymce
 $("body").on("blur", "div.media-editable", function() {
 	// get all data-attributes from the clicked
-	var currentdata = $(this).data();
+	var currentdata = $(this)[0].dataset;
 	// var currentdata = $(this).closest(".media-editable").data();
 
 	//var pluginDivId = $(this).closest('.media-editable').attr('id');
