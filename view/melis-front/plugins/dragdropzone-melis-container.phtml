@@ -17,22 +17,22 @@ if (!empty($this->pluginFrontConfig) && !empty($this->pluginFrontConfig['id']))
     data-site-module="<?= $this->siteModule; ?>">
     <div class="dnd-layout-wrapper">
         <div class="dnd-layout-indicator melis-plugin-indicator">
-            <i class="fa fa-plug"></i>
+            <img src="/MelisFront/images/icons/dnd-icon.png" alt="dragndrop icon" />
         </div>
-        <div class="dnd-layout-buttons">
+        <div class="dnd-layout-buttons melis-plugin-tools-box">
+            <div class="melis-plugin-title-box">
+                <span class="melis-dnd-title melis-module-title">DragnDrop Zone</span>
+                <span class="melis-dnd-sub-title melis-plugin-title">Columns</span>
+            </div>
+            <?= $this->partial('MelisFront/dragdropzone/meliscontainer-buttons'); ?>
+            <button class="btn dnd-plus-button" data-page-id="<?= $this->pageId; ?>" data-plugin-id="<?= $pluginId ?>">
+                <i class="fa fa-plus"></i>
+            </button>
             <div class="m-plugin-sub-tools">
                 <div class="m-move-handle">
                     <i class="fa fa-arrows"></i>
                 </div>
-	        </div>
-            <button class="btn dnd-plus-button" data-page-id="<?= $this->pageId; ?>" data-plugin-id="<?= $pluginId ?>">
-                <i class="fa fa-plus"></i>
-            </button>
-
-            <button type="button" class="btn btn-layout-popover" data-bs-toggle="popover" data-bs-placement="bottom" data-bs-html="true" data-bs-content-id="layout_popover_<?= $pluginId; ?>">
-                <i class="fa fa-columns"></i>
-            </button>
-            <?= $this->partial('MelisFront/dragdropzone/meliscontainer-buttons'); ?>
+            </div>
         </div>
         <div class="<?= $this->hasDragDropZone ? '' : 'melis-dragdropzone' ?> no-content"
             data-dragdropzone-id="<?= $this->dragdropzoneId; ?>"

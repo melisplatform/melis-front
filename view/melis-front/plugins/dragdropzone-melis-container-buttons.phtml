@@ -1,23 +1,12 @@
-<style>
-    [dnd-layout-disable] button {
-        cursor: not-allowed
-    }
-</style>
-<div id="layout_popover_<?= $this->dragdropzoneId; ?>" class="layout-popover">
-    <header class="d-flex flex-row justify-content-between">
-        <h5>Column Layout</h5>
-        <button type="button" class="btn close-btn"><i class="fa fa-times"></i></button>
-    </header>
-    <div class="column-icons">
-        <?php
-        foreach ($this->dndLayouts as $k => $layout) {
-            $dndTpl = 'data-dnd-tpl="' . $k . '"';
-            if ($this->dndLayoutTemplate == $layout['template'])
-                $dndTpl = "dnd-layout-disable";
+<div class="column-icons">
+    <?php
+    foreach ($this->dndLayouts as $k => $layout) {
+        $dndTpl = 'data-dnd-tpl="' . $k . '"';
+        if ($this->dndLayoutTemplate == $layout['template'])
+            $dndTpl = "dnd-layout-disable";
 
-            if (!empty($layout['template']) && (!empty($layout['html-button-icon'])))
-                echo '<div data-dnd-id="' . $this->dndId . '" ' . $dndTpl . ' data-page-id="' . $this->pageId . '" data-melis-site="' . $_GET['melisSite'] . '">' . $layout['html-button-icon'] . '</div>';
-        }
-        ?>
-    </div>
+        if (!empty($layout['template']) && (!empty($layout['html-button-icon'])))
+            echo '<div data-dnd-id="' . $this->dndId . '" ' . $dndTpl . ' data-page-id="' . $this->pageId . '" data-melis-site="' . $_GET['melisSite'] . '">' . $layout['html-button-icon'] . '</div>';
+    }
+    ?>
 </div>
