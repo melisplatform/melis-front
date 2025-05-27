@@ -19,7 +19,7 @@ return [
         'drag-and-drop-layouts' => [
             'default' => [
                 'template' => 'MelisFront/dnd-default-tpl',
-                'html-button-icon' => '<button class="column-icon whole-1-col">
+                'html-button-icon' => '<button class="column-icon whole-1-col" title="One column">
                                         <div class="icon-container">
                                             <div class="icon-row">
                                                 <div class="icon-col-bg icon-col-12 bg-white"></div>
@@ -29,7 +29,7 @@ return [
             ],
             '2-cols' => [
                 'template' => 'MelisFront/dnd-2-cols-tpl',
-                'html-button-icon' => '<button class="column-icon half-col-equal">
+                'html-button-icon' => '<button class="column-icon half-col-equal" title="Two column">
                                         <div class="icon-container">
                                             <div class="icon-row">
                                                 <div class="icon-col-bg icon-col-6 bg-white"></div>
@@ -40,7 +40,7 @@ return [
             ],
             '3-cols' => [
                 'template' => 'MelisFront/dnd-3-cols-tpl',
-                'html-button-icon' => '<button class="column-icon three-col-equal">
+                'html-button-icon' => '<button class="column-icon three-col-equal" title="Three column">
                                         <div class="icon-container">
                                             <div class="icon-row">
                                                 <div class="icon-col-bg icon-col-4 bg-white"></div>
@@ -52,7 +52,7 @@ return [
             ],
             '4-cols' => [
                 'template' => 'MelisFront/dnd-3-cols-tpl',
-                'html-button-icon' => '<button class="column-icon four-col-equal">
+                'html-button-icon' => '<button class="column-icon four-col-equal" title="Four column">
                                         <div class="icon-container">
                                             <div class="icon-row">
                                                 <div class="icon-col-bg icon-col-3 bg-white"></div>
@@ -65,7 +65,7 @@ return [
             ],
             '2-rows-1-3-col-center-w-bottom-1-col' => [
                 'template' => 'MelisFront/dnd-2-rows-1-3-col-center-w-bottom-1-col-tpl',
-                'html-button-icon' => '<button class="column-icon top-1-3-col-center">
+                'html-button-icon' => '<button class="column-icon top-1-3-col-center" title="Top row 1/3 column centered, bottom row one column">
                                         <div class="icon-container">
                                             <div class="icon-row justify-content-center">
                                                 <div class="icon-col-bg icon-col-4 bg-white"></div>
@@ -78,7 +78,7 @@ return [
             ],
             '2-rows-top1-col-w-bottom-1-3-col-center' => [
                 'template' => 'MelisFront/dnd-2-rows-top1-col-w-bottom-1-3-col-center-tpl',
-                'html-button-icon' => '<button class="column-icon top-1-col-w-bottom-1-3-center">
+                'html-button-icon' => '<button class="column-icon top-1-col-w-bottom-1-3-center" title="Top row one column, bottom row 1/3 column centered">
                                         <div class="icon-container">
                                             <div class="icon-row">
                                                 <div class="icon-col-bg icon-col-12 bg-white"></div>
@@ -91,7 +91,7 @@ return [
             ],
             '3-rows-top-1-col-w-1-3-col-center-w-bottom-1-col' => [
                 'template' => 'MelisFront/dnd-3-rows-top-1-col-w-1-3-col-center-w-bottom-1-col-tpl',
-                'html-button-icon' => '<button class="column-icon top-1-col-w-center-1-3-center-w-bottom-1-col">
+                'html-button-icon' => '<button class="column-icon top-1-col-w-center-1-3-center-w-bottom-1-col" title="Top and bottom row one column, center row 1/3 column centered">
                                         <div class="icon-container">
                                             <div class="icon-row">
                                                 <div class="icon-col-bg icon-col-12 bg-white"></div>
