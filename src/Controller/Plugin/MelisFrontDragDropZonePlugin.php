@@ -71,7 +71,7 @@ class MelisFrontDragDropZonePlugin extends MelisTemplatingPlugin
 
         if (isset($_GET['dndTpl']) && isset($_GET['dndId'])) {
 
-            if ($_GET['dndId'] == $this->pluginFrontConfig['id']) {
+            if (($_GET['dndId'] == $this->pluginFrontConfig['id']) || isset($_GET['addAction'])) {
                 $config = $this->getServiceManager()->get('config');
                 $dndLayouts = $config['plugins']['drag-and-drop-layouts'];
 
@@ -79,49 +79,50 @@ class MelisFrontDragDropZonePlugin extends MelisTemplatingPlugin
             }
         }
 
-        foreach ($this->pluginFrontConfig['plugins'] as $plugin) {
+        if ($this->pluginFrontConfig['isInnerDragDropZone'])
+            foreach ($this->pluginFrontConfig['plugins'] as $plugin) {
 
-            $pluginId = $plugin['pluginId'];
-            if ($plugin['pluginName'] == 'MelisFrontDragDropZonePlugin') {
-                continue;
-            }
+                $pluginId = $plugin['pluginId'];
+                if ($plugin['pluginName'] == 'MelisFrontDragDropZonePlugin') {
+                    continue;
+                }
 
-            $tmpHtml = null;
-            $data = array(
-                'action' => 'getPlugin',
-                'module' => $plugin['pluginModule'],
-                'pluginName' => $plugin['pluginName'],
-                'pluginId' => $pluginId,
-                'pageId' => $this->pluginFrontConfig['pageId'],
-                'fromDragDropZone' => true,
-            );
+                $tmpHtml = null;
+                $data = array(
+                    'action' => 'getPlugin',
+                    'module' => $plugin['pluginModule'],
+                    'pluginName' => $plugin['pluginName'],
+                    'pluginId' => $pluginId,
+                    'pageId' => $this->pluginFrontConfig['pageId'],
+                    'fromDragDropZone' => true,
+                );
 
-            try {
-                $forwardPlugin = $this->getController()->forward();
+                try {
+                    $forwardPlugin = $this->getController()->forward();
 
-                $jsonResults = $forwardPlugin->dispatch('MelisFront\\Controller\\MelisPluginRenderer', $data);
+                    $jsonResults = $forwardPlugin->dispatch('MelisFront\\Controller\\MelisPluginRenderer', $data);
 
 
-                if (!empty($jsonResults)) {
-                    $variables = $jsonResults->getVariables();
-                    // $containerId = isset($variables['datas']['dom']['pluginContainerId']) ?
-                    //     $variables['datas']['dom']['pluginContainerId'] : count($plugins);
+                    if (!empty($jsonResults)) {
+                        $variables = $jsonResults->getVariables();
+                        // $containerId = isset($variables['datas']['dom']['pluginContainerId']) ?
+                        //     $variables['datas']['dom']['pluginContainerId'] : count($plugins);
 
-                    if (!empty($variables['success'])) {
-                        $tmpHtml = $variables['datas']['html'];
-                    } else {
-                        // problem with the plugins, we show the error only BO side
-                        if ($this->renderMode == 'melis') {
-                            $tmpHtml = $variables['errors'] . ' : ' . $plugin['pluginModule'] . ' / ' . $plugin['pluginName'];
+                        if (!empty($variables['success'])) {
+                            $tmpHtml = $variables['datas']['html'];
+                        } else {
+                            // problem with the plugins, we show the error only BO side
+                            if ($this->renderMode == 'melis') {
+                                $tmpHtml = $variables['errors'] . ' : ' . $plugin['pluginModule'] . ' / ' . $plugin['pluginName'];
+                            }
                         }
                     }
+                } catch (\Exception $e) {
+                    return array('pluginId' => $this->pluginFrontConfig['id']);
                 }
-            } catch (\Exception $e) {
-                return array('pluginId' => $this->pluginFrontConfig['id']);
-            }
 
-            $plugins[$dndCtr++][] = $tmpHtml;
-        }
+                $plugins[$dndCtr++][] = $tmpHtml;
+            }
 
         $newHtml = !$this->isInBackOffice() ? '<div class="clearfix">' : '';
         foreach ($plugins as $id => $contents) {
@@ -183,6 +184,7 @@ class MelisFrontDragDropZonePlugin extends MelisTemplatingPlugin
         $viewModel->siteModule = $siteModule;
         $viewModel->columns = $columns;
         $viewModel->dndLayoutTemplate = $this->pluginFrontConfig['template_path'];
+        $viewModel->dndPluginReferer = $this->pluginFrontConfig['plugin_referer'];
 
         return $viewModel;
     }
@@ -191,10 +193,16 @@ class MelisFrontDragDropZonePlugin extends MelisTemplatingPlugin
     {
         $configValues = array();
 
+        if (!$this->pluginConfig['front']['isInnerDragDropZone'])
+            return $configValues;
+
         $xml = simplexml_load_string($this->pluginXmlDbValue);
 
         // default dnd template
         $template = 'MelisFront/dnd-default-tpl';
+
+        // default no plugin referer/ no origin
+        $pluginReferer = '';
 
         if ($xml) {
             $cpt = 0;
@@ -202,6 +210,9 @@ class MelisFrontDragDropZonePlugin extends MelisTemplatingPlugin
             // plugin layout
             if (!empty($xml->attributes()->template))
                 $template = (string)$xml->attributes()->template;
+
+            if (!empty($xml->attributes()->plugin_referer))
+                $pluginReferer = (string)$xml->attributes()->plugin_referer;
 
             foreach ($xml as $k => $plugin) {
 
@@ -231,7 +242,10 @@ class MelisFrontDragDropZonePlugin extends MelisTemplatingPlugin
 
         return [
             'template_path' => $template,
-            "plugins" => $configValues
+            'plugin_referer' => $pluginReferer,
+            "plugins" => $configValues,
+            "pluginXmlDbValue"  => $this->pluginXmlDbValue
+
         ];
     }
 
@@ -274,13 +288,13 @@ class MelisFrontDragDropZonePlugin extends MelisTemplatingPlugin
         //        dd($xml->asXML());
 
         // Output XML without the version line
-//                        print_r($parameters);
-//                exit;
+        //                        print_r($parameters);
+        //                exit;
         $xml = $this->buildXmlFromArray($parameters);
         $dom = dom_import_simplexml($xml)->ownerDocument;
         $dom->formatOutput = true;
         $xmlValueFormatted = $dom->saveXML($dom->documentElement);
-//        dump($xmlValueFormatted);exit;
+        //        dump($xmlValueFormatted);exit;
         return $xmlValueFormatted;
     }
 
@@ -294,7 +308,7 @@ class MelisFrontDragDropZonePlugin extends MelisTemplatingPlugin
         if (!$parent) {
             $parent = new \SimpleXMLElement('<' . $this->pluginXmlDbKey . '/>');
             $parent->addAttribute('id', $data['melisPluginId']);
-            $parent->addAttribute('plugin_referer', $data['reference'] ?? '');
+            $parent->addAttribute('plugin_referer', $data['pluginReferer'] ?? '');
             $parent->addAttribute('plugin_position', '1');
             //            $parent->addAttribute('plugin_container_id', '');
             //            $parent->addAttribute('width_desktop', '100');
@@ -322,7 +336,7 @@ class MelisFrontDragDropZonePlugin extends MelisTemplatingPlugin
                 $childNode = $parent->addChild($this->pluginXmlDbKey);
                 $childNode->addAttribute('id', $child['melisPluginId']);
                 $childNode->addAttribute('plugin_container_id', '');
-                $childNode->addAttribute('plugin_referer', $child['reference'] ?? '');
+                $childNode->addAttribute('plugin_referer', $child['pluginReferer'] ?? '');
                 $childNode->addAttribute('plugin_position', '1');
                 $childNode->addAttribute('width_desktop', '100');
                 $childNode->addAttribute('width_tablet', '100');

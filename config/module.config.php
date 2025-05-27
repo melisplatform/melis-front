@@ -175,6 +175,21 @@ return [
                     ],
                 ],
             ],
+            'dnd-remove' => [
+                'type' => 'Literal',
+                'options' => [
+                    'route' =>  '/dnd-remove',
+                    'constraints' => [
+                        'action' => '',
+                    ],
+                    'defaults' => [
+                        '__NAMESPACE__' => 'MelisFront\Controller',
+                        'controller' => 'MelisPluginRenderer',
+                        'action' => 'dndRemove',
+                        'renderMode' => 'melis',
+                    ],
+                ],
+            ],
         ],
     ],
     'translator' => [
@@ -283,6 +298,7 @@ return [
             'MiniTemplate/Content'                          =>  __DIR__ . '/../view/melis-front/plugins/mini-template-default.phtml',
             'MelisFront/generic-content'                    => __DIR__ . '/../view/melis-front/plugins/generic-content.phtml',
             // Drag in drop layouts
+            'MelisFront/dnd'                                                        => __DIR__ . '/../view/melis-front/plugins/dnd.phtml',
             'MelisFront/dnd-default-tpl'                                            => __DIR__ . '/../view/melis-front/plugins/dnd-default-tpl.phtml',
             'MelisFront/dnd-2-cols-tpl'                                             => __DIR__ . '/../view/melis-front/plugins/dnd-2-cols-tpl.phtml',
             'MelisFront/dnd-2-cols-down-tpl'                                        => __DIR__ . '/../view/melis-front/plugins/dnd-2-cols-down-tpl.phtml',

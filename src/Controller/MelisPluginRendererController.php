@@ -145,16 +145,29 @@ class MelisPluginRendererController extends MelisAbstractActionController
         $dndHtml = '';
         $pageId = $this->params()->fromQuery('pageId');
         $dndId = $this->params()->fromQuery('dndId');
-
-        $melisFrontDragDropZonePlugin = $this->MelisFrontDragDropZonePlugin();
-        $melisFrontDragDropZonePluginView = $melisFrontDragDropZonePlugin->render([
-            'pageId' => $pageId,
-            'id' => $dndId,
-        ]);
-
+        $addAction = $this->params()->fromQuery('addAction', false);
 
         $viewRender = $this->getServiceManager()->get('ViewRenderer');
-        $dndHtml = $viewRender->render($melisFrontDragDropZonePluginView);
+        $dndPlugin = $this->MelisFrontDragDropZonePlugin();
+
+        $dndViewParams = [
+            'pageId' => $pageId,
+            'id' => $dndId,
+        ];
+
+        if ($addAction) {
+
+            $dndView = new ViewModel();
+            $dndView->setTemplate('MelisFront/dnd-default-tpl');
+
+            $dndViewParams['id'] .= '_' . uniqid();
+            $dndViewParams['plugin_referer'] = $dndId;
+
+            $dndView->pluginsHtml = $viewRender->render($dndPlugin->render($dndViewParams));
+        } else
+            $dndView = $dndPlugin->render($dndViewParams);
+
+        $dndHtml = $viewRender->render($dndView);
 
         $success = true;
 
@@ -162,6 +175,24 @@ class MelisPluginRendererController extends MelisAbstractActionController
             'success' => $success,
             'html' => $dndHtml,
             // 'pluginsInitFiles' => $pluginsInitFiles
+        ]);
+    }
+
+    public function dndRemoveAction()
+    {
+        $success = true;
+        $pageId = $this->params()->fromPost('pageId');
+        $dndId = $this->params()->fromPost('dndId');
+
+        $container = new Container('meliscms');
+
+        if (!empty($container['content-pages'][$pageId]))
+            if (!empty($container['content-pages'][$pageId]['melisDragDropZone']))
+                if (!empty($container['content-pages'][$pageId]['melisDragDropZone'][$dndId]))
+                    unset($container['content-pages'][$pageId]['melisDragDropZone'][$dndId]);
+
+        return new JsonModel([
+            'success' => $success,
         ]);
     }
 }

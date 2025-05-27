@@ -20,7 +20,7 @@ use Laminas\View\Model\ViewModel;
  */
 class MelisDragDropZoneHelper extends AbstractHelper
 {
-	public $serviceManager;
+    public $serviceManager;
 
     /**
      * @param ServiceManager $serviceManager
@@ -31,22 +31,84 @@ class MelisDragDropZoneHelper extends AbstractHelper
     }
 
     /**
-     * @param $idPage
+     * @param $pageId
      * @param $dragDropZoneId
      * @return mixed
      */
-    public function __invoke($idPage, $dragDropZoneId)
-	{
-	    $melisFrontDragDropZonePlugin = $this->serviceManager->get('ControllerPluginManager')->get('MelisFrontDragDropZonePlugin');
+    public function __invoke($pageId, $dragDropZoneId, $isInnerDragDropZone = false)
+    {
+        $viewRender = $this->serviceManager->get('ViewRenderer');
+        $dndPlugin = $this->serviceManager->get('ControllerPluginManager')->get('MelisFrontDragDropZonePlugin');
 
-	    $melisFrontDragDropZonePluginView = $melisFrontDragDropZonePlugin->render([
-	        'pageId' => $idPage,
-	        'id' => $dragDropZoneId,
-	    ]);
-	    
-	    $viewRender = $this->serviceManager->get('ViewRenderer');
-	    $tagHtml = $viewRender->render($melisFrontDragDropZonePluginView);
+        if (!$isInnerDragDropZone) {
 
-		return $tagHtml;
-	}
+            $dndView = new ViewModel();
+            $dndView->setTemplate('MelisFront/dnd');
+            $dnds = [];
+
+            $outDndConfig = $dndPlugin->render([
+                'pageId' => $pageId,
+                'id' => $dragDropZoneId,
+                'isInnerDragDropZone' => false
+            ]);
+
+            $pluginVars = $outDndConfig->getVariables();
+            $xml = $pluginVars['pluginConfig']['xmldbvalues'];
+            $xmlData = '';
+
+            if (is_array($xml)) {
+
+                $xmlData = '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
+                $xmlData .= '<document type="MelisCMS" author="MelisTechnology" version="2.0">' . "\n";
+
+                foreach ($xml as $val)
+                    $xmlData .= $val;
+
+                $xmlData .= '</document>';
+            } else
+                $xmlData = $xml;
+
+            $xmlData = simplexml_load_string($xmlData);
+
+            foreach ($xmlData as $k => $dnd) {
+
+                if ($k == 'melisDragDropZone') {
+
+                    $id = (string) $dnd->attributes()->id;
+                    $referer = (string) $dnd->attributes()->plugin_referer;
+
+                    if (in_array($dragDropZoneId, [$id, $referer])) {
+
+                        $dnds[] = [
+                            'pageId' => $pageId,
+                            'id' => $id,
+                        ];
+                    }
+                }
+            }
+
+
+            if (empty($dnds)) {
+
+                $dnds[] = [
+                    'pageId' => $pageId,
+                    'id' => $dragDropZoneId,
+                ];
+            }
+
+            $dndView->dnds = $dnds;
+
+            return $viewRender->render($dndView);
+        } else {
+
+            $dndPluginView = $dndPlugin->render([
+                'pageId' => $pageId,
+                'id' => $dragDropZoneId,
+                'isInnerDragDropZone' => true
+            ]);
+
+            $tagHtml = $viewRender->render($dndPluginView);
+            return $tagHtml;
+        }
+    }
 }
