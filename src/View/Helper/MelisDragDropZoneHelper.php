@@ -70,22 +70,23 @@ class MelisDragDropZoneHelper extends AbstractHelper
 
             $xmlData = simplexml_load_string($xmlData);
 
-            foreach ($xmlData as $k => $dnd) {
+            if ($xmlData)
+                foreach ($xmlData as $k => $dnd) {
 
-                if ($k == 'melisDragDropZone') {
+                    if ($k == 'melisDragDropZone') {
 
-                    $id = (string) $dnd->attributes()->id;
-                    $referer = (string) $dnd->attributes()->plugin_referer;
+                        $id = (string) $dnd->attributes()->id;
+                        $referer = (string) $dnd->attributes()->plugin_referer;
 
-                    if (in_array($dragDropZoneId, [$id, $referer])) {
+                        if (in_array($dragDropZoneId, [$id, $referer])) {
 
-                        $dnds[] = [
-                            'pageId' => $pageId,
-                            'id' => $id,
-                        ];
+                            $dnds[] = [
+                                'pageId' => $pageId,
+                                'id' => $id,
+                            ];
+                        }
                     }
                 }
-            }
 
 
             if (empty($dnds)) {
