@@ -91,25 +91,25 @@ class MelisDragDropZoneHelper extends AbstractHelper
 
             if (empty($dnds)) {
 
+                // create initial dnd zone
                 $dnds[] = [
                     'pageId' => $pageId,
                     'id' => $dragDropZoneId,
                 ];
-            }
 
-            $dndView->dnds = $dnds;
-
-            // checking if the dnd id not exist in the session
-            // this will create first the data of the dnd
-            $container = new Container('meliscms');
-            if (!empty($container['content-pages'][$pageId])) {
-                if (!empty($container['content-pages'][$pageId]['melisDragDropZone'])) {
-                    if (!isset($container['content-pages'][$pageId]['melisDragDropZone'][$dragDropZoneId])) {
-                        $xml = '<melisDragDropZone id="' . $dragDropZoneId . '" plugin_container_id="' . $dragDropZoneId . '" plugin_referer="" plugin_position=""></melisDragDropZone>';
-                        $container['content-pages'][$pageId]['melisDragDropZone'][$dragDropZoneId] = $xml;
+                // save initial dnd xml data to session
+                $container = new Container('meliscms');
+                if (!empty($container['content-pages'][$pageId])) {
+                    if (!empty($container['content-pages'][$pageId]['melisDragDropZone'])) {
+                        if (!isset($container['content-pages'][$pageId]['melisDragDropZone'][$dragDropZoneId])) {
+                            $xml = '<melisDragDropZone id="' . $dragDropZoneId . '" plugin_container_id="' . $dragDropZoneId . '" plugin_referer="" plugin_position=""></melisDragDropZone>';
+                            $container['content-pages'][$pageId]['melisDragDropZone'][$dragDropZoneId] = $xml;
+                        }
                     }
                 }
             }
+
+            $dndView->dnds = $dnds;
 
             return $viewRender->render($dndView);
         } else {
