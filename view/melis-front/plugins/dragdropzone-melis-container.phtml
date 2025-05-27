@@ -27,11 +27,10 @@ if (!empty($this->pluginFrontConfig) && !empty($this->pluginFrontConfig['id']))
             </div>
             <?= $this->partial('MelisFront/dragdropzone/meliscontainer-buttons'); ?>
             <div class="dnd-plugin-sub-tools">
-                <?php if (empty($this->dndPluginReferer)) { ?>
-                    <button class="btn dnd-plus-button" data-page-id="<?= $this->pageId; ?>" data-dnd-id="<?= $pluginId ?>" data-melis-site="<?= $this->siteModule; ?>">
-                        <i class="fa fa-plus"></i>
-                    </button>
-                <?php } else { ?>
+                <button class="btn dnd-plus-button" data-page-id="<?= $this->pageId; ?>" data-dnd-id="<?= $pluginId ?>" data-melis-site="<?= $this->siteModule; ?>">
+                    <i class="fa fa-plus"></i>
+                </button>
+                <?php if (!empty($this->dndPluginReferer)) { ?>
                     <button class="btn dnd-remove-button" data-page-id="<?= $this->pageId; ?>" data-dnd-id="<?= $pluginId ?>">
                         <i class="fa fa-trash"></i>
                     </button>
@@ -61,77 +60,77 @@ if (!empty($this->pluginFrontConfig) && !empty($this->pluginFrontConfig['id']))
     <script>
         setTimeout(() => {
 
-                $("body .melis-dragdropzone-container .dnd-plus-button").off().click(function() {
+                // $("body .melis-dragdropzone-container .dnd-plus-button").off().click(function() {
 
-                    let btn = $(this);
-                    let pageId = $(this).data("pageId");
-                    let dndId = $(this).data("dndId");
-                    let melisSite = $(this).data("melisSite");
-                    let dndTpl = "default";
-                    let pluginContent = btn.closest(".dnd-plugins-content");
+                //     let btn = $(this);
+                //     let pageId = $(this).data("pageId");
+                //     let dndId = $(this).data("dndId");
+                //     let melisSite = $(this).data("melisSite");
+                //     let dndTpl = "default";
+                //     let pluginContent = btn.closest(".dnd-plugins-content");
 
-                    btn.attr("disabled", true);
+                //     btn.attr("disabled", true);
 
-                    $.get("/dnd-layout", {
-                        pageId,
-                        dndId,
-                        dndTpl,
-                        melisSite,
-                        addAction: true
-                    }).done((res) => {
+                //     $.get("/dnd-layout", {
+                //         pageId,
+                //         dndId,
+                //         dndTpl,
+                //         melisSite,
+                //         addAction: true
+                //     }).done((res) => {
 
-                        btn.attr("disabled", false);
+                //         btn.attr("disabled", false);
 
-                        if (res.success) {
+                //         if (res.success) {
 
-                            let newDnd = $(res.html);
-                            newDnd.appendTo(pluginContent);
+                //             let newDnd = $(res.html);
+                //             newDnd.appendTo(pluginContent);
 
-                            // $('html, body').animate({
-                            //     scrollTop: newDnd.offset().top
-                            // }, 2000);
+                //             // $('html, body').animate({
+                //             //     scrollTop: newDnd.offset().top
+                //             // }, 2000);
 
-                            let boHeader = 47;
-                            let pageEditionHeader = 72;
-                            let newDndTop = newDnd.offset().top;
-                            let xtra = 100;
+                //             let boHeader = 47;
+                //             let pageEditionHeader = 72;
+                //             let newDndTop = newDnd.offset().top;
+                //             let xtra = 100;
 
-                            $(parent.document).scrollTop(newDndTop + xtra);
-
-
-                            let newDndId = newDnd.find(".melis-dragdropzone-container").data("pluginId");
-
-                            melisPluginEdition.moveResponsiveClass();
-                            melisPluginEdition.pluginDetector();
-                            melisPluginEdition.initResizable();
-                            melisDragnDrop.setDragDropZone();
-
-                            // save change to session
-                            melisPluginEdition.sendDragnDropList(newDndId, pageId);
-
-                        }
-                    })
-                })
+                //             $(parent.document).scrollTop(newDndTop + xtra);
 
 
-                $("body .melis-dragdropzone-container .dnd-remove-button").off().click(function() {
+                //             let newDndId = newDnd.find(".melis-dragdropzone-container").data("pluginId");
 
-                    let btn = $(this);
-                    let pageId = $(this).data("pageId");
-                    let dndId = $(this).data("dndId");
+                //             melisPluginEdition.moveResponsiveClass();
+                //             melisPluginEdition.pluginDetector();
+                //             melisPluginEdition.initResizable();
+                //             melisDragnDrop.setDragDropZone();
 
-                    btn.attr("disabled", true);
+                //             // save change to session
+                //             melisPluginEdition.sendDragnDropList(newDndId, pageId);
 
-                    let dndContainer = btn.closest(".melis-dragdropzone-container");
+                //         }
+                //     })
+                // })
 
-                    $.post("/dnd-remove", {
-                        pageId,
-                        dndId,
-                    }).done((res) => {
-                        dndContainer.remove();
-                    });
 
-                });
+                // $("body .melis-dragdropzone-container .dnd-remove-button").off().click(function() {
+
+                //     let btn = $(this);
+                //     let pageId = $(this).data("pageId");
+                //     let dndId = $(this).data("dndId");
+
+                //     btn.attr("disabled", true);
+
+                //     let dndContainer = btn.closest(".melis-dragdropzone-container");
+
+                //     $.post("/dnd-remove", {
+                //         pageId,
+                //         dndId,
+                //     }).done((res) => {
+                //         dndContainer.remove();
+                //     });
+
+                // });
             },
             3000)
     </script>
