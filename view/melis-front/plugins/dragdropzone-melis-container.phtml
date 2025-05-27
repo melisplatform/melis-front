@@ -22,25 +22,26 @@ if (!empty($this->pluginFrontConfig) && !empty($this->pluginFrontConfig['id']))
         </div>
         <div class="dnd-layout-buttons melis-plugin-tools-box">
             <div class="melis-plugin-title-box">
-                <span class="melis-dnd-title melis-module-title">DragnDrop Zone</span>
+                <span class="melis-dnd-title melis-module-title">DND Zone</span>
                 <span class="melis-dnd-sub-title melis-plugin-title">Layout</span>
             </div>
             <?= $this->partial('MelisFront/dragdropzone/meliscontainer-buttons'); ?>
-
-            <?php if (empty($this->dndPluginReferer)) { ?>
-                <button class="btn dnd-plus-button" data-page-id="<?= $this->pageId; ?>" data-dnd-id="<?= $pluginId ?>" data-melis-site="<?= $this->siteModule; ?>">
-                    <i class="fa fa-plus"></i>
+            <div class="dnd-plugin-sub-tools">
+                <?php if (empty($this->dndPluginReferer)) { ?>
+                    <button class="btn dnd-plus-button" data-page-id="<?= $this->pageId; ?>" data-dnd-id="<?= $pluginId ?>" data-melis-site="<?= $this->siteModule; ?>">
+                        <i class="fa fa-plus"></i>
+                    </button>
+                <?php } else { ?>
+                    <button class="btn dnd-remove-button" data-page-id="<?= $this->pageId; ?>" data-dnd-id="<?= $pluginId ?>">
+                        <i class="fa fa-trash"></i>
+                    </button>
+                <?php } ?>
+                <button class="btn dnd-arrow-down">
+                    <i class="fa fa-caret-down"></i>
                 </button>
-            <?php } else { ?>
-                <button class="btn dnd-remove-button" data-page-id="<?= $this->pageId; ?>" data-dnd-id="<?= $pluginId ?>">
-                    <i class="fa fa-trash"></i>
+                <button class="btn dnd-arrow-up">
+                    <i class="fa fa-caret-up"></i>
                 </button>
-            <?php } ?>
-
-            <div class="m-plugin-sub-tools">
-                <div class="m-move-handle">
-                    <i class="fa fa-arrows"></i>
-                </div>
             </div>
         </div>
         <div class="<?= $this->hasDragDropZone ? '' : 'melis-dragdropzone' ?> no-content"

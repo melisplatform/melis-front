@@ -38,6 +38,31 @@ return [
                                         </div>
                                     </button>',
             ],
+            '3-cols' => [
+                'template' => 'MelisFront/dnd-3-cols-tpl',
+                'html-button-icon' => '<button class="column-icon three-col-equal">
+                                        <div class="icon-container">
+                                            <div class="icon-row">
+                                                <div class="icon-col-bg icon-col-4 bg-white"></div>
+                                                <div class="icon-col-bg icon-col-4 bg-white"></div>
+                                                <div class="icon-col-bg icon-col-4 bg-white"></div>
+                                            </div>
+                                        </div>
+                                    </button>',
+            ],
+            '4-cols' => [
+                'template' => 'MelisFront/dnd-3-cols-tpl',
+                'html-button-icon' => '<button class="column-icon four-col-equal">
+                                        <div class="icon-container">
+                                            <div class="icon-row">
+                                                <div class="icon-col-bg icon-col-3 bg-white"></div>
+                                                <div class="icon-col-bg icon-col-3 bg-white"></div>
+                                                <div class="icon-col-bg icon-col-3 bg-white"></div>
+                                                <div class="icon-col-bg icon-col-3 bg-white"></div>
+                                            </div>
+                                        </div>
+                                    </button>',
+            ],
             '2-rows-1-3-col-center-w-bottom-1-col' => [
                 'template' => 'MelisFront/dnd-2-rows-1-3-col-center-w-bottom-1-col-tpl',
                 'html-button-icon' => '<button class="column-icon top-1-3-col-center">
