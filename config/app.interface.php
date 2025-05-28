@@ -51,7 +51,7 @@ return [
                                     </button>',
             ],
             '4-cols' => [
-                'template' => 'MelisFront/dnd-3-cols-tpl',
+                'template' => 'MelisFront/dnd-4-cols-tpl',
                 'html-button-icon' => '<button class="column-icon four-col-equal" title="Four column">
                                         <div class="icon-container">
                                             <div class="icon-row">
@@ -76,8 +76,8 @@ return [
                                         </div>
                                     </button>',
             ],
-            '2-rows-top1-col-w-bottom-1-3-col-center' => [
-                'template' => 'MelisFront/dnd-2-rows-top1-col-w-bottom-1-3-col-center-tpl',
+            '2-rows-top-1-col-w-bottom-1-3-col-center' => [
+                'template' => 'MelisFront/dnd-2-rows-top-1-col-w-bottom-1-3-col-center-tpl',
                 'html-button-icon' => '<button class="column-icon top-1-col-w-bottom-1-3-center" title="Top row one column, bottom row 1/3 column centered">
                                         <div class="icon-container">
                                             <div class="icon-row">

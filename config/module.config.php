@@ -305,7 +305,7 @@ return [
             'MelisFront/dnd-4-cols-tpl'                                             => __DIR__ . '/../view/melis-front/plugins/dnd-4-cols-tpl.phtml',
             'MelisFront/dnd-2-cols-down-tpl'                                        => __DIR__ . '/../view/melis-front/plugins/dnd-2-cols-down-tpl.phtml',
             'MelisFront/dnd-2-rows-1-3-col-center-w-bottom-1-col-tpl'               => __DIR__ . '/../view/melis-front/plugins/dnd-2-rows-1-3-col-center-w-bottom-1-col-tpl.phtml',
-            'MelisFront/dnd-2-rows-top1-col-w-bottom-1-3-col-center-tpl'            => __DIR__ . '/../view/melis-front/plugins/dnd-2-rows-top1-col-w-bottom-1-3-col-center-tpl.phtml',
+            'MelisFront/dnd-2-rows-top-1-col-w-bottom-1-3-col-center-tpl'            => __DIR__ . '/../view/melis-front/plugins/dnd-2-rows-top-1-col-w-bottom-1-3-col-center-tpl.phtml',
             'MelisFront/dnd-3-rows-top-1-col-w-1-3-col-center-w-bottom-1-col-tpl'   => __DIR__ . '/../view/melis-front/plugins/dnd-3-rows-top-1-col-w-1-3-col-center-w-bottom-1-col-tpl.phtml',
         ],
         'template_path_stack' => [
