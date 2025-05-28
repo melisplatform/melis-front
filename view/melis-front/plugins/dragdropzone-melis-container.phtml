@@ -27,18 +27,18 @@ if (!empty($this->pluginFrontConfig) && !empty($this->pluginFrontConfig['id']))
             </div>
             <?= $this->partial('MelisFront/dragdropzone/meliscontainer-buttons'); ?>
             <div class="dnd-plugin-sub-tools">
-                <button class="btn dnd-plus-button" data-page-id="<?= $this->pageId; ?>" data-dnd-id="<?= $pluginId ?>" data-melis-site="<?= $this->siteModule; ?>">
+                <button class="btn dnd-plus-button" title="Add dragdropzone below" data-page-id="<?= $this->pageId; ?>" data-dnd-id="<?= $pluginId ?>" data-melis-site="<?= $this->siteModule; ?>">
                     <i class="fa fa-plus"></i>
                 </button>
                 <?php if (!empty($this->dndPluginReferer)) { ?>
-                    <button class="btn dnd-remove-button" data-page-id="<?= $this->pageId; ?>" data-dnd-id="<?= $pluginId ?>">
+                    <button class="btn dnd-remove-button" title="Remove dragdropzone" data-page-id="<?= $this->pageId; ?>" data-dnd-id="<?= $pluginId ?>">
                         <i class="fa fa-trash"></i>
                     </button>
                 <?php } ?>
-                <button class="btn dnd-arrow-down">
+                <button class="btn dnd-arrow-down" title="Swap position of dragdropzone down">
                     <i class="fa fa-caret-down"></i>
                 </button>
-                <button class="btn dnd-arrow-up">
+                <button class="btn dnd-arrow-up" title="Swap position of dragdropzone up">
                     <i class="fa fa-caret-up"></i>
                 </button>
             </div>
