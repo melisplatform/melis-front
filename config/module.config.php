@@ -190,6 +190,21 @@ return [
                     ],
                 ],
             ],
+            'dnd-update-order' => [
+                'type' => 'Literal',
+                'options' => [
+                    'route' =>  '/dnd-update-order',
+                    'constraints' => [
+                        'action' => '',
+                    ],
+                    'defaults' => [
+                        '__NAMESPACE__' => 'MelisFront\Controller',
+                        'controller' => 'MelisPluginRenderer',
+                        'action' => 'dndUpdateOrder',
+                        'renderMode' => 'melis',
+                    ],
+                ],
+            ],
         ],
     ],
     'translator' => [

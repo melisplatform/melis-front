@@ -195,4 +195,36 @@ class MelisPluginRendererController extends MelisAbstractActionController
             'success' => $success,
         ]);
     }
+
+    public function dndUpdateOrderAction()
+    {
+        $success = true;
+
+        $dndIds = $this->params()->fromPost('dndIds');
+        $pageId = $this->params()->fromPost('pageId');
+
+        $container = new Container('meliscms');
+        $pageDndXmls = $container['content-pages'][$pageId]['melisDragDropZone'];
+
+        // creating new list to override existing data in session
+        $updatedDndXml = [];
+        foreach ($dndIds as $dnd)
+            foreach ($dnd as $d) {
+                if (isset($pageDndXmls[$d]))
+                    $updatedDndXml[$d] = $pageDndXmls[$d];
+            }
+
+        // replace with new updated order
+        $container['content-pages'][$pageId]['melisDragDropZone'] = $updatedDndXml;
+
+        return new JsonModel([
+            'success' => $success,
+        ]);
+    }
+
+    public function testAction()
+    {
+        $container = new Container('meliscms');
+        dd($container['content-pages'][32]['melisDragDropZone']);
+    }
 }
