@@ -224,7 +224,9 @@ class MelisPluginRendererController extends MelisAbstractActionController
 
     public function testAction()
     {
+        $pageId = $this->params()->fromQuery('pageId', 32);
+
         $container = new Container('meliscms');
-        dd($container['content-pages'][32]['melisDragDropZone']);
+        dd($container['content-pages'][$pageId]['melisDragDropZone']);
     }
 }
