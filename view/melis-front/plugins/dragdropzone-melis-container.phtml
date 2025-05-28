@@ -35,10 +35,10 @@ if (!empty($this->pluginFrontConfig) && !empty($this->pluginFrontConfig['id']))
                         <i class="fa fa-trash"></i>
                     </button>
                 <?php } ?>
-                <button class="btn dnd-arrow-down" title="Swap position of dragdropzone down">
+                <button class="btn dnd-arrow-down" title="Swap position of dragdropzone down" data-page-id="<?= $this->pageId; ?>">
                     <i class="fa fa-caret-down"></i>
                 </button>
-                <button class="btn dnd-arrow-up" title="Swap position of dragdropzone up">
+                <button class="btn dnd-arrow-up" title="Swap position of dragdropzone up" data-page-id="<?= $this->pageId; ?>">
                     <i class="fa fa-caret-up"></i>
                 </button>
             </div>
