@@ -99,8 +99,14 @@ class MelisDragDropZoneHelper extends AbstractHelper
 
                 // save initial dnd xml data to session
                 $container = new Container('meliscms');
-                if (!empty($container['content-pages'][$pageId])) {
-                    if (!empty($container['content-pages'][$pageId]['melisDragDropZone'])) {
+                if (!isset($container['content-pages'][$pageId]))
+                    $container['content-pages'][$pageId] = [];
+
+                if (isset($container['content-pages'][$pageId])) {
+                    if (!isset($container['content-pages'][$pageId]['melisDragDropZone']))
+                        $container['content-pages'][$pageId]['melisDragDropZone'] = [];
+
+                    if (isset($container['content-pages'][$pageId]['melisDragDropZone'])) {
                         if (!isset($container['content-pages'][$pageId]['melisDragDropZone'][$dragDropZoneId])) {
                             $xml = '<melisDragDropZone id="' . $dragDropZoneId . '" plugin_container_id="' . $dragDropZoneId . '" plugin_referer="" plugin_position=""></melisDragDropZone>';
                             $container['content-pages'][$pageId]['melisDragDropZone'][$dragDropZoneId] = $xml;
