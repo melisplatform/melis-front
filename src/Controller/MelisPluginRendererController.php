@@ -160,10 +160,26 @@ class MelisPluginRendererController extends MelisAbstractActionController
             $dndView = new ViewModel();
             $dndView->setTemplate('MelisFront/dnd-default-tpl');
 
-            $dndViewParams['id'] .= '_' . uniqid();
+            $newDNDId = $dndId . '_' . uniqid();
+
+            $dndViewParams['id'] = $newDNDId;
             $dndViewParams['plugin_referer'] = $dndId;
 
             $dndView->pluginsHtml = $viewRender->render($dndPlugin->render($dndViewParams));
+
+            $container = new Container('meliscms');
+            if (isset($container['content-pages'][$pageId])) {
+                if (!isset($container['content-pages'][$pageId]['melisDragDropZone']))
+                    $container['content-pages'][$pageId]['melisDragDropZone'] = [];
+
+                if (isset($container['content-pages'][$pageId]['melisDragDropZone'])) {
+                    if (!isset($container['content-pages'][$pageId]['melisDragDropZone'][$newDNDId])) {
+                        $xml = '<melisDragDropZone id="' . $newDNDId . '" plugin_container_id="' . $newDNDId . '" plugin_referer="'.$dndId.'" plugin_position=""></melisDragDropZone>';
+                        $container['content-pages'][$pageId]['melisDragDropZone'][$newDNDId] = $xml;
+                    }
+                }
+            }
+
         } else
             $dndView = $dndPlugin->render($dndViewParams);
 
