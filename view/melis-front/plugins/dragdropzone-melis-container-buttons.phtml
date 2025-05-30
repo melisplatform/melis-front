@@ -1,4 +1,4 @@
-<div class="column-icons">
+<!-- <div class="column-icons"> -->
     <?php
     foreach ($this->dndLayouts as $k => $layout) {
         $dndTpl = 'data-dnd-tpl="' . $k . '"';
@@ -6,7 +6,7 @@
             $dndTpl = "dnd-layout-disable";
 
         if (!empty($layout['template']) && (!empty($layout['html-button-icon'])))
-            echo '<div data-dnd-id="' . $this->dndId . '" ' . $dndTpl . ' data-page-id="' . $this->pageId . '" data-melis-site="' . $_GET['melisSite'] . '">' . $layout['html-button-icon'] . '</div>';
+            echo '<div class="dnd-column-layout" data-dnd-id="' . $this->dndId . '" ' . $dndTpl . ' data-page-id="' . $this->pageId . '" data-melis-site="' . $_GET['melisSite'] . '">' . $layout['html-button-icon'] . '</div>';
     }
     ?>
-</div>
+<!-- </div> -->

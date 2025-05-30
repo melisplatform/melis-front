@@ -25,7 +25,6 @@ if (!empty($this->pluginFrontConfig) && !empty($this->pluginFrontConfig['id']))
                 <span class="melis-dnd-title melis-module-title">DND Zone</span>
                 <span class="melis-dnd-sub-title melis-plugin-title">Layout</span>
             </div>
-            <?= $this->partial('MelisFront/dragdropzone/meliscontainer-buttons'); ?>
             <div class="dnd-plugin-sub-tools">
                 <button class="btn dnd-plus-button" title="Add dragdropzone below" data-page-id="<?= $this->pageId; ?>" data-dnd-id="<?= $pluginId ?>" data-melis-site="<?= $this->siteModule; ?>">
                     <i class="fa fa-plus"></i>
@@ -42,6 +41,7 @@ if (!empty($this->pluginFrontConfig) && !empty($this->pluginFrontConfig['id']))
                     <i class="fa fa-caret-up"></i>
                 </button>
             </div>
+            <?= $this->partial('MelisFront/dragdropzone/meliscontainer-buttons'); ?>
         </div>
         <div class="<?= $this->hasDragDropZone ? '' : 'melis-dragdropzone' ?> no-content"
             data-dragdropzone-id="<?= $this->dragdropzoneId; ?>"
