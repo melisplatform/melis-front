@@ -318,6 +318,26 @@ return [
             'MelisFront/dnd-2-cols-tpl'                                             => __DIR__ . '/../view/melis-front/plugins/dnd-2-cols-tpl.phtml',
             'MelisFront/dnd-3-cols-tpl'                                             => __DIR__ . '/../view/melis-front/plugins/dnd-3-cols-tpl.phtml',
             'MelisFront/dnd-4-cols-tpl'                                             => __DIR__ . '/../view/melis-front/plugins/dnd-4-cols-tpl.phtml',
+            'MelisFront/dnd-5-cols-tpl'                                             => __DIR__ . '/../view/melis-front/plugins/dnd-5-cols-tpl.phtml',
+            'MelisFront/dnd-6-cols-tpl'                                             => __DIR__ . '/../view/melis-front/plugins/dnd-6-cols-tpl.phtml',
+            'MelisFront/dnd-2-cols-40-60-tpl'                                       => __DIR__ . '/../view/melis-front/plugins/dnd-2-cols-40-60-tpl.phtml',
+            'MelisFront/dnd-2-cols-60-40-tpl'                                       => __DIR__ . '/../view/melis-front/plugins/dnd-2-cols-60-40-tpl.phtml',
+            'MelisFront/dnd-2-cols-30-70-tpl'                                       => __DIR__ . '/../view/melis-front/plugins/dnd-2-cols-30-70-tpl.phtml',
+            'MelisFront/dnd-2-cols-70-30-tpl'                                       => __DIR__ . '/../view/melis-front/plugins/dnd-2-cols-70-30-tpl.phtml',
+            'MelisFront/dnd-2-cols-20-80-tpl'                                       => __DIR__ . '/../view/melis-front/plugins/dnd-2-cols-20-80-tpl.phtml',
+            'MelisFront/dnd-2-cols-80-20-tpl'                                       => __DIR__ . '/../view/melis-front/plugins/dnd-2-cols-80-20-tpl.phtml',
+
+            'MelisFront/dnd-3-cols-3-6-3-tpl'                                       => __DIR__ . '/../view/melis-front/plugins/dnd-3-cols-3-6-3-tpl.phtml',
+            'MelisFront/dnd-3-cols-3-3-6-tpl'                                       => __DIR__ . '/../view/melis-front/plugins/dnd-3-cols-3-3-6-tpl.phtml',
+            'MelisFront/dnd-3-cols-6-3-3-tpl'                                       => __DIR__ . '/../view/melis-front/plugins/dnd-3-cols-6-3-3-tpl.phtml',
+
+            'MelisFront/dnd-3-cols-2-8-2-tpl'                                       => __DIR__ . '/../view/melis-front/plugins/dnd-3-cols-2-8-2-tpl.phtml',
+            'MelisFront/dnd-3-cols-2-2-8-tpl'                                       => __DIR__ . '/../view/melis-front/plugins/dnd-3-cols-2-2-8-tpl.phtml',
+            'MelisFront/dnd-3-cols-8-2-2-tpl'                                       => __DIR__ . '/../view/melis-front/plugins/dnd-3-cols-8-2-2-tpl.phtml',
+
+            'MelisFront/dnd-4-cols-2-2-2-6-tpl'                                     => __DIR__ . '/../view/melis-front/plugins/dnd-4-cols-2-2-2-6-tpl.phtml',
+            'MelisFront/dnd-4-cols-6-2-2-2-tpl'                                     => __DIR__ . '/../view/melis-front/plugins/dnd-4-cols-6-2-2-2-tpl.phtml',
+
             'MelisFront/dnd-3-cols-1-col-left-w-2-cols-right-tpl'                   => __DIR__ . '/../view/melis-front/plugins/dnd-3-cols-1-col-left-w-2-cols-right-tpl.phtml',
             'MelisFront/dnd-3-cols-2-cols-left-w-1-col-right-tpl'                   => __DIR__ . '/../view/melis-front/plugins/dnd-3-cols-2-cols-left-w-1-col-right-tpl.phtml',
             'MelisFront/dnd-4-cols-1-col-left-w-3-cols-right-tpl'                   => __DIR__ . '/../view/melis-front/plugins/dnd-4-cols-1-col-left-w-3-cols-right-tpl.phtml',
