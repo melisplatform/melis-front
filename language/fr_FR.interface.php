@@ -122,7 +122,7 @@ return [
 
     // Dynamic dnd on buttons title attribute
     'tr_melis_front_dnd_remove_button_title' => 'Supprimer la zone',
-    'tr_melis_front_dnd_add_button_title' => 'Ajoutez dragdropzone ci-dessous',
-    'tr_melis_front_dnd_arrow_down_button_title' => 'Échanger la position de la zone de glisser-déposer vers le bas',
-    'tr_melis_front_dnd_arrow_up_button_title' => 'Échanger la position de la zone de glisser-déposer vers le haut',
+    'tr_melis_front_dnd_add_button_title' => 'Ajouter une zone',
+    'tr_melis_front_dnd_arrow_down_button_title' => 'Déplacer vers le bas',
+    'tr_melis_front_dnd_arrow_up_button_title' => 'Déplacer vers le haut',
 ];
