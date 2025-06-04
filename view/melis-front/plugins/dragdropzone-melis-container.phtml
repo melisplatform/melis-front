@@ -43,20 +43,20 @@ if (!empty($this->pluginFrontConfig) && !empty($this->pluginFrontConfig['id']))
                 </div>
                 <div class="dnd-plugin-sub-tools">
                     <div class="dnd-plus-remove-buttons">
-                        <button class="btn dnd-plus-button" title="Add dragdropzone below" data-page-id="<?= $this->pageId; ?>" data-dnd-id="<?= $pluginId ?>" data-melis-site="<?= $this->siteModule; ?>">
+                        <button class="btn dnd-plus-button" title="<?= $this->translate('tr_melis_front_dnd_add_button_title')?>" data-page-id="<?= $this->pageId; ?>" data-dnd-id="<?= $pluginId ?>" data-melis-site="<?= $this->siteModule; ?>">
                             <i class="fa fa-plus"></i>
                         </button>
                         <?php if (!empty($this->dndPluginReferer)) { ?>
-                            <button class="btn dnd-remove-button" title="Remove dragdropzone" data-page-id="<?= $this->pageId; ?>" data-dnd-id="<?= $pluginId ?>">
+                            <button class="btn dnd-remove-button" title="<?= $this->translate('tr_melis_front_dnd_remove_button_title')?>" data-page-id="<?= $this->pageId; ?>" data-dnd-id="<?= $pluginId ?>">
                                 <i class="fa fa-trash"></i>
                             </button>
                         <?php } ?>
                     </div>
                     <div class="dnd-arrow-buttons">
-                        <button class="btn dnd-arrow dnd-arrow-down" title="Swap position of dragdropzone down" data-page-id="<?= $this->pageId; ?>">
+                        <button class="btn dnd-arrow dnd-arrow-down" title="<?= $this->translate('tr_melis_front_dnd_arrow_down_button_title')?>" data-page-id="<?= $this->pageId; ?>">
                             <i class="fa fa-caret-down"></i>
                         </button>
-                        <button class="btn dnd-arrow dnd-arrow-up" title="Swap position of dragdropzone up" data-page-id="<?= $this->pageId; ?>">
+                        <button class="btn dnd-arrow dnd-arrow-up" title="<?= $this->translate('tr_melis_front_dnd_arrow_up_button_title')?>" data-page-id="<?= $this->pageId; ?>">
                             <i class="fa fa-caret-up"></i>
                         </button>
                     </div>

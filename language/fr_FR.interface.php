@@ -119,4 +119,10 @@ return [
 
     'tr_melis_front_generic_plugin_name' => 'Remontée de contenu générique',
     'tr_melis_front_generic_plugin_description' => 'Generic Content Plugin Description',
+
+    // Dynamic dnd on buttons title attribute
+    'tr_melis_front_dnd_remove_button_title' => 'Supprimer la zone',
+    'tr_melis_front_dnd_add_button_title' => 'Ajoutez dragdropzone ci-dessous',
+    'tr_melis_front_dnd_arrow_down_button_title' => 'Échanger la position de la zone de glisser-déposer vers le bas',
+    'tr_melis_front_dnd_arrow_up_button_title' => 'Échanger la position de la zone de glisser-déposer vers le haut',
 ];
