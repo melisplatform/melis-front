@@ -116,4 +116,10 @@ return [
 
     'tr_melis_front_generic_plugin_name' => 'Generic Content Plugin',
     'tr_melis_front_generic_plugin_description' => 'Generic Content Plugin Description',
+
+    // Dynamic dnd on buttons title attribute
+    'tr_melis_front_dnd_remove_button_title' => 'Delete zone',
+    'tr_melis_front_dnd_add_button_title' => 'Add zone',
+    'tr_melis_front_dnd_arrow_down_button_title' => 'Move down',
+    'tr_melis_front_dnd_arrow_up_button_title' => 'Move up',
 ];
