@@ -1,0 +1,33 @@
+<?php
+$data_dragdropzone_id = " data-dragdropzone-id='$this->dragdropzoneId'";
+
+$pluginId = '';
+if (!empty($this->pluginFrontConfig) && !empty($this->pluginFrontConfig['id']))
+    $pluginId = $this->pluginFrontConfig['id'];
+?>
+
+<div class="melis-dragdropzone-container"
+     data-dragdropzone-id="<?= $this->dragdropzoneId; ?>"
+     data-after="<?= $this->dragDropLabel; ?>"
+     data-module="<?= $this->configPluginKey; ?>"
+     data-plugin="<?= $this->pluginName; ?>"
+     data-plugin-id="<?= $pluginId; ?>"
+     data-melis-tag="<?= $this->pluginXmlDbKey; ?>"
+     data-layout-template="<?= $this->dndLayoutTemplate; ?>"
+     data-plugin-referer="<?= $this->dndPluginReferer; ?>"
+     data-site-module="<?= $this->siteModule; ?>">
+    <div class="dnd-layout-wrapper">
+        <div class='melis-dragdropzone no-content'
+            <?= $data_dragdropzone_id; ?>
+             data-after="<?= $this->dragDropLabel; ?>"
+             data-module="<?= $this->configPluginKey; ?>"
+             data-plugin="<?= $this->pluginName; ?>"
+             data-plugin-id="<?= $pluginId; ?>"
+             data-melis-tag="<?= $this->pluginXmlDbKey; ?>"
+             data-site-module="<?= $this->siteModule; ?>">
+            <?php
+            echo $this->viewFront;
+            ?>
+        </div>
+    </div>
+</div>

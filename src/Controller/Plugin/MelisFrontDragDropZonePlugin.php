@@ -134,10 +134,15 @@ class MelisFrontDragDropZonePlugin extends MelisTemplatingPlugin
         // apply content with layout to html result
         $newHtml .= !$this->isInBackOffice() ? '</div>' : '';
 
+        //get dnd render mode
+        $engineSiteSerice = $this->getServiceManager()->get('MelisEngineSiteService');
+        $dndRenderMode = $engineSiteSerice->getSiteDNDRenderModeByPageId($this->pluginFrontConfig['pageId']);
+
         // Create an array with the variables that will be available in the view
         $viewVariables = array(
             'pluginId' => $this->pluginFrontConfig['id'],
             'pluginsHtml' => $newHtml,
+            'dndRenderMode' => $dndRenderMode
         );
 
         // return the variable array and let the view be created
@@ -148,7 +153,7 @@ class MelisFrontDragDropZonePlugin extends MelisTemplatingPlugin
     public function back()
     {
         $viewModel = new ViewModel();
-        $viewModel->setTemplate('MelisFront/dragdropzone/meliscontainer');
+        $viewModel->setTemplate('MelisFront/dragdropzone/meliscontainer-old');
         $translator = $this->getServiceManager()->get('translator');
 
         $viewModel->pluginFrontConfig = $this->pluginFrontConfig;
@@ -160,6 +165,12 @@ class MelisFrontDragDropZonePlugin extends MelisTemplatingPlugin
 
         $pageId = (!empty($this->pluginFrontConfig['pageId'])) ? $this->pluginFrontConfig['pageId'] : 0;
         $columns = (!empty($this->pluginFrontConfig['columns'])) ? $this->pluginFrontConfig['columns'] : 1;
+
+        $engineSiteSerice = $this->getServiceManager()->get('MelisEngineSiteService');
+        $dndRenderMode = $engineSiteSerice->getSiteDNDRenderModeByPageId($pageId);
+        //if render dnd mode is empty, we won't use the dynamic dnd, we use the old style
+        if($dndRenderMode == 'bootstrap')
+            $viewModel->setTemplate('MelisFront/dragdropzone/meliscontainer');
 
         $siteModule = getenv('MELIS_MODULE');
         $melisPage = $this->getServiceManager()->get('MelisEnginePage');
@@ -192,7 +203,6 @@ class MelisFrontDragDropZonePlugin extends MelisTemplatingPlugin
     public function loadDbXmlToPluginConfig()
     {
         $configValues = array();
-
         if (!$this->pluginConfig['front']['isInnerDragDropZone'])
             return $configValues;
 

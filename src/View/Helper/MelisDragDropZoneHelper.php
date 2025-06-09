@@ -39,11 +39,17 @@ class MelisDragDropZoneHelper extends AbstractHelper
     {
         $viewRender = $this->serviceManager->get('ViewRenderer');
         $dndPlugin = $this->serviceManager->get('ControllerPluginManager')->get('MelisFrontDragDropZonePlugin');
+        $engineSiteSerice = $this->serviceManager->get('MelisEngineSiteService');
+        $dndRenderMode = $engineSiteSerice->getSiteDNDRenderModeByPageId($pageId);
 
         if (!$isInnerDragDropZone) {
 
             $dndView = new ViewModel();
-            $dndView->setTemplate('MelisFront/dnd');
+            $dndView->setTemplate('MelisFront/dnd-old');
+            //if render dnd mode is empty, we won't use the dynamic dnd, we use the old style
+            if($dndRenderMode == 'bootstrap')
+                $dndView->setTemplate('MelisFront/dnd');
+
             $dnds = [];
 
             $outDndConfig = $dndPlugin->render([

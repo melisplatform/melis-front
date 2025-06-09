@@ -291,6 +291,7 @@ return [
             'layout/layoutMelis'                            => __DIR__ . '/../view/layout/layoutMelis.phtml',
             'melis-front/index/index'                       => __DIR__ . '/../view/melis-front/index/index.phtml',
             'MelisFront/dragdropzone'                       => __DIR__ . '/../view/melis-front/plugins/dragdropzone.phtml',
+            'MelisFront/dragdropzone/meliscontainer-old'    => __DIR__ . '/../view/melis-front/plugins/dragdropzone-melis-container-old.phtml',
             'MelisFront/dragdropzone/meliscontainer'        => __DIR__ . '/../view/melis-front/plugins/dragdropzone-melis-container.phtml',
             'MelisFront/dragdropzone/meliscontainer-buttons' => __DIR__ . '/../view/melis-front/plugins/dragdropzone-melis-container-buttons.phtml',
             'MelisFront/tag'                                => __DIR__ . '/../view/melis-front/plugins/tag.phtml',
@@ -314,7 +315,9 @@ return [
             'MelisFront/generic-content'                    => __DIR__ . '/../view/melis-front/plugins/generic-content.phtml',
             // Drag in drop layouts
             'MelisFront/dnd'                                                        => __DIR__ . '/../view/melis-front/plugins/dnd.phtml',
+            'MelisFront/dnd-old'                                                    => __DIR__ . '/../view/melis-front/plugins/dnd-old.phtml',
             'MelisFront/dnd-default-tpl'                                            => __DIR__ . '/../view/melis-front/plugins/dnd-default-tpl.phtml',
+            'MelisFront/dnd-default-tpl-old'                                        => __DIR__ . '/../view/melis-front/plugins/dnd-default-tpl-old.phtml',
             'MelisFront/dnd-2-cols-tpl'                                             => __DIR__ . '/../view/melis-front/plugins/dnd-2-cols-tpl.phtml',
             'MelisFront/dnd-3-cols-tpl'                                             => __DIR__ . '/../view/melis-front/plugins/dnd-3-cols-tpl.phtml',
             'MelisFront/dnd-4-cols-tpl'                                             => __DIR__ . '/../view/melis-front/plugins/dnd-4-cols-tpl.phtml',

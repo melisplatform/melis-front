@@ -1,0 +1,5 @@
+<div class="dnd-plugins-content">
+    <?php foreach ($this->dnds as $k => $dnd) : ?>
+        <?= $this->MelisDragDropZone($dnd['pageId'], $dnd['id'], true) ?>
+    <?php endforeach ?>
+</div>
