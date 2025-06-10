@@ -157,6 +157,10 @@ class MelisPluginRendererController extends MelisAbstractActionController
 
         if ($addAction) {
 
+            //get dnd render mode
+            $engineSiteSerice = $this->getServiceManager()->get('MelisEngineSiteService');
+            $dndRenderMode = $engineSiteSerice->getSiteDNDRenderModeByPageId($pageId);
+
             $dndView = new ViewModel();
             $dndView->setTemplate('MelisFront/dnd-default-tpl');
 
@@ -166,6 +170,7 @@ class MelisPluginRendererController extends MelisAbstractActionController
             $dndViewParams['plugin_referer'] = $dndId;
 
             $dndView->pluginsHtml = $viewRender->render($dndPlugin->render($dndViewParams));
+            $dndView->dndRenderMode = $dndRenderMode;
 
             $container = new Container('meliscms');
             if (isset($container['content-pages'][$pageId])) {
