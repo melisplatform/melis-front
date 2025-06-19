@@ -59,7 +59,7 @@ class MelisDragDropZoneHelper extends AbstractHelper
             ]);
 
             $pluginVars = $outDndConfig->getVariables();
-            $xml = $pluginVars['pluginConfig']['xmldbvalues'];
+            $xml = $pluginVars['pluginConfig']['xmldbvalues'] ?? '';
             $xmlData = '';
 
             if (is_array($xml)) {
@@ -74,7 +74,7 @@ class MelisDragDropZoneHelper extends AbstractHelper
             } else
                 $xmlData = $xml;
 
-            $xmlData = simplexml_load_string($xmlData);
+            $xmlData = (!empty($xmlData)) ? simplexml_load_string($xmlData) : '';
 
             if ($xmlData)
                 foreach ($xmlData as $k => $dnd) {
