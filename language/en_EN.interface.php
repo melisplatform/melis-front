@@ -101,7 +101,7 @@ return [
     'tr_front_plugin_common_no_param' => 'No parameters to edit',
 
     //DragDrop Zone
-    'tr_front_drag_drop_zone_label' => 'DRAG PLUGIN HERE!',
+    'tr_front_drag_drop_zone_label' => 'Drag & Drop Zone',
 
     // GDPR Revalidation plugin
     'tr_melis_front_gdpr_revalidation_name' => 'GDPR Revalidation plugin',
