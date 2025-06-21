@@ -1,4 +1,4 @@
-function melistagTEXTAREA_init(idPlugin) {
+window.melistagTEXTAREA_init = function(idPlugin) {
 	// declaring parameters variable for old / cross browser compatability
 	if (typeof idPlugin === "undefined") idPlugin = null;
 
@@ -17,7 +17,7 @@ function melistagTEXTAREA_init(idPlugin) {
 
 	// Editor the will use for Pages
 	melisTinyMCE.createTinyMCE("textarea", idPlugin, tinyMceOption);
-}
+};
 
 function melistagTEXTAREA_savePlugin(editor) {
 	editor.on("init", function(ed) {

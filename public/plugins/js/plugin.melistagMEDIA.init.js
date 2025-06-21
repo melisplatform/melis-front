@@ -1,4 +1,4 @@
-function melistagMEDIA_init(idPlugin) {
+window.melistagMEDIA_init = function(idPlugin) {
 	// declaring parameters variable for old / cross browser compatability
 	if (typeof idPlugin === "undefined") idPlugin = null;
 
@@ -17,7 +17,7 @@ function melistagMEDIA_init(idPlugin) {
 
 	// Editor the will use for Pages
 	melisTinyMCE.createTinyMCE("media", idPlugin, tinyMceOption);
-}
+};
 
 function melistagMEDIA_savePlugin(editor) {
 	editor.on("init", function(ed) {
