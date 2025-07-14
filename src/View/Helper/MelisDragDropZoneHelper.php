@@ -50,6 +50,8 @@ class MelisDragDropZoneHelper extends AbstractHelper
             if($dndRenderMode == 'bootstrap')
                 $dndView->setTemplate('MelisFront/dnd');
 
+            $dndView->dndRenderMode = (empty($dndRenderMode)) ? 'standard' : 'dynamic';
+
             $dnds = [];
 
             $outDndConfig = $dndPlugin->render([
