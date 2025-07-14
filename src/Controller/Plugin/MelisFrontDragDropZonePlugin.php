@@ -259,52 +259,16 @@ class MelisFrontDragDropZonePlugin extends MelisTemplatingPlugin
         ];
     }
 
+    /**
+     * @param $parameters
+     * @return string
+     */
     public function savePluginConfigToXml($parameters)
     {
-        $xmlValueFormatted = '';
-        //
-        //        if (!empty($parameters['melisDragDropZoneListPlugin']) && count($parameters['melisDragDropZoneListPlugin']) > 0)
-        //        {
-        //            foreach ($parameters['melisDragDropZoneListPlugin'] as $plugin)
-        //                $xmlValueFormatted .= "\t\t" . '<plugin module="' . $plugin['melisModule'] . '" name="' .
-        //                    $plugin['melisPluginName'] . '" id="' . $plugin['melisPluginId'] . '"></plugin>' . "\n";
-        //        }
-        //
-
-        //        $this->processXMlChildren($parameters, $xmlValueFormatted);
-        //print_r($parameters);exit;
-        //        if (!empty($parameters['children'])) {
-        //            foreach ($parameters['children'] as $key => $val) {
-        //                $xmlValueFormatted .= "\t\t" . '<' . $this->pluginXmlDbKey . ' id="' . $val['melisPluginId'] . '">';
-        //
-        //                if (!empty($val['melisDragDropZoneListPlugin'])) {
-        //                    foreach ($val['melisDragDropZoneListPlugin'] as $plugin) {
-        //                        $xmlValueFormatted .= "\t\t" . '<plugin module="' . $plugin['melisModule'] . '" name="' .
-        //                            $plugin['melisPluginName'] . '" id="' . $plugin['melisPluginId'] . '"></plugin>' . "\n";
-        //                    }
-        //                }
-        //                $xmlValueFormatted .= '</' . $this->pluginXmlDbKey . '>' . "\n";
-        //            }
-        //        }
-
-        // Something has been saved, let's generate an XML for DB
-        //        $xmlValueFormatted = "\t" . '<' . $this->pluginXmlDbKey . ' id="' . $parameters['melisPluginId'] . '">' .
-        //            $xmlValueFormatted .
-        //            "\t" . '</' . $this->pluginXmlDbKey . '>' . "\n";
-        //
-        //        dump($xmlValueFormatted);
-
-        //        $xml = $this->buildXmlFromArray($parameters, $xml = null);
-        //        dd($xml->asXML());
-
-        // Output XML without the version line
-        //                        print_r($parameters);
-        //                exit;
         $xml = $this->buildXmlFromArray($parameters);
         $dom = dom_import_simplexml($xml)->ownerDocument;
         $dom->formatOutput = true;
         $xmlValueFormatted = $dom->saveXML($dom->documentElement);
-        //        dump($xmlValueFormatted);exit;
         return $xmlValueFormatted;
     }
 
