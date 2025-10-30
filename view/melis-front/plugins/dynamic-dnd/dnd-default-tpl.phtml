@@ -1,9 +1,9 @@
-<?php if($this->dndRenderMode == 'bootstrap') { ?>
-<div class="row">
-    <div class="col-12">
-        <?= $this->pluginsHtml ?>
+<?php if ($this->dndRenderMode == 'bootstrap') { ?>
+    <div class="row dnd-plugins-row">
+        <div class="col-12 dnd-plugins-col-12">
+            <?= $this->pluginsHtml ?>
+        </div>
     </div>
-</div>
 <?php } else { ?>
     <?= $this->pluginsHtml ?>
 <?php } ?>
