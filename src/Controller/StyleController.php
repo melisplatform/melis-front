@@ -27,7 +27,11 @@ class StyleController extends MelisAbstractActionController
             ->addHeaderLine('Content-Type', 'text/css;charset=UTF-8');
 
         $css     = '[class^="plugin-width"] {float: left;margin: 0;}' . PHP_EOL;
-        $css     .= '[class*="dnd-plugins-col-"] {padding-left: 0px; padding-right: 0px;}' . PHP_EOL;
+
+        // d&d grid reset to initial
+        $css     .= '[class*="dnd-plugins-col-"] {padding-left: initial; padding-right: initial;}' . PHP_EOL;
+        $css     .= '.dnd-plugins-row {padding-left: initial; padding-right: initial; --bs-gutter-x: 0rem;}' . PHP_EOL;
+
         $pageId  = (int) $this->params()->fromQuery('idpage');
 
         $pageSvc = $this->getServiceManager()->get('MelisEnginePage');
