@@ -1,1 +1,17 @@
 <?= $this->content; ?>
+/* center content vertically */
+.dnd-plugins-row > div[class*="dnd-plugins-col-"] {
+    /* min-height: 300px; */
+    display: flex;
+    flex-direction: column;
+}
+.dnd-plugins-row > div[class*="dnd-plugins-col-"] .dnd-plugins-row {
+    height: 100%;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+}
+.dnd-plugins-row > div[class*="dnd-plugins-col-"] [data-melis-plugin-tag-id] {
+    width: 100%;
+}
