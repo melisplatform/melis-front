@@ -49,6 +49,51 @@ return [
                     ],
                 ],
             ],
+            'melis-front-sitemap' => [
+                'type'    => 'Literal',
+                'options' => [
+                    'route'    => '/',
+                    'defaults' => [
+                        'controller' => 'MelisFront\Controller\SiteMap',
+                    ]
+                ],
+                'may_terminate' => false,
+                'child_routes' => [
+                    'sitemap' => [
+                        'type'    => 'Regex',
+                        'options' => [
+                            'regex' => 'sitemap.html|sitemap.xml|sitemap',
+                            'defaults' => [
+                                'action' => 'sitemap',
+                            ],
+                            'spec' => ''
+                        ],
+                    ],
+                    'sitemap-index' => [
+                        'type'    => 'Regex',
+                        'options' => [
+                            'regex' => 'sitemap_index(?:\.(?<format>xml|html))?',
+                            'defaults' => [
+                                'action' => 'sitemapindex',
+                                'format'     => 'xml',
+                            ],
+                            'spec' => '%format%',
+                        ],
+                    ],
+                    'sitemap-pages' => [
+                        'type'    => 'Regex',
+                        'options' => [
+                            'regex' => '(?<lang>[a-z]{2})/sitemap(?:\.(?<format>xml|html))?',
+                            'defaults' => [
+                                'action' => 'sitemap-lang-pages',
+                                'format'     => 'xml',
+                            ],
+                            'spec' => '/%lang%/sitemap.%format%',
+                        ],
+                    ],
+
+                ]
+            ],
             'melis-front-special-urls' => [
                 'type'    => 'Literal',
                 'options' => [
@@ -59,16 +104,6 @@ return [
                 ],
                 'may_terminate' => false,
                 'child_routes' => [
-                    'front-sitemap' => [
-                        'type'    => 'Regex',
-                        'options' => [
-                            'regex' => 'sitemap.html|sitemap.xml|sitemap',
-                            'defaults' => [
-                                'action' => 'sitemap',
-                            ],
-                            'spec' => ''
-                        ],
-                    ],
                     'front-plugin-widths' => [
                         'type' => 'Literal',
                         'options' => [
@@ -235,11 +270,11 @@ return [
     'controllers' => [
         'invokables' => [
             'MelisFront\Controller\Index'               => \MelisFront\Controller\IndexController::class,
-            'MelisFront\Controller\SpecialUrls'         => \MelisFront\Controller\SpecialUrlsController::class,
             'MelisFront\Controller\MelisFrontSearch'    => \MelisFront\Controller\MelisFrontSearchController::class,
             'MelisFront\Controller\MelisPluginRenderer' => \MelisFront\Controller\MelisPluginRendererController::class,
             'MelisFront\Controller\Style'               => \MelisFront\Controller\StyleController::class,
             'MelisFront\Controller\MinifyAssets'        => \MelisFront\Controller\MinifyAssetsController::class,
+            'MelisFront\Controller\SiteMap'             => \MelisFront\Controller\SiteMapController::class,
         ],
     ],
     'controller_plugins' => [

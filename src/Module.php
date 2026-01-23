@@ -83,7 +83,37 @@ class Module
         }
 
         // do not load listeners if working on back-office
-        if(!$isBackOffice) {
+        if (!$isBackOffice) {
+
+            // deactivation of sitemap route depend on the the site language
+            $domain = $_SERVER['SERVER_NAME'];
+            // site data based on server/domain name
+            $melisTableDomain = $sm->get('MelisEngineTableSiteDomain');
+            $siteDomain = $melisTableDomain->getEntryByField('sdom_domain', $domain)->current();
+
+            if (!empty($siteDomain)) {
+
+                // site language
+                $pageLangTbl = $sm->get('MelisEngineTableCmsSiteLangs');
+                $siteLang = $pageLangTbl->getEntryByField('slang_site_id', $siteDomain->sdom_site_id)->toArray();
+
+                // Returns TreeRouteStack
+                $router = $sm->get('Router');
+
+                // sitemap parent route
+                $siteMapRoute = $router->getRoute('melis-front-sitemap');
+                // This effectively "deactivates" the route for this request
+                // site lang less than 1 considered as a single language site
+                // else a multi language site
+                if (count($siteLang) > 1) {
+                    // removal of child route
+                    $siteMapRoute->removeRoute('sitemap');
+                } else {
+                    $siteMapRoute->removeRoute('sitemap-index');
+                    $siteMapRoute->removeRoute('sitemap-pages');
+                }
+            }
+
             // Catching PAGE SEO URLs to update Router
             //(new MelisFrontSEOReformatToRoutePageUrlListener())->attach($eventManager); -> refer init() Listener: MelisFrontSEORouteListener, issueL no translations of melis-modules
 
@@ -118,7 +148,6 @@ class Module
             (new MelisFrontHomePageRoutingListener())->attach($eventManager);
 
             (new MelisFrontHomePageIdOverrideListener())->attach($eventManager);
-
         } else {
             (new MelisFrontPluginLangSessionUpdateListener())->attach($eventManager);
             (new MelisFrontDeletePluginCacheListener())->attach($eventManager);
@@ -133,9 +162,11 @@ class Module
         $sm = $e->getApplication()->getServiceManager();
         $melisAppConfig = $sm->get('config');
         $config = $melisAppConfig['plugins']['melisfront']['datas']['default'];
-        if (!empty($config['errors']) &&
+        if (
+            !empty($config['errors']) &&
             isset($config['errors']['error_reporting']) &&
-            isset($config['errors']['display_errors'])) {
+            isset($config['errors']['display_errors'])
+        ) {
             error_reporting($config['errors']['error_reporting']);
             ini_set('display_errors', $config['errors']['display_errors']);
         }
@@ -165,7 +196,7 @@ class Module
                     $melisPagelangTbl = $sm->get('MelisEngine\Model\Tables\MelisPageLangTable');
                     $currentPage = $melisPagelangTbl->getEntryByField('plang_page_id', $idpage)->current();
 
-                    
+
                     $langSrv = $sm->get('MelisEngineLang');
                     $currentPageLang = isset($currentPage->plang_lang_id) ? $langSrv->getLangDataById($currentPage->plang_lang_id) : null;
 
@@ -195,7 +226,7 @@ class Module
             $interfaceTransPath = 'module/MelisModuleConfig/languages/MelisFront/' . $locale . '.interface.php';
             $default = __DIR__ . '/../language/' . $locale . '.interface.php';
 
-            $transPath = (file_exists($interfaceTransPath))? $interfaceTransPath : $default;
+            $transPath = (file_exists($interfaceTransPath)) ? $interfaceTransPath : $default;
 
             $sm = $e->getApplication()->getServiceManager();
             $translator = $sm->get('translator');
@@ -224,7 +255,7 @@ class Module
             /**
              * @TODO ZendSearch equivalent for Laminas
              */
-//            include __DIR__ . '/../config/plugins/MelisFrontSearchResultsPlugin.config.php',
+            //            include __DIR__ . '/../config/plugins/MelisFrontSearchResultsPlugin.config.php',
             include __DIR__ . '/../config/plugins/MelisFrontBlockSectionPlugin.config.php',
             include __DIR__ . '/../config/plugins/MelisFrontGdprBannerPlugin.config.php',
             include __DIR__ . '/../config/plugins/MelisFrontGdprRevalidationPlugin.config.php',

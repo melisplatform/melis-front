@@ -1,0 +1,37 @@
+<?php
+// Ensure no whitespace exists before this tag
+echo '<?xml version="1.0" encoding="UTF-8"?>' . PHP_EOL;
+?>
+
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+	<?php
+	foreach ($this->menu as $menuItem) {
+		$lastEditDate = $menuItem['lastEditDate'];
+		if (!empty($lastEditDate)) {
+			$lastEditDate = explode(' ', $lastEditDate);
+			$lastEditDate = $lastEditDate[0];
+		}
+	?>
+		<url>
+			<loc><?= $this->MelisLink($menuItem['idPage'], true) ?></loc>
+			<lastmod><?= $lastEditDate; ?></lastmod>
+			<changefreq>daily</changefreq>
+			<?php
+			// Simplified loop to prevent massive indentation in the output
+			foreach ($this->pageLangs as $langs):
+				if (isset($langs[$menuItem['idPage']])):
+					if (count($langs) > 1):
+						foreach ($langs as $pageId => $lang):
+							$locale = explode('_', $lang['lang_cms_locale'])[0]; ?>
+							<xhtml:link rel="alternate" hreflang="<?= $locale ?>" href="<?= $this->MelisLink($pageId, true) ?>" />
+			<?php
+						endforeach;
+					endif;
+				endif;
+			endforeach;
+			?>
+		</url>
+	<?php
+	}
+	?>
+</urlset>
