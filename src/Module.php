@@ -91,9 +91,6 @@ class Module
             $melisTableDomain = $sm->get('MelisEngineTableSiteDomain');
             $siteDomain = $melisTableDomain->getEntryByField('sdom_domain', $domain)->current();
 
-            if (isset($_GET['sitemap_debug']))
-                dump($siteDomain);
-
             if (!empty($siteDomain)) {
 
                 // site language
@@ -107,11 +104,6 @@ class Module
                 $siteMapRoute = $router->getRoute('melis-front-sitemap');
                 // This effectively "deactivates" the route for this request
                 // site lang less than 1 considered as a single language site
-
-                if (isset($_GET['sitemap_debug'])) {
-                    dump('siteLang', $siteLang);
-                    dump('siteMapRoute', $siteMapRoute);
-                }
 
                 // else a multi language site
                 if (count($siteLang) > 1) {
