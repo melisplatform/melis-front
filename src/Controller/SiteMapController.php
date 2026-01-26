@@ -110,58 +110,48 @@ class SiteMapController extends MelisAbstractActionController
 
         $lang = $this->params()->fromRoute('lang');
 
-        if (isset($_GET['sitemap_debug']))
-            dump('lang', $lang);
-
         $melisTableDomain = $this->getServiceManager()->get('MelisEngineTableSiteDomain');
         $datasDomain = $melisTableDomain->getEntryByField('sdom_domain', $domain);
-
-        if (isset($_GET['sitemap_debug']))
-            dump('datasDomain', $datasDomain);
-
         if (!empty($datasDomain) || !empty($datasDomain->current())) {
             $siteDomain = $datasDomain->current();
             $siteId = $siteDomain->sdom_site_id;
 
             $melisTableSite = $this->getServiceManager()->get('MelisEngineTableSite');
             $datasSite = $melisTableSite->getEntryById($siteId);
-
-
-            if (isset($_GET['sitemap_debug']))
-                dump('datasSite', $datasSite);
-
             if (!empty($datasSite) || !empty($datasSite->current())) {
 
                 $site = $datasSite->current();
 
-                if (isset($_GET['sitemap_debug']))
-                    dump('site', $site);
-            
-                // $siteMainPage = $site->site_main_page_id;
+                // homepage for specific page language
+                $pageLangTbl = $this->serviceManager->get('MelisEngineTableCmsSiteHome');
+                $select = $pageLangTbl->getTableGateway()->getSql()->select();
+                $select->join('melis_cms_lang', 'melis_cms_lang.lang_cms_id = melis_cms_site_home.shome_lang_id', '*', Select::JOIN_LEFT);
+                $select->join('melis_cms_site_langs', 'melis_cms_site_langs.slang_lang_id = melis_cms_site_home.shome_lang_id', '*', Select::JOIN_LEFT);
+                $select->where(['shome_site_id' => $site->site_id]);
+                $select->where(['slang_status' => 1]);
+                $select->where->like('lang_cms_locale', "%$lang%");
+                $siteHomePage = $pageLangTbl->getTableGateway()->selectWith($select)->current();
 
-                /** @var MelisSiteConfigService $siteConfigSrv */
-                $siteConfigSrv = $this->serviceManager->get('MelisSiteConfigService');
-                $siteMainPage = $siteConfigSrv->getSiteConfigByKey('home_page_id', $site->site_main_page_id,  'sites',  $lang);
+                $siteHomePageId = null;
+                if ($siteHomePage)
+                    $siteHomePageId = $siteHomePage->shome_page_id;
 
-                if (isset($_GET['sitemap_debug']))
-                    dump('siteMainPage', $siteMainPage);
-
-                if ($siteMainPage) {
+                if ($siteHomePageId) {
                     $menu = array();
                     $navigation = new \MelisFront\Navigation\MelisFrontNavigation(
                         $this->getServiceManager(),
-                        $siteMainPage,
+                        $siteHomePageId,
                         'front'
                     );
 
                     $melisPage = $this->getServiceManager()->get('MelisEnginePage');
-                    $datasPageRes = $melisPage->getDatasPage($siteMainPage);
+                    $datasPageRes = $melisPage->getDatasPage($siteHomePageId);
                     if (!empty($datasPageRes)) {
                         $datasPageRes = $datasPageRes->getMelisPageTree()->getArrayCopy();
                         $menu[] = $navigation->formatPageInArray($datasPageRes);
                     }
 
-                    $menuTmp = $navigation->getAllSubpages($siteMainPage);
+                    $menuTmp = $navigation->getAllSubpages($siteHomePageId);
                     $menuTmp = $this->getAllPagesInOneArray(array(), $menuTmp);
 
                     $menu = array_merge($menu, $menuTmp);
