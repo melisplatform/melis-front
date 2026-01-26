@@ -110,6 +110,9 @@ class SiteMapController extends MelisAbstractActionController
 
         $lang = $this->params()->fromRoute('lang');
 
+        if (isset($_GET['sitemap_debug']))
+            dump('lang', $lang);
+
         $melisTableDomain = $this->getServiceManager()->get('MelisEngineTableSiteDomain');
         $datasDomain = $melisTableDomain->getEntryByField('sdom_domain', $domain);
 
@@ -130,12 +133,15 @@ class SiteMapController extends MelisAbstractActionController
             if (!empty($datasSite) || !empty($datasSite->current())) {
 
                 $site = $datasSite->current();
+
+                if (isset($_GET['sitemap_debug']))
+                    dump('site', $site);
+            
                 // $siteMainPage = $site->site_main_page_id;
 
                 /** @var MelisSiteConfigService $siteConfigSrv */
                 $siteConfigSrv = $this->serviceManager->get('MelisSiteConfigService');
                 $siteMainPage = $siteConfigSrv->getSiteConfigByKey('homePageId', $site->site_main_page_id,  'sites',  $lang);
-
 
                 if (isset($_GET['sitemap_debug']))
                     dump('siteMainPage', $siteMainPage);
