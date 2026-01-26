@@ -98,7 +98,7 @@ class Module
 
                 // site language
                 $pageLangTbl = $sm->get('MelisEngineTableCmsSiteLangs');
-                $siteLang = $pageLangTbl->getEntryByField('slang_site_id', $siteDomain->sdom_site_id)->toArray();
+                $siteLang = $pageLangTbl->getByFields(['slang_site_id' => $siteDomain->sdom_site_id, 'slang_status' => 1])->toArray();
 
                 // Returns TreeRouteStack
                 $router = $sm->get('Router');
