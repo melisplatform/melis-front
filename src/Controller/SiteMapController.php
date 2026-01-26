@@ -141,7 +141,7 @@ class SiteMapController extends MelisAbstractActionController
 
                 /** @var MelisSiteConfigService $siteConfigSrv */
                 $siteConfigSrv = $this->serviceManager->get('MelisSiteConfigService');
-                $siteMainPage = $siteConfigSrv->getSiteConfigByKey('homePageId', $site->site_main_page_id,  'sites',  $lang);
+                $siteMainPage = $siteConfigSrv->getSiteConfigByKey('home_page_id', $site->site_main_page_id,  'sites',  $lang);
 
                 if (isset($_GET['sitemap_debug']))
                     dump('siteMainPage', $siteMainPage);
