@@ -91,6 +91,9 @@ class Module
             $melisTableDomain = $sm->get('MelisEngineTableSiteDomain');
             $siteDomain = $melisTableDomain->getEntryByField('sdom_domain', $domain)->current();
 
+
+            dump($siteDomain);
+
             if (!empty($siteDomain)) {
 
                 // site language
