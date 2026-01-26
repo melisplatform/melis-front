@@ -107,6 +107,10 @@ class Module
                 $siteMapRoute = $router->getRoute('melis-front-sitemap');
                 // This effectively "deactivates" the route for this request
                 // site lang less than 1 considered as a single language site
+
+                dump('siteLang', $siteLang);
+                dump('siteMapRoute', $siteMapRoute);
+
                 // else a multi language site
                 if (count($siteLang) > 1) {
                     // removal of child route
