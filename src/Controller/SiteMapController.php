@@ -112,12 +112,21 @@ class SiteMapController extends MelisAbstractActionController
 
         $melisTableDomain = $this->getServiceManager()->get('MelisEngineTableSiteDomain');
         $datasDomain = $melisTableDomain->getEntryByField('sdom_domain', $domain);
+
+        if (isset($_GET['sitemap_debug']))
+            dump('datasDomain', $datasDomain);
+
         if (!empty($datasDomain) || !empty($datasDomain->current())) {
             $siteDomain = $datasDomain->current();
             $siteId = $siteDomain->sdom_site_id;
 
             $melisTableSite = $this->getServiceManager()->get('MelisEngineTableSite');
             $datasSite = $melisTableSite->getEntryById($siteId);
+
+
+            if (isset($_GET['sitemap_debug']))
+                dump('datasSite', $datasSite);
+
             if (!empty($datasSite) || !empty($datasSite->current())) {
 
                 $site = $datasSite->current();
@@ -126,6 +135,10 @@ class SiteMapController extends MelisAbstractActionController
                 /** @var MelisSiteConfigService $siteConfigSrv */
                 $siteConfigSrv = $this->serviceManager->get('MelisSiteConfigService');
                 $siteMainPage = $siteConfigSrv->getSiteConfigByKey('homePageId', $site->site_main_page_id,  'sites',  $lang);
+
+
+                if (isset($_GET['sitemap_debug']))
+                    dump('siteMainPage', $siteMainPage);
 
                 if ($siteMainPage) {
                     $menu = array();
