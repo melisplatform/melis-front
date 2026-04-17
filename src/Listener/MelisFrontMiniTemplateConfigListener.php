@@ -179,6 +179,10 @@ class MelisFrontMiniTemplateConfigListener
                         $pluginsConfig['melis']['subcategory']['id'] = $pluginsConfig['melis']['subcategory']['id'] . '_' . $siteName;
                         //get the content of the mini template
                         foreach ($tpls as $k => $v) {
+                            //skip directories (e.g. AI-generated subdirectories)
+                            if (!is_file($path . DIRECTORY_SEPARATOR . $v)) {
+                                continue;
+                            }
                             //remove the file extension from the filename
                             $name = pathinfo($v, PATHINFO_FILENAME);
 
