@@ -4,7 +4,6 @@
 .melis-dragdropzone {
     position: relative;
     margin-bottom: 10px;
-    /*padding: 50px 15px;*/
     padding: 10px 5px;
     min-height: 250px;
     height: auto;
@@ -13,7 +12,7 @@
     -webkit-transition: opacity 0.4s;
     -moz-transition: opacity 0.4s;
     border: 1px dashed #de7d79;
-    border-radius: 4px;
+    border-radius: 0;
     bottom: -25px;
 }
 
@@ -24,11 +23,13 @@
 }
 
 .melis-dragdropzone.no-content {
-    background: rgba(147, 46, 42, 0.3);
+    /* background: rgba(147, 46, 42, 0.3); */
+    background: rgba(230, 28, 35, 0.3);
 }
 
 .melis-dragdropzone.highlight {
-    background: #932e2a;
+    background: rgba(230, 28, 35, 0.2);
+    /* background: #932e2a; */
 }
 
 .melis-dragdropzone.highlight .ui-state-highlight {
@@ -52,7 +53,6 @@
     margin-bottom: 35px;
 }
 
-/*.melis-dragdropzone.highlight:after,*/
 .melis-dragdropzone.no-content:after,
 .melis-dragdropzone.no-content.highlight:after{
     content: "\f1e6";
