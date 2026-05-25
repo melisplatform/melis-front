@@ -23,13 +23,15 @@
 }
 
 .melis-dragdropzone.no-content {
-    /* background: rgba(147, 46, 42, 0.3); */
-    background: rgba(230, 28, 35, 0.3);
+    /* background: rgba(147, 46, 42, 0.3);
+    background: rgba(230, 28, 35, 0.3); */
+    background-color: #fff;
 }
 
 .melis-dragdropzone.highlight {
-    background: rgba(230, 28, 35, 0.2);
-    /* background: #932e2a; */
+    /* background: rgba(230, 28, 35, 0.2);
+    background: #932e2a; */
+    background-color: #fff;
 }
 
 .melis-dragdropzone.highlight .ui-state-highlight {
