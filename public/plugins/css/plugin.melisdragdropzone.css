@@ -38,7 +38,7 @@
     float: left;
     width: auto;
     background: transparent;
-    margin: 0 5px 30px;
+    /* margin: 0 5px 30px; */
     border: 1px dashed #fff;
 }
 .melis-dragdropzone.highlight .melis-float-plugins {
