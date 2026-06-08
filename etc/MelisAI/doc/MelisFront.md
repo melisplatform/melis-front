@@ -214,6 +214,41 @@ which the menu/breadcrumb helpers render.
 `MelisFrontMinifiedAssetsCheckerListener` injects them (cache-busted) when present;
 `/minify-assets` triggers a build.
 
+## B-ex. Developer recipes (examples)
+
+**Use the helpers/plugins in a site template (`.phtml`):**
+
+```php
+<?= $this->MelisMenu($idPage); ?>                       <!-- a menu from the page tree -->
+<a href="<?= $this->MelisLink($targetPageId); ?>">…</a> <!-- SEO-friendly page link -->
+<?= $this->MelisTag($idPage, 'zone_main', 'html'); ?>   <!-- an editable HTML zone -->
+<?= $this->siteTranslate('btn_send'); ?>                <!-- a site translation string -->
+<?= $this->SiteConfig('contact_email'); ?>              <!-- a site config value -->
+```
+
+**Read a site config / translation in PHP:**
+
+```php
+$siteConfig = $sm->get('MelisSiteConfigService');
+$email = $siteConfig->getSiteConfigByKey('contact_email', $siteId);   // key/page/lang aware
+$tr    = $sm->get('MelisSiteTranslationService')->getEntryByTextAndSiteId('btn_send', $siteId, $langId);
+```
+
+**Hook the render pipeline** (intervene once the page is validated, before render):
+
+```php
+$sharedEvents->attach('MelisFront', 'melisfront_site_dispatch_ready', function ($e) {
+    $params = $e->getParams();   // page id, site, renderMode…
+    // e.g. force a redirect, add data to the layout, A/B-test…
+}, 50);
+```
+
+**Add a new content block (templating plugin):** create a class extending engine's
+`MelisEngine\Controller\Plugin\MelisTemplatingPlugin`, implement `front()` (return a `ViewModel`
+with the data your `.phtml` needs), provide a config + a back-office template, and register it as
+a `controller_plugin` + `melis` plugin config. The tool modules (News, Slider, Category2) are
+full worked examples — see their docs.
+
 ## B11. Quick code map
 
 ```
