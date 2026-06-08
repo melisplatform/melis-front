@@ -30,9 +30,11 @@ screenshots_dir: ./images
 > **Audience**: consumed by the **MelisAI** module (an MCP that answers user questions and may be
 > used by an AI to build things).
 >
-> **No screenshots**: MelisFront renders the public sites themselves; the back-office editing
-> screens are shown in the [MelisCms](../../../melis-cms/etc/MelisAI/doc/MelisCms.md) doc, so this
-> doc has no `images/`.
+> **Screenshots**: MelisFront renders the public sites themselves, so most of its UI is the
+> websites and the back-office editing screens (the latter shown in the
+> [MelisCms](../../../melis-cms/etc/MelisAI/doc/MelisCms.md) doc). The screenshots here cover the
+> **content blocks (plugins)** — the building blocks used on every page — see §A2 and the
+> [Screenshot index](#screenshot-index).
 
 ---
 
@@ -95,31 +97,91 @@ responsible for:
 When you edit a page in the back-office, the page you see and click on is **rendered by
 MelisFront in an "editing" mode** — that's why editing feels like working on the real page.
 
-## A2. The content blocks (plugins) you can add to a page
+## A2. The content blocks (plugins) — the building blocks of every page
 
-These are the building blocks you drag onto a page from the editor's plugins menu. (Other
-installed modules add their own — News, Slider, Categories, Contact form… — documented in
-their own docs.) The standard MelisFront blocks:
+**These are the most-used elements on every Melis website.** A page is essentially a template
+(the layout) filled with these blocks. You add them in the page editor (**MelisCms → open a page
+→ Edition tab → plugins menu → drag a block into a zone**), then click a block to edit its content
+or open its **settings** (a small modal). Two kinds of block:
 
-- **Text / HTML zone** — a rich-text area for titles, paragraphs, formatted content. Edited in
-  place with a rich-text editor.
-- **Text area** — a simpler plain/long-text zone.
-- **Media** — an image or file, picked from the media library.
-- **Menu** — a **navigation menu** generated from your page tree. Pages appear if they're
-  flagged to show in menus (in the page Properties). Use it for the main nav, footer nav, etc.
-- **Breadcrumb** — the "Home › Section › Page" trail showing where the visitor is.
-- **List from a folder** — repeats the **sub-pages of a folder** as a list (e.g. a news
-  teaser list, a team list, FAQ items). Great for content that grows over time.
-- **Block / Section** — a layout container to group other blocks into a section.
-- **Generic content** — a general-purpose content block.
-- **GDPR banner** — the cookie-consent banner; pair it with **GDPR revalidation** to ask
-  visitors to re-confirm consent when your policy changes.
-- **Mini-template** — drop a **ready-made block** built in *Mini Templates & Plugins* (MelisCms).
-- **Search results** — renders the results of the site's internal search.
+- **"Tag" blocks** hold content you type/pick directly on the page (text, an image). You edit
+  them *in place*.
+- **"Config" blocks** are dynamic — they don't hold fixed content, they *generate* it from your
+  site (a menu from the page tree, a list of sub-pages…). You set them up through their **settings
+  modal** (the "config / properties" screens shown below) rather than typing into them.
 
-**How to use them:** open a page in the editor → **Edition** tab → open the plugins menu →
-drag a block into a zone → click it to edit its content and open its settings. (Full step-by-step
-in the [MelisCms](../../../melis-cms/etc/MelisAI/doc/MelisCms.md) doc, §A5.2.)
+Other installed modules add **their own** blocks (News, Slider, Categories, Contact form…) — see
+those modules' docs. Below are the **standard MelisFront blocks** that ship with every site.
+
+### Text / HTML zone — `MelisTag (HTML)`
+
+The workhorse of every page: a **rich-text area** for titles, paragraphs, links, formatted
+content. You edit it **in place** on the page with a WYSIWYG (TinyMCE) editor. Use it for almost
+all written content.
+
+![HTML/Text zone on a page](./images/melisfront-page-plugin-html-tag.png)
+*An editable HTML zone — type and format content directly on the page.*
+
+### Media — `MelisTag (Media)`
+
+Places an **image or file** on the page, picked from the **media library**. Use it for photos,
+logos, banners, downloadable documents.
+
+![Media block on a page](./images/melisfront-page-plugin-media-tag.png)
+*A Media block — choose the image/file from the media library.*
+
+### Menu — the site navigation
+
+Builds a **navigation menu automatically from your page tree** — so you never hand-code menus.
+A page appears in the menu if it's flagged **"show in menu"** in its Properties. Use it for the
+main navigation, footer menus, side menus, etc. Its **settings** let you choose the starting
+point in the tree, how many levels deep to go, and the template that renders it.
+
+![Menu block settings](./images/melisfront-page-plugin-menu-config-properties.png)
+*The Menu block's settings — where in the tree to start, depth, and rendering template.*
+
+### Breadcrumb — "you are here"
+
+Renders the trail **Home › Section › Current page** so visitors know where they are (and it helps
+SEO). Built automatically from the page's position in the tree. Settings pick its rendering
+template / options.
+
+![Breadcrumb block settings](./images/melisfront-page-plugin-breadcrumb-config-properties.png)
+*The Breadcrumb block's settings.*
+
+### List from a folder — repeat sub-pages as a list
+
+One of the most powerful blocks: it takes a **folder in your page tree and lists its sub-pages**
+automatically — a news teaser list, a team grid, an FAQ, a product listing… As you add child
+pages, the list grows on its own. Its settings choose the **source folder**, ordering, how many
+items, and the template each item renders with.
+
+![List-from-folder block settings](./images/melisfront-page-plugin-folderlisting-config-properties.png)
+*The "list from a folder" settings — source folder, ordering, count, item template.*
+
+### GDPR banner — cookie consent
+
+The **cookie/consent banner** shown to visitors on the public site (its wording comes from the
+site's GDPR texts). Pair it with **GDPR revalidation** to re-ask for consent when your policy
+changes. Settings choose its rendering template/behaviour.
+
+![GDPR banner block settings](./images/melisfront-page-plugin-gdprbanner-config-properties.png)
+*The GDPR banner settings.*
+
+### The other standard blocks
+
+- **Text area** — a simpler plain/long-text zone (no rich formatting).
+- **Block / Section** — a **layout container** to group several blocks into one section (useful to
+  style or move a group together).
+- **Generic content** — a general-purpose content block for custom needs.
+- **Mini-template** — drops in a **ready-made block** prepared in *Mini Templates & Plugins*
+  (MelisCms) — reuse an approved, pre-built piece of content in one click.
+- **Search results** — renders the results of the site's internal **search** on a results page.
+
+> **Tip:** "Tag" blocks (Text/HTML, Media) are for content you write; the "config" blocks (Menu,
+> Breadcrumb, List-from-folder, GDPR…) are **dynamic** — set them up once and they keep
+> themselves up to date as your pages change. Full step-by-step for adding/editing any block is in
+> the [MelisCms](../../../melis-cms/etc/MelisAI/doc/MelisCms.md) doc, §A5.2.
 
 ## A3. Helpers available to template builders
 
@@ -311,6 +373,21 @@ melis-front/
    (extending engine's `MelisTemplatingPlugin`) to produce content blocks.
 4. `EVENT_FINISH`: plugin assets → SEO meta → page CSS → layout → cache → minified bundles.
 5. In `melis` mode the same flow yields a BO-editable page; in `front` mode it's served & cached.
+
+---
+
+## Screenshot index
+
+Filename → content lookup for the MelisAI MCP (the standard content blocks, §A2). All under `./images/`.
+
+| Image file | Content |
+|---|---|
+| `melisfront-page-plugin-html-tag.png` | Text / HTML zone (`MelisTag` HTML) edited on the page |
+| `melisfront-page-plugin-media-tag.png` | Media block (`MelisTag` Media) on the page |
+| `melisfront-page-plugin-menu-config-properties.png` | Menu block — settings (tree start, depth, template) |
+| `melisfront-page-plugin-breadcrumb-config-properties.png` | Breadcrumb block — settings |
+| `melisfront-page-plugin-folderlisting-config-properties.png` | List-from-folder block — settings |
+| `melisfront-page-plugin-gdprbanner-config-properties.png` | GDPR banner block — settings |
 
 ---
 
