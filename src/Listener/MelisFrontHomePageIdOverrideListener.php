@@ -80,6 +80,12 @@ class MelisFrontHomePageIdOverrideListener extends MelisGeneralListener implemen
                             $router = $e->getRouter();
                             $request = $e->getRequest();
                             $routeM = $router->match($request);
+                            // No route matched "/" (e.g. the site module isn't loaded) → nothing to
+                            // override. Bail out cleanly instead of calling getParams() on null
+                            // (which turned a missing route into a fatal 500).
+                            if (!$routeM) {
+                                return;
+                            }
                             //get the default params of the route
                             $params = $routeM->getParams();
 
