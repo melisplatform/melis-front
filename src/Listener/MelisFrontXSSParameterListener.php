@@ -29,11 +29,10 @@ class MelisFrontXSSParameterListener extends MelisGeneralListener implements Lis
             MvcEvent::EVENT_ROUTE,
             function(MvcEvent $e){
 
-                // AssetManager, we don't want listener to be executed if it's not a php code
-                $uri = $_SERVER['REQUEST_URI'];
-                preg_match('/.*\.((?!php).)+(?:\?.*|)$/i', $uri, $matches, PREG_OFFSET_CAPTURE);
-                if (count($matches) > 1)
-                    return;
+                // Sanitize query/POST parameters for ALL front requests.
+                // A previous extension-based early-return (skipping any URI whose
+                // path contained a non-".php" segment, e.g. "/foo.html?q=...")
+                // trivially defeated this sanitizer, so it has been removed.
 
                 $request = $e->getRequest();
                 $GetParameters = $request->getQuery();

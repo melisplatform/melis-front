@@ -19,8 +19,27 @@ use SimpleXMLElement;
 class MelisPluginRendererController extends MelisAbstractActionController
 {
 
+    /**
+     * Ensures a valid authenticated Melis back-office session exists.
+     * These actions are back-office drag-and-drop / plugin EDIT operations and
+     * must never be reachable by an anonymous front-office visitor.
+     *
+     * @return bool
+     */
+    private function isBackofficeAuthenticated()
+    {
+        return $this->getServiceManager()->get('MelisCoreAuth')->hasIdentity();
+    }
+
     public function getPluginAction()
     {
+        if (!$this->isBackofficeAuthenticated()) {
+            return new JsonModel([
+                'success' => false,
+                'errors' => 'Unauthorized',
+            ]);
+        }
+
         $module = $this->getRequest()->getQuery('module', $this->params()->fromRoute('module'));
         $pluginName = $this->getRequest()->getQuery('pluginName', $this->params()->fromRoute('pluginName'));
         $pageId = $this->getRequest()->getQuery('pageId', $this->params()->fromRoute('pageId', 1));
@@ -134,6 +153,12 @@ class MelisPluginRendererController extends MelisAbstractActionController
 
     public function editPluginAction()
     {
+        if (!$this->isBackofficeAuthenticated()) {
+            $response = $this->getResponse();
+            $response->setStatusCode(403);
+            return $response;
+        }
+
         $view  = new ViewModel();
 
         return $view;
@@ -141,6 +166,14 @@ class MelisPluginRendererController extends MelisAbstractActionController
 
     public function dndLayoutAction()
     {
+        if (!$this->isBackofficeAuthenticated()) {
+            return new JsonModel([
+                'success' => false,
+                'html' => '',
+                'errors' => 'Unauthorized',
+            ]);
+        }
+
         $success = false;
         $dndHtml = '';
         $pageId = $this->params()->fromQuery('pageId');
@@ -201,6 +234,13 @@ class MelisPluginRendererController extends MelisAbstractActionController
 
     public function dndRemoveAction()
     {
+        if (!$this->isBackofficeAuthenticated()) {
+            return new JsonModel([
+                'success' => false,
+                'errors' => 'Unauthorized',
+            ]);
+        }
+
         $success = true;
         $pageId = $this->params()->fromPost('pageId');
         $dndId = $this->params()->fromPost('dndId');
@@ -219,6 +259,13 @@ class MelisPluginRendererController extends MelisAbstractActionController
 
     public function dndUpdateOrderAction()
     {
+        if (!$this->isBackofficeAuthenticated()) {
+            return new JsonModel([
+                'success' => false,
+                'errors' => 'Unauthorized',
+            ]);
+        }
+
         $success = true;
 
         $dndIds = $this->params()->fromPost('dndIds');
@@ -241,13 +288,5 @@ class MelisPluginRendererController extends MelisAbstractActionController
         return new JsonModel([
             'success' => $success,
         ]);
-    }
-
-    public function testAction()
-    {
-        $pageId = $this->params()->fromQuery('pageId', 32);
-
-        $container = new Container('meliscms');
-        dd($container['content-pages'][$pageId]['melisDragDropZone']);
     }
 }

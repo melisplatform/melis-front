@@ -18,6 +18,22 @@ class MelisFrontSearchController extends MelisAbstractActionController
     const VENDOR = '/../vendor/melisplatform/';
 
     /**
+     * Full-site crawl/index and index optimization are expensive operations.
+     * Allow them from CLI (maintenance scripts) or from an authenticated Melis
+     * back-office session only; deny anonymous web requests (DoS vector).
+     *
+     * @return bool
+     */
+    private function isAllowedToIndex()
+    {
+        if (PHP_SAPI === 'cli') {
+            return true;
+        }
+
+        return $this->getServiceManager()->get('MelisCoreAuth')->hasIdentity();
+    }
+
+    /**
      * This creates lists of index with the content of every page ID that has been crawled by this function.
      * @param string moduleName - name of the site module where you can store all the indexes
      * @param int    pageid     - root page ID of the site, child pages of this ID will also be crawled.
@@ -30,6 +46,12 @@ class MelisFrontSearchController extends MelisAbstractActionController
      */
     public function addLuceneIndexAction()
     {
+        if (!$this->isAllowedToIndex()) {
+            $response = $this->getResponse();
+            $response->setStatusCode(403);
+            return $response;
+        }
+
         $moduleName = $this->params()->fromRoute('moduleName', null);
         $pageId = $this->params()->fromRoute('pageid', null);
         $excludes = $this->params()->fromRoute('expageid', null);
@@ -72,6 +94,12 @@ class MelisFrontSearchController extends MelisAbstractActionController
      */
     public function removeLuceneIndexAction()
     {
+        if (!$this->isAllowedToIndex()) {
+            $response = $this->getResponse();
+            $response->setStatusCode(403);
+            return $response;
+        }
+
         $moduleName = $this->params()->fromRoute('moduleName', null);
         $pageId = $this->params()->fromRoute('pageid', null);
         $excludes = $this->params()->fromRoute('expageid', null);
@@ -99,6 +127,12 @@ class MelisFrontSearchController extends MelisAbstractActionController
      */
     public function optimizeIndexAction()
     {
+        if (!$this->isAllowedToIndex()) {
+            $response = $this->getResponse();
+            $response->setStatusCode(403);
+            return $response;
+        }
+
         $moduleName = $this->params()->fromRoute('moduleName', null);
         $status = '';
 
