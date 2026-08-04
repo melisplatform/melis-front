@@ -18,11 +18,14 @@ use SimpleXMLElement;
 
 class MelisPluginRendererController extends MelisAbstractActionController
 {
+    /**
+     * Name of the route that exposes getPlugin() over HTTP (declared here and
+     * overridden - same name - by MelisAICommunityExtensions).
+     */
+    const PLUGIN_RENDERER_ROUTE = 'melis-plugin-renderer';
 
     /**
      * Ensures a valid authenticated Melis back-office session exists.
-     * These actions are back-office drag-and-drop / plugin EDIT operations and
-     * must never be reachable by an anonymous front-office visitor.
      *
      * @return bool
      */
@@ -31,9 +34,36 @@ class MelisPluginRendererController extends MelisAbstractActionController
         return $this->getServiceManager()->get('MelisCoreAuth')->hasIdentity();
     }
 
+    /**
+     * True when the request actually hit the public /melispluginrenderer route,
+     * as opposed to reaching this controller through an internal forward.
+     *
+     * getPlugin() has two callers: the back-office drag&drop / plugin-edition JS,
+     * which calls the route directly, and MelisFrontDragDropZonePlugin::front(),
+     * which renders EVERY plugin of a drag-and-drop zone through
+     * forward()->dispatch('MelisFront\Controller\MelisPluginRenderer', ...) while
+     * serving a normal front-office page. Only the former may be gated: gating both
+     * silently empties every drag-and-drop zone of the public site (the dnd plugin
+     * discards the failure unless renderMode is 'melis').
+     *
+     * Laminas\Mvc\Controller\Plugin\Forward::dispatch() seeds a fresh RouteMatch and
+     * copies the OUTER matched route name onto it, so an internal render carries the
+     * page's own route name; only a genuine HTTP hit on /melispluginrenderer matches
+     * PLUGIN_RENDERER_ROUTE. That makes this check unforgeable from outside.
+     *
+     * @return bool
+     */
+    private function isDirectPluginRendererRequest()
+    {
+        $event = $this->getEvent();
+        $routeMatch = $event ? $event->getRouteMatch() : null;
+
+        return $routeMatch && $routeMatch->getMatchedRouteName() === self::PLUGIN_RENDERER_ROUTE;
+    }
+
     public function getPluginAction()
     {
-        if (!$this->isBackofficeAuthenticated()) {
+        if ($this->isDirectPluginRendererRequest() && !$this->isBackofficeAuthenticated()) {
             return new JsonModel([
                 'success' => false,
                 'errors' => 'Unauthorized',
