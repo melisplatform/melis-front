@@ -582,7 +582,7 @@ class MelisSiteTranslationService extends MelisGeneralService
         $transCacheDir = $cacheDir.'/translations';
         if(!file_exists($transCacheDir))
             //create directory
-            mkdir($transCacheDir, 0777);
+            mkdir($transCacheDir, 0755);
 
         /**
          * Create trans file per site and inside the site we separate
@@ -603,7 +603,7 @@ class MelisSiteTranslationService extends MelisGeneralService
         //create directory for site
         $siteTransDir = $transCacheDir.'/'.$siteId;
         if(!file_exists($siteTransDir))
-            mkdir($siteTransDir, 0777);
+            mkdir($siteTransDir, 0755);
         //store the translations
         $writer = new PhpArray();
         file_put_contents($siteTransDir.'/translations.php', $writer->toString($transPerLang));
