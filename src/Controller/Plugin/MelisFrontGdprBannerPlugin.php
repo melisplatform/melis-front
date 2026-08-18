@@ -102,9 +102,28 @@ class MelisFrontGdprBannerPlugin extends MelisTemplatingPlugin
             $bannerContents = "";
         }
 
+        // Le bandeau est rendu (entre autres) sur la home « / », une route où createTranslations() n'a
+        // PAS encore résolu la locale au bootstrap (l'idPage de la home est fixé plus tard par les
+        // listeners) → les traductions d'interface MelisFront ne sont pas chargées. Et comme le
+        // translator a déjà mis en cache les messages du domaine à ce stade (le bandeau est en bas de
+        // page), un addTranslationFile ici arriverait trop tard. On traduit donc normalement, et SI le
+        // translator renvoie la clé brute (non trouvée), on lit directement le fichier d'interface de
+        // la locale pour récupérer le libellé — sinon le bouton afficherait la clé.
+        $agreeKey = 'tr_melis_front_gdpr_banner_agree_' . $locale;
+        $agree = $translator->translate($agreeKey);
+        if ($agree === $agreeKey) {
+            $transFile = __DIR__ . '/../../../language/' . $locale . '.interface.php';
+            if (is_file($transFile)) {
+                $trans = include $transFile;
+                if (is_array($trans) && !empty($trans[$agreeKey])) {
+                    $agree = $trans[$agreeKey];
+                }
+            }
+        }
+
         $labels = [
             'pluginLoaded' => $translator->translate('tr_melis_cms_gdpr_banner_plugin_loaded'),
-            'agree' => $translator->translate('tr_melis_front_gdpr_banner_agree_' . $locale),
+            'agree' => $agree,
         ];
 
         $viewVariables = [
