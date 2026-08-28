@@ -12,6 +12,18 @@
     justify-content: center;
     flex: 1;
 }
-.dnd-plugins-row > div[class*="dnd-plugins-col-"] [data-melis-plugin-tag-id] {
+/* A plugin wrapper fills its column by default, BUT an explicit per-plugin width
+   (plugin-width-* class, set via the width control) must win — it sizes the plugin
+   INSIDE the column without touching the column's own layout width. Every wrapper
+   carries a plugin-width-* class (100 by default), so scoping this to wrappers
+   WITHOUT one lets that class govern: 100% by default, or the chosen width. */
+.dnd-plugins-row > div[class*="dnd-plugins-col-"] [data-melis-plugin-tag-id]:not([class*="plugin-width"]) {
     width: 100%;
+}
+/* Only the OUTERMOST wrapper carries the per-plugin width. A tag/mini-template wrapper
+   NESTED inside another must always fill its parent (100%): mini-templates bake their own
+   plugin-width-* wrapper divs into their stored HTML, so without this the width would
+   COMPOUND at each nesting level (50% x 50% = 25%) and a stale baked class would resurface. */
+[data-melis-plugin-tag-id] [data-melis-plugin-tag-id] {
+    width: 100% !important;
 }
