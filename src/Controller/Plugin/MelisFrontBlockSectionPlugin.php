@@ -122,6 +122,11 @@ class MelisFrontBlockSectionPlugin extends MelisTemplatingPlugin
     {
         $xmlValueFormatted = '';
 
+        // template_path is the only configurable setting of the block section — persist it so the
+        // React config (Template tab) works, mirroring the other front plugins. Empty otherwise.
+        if (!empty($parameters['template_path']))
+            $xmlValueFormatted .= "\t\t" . '<template_path><![CDATA[' . $parameters['template_path'] . ']]></template_path>';
+
         // Something has been saved, let's generate an XML for DB
         $xmlValueFormatted = "\t" . '<' . $this->pluginXmlDbKey . ' id="' . $parameters['melisPluginId'] . '">' .
             $xmlValueFormatted .
