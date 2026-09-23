@@ -32,6 +32,9 @@ foreach ($this->assets['css']as $css)
         ?>
         // default js
         var scriptMap =[
+            // CSRF emitter first: the edition XHRs (savePageSessionPlugin...) run in this iframe,
+            // which does not inherit the back-office's patched XMLHttpRequest.
+            "/MelisCore/js/core/melisCsrf.js",
             // "/MelisCore/js/tinyMCE/tinymce_cleaner.js",
             "/MelisCore/js/tinyMCE/melis_tinymce.js",
             "/MelisCms/js/tools/findpage.tool.js",
