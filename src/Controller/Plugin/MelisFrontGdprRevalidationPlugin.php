@@ -145,7 +145,8 @@ class MelisFrontGdprRevalidationPlugin extends MelisTemplatingPlugin
         // set table
         $tableGateway->getSql()->setTable('melis_core_gdpr_delete_config');
         // query to table
-        $select = $tableGateway->getSql()->select()->where('mgdprc_site_id = ' . $pluginData['site_id'])->where('mgdprc_module_name = "' . $pluginData['module'] . '"');
+        $select = $tableGateway->getSql()->select();
+        $select->where->equalTo('mgdprc_site_id', (int) $pluginData['site_id'])->equalTo('mgdprc_module_name', (string) $pluginData['module']);
         // execute and get data
         $data = $tableGateway->getSql()->prepareStatementForSqlObject($select)->execute()->current();
 
