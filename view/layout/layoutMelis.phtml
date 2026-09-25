@@ -32,6 +32,14 @@ foreach ($this->assets['css']as $css)
         ?>
         // default js
         var scriptMap =[
+            // CSRF emitter first: the edition XHRs (savePageSessionPlugin...) run in this iframe,
+            // which does not inherit the back-office's patched XMLHttpRequest.
+            // Stamped with the file's mtime (as MelisCore does): it is cached for a day, and an
+            // unstamped URL would keep a stale copy running after every deploy.
+            "/MelisCore/js/core/melisCsrf.js?v=<?php
+                $csrfFile = dirname((new \ReflectionClass(\MelisCore\Module::class))->getFileName(), 2) . '/public/js/core/melisCsrf.js';
+                echo is_file($csrfFile) ? filemtime($csrfFile) : '0';
+            ?>",
             // "/MelisCore/js/tinyMCE/tinymce_cleaner.js",
             "/MelisCore/js/tinyMCE/melis_tinymce.js",
             "/MelisCms/js/tools/findpage.tool.js",
