@@ -22,6 +22,7 @@ return [
     'tr_melis_plugins_page_id' => 'Page ID',
     
     'tr_PluginSection_melisfront' => 'Melis Cms',
+    'tr_MelisFrontTagPlugin_Name' => 'Melis Tags',
     'tr_MelisFrontSubcategoryTag_Title' => 'Tags',
     'tr_MelisFrontSubcategoryPageBasics_Title' => 'Page basics',
     'tr_MelisFrontTagHtmlPlugin_Name' => 'Html tag',
@@ -30,6 +31,8 @@ return [
     'tr_MelisFrontTagTextareaPlugin_Description' => 'The Textarea tag plugin provides a wysiwig editable zone for your templates. It comes preconfigured with a wysiwig editor and basic text oriented configuration.',
     'tr_MelisFrontTagMediaPlugin_Name' => 'Media tag',
     'tr_MelisFrontTagMediaPlugin_Description' => 'The Media tag plugin provides a wysiwig editable zone for your templates. It comes preconfigured with a wysiwig editor and media oriented configuration.',
+
+    'tr_MelisFrontTagPlugin_Description' => 'The Tag plugin provides a wysiwig editable zone for your templates. These zones come preconfigured for plain text, html or media input.',
     'tr_MelisFrontBreadcrumbPlugin_Name' => 'Breadcrumb',
     'tr_MelisFrontBreadcrumbPlugin_Description' => 'The breadcrumb plugin provides the typical resources to generate a page breadcrumb from the treeview.',
     'tr_MelisFrontMenuPlugin_Name' => 'Menu',

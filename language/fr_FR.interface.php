@@ -41,8 +41,8 @@ return [
     'tr_MelisFrontShowListFromFolderPlugin_Description' => 'Le plugin listing dossier permet de lister les sous pages d\'un dossier ou d\'une page de l\'arborescence, permettant de créer des listes dynamiques d\'actualités ou de pages détails.',
     'tr_MelisFrontSearchResultsPlugin_Name' => 'Recherche',
     'tr_MelisFrontSearchResultsPlugin_Description' => 'Le plugin recherche liste les résultats de recherche sur la page en se basant sur le moteur interne de Melis Platform, basé sur Zend Search.',
-    'tr_melis_plugins_page_id_empty' => 'Please enter the page ID',
-    'tr_melis_plugins_page_id_not_num' => 'Invalid page ID, it must be numeric',
+    'tr_melis_plugins_page_id_empty' => 'Veuillez saisir l\'ID de la page',
+    'tr_melis_plugins_page_id_not_num' => 'ID de page invalide, il doit être numérique',
     
     
     // plugins validator messages
@@ -61,7 +61,7 @@ return [
     
     
     // plugin : menu
-    'tr_front_plugin_menu_modal_title' => 'Edit Menu',
+    'tr_front_plugin_menu_modal_title' => 'Editer le Menu',
     'tr_front_plugin_menu_root_page' => 'Page de départ',
     'tr_front_plugin_menu_root_page tooltip' => 'La page de départ correspond à la page parent d&#39;où commence le menu. Les sous-pages seront listées dans le menu. Pour qu&#39;une page s&#39;affiche dans le menu, sa propriété &#34;Affichage menu&#34; doit être définie sur &#34;Lien&#34; ou &#34;Texte sans lien&#34;',
     
@@ -95,9 +95,9 @@ return [
 
     //Minify Assets
     'tr_front_minify_assets_compiled_successfully' => 'Assets minifiées avec succès',
-    'tr_front_minify_assets_nothing_to_compile' => 'There is nothing to compile.',
-    'tr_front_minify_assets_error_occurred' => 'An error occurred while compiling assets.',
-    'tr_front_minify_assets_success' => 'Compiling assets successful.',
+    'tr_front_minify_assets_nothing_to_compile' => 'Il n\'y a rien à compiler.',
+    'tr_front_minify_assets_error_occurred' => 'Une erreur est survenue lors de la compilation des assets.',
+    'tr_front_minify_assets_success' => 'Compilation des assets réussie.',
 
     // Plugins
     'tr_front_plugin_common_tab_properties' => 'Propriétés',
@@ -107,7 +107,7 @@ return [
     'tr_front_drag_drop_zone_label' => 'Drag & Drop Zone',
 
     // GDPR Revalidation plugin
-    'tr_melis_front_gdpr_revalidation_name' => 'GDPR Revalidation plugin',
+    'tr_melis_front_gdpr_revalidation_name' => 'Plugin de revalidation RGPD',
     'tr_melis_front_gdpr_revalidation_desc' => 'Ce plugin permet à l\'utilisateur de valider la rétention de ses données sur le site',
     'tr_melis_front_gdpr_revalidation_info_text' => 'Votre abonnement à nos services doit être revalidé en accord avec les exigences du RGPD car vous n\'avez pas été actif pendant longtemps. Le fait de ne pas revalider activera automatiquement l\'anonymisation de votre compte.',
     'tr_melis_front_gdpr_revalidation_btn_confirm' => 'Confirmer',
@@ -118,7 +118,7 @@ return [
     'tr_melis_front_gdpr_revalidation_not_checked' => 'Veuillez cocher la case pour valider',
 
     'tr_melis_front_generic_plugin_name' => 'Remontée de contenu générique',
-    'tr_melis_front_generic_plugin_description' => 'Generic Content Plugin Description',
+    'tr_melis_front_generic_plugin_description' => 'Description du plugin de remontée de contenu générique',
 
     // Dynamic dnd on buttons title attribute
     'tr_melis_front_dnd_remove_button_title' => 'Supprimer la zone',
