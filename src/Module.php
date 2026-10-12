@@ -26,6 +26,7 @@ use MelisFront\Listener\MelisFrontLayoutListener;
 use MelisFront\Listener\MelisFrontAttachCssListener;
 use MelisFront\Listener\MelisFrontSEOMetaPageListener;
 use MelisFront\Listener\MelisFrontPluginsToLayoutListener;
+use MelisFront\Listener\MelisFrontJsonLdListener;
 use MelisFront\Listener\MelisFrontSEOReformatToRoutePageUrlListener;
 use MelisFront\Listener\MelisFrontSEODispatchRouterRegularUrlListener;
 use MelisFront\Listener\MelisFront404To301Listener;
@@ -129,6 +130,9 @@ class Module
 
             // Adding Plugins Ressources to page
             (new MelisFrontPluginsToLayoutListener())->attach($eventManager);
+
+            // Injecting schema.org JSON-LD into the page <head>
+            (new MelisFrontJsonLdListener())->attach($eventManager);
 
             // Checking if Url is correct and redirect if not
             (new MelisFrontSEODispatchRouterRegularUrlListener())->attach($eventManager);
