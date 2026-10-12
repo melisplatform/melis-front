@@ -254,6 +254,7 @@ return [
             // Laminas Mvc translator Service
             'translator'                    => 'MvcTranslator',
             'MelisFrontHead'                => \MelisFront\Service\MelisFrontHeadService::class,
+            'MelisFrontJsonLdService'       => \MelisFront\Service\MelisFrontJsonLdService::class,
             'MinifyAssets'                  => \MelisFront\Service\MinifyAssetsService::class,
             'MelisSiteTranslationService'   => \MelisFront\Service\MelisSiteTranslationService::class,
             'MelisSiteConfigService'        => \MelisFront\Service\MelisSiteConfigService::class,
