@@ -34,6 +34,7 @@ use MelisFront\Listener\MelisFrontXSSParameterListener;
 use Laminas\Session\Container;
 use MelisFront\Listener\MelisFrontPageCacheListener;
 use MelisFront\Listener\MelisFrontDeletePluginCacheListener;
+use MelisFront\Listener\MelisFrontEditionModeIdentityListener;
 
 class Module
 {
@@ -117,6 +118,10 @@ class Module
 
             // Catching PAGE SEO URLs to update Router
             //(new MelisFrontSEOReformatToRoutePageUrlListener())->attach($eventManager); -> refer init() Listener: MelisFrontSEORouteListener, issueL no translations of melis-modules
+
+            // SECURITY (audit FE-H1) : le mode édition du rendu (renderMode=melis / preview) rend
+            // les BROUILLONS — identité back-office exigée, avant tout dispatch.
+            (new MelisFrontEditionModeIdentityListener())->attach($eventManager);
 
             // Adding css linked to the page
             (new MelisFrontAttachCssListener())->attach($eventManager);

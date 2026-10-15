@@ -1,10 +1,11 @@
 <?php if ($this->breadcrumb) {?>
 <ol class="breadcrumb">
     <?php foreach ($this->breadcrumb As $key => $val){?>
+    	<?php /* SECURITY (audit FE-H8) : label = page_name (saisie d'un rédacteur BO) — échappé (XSS stocké front) */ ?>
     	<?php if ($val['isActive']){?>
-    		<li class="active"><?php echo $val['label']?></li>
+    		<li class="active"><?php echo $this->escapeHtml($val['label'])?></li>
     	<?php }else{?>
-    		<li><a title="<?php echo $val['label']  ?>" href="<?php echo $val['uri']?>"><?php echo $val['label'] ?></a></li>
+    		<li><a title="<?php echo $this->escapeHtmlAttr($val['label'])  ?>" href="<?php echo $this->escapeHtmlAttr($val['uri'])?>"><?php echo $this->escapeHtml($val['label']) ?></a></li>
     	<?php }?>
     <?php }?>
 </ol>

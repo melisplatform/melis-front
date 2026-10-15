@@ -204,11 +204,15 @@ class MelisPluginRendererController extends MelisAbstractActionController
             ]);
         }
 
+        // SECURITY (audit FE-H7) : mutation de la session d'édition, route hors scope CSRF global.
+        if ($deny = $this->denyBadDndCsrf()) { return $deny; }
+
         $success = false;
         $dndHtml = '';
-        $pageId = $this->params()->fromQuery('pageId');
-        $dndId = $this->params()->fromQuery('dndId');
-        $addAction = $this->params()->fromQuery('addAction', false);
+        // POST désormais (audit FE-H7) — repli query pour compatibilité.
+        $pageId = $this->params()->fromPost('pageId', $this->params()->fromQuery('pageId'));
+        $dndId = $this->params()->fromPost('dndId', $this->params()->fromQuery('dndId'));
+        $addAction = $this->params()->fromPost('addAction', $this->params()->fromQuery('addAction', false));
 
         $viewRender = $this->getServiceManager()->get('ViewRenderer');
         $dndPlugin = $this->MelisFrontDragDropZonePlugin();
@@ -271,6 +275,9 @@ class MelisPluginRendererController extends MelisAbstractActionController
             ]);
         }
 
+        // SECURITY (audit FE-H7) : mutation de la session d'édition, route hors scope CSRF global.
+        if ($deny = $this->denyBadDndCsrf()) { return $deny; }
+
         $success = true;
         $pageId = $this->params()->fromPost('pageId');
         $dndId = $this->params()->fromPost('dndId');
@@ -296,6 +303,9 @@ class MelisPluginRendererController extends MelisAbstractActionController
             ]);
         }
 
+        // SECURITY (audit FE-H7) : mutation de la session d'édition, route hors scope CSRF global.
+        if ($deny = $this->denyBadDndCsrf()) { return $deny; }
+
         $success = true;
 
         $dndIds = $this->params()->fromPost('dndIds');
@@ -318,5 +328,59 @@ class MelisPluginRendererController extends MelisAbstractActionController
         return new JsonModel([
             'success' => $success,
         ]);
+    }
+
+    /**
+     * SECURITY (audit FE-H7) : les routes /dnd-* vivent HORS du préfixe /melis — la garde CSRF
+     * globale de melis-core (MelisCoreCsrfListener) ne les couvre pas. Ces actions mutent la
+     * session d'édition : POST + même origine + jeton exigés ici même. Le jeton arrive en champ
+     * POST `melis_csrf` (le patch XHR de melisCsrf.js ne pose l'en-tête que sur /melis… ;
+     * dynamic-dragndrop.js joint le champ explicitement). Même sémantique que le listener global :
+     * session sans jeton = rien à protéger (le jeton seul est alors dispensé, pas l'origine).
+     */
+    private function denyBadDndCsrf()
+    {
+        $request = $this->getRequest();
+
+        if (! $request->isPost()) {
+            return new JsonModel(['success' => false, 'errors' => 'POST required']);
+        }
+
+        // Même origine : Origin (envoyé par tout navigateur moderne sur un POST cross-site),
+        // sinon Referer. Aucun des deux = refus.
+        $headers  = $request->getHeaders();
+        $self     = $headers->get('Host') ? trim((string) $headers->get('Host')->getFieldValue()) : '';
+        $selfHost = preg_replace('/:\d+$/', '', $self);
+        $originOk = false;
+        foreach (['Origin', 'Referer'] as $name) {
+            $header = $headers->get($name);
+            if (! $header) {
+                continue;
+            }
+            $value = trim((string) $header->getFieldValue());
+            if ($value === '' || $value === 'null') {
+                continue;
+            }
+            $host = parse_url($value, PHP_URL_HOST);
+            if (empty($host)) {
+                continue;
+            }
+            $originOk = (strcasecmp($host, $selfHost) === 0) || (strcasecmp($host, $self) === 0);
+            break;
+        }
+        if (! $originOk) {
+            return new JsonModel(['success' => false, 'errors' => 'Invalid origin']);
+        }
+
+        $token = \MelisCore\Service\MelisCoreCsrfService::getToken();
+        if ($token !== '') {
+            $header    = $headers->get(\MelisCore\Service\MelisCoreCsrfService::HEADER_NAME);
+            $submitted = $header ? $header->getFieldValue() : $request->getPost(\MelisCore\Service\MelisCoreCsrfService::FIELD_NAME);
+            if (! \MelisCore\Service\MelisCoreCsrfService::isValid($submitted)) {
+                return new JsonModel(['success' => false, 'errors' => 'Invalid CSRF token']);
+            }
+        }
+
+        return null;
     }
 }
