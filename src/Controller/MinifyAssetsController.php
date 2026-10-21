@@ -9,6 +9,7 @@
 
 namespace MelisFront\Controller;
 
+use Laminas\Authentication\Storage\Session as SessionStorage;
 use Laminas\View\Model\JsonModel;
 use MelisCore\Controller\MelisAbstractActionController;
 
@@ -24,7 +25,7 @@ class MinifyAssetsController extends MelisAbstractActionController
          * Asset (re)compilation is a heavy back-office operation. Require a valid
          * authenticated Melis back-office session; deny anonymous requests (DoS vector).
          */
-        if (!$this->getServiceManager()->get('MelisCoreAuth')->hasIdentity()) {
+        if (!$this->isBackofficeAuthenticated()) {
             return new JsonModel([
                 'title' => 'Compiling assets',
                 'message' => 'Unauthorized',
@@ -59,5 +60,24 @@ class MinifyAssetsController extends MelisAbstractActionController
             'message' => wordwrap($message, 20, "\n", true),
             'success' => $success,
         ));
+    }
+
+    /**
+     * True when the request carries an authenticated Melis back-office session.
+     *
+     * /minify-assets is a front route: MelisModuleManager only loads the site's
+     * modules there, so MelisCore (and its MelisCoreAuth service) is usually absent.
+     * Read the same 'Melis_Auth' session storage MelisCoreAuth uses instead.
+     *
+     * @return bool
+     */
+    private function isBackofficeAuthenticated()
+    {
+        $serviceManager = $this->getServiceManager();
+        if ($serviceManager->has('MelisCoreAuth')) {
+            return $serviceManager->get('MelisCoreAuth')->hasIdentity();
+        }
+
+        return !(new SessionStorage('Melis_Auth'))->isEmpty();
     }
 }
