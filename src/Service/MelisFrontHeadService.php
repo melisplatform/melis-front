@@ -175,20 +175,43 @@ class MelisFrontHeadService extends MelisServiceManager implements MelisFrontHea
 			$files = $this->getServiceManager()->get('templating_plugins')->getItem('plugins_front');
 			
 			$cssHtmlToAdd = "\n";
-			foreach ($files['css'] as $css)
-				$cssHtmlToAdd .= '<link href="' . $css . '" media="screen" rel="stylesheet" type="text/css">' . "\n";
+			foreach ($files['css'] as $css) {
+				// SECURITY (audit AM-H3 / FE-H4, defence in depth): these URLs originate from the
+				// plugin config, which merges the query string — a " or </script> would break out
+				// of the attribute. The front XSS listener strips files/js/css at the entry point;
+				// we additionally reject non-URL values and escape at emission so a single path
+				// that bypasses the listener cannot inject markup.
+				if (!$this->isSafeAssetUrl($css)) continue;
+				$cssHtmlToAdd .= '<link href="' . htmlspecialchars($css, ENT_QUOTES, 'UTF-8') . '" media="screen" rel="stylesheet" type="text/css">' . "\n";
+			}
 
 			$headRegex = '/(<\/head[^>]*>)/im';
 			$newContent = preg_replace($headRegex, "$cssHtmlToAdd$1", $newContent);
-			
+
 			$jsHtmlToAdd = "\n";
-			foreach ($files['js'] as $js)
-				$jsHtmlToAdd .= '<script type="text/javascript" src="' . $js . '"></script>' . "\n";
+			foreach ($files['js'] as $js) {
+				if (!$this->isSafeAssetUrl($js)) continue;
+				$jsHtmlToAdd .= '<script type="text/javascript" src="' . htmlspecialchars($js, ENT_QUOTES, 'UTF-8') . '"></script>' . "\n";
+			}
 
 			$bodyRegex = '/(<\/body[^>]*>)/im';
 			$newContent = preg_replace($bodyRegex, "$jsHtmlToAdd$1", $newContent);
 		}
-		
+
 		return $newContent;
+	}
+
+	/**
+	 * SECURITY (audit AM-H3 / FE-H4): a plugin asset URL must be a plain relative path or an
+	 * http(s)/protocol-relative URL — never a javascript:/data: scheme or a value carrying
+	 * quotes / angle brackets that would break the <link>/<script> attribute context.
+	 */
+	protected function isSafeAssetUrl($url): bool
+	{
+		$url = (string) $url;
+		if ($url === '' || preg_match('/["\'<>\s]/', $url)) {
+			return false;
+		}
+		return (bool) preg_match('#^(/|https?:/|//)#i', $url);
 	}
 }
