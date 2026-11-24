@@ -49,7 +49,7 @@ class MelisPluginRendererController extends MelisAbstractActionController
      * Laminas\Mvc\Controller\Plugin\Forward::dispatch() seeds a fresh RouteMatch and
      * copies the OUTER matched route name onto it, so an internal render carries the
      * page's own route name; only a genuine HTTP hit on /melispluginrenderer matches
-     * PLUGIN_RENDERER_ROUTE. That makes this check unforgeable from outside.
+     * PLUGIN_RENDERER_ROUTE.
      *
      * @return bool
      */
