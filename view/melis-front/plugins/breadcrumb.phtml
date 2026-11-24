@@ -1,7 +1,7 @@
 <?php if ($this->breadcrumb) {?>
 <ol class="breadcrumb">
     <?php foreach ($this->breadcrumb As $key => $val){?>
-    	<?php /* SECURITY (audit FE-H8) : label = page_name (saisie d'un rédacteur BO) — échappé (XSS stocké front) */ ?>
+    	<?php /* label = page_name, échappé */ ?>
     	<?php if ($val['isActive']){?>
     		<li class="active"><?php echo $this->escapeHtml($val['label'])?></li>
     	<?php }else{?>

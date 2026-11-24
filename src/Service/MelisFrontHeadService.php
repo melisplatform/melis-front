@@ -176,11 +176,7 @@ class MelisFrontHeadService extends MelisServiceManager implements MelisFrontHea
 			
 			$cssHtmlToAdd = "\n";
 			foreach ($files['css'] as $css) {
-				// SECURITY (audit AM-H3 / FE-H4, defence in depth): these URLs originate from the
-				// plugin config, which merges the query string — a " or </script> would break out
-				// of the attribute. The front XSS listener strips files/js/css at the entry point;
-				// we additionally reject non-URL values and escape at emission so a single path
-				// that bypasses the listener cannot inject markup.
+				// Non-URL values are skipped; URLs are escaped at emission.
 				if (!$this->isSafeAssetUrl($css)) continue;
 				$cssHtmlToAdd .= '<link href="' . htmlspecialchars($css, ENT_QUOTES, 'UTF-8') . '" media="screen" rel="stylesheet" type="text/css">' . "\n";
 			}
@@ -202,9 +198,8 @@ class MelisFrontHeadService extends MelisServiceManager implements MelisFrontHea
 	}
 
 	/**
-	 * SECURITY (audit AM-H3 / FE-H4): a plugin asset URL must be a plain relative path or an
-	 * http(s)/protocol-relative URL — never a javascript:/data: scheme or a value carrying
-	 * quotes / angle brackets that would break the <link>/<script> attribute context.
+	 * A plugin asset URL must be a plain relative path or an http(s)/protocol-relative URL,
+	 * without quotes, angle brackets or whitespace.
 	 */
 	protected function isSafeAssetUrl($url): bool
 	{

@@ -21,12 +21,9 @@ class MelisFrontXSSParameterListener extends MelisGeneralListener implements Lis
      * MelisTemplatingPlugin config-merge. None of these are legitimate
      * user-supplied parameters, so they are always removed.
      *
-     * SECURITY (audit FE-H4 / SL-H1): MelisTemplatingPlugin::formatGetPostInArray()
-     * rebuilds nested config from keys split on "-" (e.g. files-js-0 → files[js][0]),
-     * so blocking only the exact top-level names left the EXPLODED form through — any
-     * plugin declaring `files` in its front config then emitted an attacker-controlled
-     * <script src>. We therefore strip both the exact names and anything prefixed
-     * `files-`/`js-`/`css-`.
+     * MelisTemplatingPlugin::formatGetPostInArray() rebuilds nested config from keys split
+     * on "-" (e.g. files-js-0 → files[js][0]), so both the exact names and anything
+     * prefixed `files-`/`js-`/`css-` are removed.
      */
     private const BLOCKED_ASSET_KEYS = ['js', 'css', 'files'];
 
@@ -56,11 +53,7 @@ class MelisFrontXSSParameterListener extends MelisGeneralListener implements Lis
 
                 $request = $e->getRequest();
 
-                // SECURITY (audit SL-H1/SL-H2): sanitize GET *and* POST symmetrically.
-                // The previous version only strip-listed POST asset keys but never
-                // html-encoded POST values, so any plugin config key reflected from a
-                // POST body (e.g. the plugin `id` echoed into an attribute) was a
-                // reflected XSS reachable by an auto-submitted cross-site form.
+                // GET and POST are sanitized the same way.
                 foreach ([$request->getQuery(), $request->getPost()] as $params) {
                     foreach ($params as $key => $value) {
                         if ($this->isBlockedAssetKey((string) $key)) {

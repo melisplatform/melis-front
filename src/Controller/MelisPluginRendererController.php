@@ -204,12 +204,12 @@ class MelisPluginRendererController extends MelisAbstractActionController
             ]);
         }
 
-        // SECURITY (audit FE-H7) : mutation de la session d'édition, route hors scope CSRF global.
+        // Mutation de la session d'édition : POST + jeton CSRF exigés.
         if ($deny = $this->denyBadDndCsrf()) { return $deny; }
 
         $success = false;
         $dndHtml = '';
-        // POST désormais (audit FE-H7) — repli query pour compatibilité.
+        // POST, repli query pour compatibilité.
         $pageId = $this->params()->fromPost('pageId', $this->params()->fromQuery('pageId'));
         $dndId = $this->params()->fromPost('dndId', $this->params()->fromQuery('dndId'));
         $addAction = $this->params()->fromPost('addAction', $this->params()->fromQuery('addAction', false));
@@ -275,7 +275,7 @@ class MelisPluginRendererController extends MelisAbstractActionController
             ]);
         }
 
-        // SECURITY (audit FE-H7) : mutation de la session d'édition, route hors scope CSRF global.
+        // Mutation de la session d'édition : POST + jeton CSRF exigés.
         if ($deny = $this->denyBadDndCsrf()) { return $deny; }
 
         $success = true;
@@ -303,7 +303,7 @@ class MelisPluginRendererController extends MelisAbstractActionController
             ]);
         }
 
-        // SECURITY (audit FE-H7) : mutation de la session d'édition, route hors scope CSRF global.
+        // Mutation de la session d'édition : POST + jeton CSRF exigés.
         if ($deny = $this->denyBadDndCsrf()) { return $deny; }
 
         $success = true;
@@ -331,12 +331,8 @@ class MelisPluginRendererController extends MelisAbstractActionController
     }
 
     /**
-     * SECURITY (audit FE-H7) : les routes /dnd-* vivent HORS du préfixe /melis — la garde CSRF
-     * globale de melis-core (MelisCoreCsrfListener) ne les couvre pas. Ces actions mutent la
-     * session d'édition : POST + même origine + jeton exigés ici même. Le jeton arrive en champ
-     * POST `melis_csrf` (le patch XHR de melisCsrf.js ne pose l'en-tête que sur /melis… ;
-     * dynamic-dragndrop.js joint le champ explicitement). Même sémantique que le listener global :
-     * session sans jeton = rien à protéger (le jeton seul est alors dispensé, pas l'origine).
+     * Contrôle CSRF des routes /dnd-* : POST + même origine + jeton exigés. Le jeton arrive en
+     * champ POST `melis_csrf` (joint par dynamic-dragndrop.js).
      */
     private function denyBadDndCsrf()
     {

@@ -7,18 +7,12 @@ use Laminas\EventManager\ListenerAggregateInterface;
 use Laminas\Mvc\MvcEvent;
 
 /**
- * SECURITY (audit FE-H1) : frontière d'identité du MODE ÉDITION du rendu front.
+ * Identité du mode édition du rendu front.
  *
- * `renderMode=melis` et `/preview` rendent la version `saved` (BROUILLON) d'une page — un contenu
- * réservé aux rédacteurs. Jusqu'ici AUCUN test d'identité n'existait sur ce chemin dans
- * melis-front : l'anonyme n'était bloqué que par accident (fatal du forward layout vers MelisCms
- * non chargé en mode front — vérifié live : 500 ; et 302 login de melis-core::checkIdentity
- * uniquement quand `?melisSite=` force le chargement des modules back-office). Un site qui charge
- * MelisCms dans son module.load.php front perdait la première barrière.
- *
- * Ce listener rend la frontière DÉLIBÉRÉE et locale : toute requête web dont le routeMatch porte
- * renderMode=melis ou preview exige une identité back-office. Flux légitimes intacts : l'iframe
- * d'édition legacy et le rendu interne du canvas React portent la session BO ; le CLI est exempt.
+ * `renderMode=melis` et `/preview` rendent la version `saved` (brouillon) d'une page : toute
+ * requête web dont le routeMatch porte renderMode=melis ou preview exige une identité back-office.
+ * L'iframe d'édition legacy et le rendu interne du canvas React portent la session BO ; le CLI
+ * est exempt.
  */
 class MelisFrontEditionModeIdentityListener implements ListenerAggregateInterface
 {
@@ -62,7 +56,7 @@ class MelisFrontEditionModeIdentityListener implements ListenerAggregateInterfac
             $hasIdentity = $e->getApplication()->getServiceManager()
                 ->get('MelisCoreAuth')->hasIdentity();
         } catch (\Throwable $ex) {
-            // service d'auth indisponible → refus (fail-closed)
+            // service d'auth indisponible → refus
         }
         if ($hasIdentity) {
             return;

@@ -6,7 +6,7 @@
                 <a href="<?php echo $this->indexerURL ?>"><?php echo $this->indexerURL?></a>
     	<?php }else{?>
 			<h3><strong>Oppsss...</strong></h3>
-			<?php /* SECURITY (audit FE-H3) : moduleName est écrasable par la query string (fusion GET→config du plugin) — échappé */ ?>
+			<?php /* moduleName échappé */ ?>
 			<p>/module/MelisSites/<?php echo $this->escapeHtml($this->moduleName)?>/luceneIndex directory is not writable, please make the directory writable and try again</p>
     	<?php }?>
     <?php }else{?>
@@ -36,6 +36,6 @@
     <?php }?>
 <?php }else{?>
 	<h3><strong>Oppsss...</strong></h3>
-	<?php /* SECURITY (audit FE-H3) : moduleName est écrasable par la query string (fusion GET→config du plugin) — échappé */ ?>
+	<?php /* moduleName échappé */ ?>
 	<p>/module/MelisSites/<?php echo $this->escapeHtml($this->moduleName)?> directory doesn't exist</p>
 <?php }?>
