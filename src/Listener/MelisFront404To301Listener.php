@@ -18,6 +18,8 @@ use MelisFront\Listener\MelisFrontSEODispatchRouterAbstractListener;
  */
 class MelisFront404To301Listener extends MelisFrontSEODispatchRouterAbstractListener
 {
+    use MelisFrontSite301Trait;
+
     public function attach(EventManagerInterface $events, $priority = 1)
     {
         $this->attachEventListener(
@@ -34,13 +36,13 @@ class MelisFront404To301Listener extends MelisFrontSEODispatchRouterAbstractList
         	        $router = $sm->get('router');
         	        $uri = $router->getRequestUri();
         	        
-        	        // Retrieving Site 301 if the 404 data is exist as Old Url
-        	        $site301 = $sm->get('MelisEngineTableSite301');
-        	        $site301Data = $site301->getEntryByField('s301_old_url', $uri->getPath())->current();
-        	        if (!empty($site301Data)) {
+        	        // Site 301 of the requested site only (Mantis #0009351: the first redirect with this
+        	        // old url was used, whatever its site)
+        	        $newUrl = $this->findSite301Url($sm, (string) $uri->getHost(), (string) $uri->getPath());
+        	        if (!empty($newUrl)) {
         	            // If the 404 url exist on Database, the new Url will set to 301 to make a  redirect to new url
         	            $params['301_type'] = 'oldUrl301';
-        	            $params['301'] = $site301Data->s301_new_url;
+        	            $params['301'] = $newUrl;
         	            $params['404'] = null;
         	            $params['404_type'] = '';
         	        }
