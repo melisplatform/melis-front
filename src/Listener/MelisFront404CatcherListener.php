@@ -19,6 +19,8 @@ use MelisCore\Listener\MelisGeneralListener;
  */
 class MelisFront404CatcherListener extends MelisGeneralListener implements ListenerAggregateInterface
 {
+    use MelisFrontSite301Trait;
+
     public function attach(EventManagerInterface $events, $priority = 1)
     {
         $callBackHandler = $events->attach(
@@ -43,28 +45,9 @@ class MelisFront404CatcherListener extends MelisGeneralListener implements Liste
         		    // Retrieving the router Details, This will return URL details in Object
         		    $uri = $router->getRequestUri();
         		    
-        		    // Retrieving Site 301 if the 404 data is exist as Old Url
-        		    $site301 = $sm->get('MelisEngineTableSite301');
-        		    $site301Datas = $site301->getEntryByField('s301_old_url', $uri->getPath());
-        		    $url = null;
-        		    if (!empty($site301Datas->count()))
-        		    {
-        		        
-        		        $newUrlHost = array();
-        		        
-        		        foreach($site301Datas as $site301Data){
-        		            
-        		                if(!empty( $site301Data->s301_site_id)){
-        		                    $siteDomain  = $siteDomainTable->getEntryByField('sdom_env', getenv('MELIS_PLATFORM'))->current();
-        		                     
-        		                    if($siteDomain->sdom_domain == $uri->getHost() && $site301Data->s301_site_id == $siteDomain->sdom_site_id){
-        		                        $url = $site301Data->s301_new_url;
-        		                    }
-        		                }else{
-        		                    $url = $site301Data->s301_new_url;
-        		                }
-        		        }
-        		    }else{
+        		    // Site 301 of the requested site (Mantis #0009351), else the site 404 page below
+        		    $url = $this->findSite301Url($sm, (string) $uri->getHost(), (string) $uri->getPath());
+        		    if (!$url) {
         		        // check for site 404
         		        $siteDomain  = $siteDomainTable->getEntryByField('sdom_domain', $uri->getHost())->current();
         		        
